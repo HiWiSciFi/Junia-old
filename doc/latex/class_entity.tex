@@ -1,0 +1,76 @@
+\hypertarget{class_entity}{}\doxysection{Entity Class Reference}
+\label{class_entity}\index{Entity@{Entity}}
+
+
+{\ttfamily \#include $<$ECS.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_entity_a00b6eeaf99b35c8f8b10b5fbfc1baf4f}{update}} ()
+\item 
+void \mbox{\hyperlink{class_entity_a7666f416dd0d1fce0f1133f78df44476}{draw}} ()
+\item 
+bool \mbox{\hyperlink{class_entity_a00a0f5a9e9f39be9b9db28d5dbccd20e}{is\+Active}} ()
+\item 
+void \mbox{\hyperlink{class_entity_a691dbe5f9ec930c27af2af0b97907a9e}{destroy}} ()
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{class_entity_aa622a8d79153a90d0e3b9b992ca2d38b}{has\+Component}} () const
+\item 
+{\footnotesize template$<$typename T , typename... TArgs$>$ }\\T \& \mbox{\hyperlink{class_entity_a7bf861ddc1ae381796565481bbb873ef}{add\+Component}} (TArgs \&\&... m\+Args)
+\item 
+{\footnotesize template$<$typename T $>$ }\\T \& \mbox{\hyperlink{class_entity_ab67b05516196a4ec97c5b9fd13638bbb}{get\+Component}} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_entity_a7bf861ddc1ae381796565481bbb873ef}\label{class_entity_a7bf861ddc1ae381796565481bbb873ef}} 
+\index{Entity@{Entity}!addComponent@{addComponent}}
+\index{addComponent@{addComponent}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{addComponent()}{addComponent()}}
+{\footnotesize\ttfamily template$<$typename T , typename... TArgs$>$ \\
+T\& Entity\+::add\+Component (\begin{DoxyParamCaption}\item[{TArgs \&\&...}]{m\+Args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_entity_a691dbe5f9ec930c27af2af0b97907a9e}\label{class_entity_a691dbe5f9ec930c27af2af0b97907a9e}} 
+\index{Entity@{Entity}!destroy@{destroy}}
+\index{destroy@{destroy}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{destroy()}{destroy()}}
+{\footnotesize\ttfamily void Entity\+::destroy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_entity_a7666f416dd0d1fce0f1133f78df44476}\label{class_entity_a7666f416dd0d1fce0f1133f78df44476}} 
+\index{Entity@{Entity}!draw@{draw}}
+\index{draw@{draw}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Entity\+::draw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_entity_ab67b05516196a4ec97c5b9fd13638bbb}\label{class_entity_ab67b05516196a4ec97c5b9fd13638bbb}} 
+\index{Entity@{Entity}!getComponent@{getComponent}}
+\index{getComponent@{getComponent}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{getComponent()}{getComponent()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T\& Entity\+::get\+Component (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_entity_aa622a8d79153a90d0e3b9b992ca2d38b}\label{class_entity_aa622a8d79153a90d0e3b9b992ca2d38b}} 
+\index{Entity@{Entity}!hasComponent@{hasComponent}}
+\index{hasComponent@{hasComponent}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{hasComponent()}{hasComponent()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool Entity\+::has\+Component (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_entity_a00a0f5a9e9f39be9b9db28d5dbccd20e}\label{class_entity_a00a0f5a9e9f39be9b9db28d5dbccd20e}} 
+\index{Entity@{Entity}!isActive@{isActive}}
+\index{isActive@{isActive}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{isActive()}{isActive()}}
+{\footnotesize\ttfamily bool Entity\+::is\+Active (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_entity_a00b6eeaf99b35c8f8b10b5fbfc1baf4f}\label{class_entity_a00b6eeaf99b35c8f8b10b5fbfc1baf4f}} 
+\index{Entity@{Entity}!update@{update}}
+\index{update@{update}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Entity\+::update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Junia/src/\+ECS/\mbox{\hyperlink{_e_c_s_8h}{ECS.\+h}}\end{DoxyCompactItemize}
