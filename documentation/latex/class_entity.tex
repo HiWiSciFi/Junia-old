@@ -1,0 +1,133 @@
+\hypertarget{class_entity}{}\doxysection{Entity Class Reference}
+\label{class_entity}\index{Entity@{Entity}}
+
+
+{\ttfamily \#include $<$ECS.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_entity_adf6d3f7cb1b2ba029b6b048a395cc8ae}{$\sim$\+Entity}} ()
+\item 
+{\footnotesize template$<$typename T , typename... TArgs$>$ }\\T $\ast$ \mbox{\hyperlink{class_entity_ac521d838a28fdb314bb22e36ea5885f1}{add\+Component}} (TArgs... args)
+\begin{DoxyCompactList}\small\item\em create a component and attach it to this entity \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , typename... TArgs$>$ }\\T $\ast$ \mbox{\hyperlink{class_entity_a542e6ee8ab3335308fc1e8431f9cee37}{get\+Component}} (TArgs... default\+Args)
+\begin{DoxyCompactList}\small\item\em get an attached component of a certain type \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , typename... TArgs$>$ }\\T $\ast$ \mbox{\hyperlink{class_entity_ac8672c61d2ab995f2d4449a42a3c2b46}{require\+Component}} (TArgs... default\+Args)
+\begin{DoxyCompactList}\small\item\em require a component to exist on this entity \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{class_entity_ad42785721cb226a1bea8025aeb1d9e8d}{has\+Component}} ()
+\begin{DoxyCompactList}\small\item\em check if the entity has a component of a given type attached \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_entity_adf6d3f7cb1b2ba029b6b048a395cc8ae}\label{class_entity_adf6d3f7cb1b2ba029b6b048a395cc8ae}} 
+\index{Entity@{Entity}!````~Entity@{$\sim$Entity}}
+\index{````~Entity@{$\sim$Entity}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{$\sim$Entity()}{~Entity()}}
+{\footnotesize\ttfamily Entity\+::$\sim$\+Entity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_entity_ac521d838a28fdb314bb22e36ea5885f1}\label{class_entity_ac521d838a28fdb314bb22e36ea5885f1}} 
+\index{Entity@{Entity}!addComponent@{addComponent}}
+\index{addComponent@{addComponent}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{addComponent()}{addComponent()}}
+{\footnotesize\ttfamily template$<$typename T , typename... TArgs$>$ \\
+T$\ast$ Entity\+::add\+Component (\begin{DoxyParamCaption}\item[{TArgs...}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+create a component and attach it to this entity 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & the type of the component to add \\
+\hline
+{\em ...\+TArgs} & the type of the arguments to pass to the component constructor \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em ...\+args} & the arguments to pass to the component constructor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+if there is no attached component of this type it will create one and otherwise a pointer to the component that already exists 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_entity_a542e6ee8ab3335308fc1e8431f9cee37}\label{class_entity_a542e6ee8ab3335308fc1e8431f9cee37}} 
+\index{Entity@{Entity}!getComponent@{getComponent}}
+\index{getComponent@{getComponent}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{getComponent()}{getComponent()}}
+{\footnotesize\ttfamily template$<$typename T , typename... TArgs$>$ \\
+T$\ast$ Entity\+::get\+Component (\begin{DoxyParamCaption}\item[{TArgs...}]{default\+Args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get an attached component of a certain type 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & the type of the component to find \\
+\hline
+{\em ...\+TArgs} & the type of the arguments to pass to the constructor of the component in case there is no component of the type already attached \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em ...\+default\+Args} & the arguments to pass to the constructor of the component in case there is no component of the type already attached \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the attached component of the given type 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_entity_ad42785721cb226a1bea8025aeb1d9e8d}\label{class_entity_ad42785721cb226a1bea8025aeb1d9e8d}} 
+\index{Entity@{Entity}!hasComponent@{hasComponent}}
+\index{hasComponent@{hasComponent}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{hasComponent()}{hasComponent()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool Entity\+::has\+Component (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+check if the entity has a component of a given type attached 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & the type of the component to find \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+true, if a component of the type is attached, false if not 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_entity_ac8672c61d2ab995f2d4449a42a3c2b46}\label{class_entity_ac8672c61d2ab995f2d4449a42a3c2b46}} 
+\index{Entity@{Entity}!requireComponent@{requireComponent}}
+\index{requireComponent@{requireComponent}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{requireComponent()}{requireComponent()}}
+{\footnotesize\ttfamily template$<$typename T , typename... TArgs$>$ \\
+T$\ast$ Entity\+::require\+Component (\begin{DoxyParamCaption}\item[{TArgs...}]{default\+Args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+require a component to exist on this entity 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & the type of the component that has to exist \\
+\hline
+{\em ...\+TArgs} & the type of the arguments to pass to the constructor of the component in case there is no component of the type already attached \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em ...\+default\+Args} & the arguments to pass to the constructor of the component in case there is no component of the type already attached \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the attached component of the given type 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/maxjh/source/repos/\+Junia\+Header\+Lib/\+Junia\+Header\+Lib/src/\+Junia/\mbox{\hyperlink{_e_c_s_8h}{ECS.\+h}}\end{DoxyCompactItemize}

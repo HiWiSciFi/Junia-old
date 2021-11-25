@@ -1,0 +1,10 @@
+digraph "Component::onUpdate"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="Component::onUpdate",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="override to catch the update event"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node2 [label="Component::update",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_component.html#a78fe4950ee37b183fe863d2d6dc419e1",tooltip="called by the engine on update"];
+}
