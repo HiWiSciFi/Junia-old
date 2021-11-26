@@ -2,6 +2,7 @@
 #define _CANVAS_H
 
 #include "GuiElement.h"
+#include "../Level.h"
 
 class Canvas : public GuiElement {
 public:
@@ -16,17 +17,21 @@ public:
 	}
 
 	~Canvas() {
-		delete currentLevel;
+		unloadLevel();
 	}
 
-	void loadLevel(Level* _level) {
-		currentLevel->unload();
-		currentLevel = _level;
+	template <typename T, typename... TArgs>
+	T* loadLevel(TArgs... levelConstructorArgs) {
+		T* level = new T(std::forward<TArgs>(levelConstructorArgs)...);
+		unloadLevel();
+		currentLevel = level;
 		currentLevel->load();
+		return level;
 	}
 
 	void unloadLevel() {
 		currentLevel->unload();
+		delete currentLevel;
 	}
 
 	void onInit() override {

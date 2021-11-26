@@ -2,7 +2,7 @@
 #define _ECS_H
 
 class Entity;
-#include <list>
+#include <vector>
 #include <typeinfo>
 
 
@@ -56,6 +56,12 @@ public:
 		return c;
 	}
 
+	template <typename T>
+	void removeComponent() {
+		auto tid = typeid(T).hash_code;
+		std::remove_if(components.begin(), components.end(), [](Component*& c) { return tid == typeid(*(c)).hash_code; });
+	}
+
 	/// @brief get an attached component of a certain type
 	/// @tparam T the type of the component to find
 	/// @tparam ...TArgs the type of the arguments to pass to the constructor of the component in case there is no component of the type already attached
@@ -97,7 +103,7 @@ public:
 
 private:
 	/// @brief a list of the attached components
-	std::list<Component*> components;
+	std::vector<Component*> components;
 };
 
 #endif // _ECS_H

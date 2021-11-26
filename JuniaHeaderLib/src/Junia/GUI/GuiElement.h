@@ -3,7 +3,7 @@
 
 class GuiElement {
 public:
-	GuiElement* parent;
+	GuiElement* parent = nullptr;
 
 	/// @brief override to catch initialization event
 	virtual void onInit() {  }

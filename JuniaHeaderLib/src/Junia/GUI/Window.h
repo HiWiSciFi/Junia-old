@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include "../Level.h"
 #include "GuiElement.h"
-#include <list>
+#include <vector>
 #include <string>
 
 class Window : public GuiElement {
@@ -25,12 +25,14 @@ public:
 	}
 
 	~Window() {
+		while (!guiElements.empty()) delete guiElements.back(), guiElements.pop_back();
 		SDL_DestroyWindow(window);
 		SDL_DestroyRenderer(renderer);
 		SDL_Quit();
 	}
 
 	void gameLoop() {
+		// update
 		for (GuiElement*& ge : guiElements) ge->update();
 		for (GuiElement*& ge : guiElements) {
 			SDL_RenderClear(renderer);
@@ -53,7 +55,7 @@ private:
 	int height;
 	std::string title;
 
-	std::list<GuiElement*> guiElements;
+	std::vector<GuiElement*> guiElements;
 
 	SDL_Window* window;
 	SDL_Renderer* renderer;

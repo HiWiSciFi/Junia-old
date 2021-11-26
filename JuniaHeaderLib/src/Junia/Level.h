@@ -6,7 +6,7 @@
 
 class Level {
 public:
-	~Level() { for (Entity*& e : entities) delete e; }
+	~Level() { while (!entities.empty()) delete entities.front(), entities.pop_front(); }
 
 	/// @brief load a certain level
 	/// @param level the level to be loaded

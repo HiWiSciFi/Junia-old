@@ -1,8 +1,6 @@
 #include "Junia/Junia.h"
 #include "Lvl0.h"
 
-#include <iostream>
-
 int main(int argc, char* argv[]) {
 	if (Junia::init() != 0) {
 		Junia::log("Junia could not be initialized!");
@@ -10,12 +8,13 @@ int main(int argc, char* argv[]) {
 	}
 
 	Window* game = Junia::createWindow();
-	Level* lvl0 = new Lvl0();
-	Canvas* canvas = game->addGuiElement<Canvas>(lvl0);
+	Canvas* levelManager = game->addGuiElement<Canvas>();
+	Level* lvl0 = levelManager->loadLevel<Lvl0>();
+
+	Junia::log("Junia initialized and loaded!");
 
 	while (Junia::running) Junia::gameLoop();
 
-	delete game;
 	Junia::quit();
 
 	return 0;
