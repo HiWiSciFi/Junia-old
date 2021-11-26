@@ -164,6 +164,7 @@
     <ClInclude Include="src\Junia\JuniaBase.h" />
     <ClInclude Include="src\Junia\Level.h" />
     <ClInclude Include="src\Junia\GUI\Window.h" />
+    <ClInclude Include="src\Junia\Math.h" />
     <ClInclude Include="src\Junia\math\vec2f.h" />
     <ClInclude Include="src\Junia\math\vec2i.h" />
     <ClInclude Include="src\Lvl0.h" />

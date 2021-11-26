@@ -1,7 +1,10 @@
 #include "Junia/Junia.h"
 #include "Lvl0.h"
 
+#include <Windows.h>
+
 int main(int argc, char* argv[]) {
+
 	if (Junia::init() != 0) {
 		Junia::log("Junia could not be initialized!");
 		return 1;
