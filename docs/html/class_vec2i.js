@@ -1,0 +1,27 @@
+var class_vec2i =
+[
+    [ "Vec2i", "class_vec2i.html#ab3aaa1108bd90108d4d036fd8ea2d3b6", null ],
+    [ "Vec2i", "class_vec2i.html#a202e6345767c9ae540ef559654ef391c", null ],
+    [ "magnitude", "class_vec2i.html#a886f7c7db72be18b1231c5dd213374b6", null ],
+    [ "operator++", "class_vec2i.html#a7d7295e3c78486514cebe7284b9618d2", null ],
+    [ "operator+=", "class_vec2i.html#a090a36ed70af90e692561585e691d75d", null ],
+    [ "operator+=", "class_vec2i.html#aaf21a1de015c2b2cf5698e3dea8b83f1", null ],
+    [ "operator+=", "class_vec2i.html#a45c19510540ed7cbc9e4c4ff96897a38", null ],
+    [ "operator--", "class_vec2i.html#aa80a1b29aaec6e191c8a25c5dfc4a76e", null ],
+    [ "operator-=", "class_vec2i.html#ab4a7f863d2487c02876ca1e6571f8b82", null ],
+    [ "operator-=", "class_vec2i.html#a6cdcc91617afda428d8671e980e20012", null ],
+    [ "operator=", "class_vec2i.html#a230a9f9552d1368f452e9e7c8b6b348c", null ],
+    [ "operator[]", "class_vec2i.html#a5af33a4c2216ec9e6dbea3d60362a254", null ],
+    [ "operator!=", "class_vec2i.html#a592316193f549d88eb0a2894c2dff0cb", null ],
+    [ "operator+", "class_vec2i.html#a32f707589143d34416401f6cd232f12a", null ],
+    [ "operator+", "class_vec2i.html#a7a56682eaff53d45269c5aa4d86e8ef4", null ],
+    [ "operator-", "class_vec2i.html#a52959d04988f60485f8b14d8267530e2", null ],
+    [ "operator-", "class_vec2i.html#ac35eaa8435228cbf5d55ee5efce24aeb", null ],
+    [ "operator<", "class_vec2i.html#a6b7f9596513699b1232a9907520d130a", null ],
+    [ "operator<=", "class_vec2i.html#a4854a85793b065ee0eda6f1fd31c2814", null ],
+    [ "operator==", "class_vec2i.html#a3e68ab3563a734bb55fc6445ad3c9686", null ],
+    [ "operator>", "class_vec2i.html#a9a4720eaba09411b11c2aba88e07f92e", null ],
+    [ "operator>=", "class_vec2i.html#ace06c09a8e7bc6a5f6f719977ac949a8", null ],
+    [ "x", "class_vec2i.html#ac79153cee745dfd6c4296199abf68f04", null ],
+    [ "y", "class_vec2i.html#a484bf927f1c7bde60922d1d432103ca5", null ]
+];

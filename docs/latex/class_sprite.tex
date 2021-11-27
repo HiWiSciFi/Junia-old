@@ -1,0 +1,69 @@
+\hypertarget{class_sprite}{}\doxysection{Sprite Class Reference}
+\label{class_sprite}\index{Sprite@{Sprite}}
+
+
+{\ttfamily \#include $<$Sprite.\+h$>$}
+
+Inheritance diagram for Sprite\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_sprite}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_sprite_a120d2151e77aba13c37b9cf976e64069}{load\+From\+Path}} (const char $\ast$path) override
+\item 
+void \mbox{\hyperlink{class_sprite_aa52034ec770c1338f259e85aa42a9977}{unload}} () override
+\item 
+SDL\+\_\+\+Texture $\ast$ \mbox{\hyperlink{class_sprite_ac09164eb4665301dd93fc967edec4b5d}{convert\+To\+Texture}} (SDL\+\_\+\+Renderer $\ast$renderer)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+SDL\+\_\+\+Rect $\ast$ \mbox{\hyperlink{class_sprite_ad12b634d7dd3f378dd205ba7e48dd63d}{src\+Rect}} = nullptr
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_sprite_ac09164eb4665301dd93fc967edec4b5d}\label{class_sprite_ac09164eb4665301dd93fc967edec4b5d}} 
+\index{Sprite@{Sprite}!convertToTexture@{convertToTexture}}
+\index{convertToTexture@{convertToTexture}!Sprite@{Sprite}}
+\doxysubsubsection{\texorpdfstring{convertToTexture()}{convertToTexture()}}
+{\footnotesize\ttfamily SDL\+\_\+\+Texture$\ast$ Sprite\+::convert\+To\+Texture (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_sprite_a120d2151e77aba13c37b9cf976e64069}\label{class_sprite_a120d2151e77aba13c37b9cf976e64069}} 
+\index{Sprite@{Sprite}!loadFromPath@{loadFromPath}}
+\index{loadFromPath@{loadFromPath}!Sprite@{Sprite}}
+\doxysubsubsection{\texorpdfstring{loadFromPath()}{loadFromPath()}}
+{\footnotesize\ttfamily void Sprite\+::load\+From\+Path (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_asset_aa64c3d4079c993d97680b457d337790c}{Asset}}.
+
+\mbox{\Hypertarget{class_sprite_aa52034ec770c1338f259e85aa42a9977}\label{class_sprite_aa52034ec770c1338f259e85aa42a9977}} 
+\index{Sprite@{Sprite}!unload@{unload}}
+\index{unload@{unload}!Sprite@{Sprite}}
+\doxysubsubsection{\texorpdfstring{unload()}{unload()}}
+{\footnotesize\ttfamily void Sprite\+::unload (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_asset_a468e4af7f3dcf8733473f0e56cfbb2fa}{Asset}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_sprite_ad12b634d7dd3f378dd205ba7e48dd63d}\label{class_sprite_ad12b634d7dd3f378dd205ba7e48dd63d}} 
+\index{Sprite@{Sprite}!srcRect@{srcRect}}
+\index{srcRect@{srcRect}!Sprite@{Sprite}}
+\doxysubsubsection{\texorpdfstring{srcRect}{srcRect}}
+{\footnotesize\ttfamily SDL\+\_\+\+Rect$\ast$ Sprite\+::src\+Rect = nullptr}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Projekte/\+Visual\+Studio/source/repos/\+Junia/\+Junia\+Header\+Lib/src/\+Junia/\+Asset\+Types/\+Default\+Assets/\mbox{\hyperlink{_sprite_8h}{Sprite.\+h}}\end{DoxyCompactItemize}

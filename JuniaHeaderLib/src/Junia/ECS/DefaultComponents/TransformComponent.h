@@ -1,7 +1,7 @@
 #ifndef _TRANSFORMCOMPONENT_H
 #define _TRANSFORMCOMPONENT_H
 
-#include "Junia/ECS.h"
+#include "../ECS.h"
 
 class TransformComponent : public Component {
 public:
@@ -10,10 +10,15 @@ public:
 	/// @brief the y position
 	int y;
 
+	int xscale;
+	int yscale;
+
 	/// @brief initialize with x and y position of 0
 	TransformComponent() {
 		x = 0;
 		y = 0;
+		xscale = 1;
+		yscale = 1;
 	}
 
 	/// @brief initialize with given x and y position
@@ -22,15 +27,8 @@ public:
 	TransformComponent(int _x, int _y) {
 		x = _x;
 		y = _y;
-	}
-
-	void onInit() override {
-		
-	}
-
-	void onUpdate() override {
-		x++;
-		y++;
+		xscale = 1;
+		yscale = 1;
 	}
 };
 

@@ -2,13 +2,16 @@
 #define _LVL0_H
 
 #include "Junia/Junia.h"
-#include "Junia/DefaultComponents.h"
 
 class Lvl0 : public Level {
 public:
 	void onLoad() override {
 		Entity* entity = createEntity();
-		SpriteComponent* tc = entity->addComponent<SpriteComponent>();
+		Sprite* sprite = AssetManager::loadAssetFromPath<Sprite>("assets/player.png");
+		SpriteComponent* sc = entity->addComponent<SpriteComponent>(sprite);
+		TransformComponent* transform = entity->getComponent<TransformComponent>();
+		transform->xscale = 2;
+		transform->yscale = 2;
 	}
 
 	void onUnload() override {

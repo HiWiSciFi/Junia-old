@@ -1,0 +1,1 @@
+#include "AssetTypes/DefaultAssets/Sprite.h"

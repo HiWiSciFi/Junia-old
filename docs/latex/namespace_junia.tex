@@ -1,0 +1,110 @@
+\hypertarget{namespace_junia}{}\doxysection{Junia Namespace Reference}
+\label{namespace_junia}\index{Junia@{Junia}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{namespace_junia_abbd12f659d07af363e9047490cf2c3a8}{sleep}} (long ms)
+\begin{DoxyCompactList}\small\item\em \mbox{[}works without initialization\mbox{]} pause the program for a limited timeframe !\+ATTENTION! THIS WILL ALSO DISABLE ALL INPUTS AND EVENTS INCLUDING WINDOW CLOSE EVENTS \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespace_junia_a6da37369e2dc4b479e0c0c90bdd5411d}{init}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{[}works without initialization\mbox{]} initialize the engine \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_window}{Window}} $\ast$ \mbox{\hyperlink{namespace_junia_a5e92bb881fad6702d2312bc9d4a9fbf8}{create\+Window}} (const char $\ast$title=\char`\"{}Junia \mbox{\hyperlink{class_window}{Window}}\char`\"{}, int x=SDL\+\_\+\+WINDOWPOS\+\_\+\+CENTERED, int y=SDL\+\_\+\+WINDOWPOS\+\_\+\+CENTERED, int width=800, int height=600)
+\item 
+void \mbox{\hyperlink{namespace_junia_a2db90dfae6d9bb9f41c4bf2e5c9e135e}{log}} (const char $\ast$format,...)
+\item 
+void \mbox{\hyperlink{namespace_junia_a550842148a6d0998e1c7e945d35a67c4}{clean}} ()
+\item 
+void \mbox{\hyperlink{namespace_junia_a215c986b57736a657b0dcfc27397f5c2}{quit}} ()
+\item 
+void \mbox{\hyperlink{namespace_junia_a267d98cc0746ac7b0b4e40958fce610b}{destroy\+Window}} (\mbox{\hyperlink{class_window}{Window}} $\ast$w)
+\item 
+void \mbox{\hyperlink{namespace_junia_a4f6f2594b23b2bd8f774bfe00eea907a}{game\+Loop}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{class_window}{Window}} $\ast$ $>$ \mbox{\hyperlink{namespace_junia_a70c6da1f31df37a940babb12e3b7ec7c}{windows}}
+\item 
+bool \mbox{\hyperlink{namespace_junia_af66469bea39fb256fb4e65e317c9618c}{running}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_junia_a550842148a6d0998e1c7e945d35a67c4}\label{namespace_junia_a550842148a6d0998e1c7e945d35a67c4}} 
+\index{Junia@{Junia}!clean@{clean}}
+\index{clean@{clean}!Junia@{Junia}}
+\doxysubsubsection{\texorpdfstring{clean()}{clean()}}
+{\footnotesize\ttfamily void Junia\+::clean (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_junia_a5e92bb881fad6702d2312bc9d4a9fbf8}\label{namespace_junia_a5e92bb881fad6702d2312bc9d4a9fbf8}} 
+\index{Junia@{Junia}!createWindow@{createWindow}}
+\index{createWindow@{createWindow}!Junia@{Junia}}
+\doxysubsubsection{\texorpdfstring{createWindow()}{createWindow()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_window}{Window}}$\ast$ Junia\+::create\+Window (\begin{DoxyParamCaption}\item[{const char $\ast$}]{title = {\ttfamily \char`\"{}Junia~\mbox{\hyperlink{class_window}{Window}}\char`\"{}},  }\item[{int}]{x = {\ttfamily SDL\+\_\+WINDOWPOS\+\_\+CENTERED},  }\item[{int}]{y = {\ttfamily SDL\+\_\+WINDOWPOS\+\_\+CENTERED},  }\item[{int}]{width = {\ttfamily 800},  }\item[{int}]{height = {\ttfamily 600} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_junia_a267d98cc0746ac7b0b4e40958fce610b}\label{namespace_junia_a267d98cc0746ac7b0b4e40958fce610b}} 
+\index{Junia@{Junia}!destroyWindow@{destroyWindow}}
+\index{destroyWindow@{destroyWindow}!Junia@{Junia}}
+\doxysubsubsection{\texorpdfstring{destroyWindow()}{destroyWindow()}}
+{\footnotesize\ttfamily void Junia\+::destroy\+Window (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_window}{Window}} $\ast$}]{w }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_junia_a4f6f2594b23b2bd8f774bfe00eea907a}\label{namespace_junia_a4f6f2594b23b2bd8f774bfe00eea907a}} 
+\index{Junia@{Junia}!gameLoop@{gameLoop}}
+\index{gameLoop@{gameLoop}!Junia@{Junia}}
+\doxysubsubsection{\texorpdfstring{gameLoop()}{gameLoop()}}
+{\footnotesize\ttfamily void Junia\+::game\+Loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_junia_a6da37369e2dc4b479e0c0c90bdd5411d}\label{namespace_junia_a6da37369e2dc4b479e0c0c90bdd5411d}} 
+\index{Junia@{Junia}!init@{init}}
+\index{init@{init}!Junia@{Junia}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily int Junia\+::init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\mbox{[}works without initialization\mbox{]} initialize the engine 
+
+\begin{DoxyReturn}{Returns}
+0 if the initialization process was sucessful 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespace_junia_a2db90dfae6d9bb9f41c4bf2e5c9e135e}\label{namespace_junia_a2db90dfae6d9bb9f41c4bf2e5c9e135e}} 
+\index{Junia@{Junia}!log@{log}}
+\index{log@{log}!Junia@{Junia}}
+\doxysubsubsection{\texorpdfstring{log()}{log()}}
+{\footnotesize\ttfamily void Junia\+::log (\begin{DoxyParamCaption}\item[{const char $\ast$}]{format,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_junia_a215c986b57736a657b0dcfc27397f5c2}\label{namespace_junia_a215c986b57736a657b0dcfc27397f5c2}} 
+\index{Junia@{Junia}!quit@{quit}}
+\index{quit@{quit}!Junia@{Junia}}
+\doxysubsubsection{\texorpdfstring{quit()}{quit()}}
+{\footnotesize\ttfamily void Junia\+::quit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_junia_abbd12f659d07af363e9047490cf2c3a8}\label{namespace_junia_abbd12f659d07af363e9047490cf2c3a8}} 
+\index{Junia@{Junia}!sleep@{sleep}}
+\index{sleep@{sleep}!Junia@{Junia}}
+\doxysubsubsection{\texorpdfstring{sleep()}{sleep()}}
+{\footnotesize\ttfamily void Junia\+::sleep (\begin{DoxyParamCaption}\item[{long}]{ms }\end{DoxyParamCaption})}
+
+
+
+\mbox{[}works without initialization\mbox{]} pause the program for a limited timeframe !\+ATTENTION! THIS WILL ALSO DISABLE ALL INPUTS AND EVENTS INCLUDING WINDOW CLOSE EVENTS 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms} & how many milliseconds the application should sleep \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespace_junia_af66469bea39fb256fb4e65e317c9618c}\label{namespace_junia_af66469bea39fb256fb4e65e317c9618c}} 
+\index{Junia@{Junia}!running@{running}}
+\index{running@{running}!Junia@{Junia}}
+\doxysubsubsection{\texorpdfstring{running}{running}}
+{\footnotesize\ttfamily bool Junia\+::running = false}
+
+\mbox{\Hypertarget{namespace_junia_a70c6da1f31df37a940babb12e3b7ec7c}\label{namespace_junia_a70c6da1f31df37a940babb12e3b7ec7c}} 
+\index{Junia@{Junia}!windows@{windows}}
+\index{windows@{windows}!Junia@{Junia}}
+\doxysubsubsection{\texorpdfstring{windows}{windows}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{class_window}{Window}}$\ast$$>$ Junia\+::windows}
+

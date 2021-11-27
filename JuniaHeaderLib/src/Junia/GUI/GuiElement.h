@@ -12,6 +12,8 @@ public:
 	/// @brief override to catch draw event
 	virtual void onDraw(SDL_Renderer* renderer) {  }
 
+	/// @brief set the parent of this GuiElement
+	/// @param _parent a pointer to the parent GuiElement
 	void setParent(GuiElement* _parent) { parent = _parent; }
 
 	/// @brief called by the engine on initialization

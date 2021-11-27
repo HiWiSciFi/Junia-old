@@ -4,7 +4,7 @@
 class Entity;
 #include <vector>
 #include <typeinfo>
-
+#include <SDL.h>
 
 class Component {
 public:
@@ -18,14 +18,14 @@ public:
 	/// @brief override to catch the update event
 	virtual void onUpdate() {  }
 	/// @brief override to catch the draw event
-	virtual void onDraw() {  }
+	virtual void onDraw(SDL_Renderer* renderer) {  }
 
 	/// @brief called by the engine on initialization
 	void init() { this->onInit(); }
 	/// @brief called by the engine on update
 	void update() { this->onUpdate(); }
 	/// @brief called by the engine on draw
-	void draw() { this->onDraw(); }
+	void draw(SDL_Renderer* renderer) { this->onDraw(renderer); }
 
 };
 
@@ -99,7 +99,7 @@ public:
 	/// @brief called by the engine on update
 	void update() { for (Component*& c : components) c->update(); }
 	/// @brief called by the engine on draw
-	void draw() { for (Component*& c : components) c->draw(); }
+	void draw(SDL_Renderer* renderer) { for (Component*& c : components) c->draw(renderer); }
 
 private:
 	/// @brief a list of the attached components

@@ -39,11 +39,11 @@ public:
 	}
 
 	void onUpdate() override {
-
+		currentLevel->update();
 	}
 
 	void onDraw(SDL_Renderer* renderer) override {
-		currentLevel->draw();
+		currentLevel->draw(renderer);
 	}
 
 private:

@@ -1,0 +1,127 @@
+\hypertarget{class_level}{}\doxysection{Level Class Reference}
+\label{class_level}\index{Level@{Level}}
+
+
+{\ttfamily \#include $<$Level.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_level_a249eac1e8f19ff44134efa5e986feaca}{$\sim$\+Level}} ()
+\item 
+\mbox{\hyperlink{class_entity}{Entity}} $\ast$ \mbox{\hyperlink{class_level_ab4678e6a5ddf701c8db3167d28df22f6}{create\+Entity}} ()
+\begin{DoxyCompactList}\small\item\em create an entity in the level \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_level_ab213ddeeb92129f90837246605430254}{load}} ()
+\begin{DoxyCompactList}\small\item\em called by the engine to load the level \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_level_a42ab65803b47558b16aa087b6d4c8f07}{unload}} ()
+\begin{DoxyCompactList}\small\item\em called by the engine to unload the level \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_level_ad768d8a3234651a2f20d7f032c4fa1cb}{on\+Load}} ()
+\begin{DoxyCompactList}\small\item\em override to catch the load event \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_level_a5c07342109dac35f220725f24ad3567c}{on\+Unload}} ()
+\begin{DoxyCompactList}\small\item\em override to catch the unload event \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_level_a62e412eaad753d2baa2f94239cb80e41}{update}} ()
+\item 
+void \mbox{\hyperlink{class_level_ac6f4a249f752ad81c8d447c5199ebcfe}{draw}} (SDL\+\_\+\+Renderer $\ast$renderer)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_level_afb5c04d09a5772fa0e0e3c829baa2b78}{load\+Level}} (\mbox{\hyperlink{class_level}{Level}} $\ast$level)
+\begin{DoxyCompactList}\small\item\em load a certain level \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_level_a249eac1e8f19ff44134efa5e986feaca}\label{class_level_a249eac1e8f19ff44134efa5e986feaca}} 
+\index{Level@{Level}!````~Level@{$\sim$Level}}
+\index{````~Level@{$\sim$Level}!Level@{Level}}
+\doxysubsubsection{\texorpdfstring{$\sim$Level()}{~Level()}}
+{\footnotesize\ttfamily Level\+::$\sim$\+Level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_level_ab4678e6a5ddf701c8db3167d28df22f6}\label{class_level_ab4678e6a5ddf701c8db3167d28df22f6}} 
+\index{Level@{Level}!createEntity@{createEntity}}
+\index{createEntity@{createEntity}!Level@{Level}}
+\doxysubsubsection{\texorpdfstring{createEntity()}{createEntity()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_entity}{Entity}}$\ast$ Level\+::create\+Entity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+create an entity in the level 
+
+\begin{DoxyReturn}{Returns}
+a pointer to the created entity 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_level_ac6f4a249f752ad81c8d447c5199ebcfe}\label{class_level_ac6f4a249f752ad81c8d447c5199ebcfe}} 
+\index{Level@{Level}!draw@{draw}}
+\index{draw@{draw}!Level@{Level}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Level\+::draw (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_level_ab213ddeeb92129f90837246605430254}\label{class_level_ab213ddeeb92129f90837246605430254}} 
+\index{Level@{Level}!load@{load}}
+\index{load@{load}!Level@{Level}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void Level\+::load (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+called by the engine to load the level 
+
+\mbox{\Hypertarget{class_level_afb5c04d09a5772fa0e0e3c829baa2b78}\label{class_level_afb5c04d09a5772fa0e0e3c829baa2b78}} 
+\index{Level@{Level}!loadLevel@{loadLevel}}
+\index{loadLevel@{loadLevel}!Level@{Level}}
+\doxysubsubsection{\texorpdfstring{loadLevel()}{loadLevel()}}
+{\footnotesize\ttfamily static void Level\+::load\+Level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_level}{Level}} $\ast$}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+load a certain level 
+
+
+\begin{DoxyParams}{Parameters}
+{\em level} & the level to be loaded \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_level_ad768d8a3234651a2f20d7f032c4fa1cb}\label{class_level_ad768d8a3234651a2f20d7f032c4fa1cb}} 
+\index{Level@{Level}!onLoad@{onLoad}}
+\index{onLoad@{onLoad}!Level@{Level}}
+\doxysubsubsection{\texorpdfstring{onLoad()}{onLoad()}}
+{\footnotesize\ttfamily virtual void Level\+::on\+Load (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+override to catch the load event 
+
+\mbox{\Hypertarget{class_level_a5c07342109dac35f220725f24ad3567c}\label{class_level_a5c07342109dac35f220725f24ad3567c}} 
+\index{Level@{Level}!onUnload@{onUnload}}
+\index{onUnload@{onUnload}!Level@{Level}}
+\doxysubsubsection{\texorpdfstring{onUnload()}{onUnload()}}
+{\footnotesize\ttfamily virtual void Level\+::on\+Unload (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+override to catch the unload event 
+
+\mbox{\Hypertarget{class_level_a42ab65803b47558b16aa087b6d4c8f07}\label{class_level_a42ab65803b47558b16aa087b6d4c8f07}} 
+\index{Level@{Level}!unload@{unload}}
+\index{unload@{unload}!Level@{Level}}
+\doxysubsubsection{\texorpdfstring{unload()}{unload()}}
+{\footnotesize\ttfamily void Level\+::unload (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+called by the engine to unload the level 
+
+\mbox{\Hypertarget{class_level_a62e412eaad753d2baa2f94239cb80e41}\label{class_level_a62e412eaad753d2baa2f94239cb80e41}} 
+\index{Level@{Level}!update@{update}}
+\index{update@{update}!Level@{Level}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Level\+::update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Projekte/\+Visual\+Studio/source/repos/\+Junia/\+Junia\+Header\+Lib/src/\+Junia/\mbox{\hyperlink{_level_8h}{Level.\+h}}\end{DoxyCompactItemize}

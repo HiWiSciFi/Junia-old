@@ -31,7 +31,7 @@ public:
 	virtual void onUnload() {  }
 
 	void update() { for (Entity*& e : entities) e->update(); }
-	void draw() { for (Entity*& e : entities) e->draw(); }
+	void draw(SDL_Renderer* renderer) { for (Entity*& e : entities) e->draw(renderer); }
 
 private:
 	/// @brief the entities in the level

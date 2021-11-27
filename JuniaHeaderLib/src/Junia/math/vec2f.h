@@ -18,7 +18,7 @@ public:
 		y = _y;
 	}
 
-	float magnitude() const { return std::sqrt(x*x + y*y); }
+	float magnitude() const { return std::sqrt(x * x + y * y); }
 
 	// copy assignment
 	Vec2f& operator=(const Vec2f& other) {

@@ -154,6 +154,11 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Junia\Assets.h" />
+    <ClInclude Include="src\Junia\AssetTypes\Asset.h" />
+    <ClInclude Include="src\Junia\AssetTypes\AssetManager.h" />
+    <ClInclude Include="src\Junia\AssetTypes\DefaultAssets\Sprite.h" />
+    <ClInclude Include="src\Junia\DefaultAssets.h" />
     <ClInclude Include="src\Junia\DefaultComponents.h" />
     <ClInclude Include="src\Junia\ECS.h" />
     <ClInclude Include="src\Junia\GUI.h" />

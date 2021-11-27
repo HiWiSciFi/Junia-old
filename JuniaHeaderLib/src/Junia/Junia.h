@@ -1,5 +1,6 @@
 #include "JuniaBase.h"
 #include "ECS.h"
+#include "DefaultComponents.h"
 #include "GUI.h"
 #include "Level.h"
 #include "Math.h"

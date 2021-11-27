@@ -99,7 +99,7 @@ public:
 	friend bool operator==(const Vec2i& lhs, const Vec2i& rhs) { return (lhs.x == rhs.x) && (lhs.y == rhs.y); }
 	friend bool operator!=(const Vec2i& lhs, const Vec2i& rhs) { return !(lhs == rhs); }
 
-	const int& operator[](std::size_t idx) const { return idx == 0 ? x : y; }
+	const float& operator[](std::size_t idx) const { return idx == 0 ? x : y; }
 };
 
 #endif // _VEC2I_H
