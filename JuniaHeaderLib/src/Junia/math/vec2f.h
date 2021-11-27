@@ -75,16 +75,6 @@ public:
 		return *this;
 	}
 
-	friend Vec2f& operator+(Vec2f ob, const Vec2f& other) {
-		ob += other;
-		return ob;
-	}
-
-	friend Vec2f& operator-(Vec2f ob, const Vec2f& other) {
-		ob -= other;
-		return ob;
-	}
-
 	friend bool operator< (const Vec2f& lhs, const Vec2f& rhs) { return lhs.magnitude() < rhs.magnitude(); }
 	friend bool operator> (const Vec2f& lhs, const Vec2f& rhs) { return rhs < lhs; }
 	friend bool operator<=(const Vec2f& lhs, const Vec2f& rhs) { return !(lhs > rhs); }

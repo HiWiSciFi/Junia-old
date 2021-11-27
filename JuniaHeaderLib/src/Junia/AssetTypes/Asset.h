@@ -3,6 +3,7 @@
 
 class Asset {
 public:
+	virtual ~Asset() {  }
 	virtual void loadFromPath(const char* path) {  }
 	virtual void unload() {  }
 };

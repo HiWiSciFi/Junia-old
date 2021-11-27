@@ -34,15 +34,15 @@ public:
 		delete currentLevel;
 	}
 
-	void onInit() override {
+	void onInit() {
 
 	}
 
-	void onUpdate() override {
+	void onUpdate() {
 		currentLevel->update();
 	}
 
-	void onDraw(SDL_Renderer* renderer) override {
+	void onDraw(SDL_Renderer* renderer) {
 		currentLevel->draw(renderer);
 	}
 

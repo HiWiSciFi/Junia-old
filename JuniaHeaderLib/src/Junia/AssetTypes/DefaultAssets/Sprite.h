@@ -24,7 +24,7 @@ public:
 	}
 
 private:
-	SDL_Surface* texture;
+	SDL_Surface* texture = nullptr;
 };
 
 #endif // _SPRITE_H

@@ -5,16 +5,15 @@
 
 class Lvl0 : public Level {
 public:
-	void onLoad() override {
+	void onLoad() {
 		Entity* entity = createEntity();
-		Sprite* sprite = AssetManager::loadAssetFromPath<Sprite>("assets/player.png");
-		SpriteComponent* sc = entity->addComponent<SpriteComponent>(sprite);
+		entity->addComponent<SpriteComponent>(AssetManager::loadAssetFromPath<Sprite>("assets/player.png"));
 		TransformComponent* transform = entity->getComponent<TransformComponent>();
 		transform->xscale = 2;
 		transform->yscale = 2;
 	}
 
-	void onUnload() override {
+	void onUnload() {
 
 	}
 };

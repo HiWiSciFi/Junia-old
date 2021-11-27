@@ -5,6 +5,8 @@ class GuiElement {
 public:
 	GuiElement* parent = nullptr;
 
+	virtual ~GuiElement() {  }
+
 	/// @brief override to catch initialization event
 	virtual void onInit() {  }
 	/// @brief override to catch update event

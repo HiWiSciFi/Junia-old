@@ -14,22 +14,24 @@ public:
 		transform = nullptr;
 		sprite = nullptr;
 		texture = nullptr;
+		destRect = new SDL_Rect();
 	}
 
 	SpriteComponent(Sprite* _sprite) {
 		transform = nullptr;
 		sprite = _sprite;
 		texture = nullptr;
+		destRect = new SDL_Rect();
 	}
 
-	void onInit() override {
+	void onInit() {
 		transform = entity->requireComponent<TransformComponent>(); // require Component
 	}
 
-	void onDraw(SDL_Renderer* renderer) override {
+	void onDraw(SDL_Renderer* renderer) {
 		if (sprite != nullptr) {
 			if (texture != nullptr) {
-				SDL_RenderCopy(renderer, texture, sprite->srcRect, &calcDestRect());
+				SDL_RenderCopy(renderer, texture, sprite->srcRect, recalcDestRect());
 			}
 			else {
 				// load texture from surface
@@ -41,14 +43,14 @@ public:
 private:
 	TransformComponent* transform;
 	SDL_Texture* texture;
+	SDL_Rect* destRect;
 
-	SDL_Rect& calcDestRect() {
-		SDL_Rect rect;
-		rect.w = sprite->srcRect->w * transform->xscale;
-		rect.h = sprite->srcRect->h * transform->yscale;
-		rect.x = transform->x;
-		rect.y = transform->y;
-		return rect;
+	SDL_Rect* recalcDestRect() {
+		destRect->w = sprite->srcRect->w * transform->xscale;
+		destRect->h = sprite->srcRect->h * transform->yscale;
+		destRect->x = transform->x;
+		destRect->y = transform->y;
+		return destRect;
 	}
 };
 
