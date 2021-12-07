@@ -45,6 +45,9 @@ namespace Junia {
 		return window;
 	}
 	
+	/// @brief logs a message
+	/// @param format the format string (ref. printf)
+	/// @param  the arguments for the formatted string (ref. printf)
 	void log(const char* format, ...) {
 		va_list ap;
 		va_start(ap, format);
@@ -52,18 +55,22 @@ namespace Junia {
 		va_end(ap);
 	}
 
+	/// @brief clean up the engine and (hopfully) fix all floating references created by it
 	void clean() {
 		AssetManager::unloadAll();
 		for (Window*& w : windows) { w->running = false; }
 		while (!windows.empty()) delete windows.back(), windows.pop_back();
 	}
 
+	/// @brief clean and exit SDL and the engine
 	void quit() {
 		running = false;
 		clean();
 		SDL_Quit();
 	}
 
+	/// @brief DEPRECATED
+	/// @param w DEPRECATED
 	void destroyWindow(Window* w) {
 		delete w;
 		windows.erase(std::remove(windows.begin(), windows.end(), w), windows.end());
@@ -72,6 +79,7 @@ namespace Junia {
 		}
 	}
 
+	/// @brief the game loop to be called each update frame
 	void gameLoop() {
 		// handle events
 		SDL_Event event;
