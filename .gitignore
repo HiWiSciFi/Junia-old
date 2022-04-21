@@ -1,9 +1,9 @@
 # DIRECTORIES
-./bin/
-bin-int/
+/bin/
+/bin-int/
 
 # VS
-.vs/
+/.vs/
 
 # FILES
 
