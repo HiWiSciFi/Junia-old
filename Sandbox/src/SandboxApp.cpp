@@ -3,15 +3,8 @@
 class Sandbox : public Junia::Application
 {
 public:
-	Sandbox()
-	{
-
-	}
-
-	~Sandbox()
-	{
-
-	}
+	Sandbox() = default;
+	~Sandbox() override = default;
 };
 
 Junia::Application* Junia::CreateApplication()
