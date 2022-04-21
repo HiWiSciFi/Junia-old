@@ -1,0 +1,3 @@
+[submodule ".\\Junia\\vendor\\spdlog"]
+	path = .\\Junia\\vendor\\spdlog
+	url = https://github.com/gabime/spdlog

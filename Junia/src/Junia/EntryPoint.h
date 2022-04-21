@@ -2,11 +2,15 @@
 
 #ifdef JE_PLATFORM_WINDOWS
 
-extern Junia::Application* Junia::CreateApplication();
-
+// ReSharper disable once CppNonInlineFunctionDefinitionInHeaderFile
 int main(int argc, char** argv)
 {
-	auto app = Junia::CreateApplication();
+	Junia::Log::Init();
+	JE_CORE_WARN("Initialized Log!");
+	int a = 5;
+	JE_INFO("Hello! Var={0}", a);
+
+	auto const app = Junia::CreateApplication();
 	app->Run();
 	delete app;
 	return 0;
