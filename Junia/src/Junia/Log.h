@@ -1,9 +1,8 @@
 #pragma once
 
-#include <memory>
-
 #include "Core.h"
 #include "spdlog/spdlog.h"
+#include "spdlog/fmt/ostr.h"
 
 namespace Junia {
 	class JUNIA_API Log
@@ -28,8 +27,8 @@ namespace Junia {
 #define JE_CORE_FATAL(...)    ::Junia::Log::GetCoreLogger()->fatal(__VA_ARGS__)
 
 // Client log macros
-#define JE_TRACE(...)         ::Junia::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define JE_INFO(...)          ::Junia::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define JE_WARN(...)          ::Junia::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define JE_ERROR(...)         ::Junia::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define JE_FATAL(...)         ::Junia::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+#define JE_TRACE(...)         ::Junia::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define JE_INFO(...)          ::Junia::Log::GetClientLogger()->info(__VA_ARGS__)
+#define JE_WARN(...)          ::Junia::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define JE_ERROR(...)         ::Junia::Log::GetClientLogger()->error(__VA_ARGS__)
+#define JE_FATAL(...)         ::Junia::Log::GetClientLogger()->fatal(__VA_ARGS__)

@@ -2,7 +2,6 @@
 
 #ifdef JE_PLATFORM_WINDOWS
 
-// ReSharper disable once CppNonInlineFunctionDefinitionInHeaderFile
 int main(int argc, char** argv)
 {
 	Junia::Log::Init();
