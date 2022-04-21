@@ -1,6 +1,6 @@
 # DIRECTORIES
 ./bin/
-./bin-int/
+bin-int/
 
 # VS
 .vs/
