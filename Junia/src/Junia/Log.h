@@ -20,15 +20,15 @@ namespace Junia {
 }
 
 // Core log macros
-#define JE_CORE_TRACE(...)    ::Junia::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define JE_CORE_INFO(...)     ::Junia::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define JE_CORE_WARN(...)     ::Junia::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define JE_CORE_ERROR(...)    ::Junia::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define JE_CORE_FATAL(...)    ::Junia::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+#define JE_CORE_TRACE(...)    Junia::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define JE_CORE_INFO(...)     Junia::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define JE_CORE_WARN(...)     Junia::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define JE_CORE_ERROR(...)    Junia::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define JE_CORE_FATAL(...)    Junia::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 // Client log macros
-#define JE_TRACE(...)         ::Junia::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define JE_INFO(...)          ::Junia::Log::GetClientLogger()->info(__VA_ARGS__)
-#define JE_WARN(...)          ::Junia::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define JE_ERROR(...)         ::Junia::Log::GetClientLogger()->error(__VA_ARGS__)
-#define JE_FATAL(...)         ::Junia::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define JE_TRACE(...)         Junia::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define JE_INFO(...)          Junia::Log::GetClientLogger()->info(__VA_ARGS__)
+#define JE_WARN(...)          Junia::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define JE_ERROR(...)         Junia::Log::GetClientLogger()->error(__VA_ARGS__)
+#define JE_FATAL(...)         Junia::Log::GetClientLogger()->critical(__VA_ARGS__)
