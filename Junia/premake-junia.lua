@@ -6,8 +6,8 @@ project "Junia"
 	targetdir ("../out/" .. outputdir .. "/%{prj.name}")
 	objdir ("../out-obj/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "jepch.h"
-	pchsource "src/jepch.cpp"
+	pchheader "juniapch.h"
+	pchsource "src/juniapch.cpp"
 
 	files {
 		"src/**.h",
