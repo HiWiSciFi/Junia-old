@@ -5,6 +5,10 @@
 # VS
 /.vs/
 
+# XCODE4
+*.xcworkspace/
+*.xcodeproj/
+
 # FILES
 
 # VS
