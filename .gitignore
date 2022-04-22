@@ -12,3 +12,6 @@
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+
+# GMAKE
+Makefile
