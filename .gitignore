@@ -10,6 +10,7 @@
 *.xcodeproj/
 
 # FILES
+*.swp
 
 # VS
 *.sln
