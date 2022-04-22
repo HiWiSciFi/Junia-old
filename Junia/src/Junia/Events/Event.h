@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Junia/Core.h"
+#include "Junia/Base.h"
 
 namespace Junia
 {
@@ -20,10 +20,10 @@ namespace Junia
 	enum EventCategory
 	{
 		None = 0,
-		EventCategoryApplication    = BIT(0),
-		EventCategoryInput          = BIT(1),
-		EventCategoryKeyboard       = BIT(2),
-		EventCategoryMouse          = BIT(3)
+		EventCategoryApplication    = BITFIELD(0),
+		EventCategoryInput          = BITFIELD(1),
+		EventCategoryKeyboard       = BITFIELD(2),
+		EventCategoryMouse          = BITFIELD(3)
 	};
 
 #define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }\
