@@ -16,7 +16,7 @@ project "Junia"
 
 	includedirs {
 		"src",
-		"dependencies/spdlog/include"
+		"dependencies/plog/include"
 	}
 
 	filter "system:windows"

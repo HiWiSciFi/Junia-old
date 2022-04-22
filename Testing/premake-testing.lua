@@ -12,7 +12,7 @@ project "Testing"
 	}
 
 	includedirs {
-		"../Junia/dependencies/spdlog/include",
+		"../Junia/dependencies/plog/include",
 		"../Junia/src"
 	}
 
