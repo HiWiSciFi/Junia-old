@@ -12,6 +12,7 @@
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+*.vcproj
 
 # GMAKE and GMAKE2
 Makefile
@@ -19,3 +20,7 @@ Makefile
 # CODELITE
 *.workspace
 *.project
+
+# XCODE4
+*.xcworkspace
+*.xcodeproj
