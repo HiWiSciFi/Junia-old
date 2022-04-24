@@ -5,6 +5,9 @@
 # VS
 /.vs/
 
+# CODELITE
+/.codelite/
+
 # XCODE4
 *.xcworkspace/
 *.xcodeproj/
