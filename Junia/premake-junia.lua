@@ -1,46 +1,71 @@
+group "Dependencies"
+	include "dependencies/premake-dependencies.lua"
+group ""
+
 project "Junia"
 	location "."
 	kind "SharedLib"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "Off"
 
-	targetdir ("../out/" .. outputdir .. "/%{prj.name}")
-	objdir ("../out-obj/" .. outputdir .. "/%{prj.name}")
+	targetdir ("../out/%{prj.name}/" .. buildtargetname)
+	objdir ("../out-obj/%{prj.name}/" .. buildtargetname)
 
-	pchheader "juniapch.h"
+	pchheader "juniapch.hpp"
 	pchsource "src/juniapch.cpp"
 
 	files {
-		"src/**.h",
+		"src/**.hpp",
 		"src/**.cpp"
+	}
+
+	defines {
+
 	}
 
 	includedirs {
 		"src",
-		"dependencies/plog/include"
+		"%{Dependency.spdlog.include}"
+	}
+
+	links {
+		
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
-
 		defines {
-			"JE_PLATFORM_WINDOWS;",
-			"JE_BUILD_DLL;"
+			"JE_TARGETPLATFORM_WINDOWS",
+			"JE_EXPORT"
 		}
-
 		postbuildcommands {
-			("{COPY} %{cfg.buildtarget.relpath} ../out/" .. outputdir .. "/Testing")
+			("{COPY} %{cfg.buildtarget.relpath} ../out/Testing/" .. buildtargetname)
 		}
 
 	filter "configurations:Debug"
-		defines "JE_DEBUG"
+		runtime "Debug"
 		symbols "On"
+		optimize "Off"
+		defines {
+			"JELOG_MAX_TRACE",
+			"JE_CONFIG_DEBUG"
+		}
 
-	filter "configurations:Debug"
-		defines "JE_RELEASE"
+	filter "configurations:Optimized"
+		runtime "Release"
+		symbols "Off"
 		optimize "On"
+		defines {
+			"JE_CONFIG_OPTIMIZED",
+			"JELOG_MAX_ERROR"
+		}
 
-	filter "configurations:Debug"
-		defines "JE_DIST"
+	filter "configurations:Release"
+		runtime "Release"
+		symbols "Off"
 		optimize "On"
+		defines {
+			"JE_CONFIG_RELEASE",
+			"JELOG_MAX_CRIT"
+		}

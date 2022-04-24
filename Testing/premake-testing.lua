@@ -1,19 +1,25 @@
+group "Dependencies"
+	include "dependencies/premake-dependencies.lua"
+group ""
+
 project "Testing"
 	location "."
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "On"
 
-	targetdir ("../out/" .. outputdir .. "/%{prj.name}")
-	objdir ("../out-obj/" .. outputdir .. "/%{prj.name}")
+	targetdir ("../out/%{prj.name}/" .. buildtargetname)
+	objdir ("../out-obj/%{prj.name}/" .. buildtargetname)
 
 	files {
-		"src/**.h",
+		"src/**.hpp",
 		"src/**.cpp"
 	}
 
 	includedirs {
-		"../Junia/dependencies/plog/include",
-		"../Junia/src"
+		"../Junia/src",
+		"%{Dependency.spdlog.include}"
 	}
 
 	links {
@@ -21,22 +27,34 @@ project "Testing"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
-
 		defines {
-			"JE_PLATFORM_WINDOWS;"
+			"JE_TARGETPLATFORM_WINDOWS"
 		}
 
 	filter "configurations:Debug"
-		defines "JE_DEBUG"
+		runtime "Debug"
 		symbols "On"
+		optimize "Off"
+		defines {
+			"JELOG_MAX_TRACE",
+			"JE_CONFIG_DEBUG"
+		}
 
-	filter "configurations:Debug"
-		defines "JE_RELEASE"
+	filter "configurations:Optimized"
+		runtime "Release"
+		symbols "Off"
 		optimize "On"
+		defines {
+			"JE_CONFIG_OPTIMIZED",
+			"JELOG_MAX_ERROR"
+		}
 
-	filter "configurations:Debug"
-		defines "JE_DIST"
+	filter "configurations:Release"
+		runtime "Release"
+		symbols "Off"
 		optimize "On"
+		defines {
+			"JE_CONFIG_RELEASE",
+			"JELOG_MAX_CRIT"
+		}

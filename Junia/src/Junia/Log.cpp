@@ -1,31 +1,28 @@
-#include "juniapch.h"
-#include "Log.h"
+#include "juniapch.hpp"
+#include "Log.hpp"
 
-//#include <spdlog/sinks/stdout_color_sinks.h>
-#include <plog/Log.h>
-#include "plog/Initializers/RollingFileInitializer.h"
-#include "plog/Appenders/ColorConsoleAppender.h"
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 namespace Junia
 {
-	/*std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
-	std::shared_ptr<spdlog::logger> Log::s_ClientLogger;*/
+	std::shared_ptr<spdlog::logger> Log::juniaLogger;
+	std::shared_ptr<spdlog::logger> Log::applicationLogger;
 
 	void Log::Init()
 	{
-		static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-		plog::init(plog::debug, &consoleAppender); // Step2: initialize the logger
+		spdlog::set_pattern("%^[%Y-%m-%d %T] %n %v%$");
 
-		// Step3: write log messages using a special macro
-		// There are several log macros, use the macro you liked the most
+		juniaLogger = spdlog::stdout_color_mt("[Junia]");
+		juniaLogger->set_level(spdlog::level::trace);
 
-		PLOGD << "Hello log!"; // short macro
-		PLOG_DEBUG << "Hello log!"; // long macro
-		PLOG(plog::debug) << "Hello log!"; // function-style macro
+		applicationLogger = spdlog::stdout_color_mt("  [App]");
+		applicationLogger->set_level(spdlog::level::trace);
 
-		// Also you can use LOG_XXX macro but it may clash with other logging libraries
-		LOGD << "Hello log!"; // short macro
-		LOG_DEBUG << "Hello log!"; // long macro
-		LOG(plog::debug) << "Hello log!"; // function-style macro
+		JELOG_BASE_WARN("Logger initialized!");
+		JELOG_TRACE("Still works!");
+		JELOG_INFO("idk how tbh...");
+		JELOG_BASE_ERROR("err");
+		JELOG_BASE_CRIT("REEE");
 	}
 }

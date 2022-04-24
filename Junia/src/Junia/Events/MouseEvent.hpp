@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Event.h"
+#include "Event.hpp"
 
 namespace Junia
 {
-	class JUNIA_API MouseMovedEvent : public Event
+	class JE_API_IO MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(float x, float y) : m_MouseX(x), m_MouseY(y) {}
@@ -26,7 +26,7 @@ namespace Junia
 		float m_MouseX, m_MouseY;
 	};
 
-	class JUNIA_API MouseScrolledEvent : public Event
+	class JE_API_IO MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset) : m_XOffset(xOffset), m_YOffset(yOffset) {}
@@ -48,7 +48,7 @@ namespace Junia
 		float m_XOffset, m_YOffset;
 	};
 
-	class JUNIA_API MouseButtonEvent : public Event
+	class JE_API_IO MouseButtonEvent : public Event
 	{
 	public:
 		inline int GetMouseButton() const { return m_Button; }
@@ -61,7 +61,7 @@ namespace Junia
 		int m_Button;
 	};
 
-	class JUNIA_API MouseButtonPressedEvent : public MouseButtonEvent
+	class JE_API_IO MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}
@@ -76,7 +76,7 @@ namespace Junia
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
-	class JUNIA_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class JE_API_IO MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(int button) : MouseButtonEvent(button) {}

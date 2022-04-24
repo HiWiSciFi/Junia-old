@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Event.h"
+#include "Event.hpp"
 
 namespace Junia
 {
-	class JUNIA_API WindowResizeEvent : public Event
+	class JE_API_IO WindowResizeEvent : public Event
 	{
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height) : m_Width(width), m_Height(height) {}
@@ -26,7 +26,7 @@ namespace Junia
 		unsigned int m_Width, m_Height;
 	};
 
-	class JUNIA_API WindowCloseEvent : public Event
+	class JE_API_IO WindowCloseEvent : public Event
 	{
 	public:
 		WindowCloseEvent() {}
@@ -35,7 +35,7 @@ namespace Junia
 		EVENT_CLASS_TYPE(WindowClose)
 	};
 
-	class JUNIA_API AppTickEvent : public Event
+	class JE_API_IO AppTickEvent : public Event
 	{
 	public:
 		AppTickEvent() {}
@@ -44,7 +44,7 @@ namespace Junia
 		EVENT_CLASS_TYPE(AppTick)
 	};
 
-	class JUNIA_API AppUpdateEvent : public Event
+	class JE_API_IO AppUpdateEvent : public Event
 	{
 	public:
 		AppUpdateEvent() {}
@@ -53,7 +53,7 @@ namespace Junia
 		EVENT_CLASS_TYPE(AppUpdate)
 	};
 
-	class JUNIA_API AppRenderEvent : public Event
+	class JE_API_IO AppRenderEvent : public Event
 	{
 	public:
 		AppRenderEvent() {}

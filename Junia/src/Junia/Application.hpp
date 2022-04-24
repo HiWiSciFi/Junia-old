@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Base.h"
+#include "Base.hpp"
 
 namespace Junia
 {
-	class JUNIA_API Application
+	class JE_API_IO Application
 	{
 	public:
 		Application();

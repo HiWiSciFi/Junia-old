@@ -1,4 +1,4 @@
-#include <Junia.h>
+#include <Junia.hpp>
 
 class Testapp : public Junia::Application
 {

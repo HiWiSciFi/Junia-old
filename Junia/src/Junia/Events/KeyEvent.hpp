@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Event.h"
+#include "Event.hpp"
 
 namespace Junia
 {
-	class JUNIA_API KeyEvent : public Event
+	class JE_API_IO KeyEvent : public Event
 	{
 	public:
 		inline int GetKeyCode() const { return m_KeyCode; }
@@ -17,7 +17,7 @@ namespace Junia
 		int m_KeyCode;
 	};
 
-	class JUNIA_API KeyPressedEvent : public KeyEvent
+	class JE_API_IO KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(int keycode, int repeatCount) : KeyEvent(keycode), m_RepeatCount(repeatCount) {}
@@ -37,7 +37,7 @@ namespace Junia
 		int m_RepeatCount;
 	};
 
-	class JUNIA_API KeyReleasedEvent : public KeyEvent
+	class JE_API_IO KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}

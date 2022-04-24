@@ -1,24 +1,20 @@
-#include "juniapch.h"
-#include "Application.h"
+#include "juniapch.hpp"
+#include "Application.hpp"
 
-#include "Events/ApplicationEvent.h"
-#include "Junia/Log.h"
+#include "Events/ApplicationEvent.hpp"
+#include "Junia/Log.hpp"
 
 namespace Junia
 {
 
-	Application::Application()
-	{
-	}
+	Application::Application() = default;
 
-	Application::~Application()
-	{
-	}
+	Application::~Application() = default;
 
 	void Application::Run()
 	{
 		WindowResizeEvent const e(1280, 720);
-		JE_TRACE(e);
+		JELOG_TRACE("{0}", e);
 		while(true);
 	}
 

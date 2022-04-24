@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Junia/Base.h"
+#include "Junia/Base.hpp"
 
 namespace Junia
 {
@@ -17,6 +17,8 @@ namespace Junia
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 
+#define BITFIELD(x) (1 << (x))
+
 	enum EventCategory
 	{
 		None = 0,
@@ -32,7 +34,7 @@ namespace Junia
 
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
-	class JUNIA_API Event
+	class JE_API_IO Event
 	{
 		friend class EventDispatcher;
 
@@ -64,7 +66,7 @@ namespace Junia
 		{
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.m_Handled = func(*(T*)&m_Event);
+				m_Event.m_Handled = func(*static_cast<T*>(&m_Event));
 				return true;
 			}
 			return false;

@@ -1,3 +1,15 @@
-[submodule "Junia/dependencies/plog"]
-	path = Junia/dependencies/plog
-	url = https://github.com/SergiusTheBest/plog
+[submodule "Junia/dependencies/spdlog"]
+	path = Junia/dependencies/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "Junia/dependencies/GLFW"]
+	path = Junia/dependencies/GLFW
+	url = https://github.com/glfw/glfw
+[submodule "Junia/dependencies/EnTT"]
+	path = Junia/dependencies/EnTT
+	url = https://github.com/skypjack/entt
+[submodule "Junia/dependencies/GLM"]
+	path = Junia/dependencies/GLM
+	url = https://github.com/g-truc/glm
+[submodule "Junia/dependencies/stb"]
+	path = Junia/dependencies/stb
+	url = https://github.com/nothings/stb

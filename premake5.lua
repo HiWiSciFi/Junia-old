@@ -4,11 +4,18 @@ workspace "Junia"
 
 	configurations {
 		"Debug",
-		"Release",
-		"Dist"
+		"Optimized",
+		"Release"
 	}
 
-	outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+	flags {
+		"MultiProcessorCompile",
+		"RelativeLinks"
+	}
+
+	buildtargetname = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+	Dependency = {}
 
 	include "Junia/premake-junia.lua"
 	include "Testing/premake-testing.lua"
