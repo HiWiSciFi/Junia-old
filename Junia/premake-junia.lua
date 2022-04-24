@@ -1,6 +1,6 @@
 group "Dependencies"
 	include "dependencies/premake-dependencies.lua"
-	
+
 group "Junia"
 project "Junia"
 	location "."
@@ -30,7 +30,7 @@ project "Junia"
 	}
 
 	links {
-		
+
 	}
 
 	filter "system:windows"
@@ -48,8 +48,9 @@ project "Junia"
 		symbols "On"
 		optimize "Off"
 		defines {
+			"JE_CONFIG_DEBUG",
 			"JELOG_MAX_TRACE",
-			"JE_CONFIG_DEBUG"
+			"JELOG_EXTENDED_INFO"
 		}
 
 	filter "configurations:Optimized"
@@ -58,7 +59,8 @@ project "Junia"
 		optimize "On"
 		defines {
 			"JE_CONFIG_OPTIMIZED",
-			"JELOG_MAX_ERROR"
+			"JELOG_MAX_ERROR",
+			"JELOG_EXTENDED_INFO"
 		}
 
 	filter "configurations:Release"

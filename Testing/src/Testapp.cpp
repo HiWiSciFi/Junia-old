@@ -1,6 +1,6 @@
 #include <Junia.hpp>
 
-class Testapp : public Junia::Application
+class Testapp final : public Junia::Application
 {
 public:
 	Testapp() = default;
