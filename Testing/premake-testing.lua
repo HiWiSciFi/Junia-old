@@ -1,7 +1,7 @@
 group "Dependencies"
 	include "dependencies/premake-dependencies.lua"
-group ""
 
+group "Junia"
 project "Testing"
 	location "."
 	kind "ConsoleApp"
