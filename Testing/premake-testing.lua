@@ -1,3 +1,5 @@
+depsloc = "../Testing/dependencies/"
+
 group "Dependencies"
 	include "dependencies/premake-dependencies.lua"
 

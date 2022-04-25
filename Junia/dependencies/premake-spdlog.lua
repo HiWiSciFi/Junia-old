@@ -13,5 +13,6 @@ project "spdlog"
 		"%{prj.name}/include"
 	}
 
-Dependency["spdlog"] = {}
-Dependency["spdlog"]["include"] = "../Junia/dependencies/spdlog/include"
+	filter {}
+		Dependency["spdlog"] = {}
+		Dependency["spdlog"]["include"] = depsloc .. "spdlog/include"

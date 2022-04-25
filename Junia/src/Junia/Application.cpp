@@ -3,6 +3,8 @@
 
 #include "Junia/Log.hpp"
 
+#include <GLFW/glfw3.h>
+
 namespace Junia
 {
 
@@ -12,8 +14,10 @@ namespace Junia
 
 	void Application::Run()
 	{
+		//if (!glfwInit()) JELOG_CRIT("{0}", "GLFW could not be initialized!");
 		JELOG_TRACE("{0}", "E");
-		while(true);
+		//glfwTerminate();
+		while (true);
 	}
 
 }

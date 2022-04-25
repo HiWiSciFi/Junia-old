@@ -1,3 +1,5 @@
+depsloc = "../Junia/dependencies/"
+
 group "Dependencies"
 	include "dependencies/premake-dependencies.lua"
 
@@ -26,11 +28,12 @@ project "Junia"
 
 	includedirs {
 		"src",
+		"%{Dependency.GLFW.include}",
 		"%{Dependency.spdlog.include}"
 	}
 
 	links {
-
+		"%{Dependency.GLFW.lib}"
 	}
 
 	filter "system:windows"
