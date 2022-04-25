@@ -23,7 +23,10 @@
 *.vcproj
 
 # GMAKE and GMAKE2
-Makefile
+[Mm]akefile
+
+# CMAKE
+[Cc][Mm]ake[Ll]ists.txt
 
 # CODELITE
 *.workspace
