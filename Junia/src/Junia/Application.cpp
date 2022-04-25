@@ -1,7 +1,6 @@
 #include "juniapch.hpp"
 #include "Application.hpp"
 
-#include "Events/ApplicationEvent.hpp"
 #include "Junia/Log.hpp"
 
 namespace Junia
@@ -13,8 +12,7 @@ namespace Junia
 
 	void Application::Run()
 	{
-		WindowResizeEvent const e(1280, 720);
-		JELOG_TRACE("{0}", e);
+		JELOG_TRACE("{0}", "E");
 		while(true);
 	}
 
