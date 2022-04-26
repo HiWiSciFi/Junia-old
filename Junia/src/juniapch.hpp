@@ -15,6 +15,7 @@
 
 #include "Junia/Log.hpp"
 
+
 #ifdef JE_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif
