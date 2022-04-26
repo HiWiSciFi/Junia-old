@@ -33,7 +33,8 @@ project "Junia"
 	}
 
 	links {
-		"%{Dependency.GLFW.lib}"
+		"%{Dependency.GLFW.lib}",
+		"GLFW"
 	}
 
 	filter "system:windows"

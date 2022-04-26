@@ -11,18 +11,32 @@ namespace Junia
 
 	void Log::Init()
 	{
+	#ifdef JELOG_EXTENDED_INFO
+		JE_ONLY_JELOG_MAX_TRACE(std::cout << "[Junia-preinit] [at " << __FILE__ << ":" << __LINE__ << "] Initializing Logger..." << std::endl);
+	#else
+		JE_ONLY_JELOG_MAX_TRACE(std::cout << "[Junia-preinit] Main function called" << std::endl);
+	#endif
+
 		spdlog::set_pattern("%^[%Y-%m-%d %T] %n %v%$");
+
+	#ifdef JELOG_EXTENDED_INFO
+		JE_ONLY_JELOG_MAX_TRACE(std::cout << "[Junia-preinit] [at " << __FILE__ << ":" << __LINE__ << "] Creating Junia Logger..." << std::endl);
+	#else
+		JE_ONLY_JELOG_MAX_TRACE(std::cout << "[Junia-preinit] Creating Junia Logger..." << std::endl);
+	#endif
 
 		juniaLogger = spdlog::stdout_color_mt("[Junia]");
 		juniaLogger->set_level(spdlog::level::trace);
 
-		applicationLogger = spdlog::stdout_color_mt("  [App]");
+	#ifdef JELOG_EXTENDED_INFO
+		JE_ONLY_JELOG_MAX_TRACE(std::cout << "[Junia-preinit] [at " << __FILE__ << ":" << __LINE__ << "] Creating Application Logger..." << std::endl);
+	#else
+		JE_ONLY_JELOG_MAX_TRACE(std::cout << "[Junia-preinit] Creating Application Logger..." << std::endl);
+	#endif
+
+		applicationLogger = spdlog::stdout_color_mt(" [App] ");
 		applicationLogger->set_level(spdlog::level::trace);
 
-		JELOG_BASE_WARN("Logger initialized!");
-		JELOG_TRACE("Still works!");
-		JELOG_INFO("idk how tbh...");
-		JELOG_BASE_ERROR("err");
-		JELOG_BASE_CRIT("REEE");
+		JELOG_BASE_INFO("Logger initialized!");
 	}
 }

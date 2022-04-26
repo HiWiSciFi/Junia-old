@@ -14,10 +14,9 @@ namespace Junia
 
 	void Application::Run()
 	{
-		//if (!glfwInit()) JELOG_CRIT("{0}", "GLFW could not be initialized!");
+		if (!glfwInit()) JELOG_CRIT("{0}", "GLFW could not be initialized!");
 		JELOG_TRACE("{0}", "E");
-		//glfwTerminate();
+		glfwTerminate();
 		while (true);
 	}
-
 }
