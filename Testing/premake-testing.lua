@@ -24,8 +24,13 @@ project "Testing"
 		"%{Dependency.spdlog.include}"
 	}
 
+	libdirs {
+		"%{Dependency.spdlog.lib}"
+	}
+
 	links {
-		"Junia"
+		"Junia",
+		"spdlog"
 	}
 
 	filter "system:windows"

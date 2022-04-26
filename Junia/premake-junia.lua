@@ -33,11 +33,13 @@ project "Junia"
 	}
 
 	libdirs {
-		"%{Dependency.GLFW.lib}"
+		"%{Dependency.GLFW.lib}",
+		"%{Dependency.spdlog.lib}"
 	}
 
 	links {
-		"GLFW"
+		"GLFW",
+		"spdlog"
 	}
 
 	filter "system:windows"
