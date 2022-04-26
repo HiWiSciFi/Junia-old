@@ -32,8 +32,11 @@ project "Junia"
 		"%{Dependency.spdlog.include}"
 	}
 
+	libdirs {
+		"%{Dependency.GLFW.lib}"
+	}
+
 	links {
-		"%{Dependency.GLFW.lib}",
 		"GLFW"
 	}
 

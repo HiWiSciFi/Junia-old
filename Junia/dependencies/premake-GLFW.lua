@@ -24,6 +24,7 @@ project "GLFW"
 		"GLFW/src/null_window.c",
 
 		"GLFW/src/platform.c",
+		"GLFW/src/vulkan.c",
 		"GLFW/src/window.c"
 	}
 
@@ -85,4 +86,4 @@ project "GLFW"
 	filter {}
 		Dependency["GLFW"] = {}
 		Dependency["GLFW"]["include"] = depsloc .. "GLFW/include"
-		Dependency["GLFW"]["lib"] = "%{cfg.buildtarget.relpath}"
+		Dependency["GLFW"]["libdir"] = depsloc .. "out/%{prj.name}/" .. buildtargetname
