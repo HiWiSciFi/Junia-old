@@ -6,13 +6,8 @@ project "spdlog"
 	staticruntime "Off"
 
 	files {
-		"%{prj.name}/src/async.cpp",
-		"%{prj.name}/src/cfg.cpp",
-		"%{prj.name}/src/color_sinks.cpp",
-		"%{prj.name}/src/file_sinks.cpp",
-		"%{prj.name}/src/fmt.cpp",
-		"%{prj.name}/src/spdlog.cpp",
-		"%{prj.name}/src/stdout_sinks.cpp"
+		"%{prj.name}/inlude/**.h",
+		"%{prj.name}/src/**.cpp"
 	}
 
 	includedirs {

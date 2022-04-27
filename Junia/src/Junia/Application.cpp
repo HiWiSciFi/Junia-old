@@ -7,16 +7,29 @@
 
 namespace Junia
 {
-
 	Application::Application() = default;
 
 	Application::~Application() = default;
 
 	void Application::Run()
 	{
-		if (!glfwInit()) JELOG_CRIT("{0}", "GLFW could not be initialized!");
-		JELOG_TRACE("{0}", "E");
+		JELOG_BASE_TRACE("Initializing GLFW...");
+		if (!glfwInit()) { JELOG_BASE_CRIT("GLFW could not be initialized!"); return; }
+		JELOG_BASE_TRACE("GLFW Initialized!");
+
+		GLFWwindow* window = glfwCreateWindow(640, 480, "Application", NULL, NULL);
+		if (!window) { glfwTerminate(); return; }
+		glfwMakeContextCurrent(window);
+		while (!glfwWindowShouldClose(window)) {
+			//glClear(GL_COLOR_BUFFER_BIT);
+			glfwSwapBuffers(window);
+			glfwPollEvents();
+		}
+
+		JELOG_BASE_TRACE("Shutting down GLFW...");
 		glfwTerminate();
+		JELOG_BASE_TRACE("GLFW stopped!");
+
 		while (true);
 	}
 }
