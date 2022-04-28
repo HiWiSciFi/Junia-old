@@ -7,3 +7,9 @@
 [submodule "Junia/dependencies/stb/include/stb"]
 	path = Junia/dependencies/stb/include/stb
 	url = https://github.com/nothings/stb
+[submodule "Junia/dependencies/GLM/GLM"]
+	path = Junia/dependencies/GLM/GLM
+	url = https://github.com/g-truc/glm
+[submodule "Junia/dependencies/EnTT/EnTT"]
+	path = Junia/dependencies/EnTT/EnTT
+	url = https://github.com/skypjack/entt

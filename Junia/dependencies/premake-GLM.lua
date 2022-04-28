@@ -5,12 +5,12 @@ project "GLM"
 	staticruntime "Off"
 
 	files {
-		"%{prj.name}/glm/**.hpp",
-		"%{prj.name}/glm/**.h"
+		"%{prj.name}/%{prj.name}/glm/**.hpp",
+		"%{prj.name}/%{prj.name}/glm/**.h"
 	}
 
 	includedirs {
-		"%{prj.name}"
+		"%{prj.name}/%{prj.name}"
 	}
 
 	filter "configurations:Debug"
@@ -30,4 +30,4 @@ project "GLM"
 	
 	filter {}
 		Dependency["GLM"] = {}
-		Dependency["GLM"]["include"] = depsloc .. "GLM"
+		Dependency["GLM"]["include"] = depsloc .. "GLM/GLM"

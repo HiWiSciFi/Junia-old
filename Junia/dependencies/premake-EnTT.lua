@@ -5,14 +5,14 @@ project "EnTT"
 	staticruntime "Off"
 
 	files {
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.hpp"
+		"%{prj.name}/%{prj.name}/src/**.h",
+		"%{prj.name}/%{prj.name}/src/**.hpp"
 	}
 
 	includedirs {
-		"%{prj.name}/single_include"
+		"%{prj.name}/%{prj.name}/single_include"
 	}
 	
 	filter {}
 		Dependency["EnTT"] = {}
-		Dependency["EnTT"]["include"] = depsloc .. "EnTT/single_include"
+		Dependency["EnTT"]["include"] = depsloc .. "EnTT/EnTT/single_include"
