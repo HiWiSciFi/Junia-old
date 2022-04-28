@@ -10,3 +10,6 @@
 [submodule "Junia/dependencies/GLM"]
 	path = Junia/dependencies/GLM
 	url = https://github.com/g-truc/glm
+[submodule "Junia/dependencies/stb/include/stb"]
+	path = Junia/dependencies/stb/include/stb
+	url = https://github.com/nothings/stb
