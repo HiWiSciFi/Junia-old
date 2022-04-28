@@ -3,6 +3,7 @@
 
 #include "Junia/Log.hpp"
 
+//#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace Junia
@@ -21,7 +22,8 @@ namespace Junia
 		if (!window) { glfwTerminate(); return; }
 		glfwMakeContextCurrent(window);
 		while (!glfwWindowShouldClose(window)) {
-			//glClear(GL_COLOR_BUFFER_BIT);
+			glClearColor(1, 0, 1, 1);
+			glClear(GL_COLOR_BUFFER_BIT);
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}

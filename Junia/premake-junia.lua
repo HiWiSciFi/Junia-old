@@ -28,16 +28,19 @@ project "Junia"
 
 	includedirs {
 		"src",
+		"%{Dependency.glad.include}",
 		"%{Dependency.GLFW.include}",
 		"%{Dependency.spdlog.include}"
 	}
 
 	libdirs {
+		"%{Dependency.glad.lib}",
 		"%{Dependency.GLFW.lib}",
 		"%{Dependency.spdlog.lib}"
 	}
 
 	links {
+		"glad",
 		"GLFW",
 		"spdlog"
 	}

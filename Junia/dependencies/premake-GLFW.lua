@@ -10,8 +10,7 @@ project "GLFW"
 	objdir ("out-obj/%{prj.name}/" .. buildtargetname)
 
 	files {
-		"%{prj.name}/include/GLFW/glfw3.h",
-		"%{prj.name}/include/GLFW/glfw3native.h",
+		"%{prj.name}/include/**.h",
 		"%{prj.name}/src/glfw_config.h",
 		"%{prj.name}/src/context.c",
 		"%{prj.name}/src/init.c",
@@ -26,6 +25,10 @@ project "GLFW"
 		"%{prj.name}/src/platform.c",
 		"%{prj.name}/src/vulkan.c",
 		"%{prj.name}/src/window.c"
+	}
+
+	includedirs {
+		"%{prj.name}/include"
 	}
 
 	filter "system:windows"
