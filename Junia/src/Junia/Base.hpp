@@ -33,5 +33,5 @@
 		#define JE_API_IO __declspec(dllimport)
 	#endif
 #else
-	#error Junia is only supported on Windows!
+	#error Junia is only supported on Windows as of now!
 #endif

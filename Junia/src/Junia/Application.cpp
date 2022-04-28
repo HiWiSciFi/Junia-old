@@ -1,7 +1,7 @@
 #include "juniapch.hpp"
 #include "Application.hpp"
 
-#include "Junia/Log.hpp"
+#include "Junia/Events/MouseEvents.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -18,16 +18,26 @@ namespace Junia
 		if (!glfwInit()) { JELOG_BASE_CRIT("GLFW could not be initialized!"); return; }
 		JELOG_BASE_TRACE("GLFW Initialized!");
 
+		// Event test code
+
+
+
+		// END Event test code
+
+		// GLFW Window test code
+
 		GLFWwindow* window = glfwCreateWindow(640, 480, "Application", NULL, NULL);
 		if (!window) { glfwTerminate(); return; }
 		glfwMakeContextCurrent(window);
 		gladLoadGL();
 		while (!glfwWindowShouldClose(window)) {
-			glClearColor(1, 0, 1, 1);
+			glClearColor(0, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}
+
+		// END GLFW Window test code
 
 		JELOG_BASE_TRACE("Shutting down GLFW...");
 		glfwTerminate();

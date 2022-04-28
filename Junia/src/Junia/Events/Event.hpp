@@ -38,7 +38,7 @@ namespace Junia
 			virtual uint8_t GetCategories()  = 0;
 			virtual std::string ToString()   = 0;
 
-			inline bool IsCategory(EventCategory cat)
+			bool IsCategory(EventCategory cat)
 			{
 				return GetCategories() & cat;
 			}
