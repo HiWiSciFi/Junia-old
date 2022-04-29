@@ -10,12 +10,12 @@ project "glad"
 	objdir ("out-obj/%{prj.name}/" .. buildtargetname)
 
 	files {
-		"%{prj.name}/include/**.h",
-		"%{prj.name}/src/**.c"
+		"%{prj.name}/glad-junia/include/**.h",
+		"%{prj.name}/glad-junia/src/**.c"
 	}
 
 	includedirs {
-		"%{prj.name}/include"
+		"%{prj.name}/glad-junia/include"
 	}
 
 	filter "configurations:Debug"
@@ -35,5 +35,5 @@ project "glad"
 	
 	filter {}
 		Dependency["glad"] = {}
-		Dependency["glad"]["include"] = depsloc .. "glad/include"
+		Dependency["glad"]["include"] = depsloc .. "glad/glad-junia/include"
 		Dependency["glad"]["libdir"] = depsloc .. "out/glad/" .. buildtargetname
