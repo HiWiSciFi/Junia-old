@@ -17,8 +17,8 @@
 	#define JELOG_BASE_INFO(str, ...)  Junia::Log::JuniaLogInfo  (__FILE__, __LINE__, str, __VA_ARGS__)
 	#define JELOG_INFO(str, ...)       Junia::Log::LogInfo       (__FILE__, __LINE__, str, __VA_ARGS__)
 #else
-	#define JELOG_BASE_INFO(str, ...)
-	#define JELOG_INFO(str, ...)
+	#define JELOG_BASE_INFO(...)
+	#define JELOG_INFO(...)
 #endif
 
 #if defined(JELOG_MAX_TRACE) || defined(JELOG_MAX_INFO) || defined(JELOG_MAX_WARN)
