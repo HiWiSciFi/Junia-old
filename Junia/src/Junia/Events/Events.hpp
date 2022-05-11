@@ -1,15 +1,16 @@
 #pragma once
 #include <queue>
+#include <vector>
 
 namespace Junia
 {
-	enum class JE_API_IO EventCategory
+	enum class EventCategory
 	{
 		Input,
 		Window
 	};
 
-	enum class JE_API_IO EventType
+	enum class EventType
 	{
 		MouseMove,
 		MouseButtonDown,
@@ -26,7 +27,7 @@ namespace Junia
 
 		[[nodiscard]] virtual EventType GetType() const = 0;
 		[[nodiscard]] virtual EventCategory GetCategory() const = 0;
-		[[nodiscard]] virtual std::string ToString() const = 0;
+		[[nodiscard]] virtual const char* ToString() const = 0;
 
 	protected:
 		Event() = default;
@@ -36,8 +37,8 @@ namespace Junia
 	{
 	public:
 		static void Subscribe(bool (*callback)(const Event* e));
-		static void Trigger(Event* e);
-		static void TriggerImmediate(const Event* e);
+		static void Trigger(const std::shared_ptr<Event> e);
+		static void TriggerImmediate(const std::shared_ptr<Event> e);
 
 	private:
 		static std::vector<bool (*)(const Event*)> subscribers;

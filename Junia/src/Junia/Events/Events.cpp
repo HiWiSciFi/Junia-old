@@ -12,14 +12,14 @@ namespace Junia
 		subscribers.push_back(callback);
 	}
 
-	void EventSystem::Trigger(Event* e)
+	void EventSystem::Trigger(const std::shared_ptr<Event> e)
 	{
-		//eventQueue.push(std::make_shared<Event>(*e));
+		eventQueue.push(e);
 	}
 
-	void EventSystem::TriggerImmediate(const Event* e)
+	void EventSystem::TriggerImmediate(const std::shared_ptr<Event> e)
 	{
-		Dispatch(e);
+		Dispatch(e.get());
 	}
 
 	void EventSystem::Dispatch(const Event* e)

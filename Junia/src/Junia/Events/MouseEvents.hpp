@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Events.hpp"
 
 namespace Junia
@@ -11,7 +12,7 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::MouseMove; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] std::string ToString() const override { return "MouseMoveEvent"; }
+		[[nodiscard]] const char* ToString() const override { return "MouseMoveEvent"; }
 	};
 
 	class JE_API_IO MouseButtonDownEvent : public Event
@@ -22,7 +23,7 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::MouseButtonDown; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] std::string ToString() const override { return "MouseButtonDownEvent"; }
+		[[nodiscard]] const char* ToString() const override { return "MouseButtonDownEvent"; }
 	};
 
 	class JE_API_IO MouseButtonUpEvent : public Event
@@ -33,6 +34,6 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::MouseButtonUp; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] std::string ToString() const override { return "MouseButtonUpEvent"; }
+		[[nodiscard]] const char* ToString() const override { return "MouseButtonUpEvent"; }
 	};
 }
