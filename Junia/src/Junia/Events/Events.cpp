@@ -14,7 +14,7 @@ namespace Junia
 
 	void EventSystem::Trigger(Event* e)
 	{
-		eventQueue.push(std::make_shared<Event>(*e));
+		//eventQueue.push(std::make_shared<Event>(*e));
 	}
 
 	void EventSystem::TriggerImmediate(const Event* e)

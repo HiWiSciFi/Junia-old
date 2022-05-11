@@ -9,7 +9,7 @@
 
 bool HandleMouseEvent(const Junia::Event* e)
 {
-	if (e->GetType() != Junia::EventType::MouseMoveEvent) return false;
+	if (e->GetType() != Junia::EventType::MouseMove) return false;
 	const auto ev = reinterpret_cast<const Junia::MouseMoveEvent*>(e);
 	JELOG_INFO("Event handled: {0} with coords: {1}, {2}", e->ToString(), ev->x, ev->y);
 	return true;
