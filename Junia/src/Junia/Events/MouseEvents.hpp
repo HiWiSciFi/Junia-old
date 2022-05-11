@@ -1,12 +1,20 @@
 #pragma once
-
-#include "Event.hpp"
+#include "Events.hpp"
 
 namespace Junia
 {
-	class JE_API_IO MouseButtonDownEvent : public Event
+	class MouseMoveEvent : public Event
 	{
-	public:
-	private:
+
+	};
+
+	class MouseButtonDownEvent : public Event
+	{
+
+	};
+
+	class MouseButtonUpEvent : public Event
+	{
+
 	};
 }
