@@ -3,13 +3,14 @@
 
 namespace Junia
 {
-	class KeyboardKeyDownEvent : public Event
+	class JE_API_IO KeyboardKeyDownEvent : public Event
 	{
+	public:
+		explicit KeyboardKeyDownEvent(const int key) : key(key) { }
+		const int key;
 
-	};
-
-	class KeyboardKeyUpEvent : public Event
-	{
-
+		[[nodiscard]] EventType GetType() const override { return EventType::KeyboardKeyDown; }
+		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
+		[[nodiscard]] std::string ToString() const override { return "KeyboardKeyDownEvent"; }
 	};
 }

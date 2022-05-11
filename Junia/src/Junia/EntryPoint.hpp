@@ -4,6 +4,17 @@
 #include "Junia/Version.hpp"
 #include <iostream>
 
+#include "Events/Events.hpp"
+#include "Events/MouseEvents.hpp"
+
+bool HandleMouseEvent(const Junia::Event* e)
+{
+	if (e->GetType() != Junia::EventType::MouseMoveEvent) return false;
+	const auto ev = reinterpret_cast<const Junia::MouseMoveEvent*>(e);
+	JELOG_INFO("Event handled: {0} with coords: {1}, {2}", e->ToString(), ev->x, ev->y);
+	return true;
+}
+
 int main(int argc, char** argv)
 {
 #ifdef JELOG_EXTENDED_INFO
@@ -18,6 +29,13 @@ int main(int argc, char** argv)
 
 	Junia::Log::Init();
 	JELOG_BASE_INFO("Junia initialized!");
+
+
+	JELOG_INFO("Registering EventListener...");
+	Junia::EventSystem::Subscribe(HandleMouseEvent);
+	JELOG_INFO("Triggering Event...");
+	Junia::EventSystem::TriggerImmediate(new Junia::MouseMoveEvent(10, 100));
+
 
 	JELOG_BASE_TRACE("Creating user application...");
 	auto const app = Junia::CreateApplication();
