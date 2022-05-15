@@ -45,8 +45,8 @@ project "Testing"
 		optimize "Off"
 		defines {
 			"JE_CONFIG_DEBUG",
-			"JELOG_MAX_TRACE",
-			"JELOG_EXTENDED_INFO"
+			"JELOG_MAX_TRACE"--,
+			--"JELOG_EXTENDED_INFO"
 		}
 
 	filter "configurations:Optimized"
@@ -55,8 +55,8 @@ project "Testing"
 		optimize "On"
 		defines {
 			"JE_CONFIG_OPTIMIZED",
-			"JELOG_MAX_ERROR",
-			"JELOG_EXTENDED_INFO"
+			"JELOG_MAX_WARN"--,
+			--"JELOG_EXTENDED_INFO"
 		}
 
 	filter "configurations:Release"
