@@ -1,8 +1,6 @@
 #include "juniapch.hpp"
 #include "Application.hpp"
 
-#include "Junia/Events/MouseEvents.hpp"
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -17,12 +15,6 @@ namespace Junia
 		JELOG_BASE_TRACE("Initializing GLFW...");
 		if (!glfwInit()) { JELOG_BASE_CRIT("GLFW could not be initialized!"); return; }
 		JELOG_BASE_TRACE("GLFW Initialized!");
-
-		// Event test code
-
-
-
-		// END Event test code
 
 		// GLFW Window test code
 

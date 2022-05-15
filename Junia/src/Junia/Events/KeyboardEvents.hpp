@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Events.hpp"
+#include "Event.hpp"
 
 namespace Junia
 {
-	class JE_API_IO KeyboardKeyDownEvent : public Event
+	class KeyboardKeyDownEvent : public Event
 	{
 	public:
 		explicit KeyboardKeyDownEvent(const int button) : button(button) { }
@@ -15,7 +15,7 @@ namespace Junia
 		[[nodiscard]] const char* ToString() const override { return "KeyboardKeyDownEvent"; }
 	};
 
-	class JE_API_IO KeyboardKeyUpEvent : public Event
+	class KeyboardKeyUpEvent : public Event
 	{
 	public:
 		explicit KeyboardKeyUpEvent(const int button) : button(button) { }

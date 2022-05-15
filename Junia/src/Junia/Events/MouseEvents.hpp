@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Events.hpp"
+#include "Event.hpp"
 
 namespace Junia
 {
-	class JE_API_IO MouseMoveEvent : public Event
+	class MouseMoveEvent : public Event
 	{
 	public:
 		explicit MouseMoveEvent(const int x, const int y) : x(x), y(y) {  }
@@ -15,7 +15,7 @@ namespace Junia
 		[[nodiscard]] const char* ToString() const override { return "MouseMoveEvent"; }
 	};
 
-	class JE_API_IO MouseButtonDownEvent : public Event
+	class MouseButtonDownEvent : public Event
 	{
 	public:
 		explicit MouseButtonDownEvent(const int button) : button(button) {  }
@@ -26,7 +26,7 @@ namespace Junia
 		[[nodiscard]] const char* ToString() const override { return "MouseButtonDownEvent"; }
 	};
 
-	class JE_API_IO MouseButtonUpEvent : public Event
+	class MouseButtonUpEvent : public Event
 	{
 	public:
 		explicit MouseButtonUpEvent(const int button) : button(button) { }
