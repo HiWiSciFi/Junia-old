@@ -13,12 +13,20 @@ namespace Junia
 		MouseMove,
 		MouseButtonDown,
 		MouseButtonUp,
+		MouseScroll,
 
 		KeyboardKeyDown,
+		KeyboardKeyRepeat,
 		KeyboardKeyUp,
+		KeyboardKeyChar,
 
+		JoystickConnect,
+
+		WindowClose,
 		WindowMove,
-		WindowResize
+		WindowResize,
+		WindowMaximize,
+		WindowFocus
 	};
 
 	class Event

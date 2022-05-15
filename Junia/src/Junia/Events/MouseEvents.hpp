@@ -7,8 +7,9 @@ namespace Junia
 	class MouseMoveEvent : public Event
 	{
 	public:
-		explicit MouseMoveEvent(const int x, const int y) : x(x), y(y) {  }
-		const int x, y;
+		explicit MouseMoveEvent(const float x, const float y) : x(x), y(y) {  }
+		const float x;
+		const float y;
 
 		[[nodiscard]] EventType GetType() const override { return EventType::MouseMove; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
@@ -35,5 +36,17 @@ namespace Junia
 		[[nodiscard]] EventType GetType() const override { return EventType::MouseButtonUp; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
 		[[nodiscard]] const char* ToString() const override { return "MouseButtonUpEvent"; }
+	};
+
+	class MouseScrollEvent : public Event
+	{
+	public:
+		explicit MouseScrollEvent(const float xOffset, const float yOffset) : xOffset(xOffset), yOffset(yOffset) { }
+		const float xOffset;
+		const float yOffset;
+
+		[[nodiscard]] EventType GetType() const override { return EventType::MouseScroll; }
+		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
+		[[nodiscard]] const char* ToString() const override { return "MouseScrollEvent"; }
 	};
 }

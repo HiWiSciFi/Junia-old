@@ -1,41 +1,49 @@
 #include "Application.hpp"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <functional>
 
-#include <Junia/Log.hpp>
+#include "Events/EventSystem.hpp"
+#include <glad/glad.h>
+
+#include "Log.hpp"
+#include "Events/WindowEvents.hpp"
 
 namespace Junia
 {
-	Application::Application() = default;
+	Application::Application()
+	{
+		window = std::unique_ptr<Window>(Window::Create());
+		EventSystem::Subscribe(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+		EventSystem::Subscribe(std::bind(&Application::OnWindowClosed, this, std::placeholders::_1));
+	}
 
 	Application::~Application() = default;
 
+	bool Application::OnEvent(const Event* e)
+	{
+		JELOG_BASE_INFO("Event Triggered: {0}", e->ToString());
+		return false;
+	}
+
 	void Application::Run()
 	{
-		JELOG_BASE_TRACE("Initializing GLFW...");
-		if (!glfwInit()) { JELOG_BASE_CRIT("GLFW could not be initialized!"); return; }
-		JELOG_BASE_TRACE("GLFW Initialized!");
+		EventSystem::TriggerImmediate(new WindowMoveEvent(50, 90));
 
-		// GLFW Window test code
-
-		GLFWwindow* window = glfwCreateWindow(640, 480, "Application", NULL, NULL);
-		if (!window) { glfwTerminate(); return; }
-		glfwMakeContextCurrent(window);
-		gladLoadGL();
-		while (!glfwWindowShouldClose(window)) {
-			glClearColor(0, 0, 1, 1);
+		//const auto w = std::unique_ptr<Window>(Window::Create(WindowProperties("Subwindow", 200, 300)));
+		while (running)
+		{
+			glClearColor(0, .3f, .3f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
-			glfwSwapBuffers(window);
-			glfwPollEvents();
+			EventSystem::DispatchQueue();
+			window->OnUpdate();
+			//w->OnUpdate();
 		}
+	}
 
-		// END GLFW Window test code
-
-		JELOG_BASE_TRACE("Shutting down GLFW...");
-		glfwTerminate();
-		JELOG_BASE_TRACE("GLFW stopped!");
-
-		while (true);
+	bool Application::OnWindowClosed(const Event* e)
+	{
+		if (e->GetType() != EventType::WindowClose) return false;
+		running = false;
+		return true;
 	}
 }

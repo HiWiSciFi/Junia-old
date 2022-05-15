@@ -2,10 +2,10 @@
 
 namespace Junia
 {
-	std::vector<bool (*)(const Event*)> EventSystem::subscribers;
+	std::vector<std::function<bool(const Event*)>> EventSystem::subscribers;
 	std::queue<Event*> EventSystem::eventQueue;
 
-	void EventSystem::Subscribe(bool(* callback)(const Event* e))
+	void EventSystem::Subscribe(const std::function<bool(const Event*)>& callback)
 	{
 		subscribers.push_back(callback);
 	}
@@ -37,6 +37,6 @@ namespace Junia
 
 	void EventSystem::Dispatch(const Event* e)
 	{
-		for (bool(*callback)(const Event*) : subscribers) { if (callback(e)) break; }
+		for (const std::function<bool(const Event*)>& callback : subscribers) { if (callback(e)) break; }
 	}
 }
