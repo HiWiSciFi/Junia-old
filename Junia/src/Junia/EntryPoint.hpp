@@ -22,6 +22,15 @@ int main(int argc, char** argv)
 	JE_ONLY_JELOG_MAX_TRACE(std::cout << "[Junia-preinit] Initializing Junia..." << std::endl);
 #endif
 
+	if (!Junia::HeaderCompileVersionMatch())
+	{
+#ifdef JELOG_EXTENDED_INFO
+		JE_ONLY_JELOG_MAX_WARN(std::cout << "[Junia-preinit] POTENTIALLY FATAL [at " << __FILE__ << ":" << __LINE__ << "] Header and Compiled Junia Versions do not match! This could break the application!" << std::endl);
+#else
+		JE_ONLY_JELOG_MAX_WARN(std::cout << "[Junia-preinit] POTENTIALLY FATAL : Header and Compiled Junia Versions do not match! This could break the application!" << std::endl);
+#endif
+	}
+
 	Junia::Log::Init();
 	JELOG_BASE_INFO("Junia initialized!");
 

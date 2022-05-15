@@ -4,8 +4,8 @@
 namespace Junia
 {
 	#define JE_VERSION_MAJOR (unsigned int)1
-	#define JE_VERSION_MINOR (unsigned int)0
-	#define JE_VERSION_PATCH (unsigned int)0
+	#define JE_VERSION_MINOR (unsigned int)1
+	#define JE_VERSION_PATCH (unsigned int)1
 
 	class JE_API_IO Version
 	{
@@ -17,4 +17,9 @@ namespace Junia
 		static const char* GetCompilationDate();
 		static const char* GetCompilationTime();
 	};
+
+	inline bool HeaderCompileVersionMatch()
+	{
+		return Version::GetMajor() == JE_VERSION_MAJOR && Version::GetMinor() == JE_VERSION_MINOR && Version::GetPatch() == JE_VERSION_PATCH;
+	}
 }
