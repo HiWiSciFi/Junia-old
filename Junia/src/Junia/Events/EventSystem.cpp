@@ -1,4 +1,3 @@
-#include "juniapch.hpp"
 #include "EventSystem.hpp"
 
 namespace Junia

@@ -14,9 +14,6 @@ project "Junia"
 	targetdir ("../out/%{prj.name}/" .. buildtargetname)
 	objdir ("../out-obj/%{prj.name}/" .. buildtargetname)
 
-	pchheader "juniapch.hpp"
-	pchsource "src/juniapch.cpp"
-
 	files {
 		"src/**.hpp",
 		"src/**.cpp"

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <queue>
+#include "Junia/Base.hpp"
 
+#include <queue>
 #include "Event.hpp"
 
 namespace Junia

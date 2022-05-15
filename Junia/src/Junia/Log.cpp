@@ -1,5 +1,6 @@
-#include "juniapch.hpp"
 #include "Log.hpp"
+
+#include <iostream>
 
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"

@@ -1,4 +1,5 @@
 #pragma once
+#include "Base.hpp"
 
 namespace Junia
 {

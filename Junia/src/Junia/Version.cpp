@@ -1,4 +1,3 @@
-#include "juniapch.hpp"
 #include "Version.hpp"
 
 namespace Junia
