@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sstream>
+
 namespace Junia
 {
 	enum class EventCategory
@@ -29,6 +31,8 @@ namespace Junia
 		WindowFocus
 	};
 
+#define JE_EVENT_TOSTR_MCR(x) std::stringstream ss; ss << ##x; return ss.str()
+
 	class Event
 	{
 	public:
@@ -36,7 +40,7 @@ namespace Junia
 
 		[[nodiscard]] virtual EventType GetType() const = 0;
 		[[nodiscard]] virtual EventCategory GetCategory() const = 0;
-		[[nodiscard]] virtual const char* ToString() const = 0;
+		[[nodiscard]] virtual std::string ToString() const = 0;
 
 	protected:
 		Event() = default;

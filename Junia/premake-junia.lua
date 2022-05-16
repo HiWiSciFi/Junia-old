@@ -56,6 +56,7 @@ project "Junia"
 		runtime "Debug"
 		symbols "On"
 		optimize "Off"
+		buildoptions "/MDd"
 		defines {
 			"JE_CONFIG_DEBUG",
 			"JELOG_MAX_TRACE"--,
@@ -66,6 +67,7 @@ project "Junia"
 		runtime "Release"
 		symbols "Off"
 		optimize "On"
+		buildoptions "/MDd"
 		defines {
 			"JE_CONFIG_OPTIMIZED",
 			"JELOG_MAX_WARN"--,
@@ -76,6 +78,7 @@ project "Junia"
 		runtime "Release"
 		symbols "Off"
 		optimize "On"
+		buildoptions "/MDd"
 		defines {
 			"JE_CONFIG_RELEASE",
 			"JELOG_MAX_CRIT"

@@ -11,7 +11,7 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::WindowClose; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
-		[[nodiscard]] const char* ToString() const override { return "WindowCloseEvent"; }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowCloseEvent()"); }
 	};
 
 	class WindowMoveEvent : public Event
@@ -23,7 +23,7 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::WindowMove; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
-		[[nodiscard]] const char* ToString() const override { return "WindowMoveEvent"; }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowMoveEvent(" << x << "," << y << ")"); }
 	};
 
 	class WindowResizeEvent : public Event
@@ -35,7 +35,7 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::WindowResize; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
-		[[nodiscard]] const char* ToString() const override { return "WindowResizeEvent"; }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowResizeEvent(" << x << "," << y << ")"); }
 	};
 
 	class WindowMaximizeEvent : public Event
@@ -46,7 +46,7 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::WindowMaximize; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
-		[[nodiscard]] const char* ToString() const override { return "WindowMaximizeEvent"; }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowMaximizeEvent(" << (maximized ? "true" : "false") << ")"); }
 	};
 
 	class WindowFocusEvent : public Event
@@ -57,6 +57,6 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::WindowFocus; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
-		[[nodiscard]] const char* ToString() const override { return "WindowFocusEvent"; }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowFocusEvent(" << (focused ? "true" : "false") << ")"); }
 	};
 }

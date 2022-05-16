@@ -12,7 +12,7 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::KeyboardKeyDown; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] const char* ToString() const override { return "KeyboardKeyDownEvent"; }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("KeyboardKeyDownEvent(" << button << ")"); }
 	};
 
 	class KeyboardKeyRepeatEvent : public Event
@@ -23,7 +23,7 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::KeyboardKeyRepeat; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] const char* ToString() const override { return "KeyboardKeyRepeatEvent"; }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("KeyboardKeyRepeatEvent(" << button << ")"); }
 	};
 
 	class KeyboardKeyUpEvent : public Event
@@ -34,7 +34,7 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::KeyboardKeyUp; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] const char* ToString() const override { return "KeyboardKeyUpEvent"; }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("KeyboardKeyUpEvent(" << button << ")"); }
 	};
 
 	class KeyboardKeyCharEvent : public Event
@@ -45,6 +45,6 @@ namespace Junia
 
 		[[nodiscard]] EventType GetType() const override { return EventType::KeyboardKeyChar; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] const char* ToString() const override { return "KeyboardKeyCharEvent"; }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("KeyboardKeyCharEvent(" << codepoint << ")"); }
 	};
 }

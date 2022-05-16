@@ -6,12 +6,12 @@ namespace Junia
 	class JoystickConnectEvent : public Event
 	{
 	public:
-		explicit JoystickConnectEvent(const int id, const bool maximized) : id(id), maximized(maximized) { }
+		explicit JoystickConnectEvent(const int id, const bool connected) : id(id), connected(connected) { }
 		const int id;
-		const bool maximized;
+		const bool connected;
 
 		[[nodiscard]] EventType GetType() const override { return EventType::JoystickConnect; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] const char* ToString() const override { return "JoystickConnectEvent"; }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("JoystickConnectEvent(" << id << "," << (connected ? "true" : "false") << ")"); }
 	};
 }
