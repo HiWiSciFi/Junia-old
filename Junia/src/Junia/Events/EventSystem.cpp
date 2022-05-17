@@ -3,7 +3,7 @@
 namespace Junia
 {
 	std::vector<std::function<bool(const Event*)>> EventSystem::subscribers;
-	std::queue<Event*> EventSystem::eventQueue;
+	std::deque<Event*> EventSystem::eventQueue;
 
 	void EventSystem::Subscribe(const std::function<bool(const Event*)>& callback)
 	{
@@ -12,7 +12,7 @@ namespace Junia
 
 	void EventSystem::Trigger(Event* e)
 	{
-		eventQueue.push(e);
+		eventQueue.push_back(e);
 	}
 
 	void EventSystem::TriggerImmediate(const Event* e)
@@ -31,7 +31,7 @@ namespace Junia
 		for (unsigned long i = 0; i < eventQueue.size(); i++)
 		{
 			Dispatch(eventQueue.front());
-			eventQueue.pop();
+			eventQueue.pop_front();
 		}
 	}
 

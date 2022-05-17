@@ -20,7 +20,7 @@ namespace Junia
 
 	private:
 		static std::vector<std::function<bool(const Event*)>> subscribers;
-		static std::queue<Event*> eventQueue;
+		static std::deque<Event*> eventQueue;
 
 		static void Dispatch(const Event* e);
 	};
