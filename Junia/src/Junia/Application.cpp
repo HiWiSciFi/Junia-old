@@ -7,6 +7,7 @@
 
 #include "Log.hpp"
 #include "Events/WindowEvents.hpp"
+#include <Junia/Events/MouseEvents.hpp>
 
 namespace Junia
 {
@@ -21,14 +22,12 @@ namespace Junia
 
 	bool Application::OnEvent(const Event* e)
 	{
-		JELOG_BASE_INFO("Event Triggered: {0}", e->ToString());
+		JELOG_BASE_TRACE("Event Triggered: {0}", e->ToString());
 		return false;
 	}
 
 	void Application::Run()
 	{
-		EventSystem::TriggerImmediate(new WindowMoveEvent(50, 90));
-
 		//const auto w = std::unique_ptr<Window>(Window::Create(WindowProperties("Subwindow", 200, 300)));
 		while (running)
 		{

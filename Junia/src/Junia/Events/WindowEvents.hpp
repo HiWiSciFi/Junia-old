@@ -12,6 +12,8 @@ namespace Junia
 		[[nodiscard]] EventType GetType() const override { return EventType::WindowClose; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
 		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowCloseEvent()"); }
+
+		JE_EVENT_FUNCS_IMPL_Q(WindowCloseEvent)
 	};
 
 	class WindowMoveEvent : public Event
@@ -24,6 +26,8 @@ namespace Junia
 		[[nodiscard]] EventType GetType() const override { return EventType::WindowMove; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
 		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowMoveEvent(" << x << "," << y << ")"); }
+
+		JE_EVENT_FUNCS_IMPL_Q(WindowMoveEvent)
 	};
 
 	class WindowResizeEvent : public Event
@@ -36,6 +40,8 @@ namespace Junia
 		[[nodiscard]] EventType GetType() const override { return EventType::WindowResize; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
 		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowResizeEvent(" << x << "," << y << ")"); }
+
+		JE_EVENT_FUNCS_IMPL_Q(WindowResizeEvent)
 	};
 
 	class WindowMaximizeEvent : public Event
@@ -47,6 +53,8 @@ namespace Junia
 		[[nodiscard]] EventType GetType() const override { return EventType::WindowMaximize; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
 		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowMaximizeEvent(" << (maximized ? "true" : "false") << ")"); }
+
+		JE_EVENT_FUNCS_IMPL_Q(WindowMaximizeEvent)
 	};
 
 	class WindowFocusEvent : public Event
@@ -58,5 +66,7 @@ namespace Junia
 		[[nodiscard]] EventType GetType() const override { return EventType::WindowFocus; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
 		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowFocusEvent(" << (focused ? "true" : "false") << ")"); }
+
+		JE_EVENT_FUNCS_IMPL_Q(WindowFocusEvent)
 	};
 }

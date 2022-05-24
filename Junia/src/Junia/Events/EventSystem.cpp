@@ -1,4 +1,8 @@
 #include "EventSystem.hpp"
+#include <Junia/Events/JoystickEvents.hpp>
+#include <Junia/Events/KeyboardEvents.hpp>
+#include <Junia/Events/MouseEvents.hpp>
+#include <Junia/Events/WindowEvents.hpp>
 
 namespace Junia
 {
@@ -35,8 +39,37 @@ namespace Junia
 		}
 	}
 
+	#define JE_EVENT_DISPATCH_SWITCH_IMPL_Q(x)	case EventType:: ## x: \
+												{ \
+													const x ## Event* ev = reinterpret_cast<const x ## Event*>(e); \
+													x ## Event::Dispatch(ev); \
+													break; \
+												}
+
 	void EventSystem::Dispatch(const Event* e)
 	{
 		for (const std::function<bool(const Event*)>& callback : subscribers) { if (callback(e)) break; }
+		switch (e->GetType())
+		{
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(JoystickConnect)
+
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(KeyboardKeyChar)
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(KeyboardKeyDown)
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(KeyboardKeyRepeat)
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(KeyboardKeyUp)
+
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(MouseButtonDown)
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(MouseButtonUp)
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(MouseMove)
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(MouseScroll)
+
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(WindowClose)
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(WindowFocus)
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(WindowMaximize)
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(WindowMove)
+			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(WindowResize)
+		default:
+			break;
+		}
 	}
 }
