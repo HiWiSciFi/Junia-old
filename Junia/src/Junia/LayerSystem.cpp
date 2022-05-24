@@ -1,4 +1,4 @@
-#include "LayerSystem.h"
+#include "LayerSystem.hpp"
 
 namespace Junia
 {
