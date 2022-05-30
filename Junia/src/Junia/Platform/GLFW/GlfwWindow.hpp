@@ -1,7 +1,7 @@
 #pragma once
-#include <Junia/Window.hpp>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#undef APIENTRY
+#include <Junia/Window.hpp>
 
 namespace Junia
 {

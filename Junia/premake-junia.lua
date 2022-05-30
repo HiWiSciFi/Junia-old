@@ -25,21 +25,22 @@ project "Junia"
 
 	includedirs {
 		"src",
-		"%{Dependency.glad.include}",
 		"%{Dependency.GLFW.include}",
 		"%{Dependency.spdlog.include}"
 	}
 
 	libdirs {
-		"%{Dependency.glad.lib}",
-		"%{Dependency.GLFW.lib}",
-		"%{Dependency.spdlog.lib}"
+		"%{Dependency.GLFW.libdir}",
+		"%{Dependency.spdlog.libdir}"
 	}
 
 	links {
-		"glad",
 		"GLFW",
 		"spdlog"
+	}
+
+	flags {
+		"FatalWarnings"
 	}
 
 	filter "system:windows"

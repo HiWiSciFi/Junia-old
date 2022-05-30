@@ -2,7 +2,6 @@
 
 #include <memory>
 
-#include <Junia/Base.hpp>
 #include <Junia/Window.hpp>
 #include <Junia/Events/Event.hpp>
 

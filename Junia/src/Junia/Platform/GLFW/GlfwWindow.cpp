@@ -37,7 +37,7 @@ namespace Junia
 
 		window = glfwCreateWindow(static_cast<int>(properties.width), static_cast<int>(properties.height), data.title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(window);
-		gladLoadGL();
+		// gladLoadGL();
 		glfwSetWindowUserPointer(window, &data);
 		GlfwWindow::SetVSync(true);
 

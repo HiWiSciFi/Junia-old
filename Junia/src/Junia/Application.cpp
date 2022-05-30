@@ -2,12 +2,8 @@
 
 #include <functional>
 
-#include <Junia/Events/EventSystem.hpp>
-#include <glad/glad.h>
-
 #include <Junia/Log.hpp>
-#include <Junia/Events/WindowEvents.hpp>
-#include <Junia/Events/MouseEvents.hpp>
+#include <Junia/Events/EventSystem.hpp>
 
 namespace Junia
 {
@@ -44,8 +40,6 @@ namespace Junia
 		//const auto w = std::unique_ptr<Window>(Window::Create(WindowProperties("Subwindow", 200, 300)));
 		while (running)
 		{
-			glClearColor(0, .3f, .3f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
 			EventSystem::DispatchQueue();
 			window->OnUpdate();
 			//w->OnUpdate();

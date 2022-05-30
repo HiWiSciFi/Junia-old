@@ -13,8 +13,7 @@ workspace "Junia"
 	}
 
 	flags {
-		"MultiProcessorCompile",
-		"FatalWarnings"
+		"MultiProcessorCompile"
 	}
 
 	buildtargetname = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
