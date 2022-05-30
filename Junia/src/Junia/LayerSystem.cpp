@@ -41,11 +41,11 @@ namespace Junia
 
 	void LayerSystem::IterateForward(std::function<void(Layer* const layer)> handler)
 	{
-		for (int i = layerStack.size()-1; i >= 0; i--) handler(layerStack[i]);
+		for (auto it = layerStack.crbegin(); it != layerStack.crend(); ++it) handler(*it);
 	}
 
 	void LayerSystem::IterateBackward(std::function<void(Layer* const layer)> handler)
 	{
-		for (int i = 0; i < layerStack.size(); i++) handler(layerStack[i]);
+		for (auto it = layerStack.cbegin(); it != layerStack.cend(); ++it) handler(*it);
 	}
 }

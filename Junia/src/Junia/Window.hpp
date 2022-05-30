@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-#include "Base.hpp"
+#include <Junia/Base.hpp>
 
 namespace Junia
 {
@@ -17,18 +17,20 @@ namespace Junia
 			: title(std::move(title)), width(width), height(height) { }
 	};
 
-	class JE_API_IO Window
+	class Window
 	{
 	public:
 		virtual ~Window() = default;
 
 		virtual void OnUpdate() = 0;
 
-		[[nodiscard]] virtual unsigned int GetWidth() const = 0;
-		[[nodiscard]] virtual unsigned int GetHeight() const = 0;
+		virtual unsigned int GetWidth() const = 0;
+		virtual unsigned int GetHeight() const = 0;
 
 		virtual void SetVSync(bool enable) = 0;
-		[[nodiscard]] virtual bool IsVSync() const = 0;
+		virtual bool IsVSync() const = 0;
+
+		virtual void* getNativeWindow() const = 0;
 
 		static Window* Create(const WindowProperties& properties = WindowProperties());
 	};

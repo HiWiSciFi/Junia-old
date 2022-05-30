@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 
-#include "Base.hpp"
+#include <Junia/Base.hpp>
 
 namespace Junia
 {
@@ -10,7 +10,7 @@ namespace Junia
 	#define JE_VERSION_MINOR (unsigned int)0
 	#define JE_VERSION_PATCH (unsigned int)0
 
-	class JE_API_IO Version
+	class Version
 	{
 	public:
 		static unsigned int GetMajor();

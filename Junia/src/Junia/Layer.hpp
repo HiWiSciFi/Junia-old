@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-#include "Events/Event.hpp"
+#include <Junia/Events/Event.hpp>
 
 namespace Junia
 {
@@ -16,7 +16,7 @@ namespace Junia
 		virtual void OnUpdate();
 		virtual void OnEvent(const Event*);
 
-		[[nodiscard]] std::string GetName() const { return name; }
+		std::string GetName() const { return name; }
 
 	private:
 		std::string name;

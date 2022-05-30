@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <Junia/Base.hpp>
 
 int main(int argc, char** argv)
 {

@@ -2,9 +2,7 @@ project "glad"
 	location "%{prj.name}"
 	kind "StaticLib"
 	language "C"
-	staticruntime "Off"
-
-	pic "On"
+	staticruntime "On"
 
 	targetdir ("out/%{prj.name}/" .. buildtargetname)
 	objdir ("out-obj/%{prj.name}/" .. buildtargetname)

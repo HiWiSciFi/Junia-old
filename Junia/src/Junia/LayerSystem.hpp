@@ -1,12 +1,11 @@
 #pragma once
-#include "Base.hpp"
 #include "Layer.hpp"
 #include <functional>
 #include <deque>
 
 namespace Junia
 {
-	class JE_API_IO LayerSystem
+	class LayerSystem
 	{
 	public:
 		LayerSystem();

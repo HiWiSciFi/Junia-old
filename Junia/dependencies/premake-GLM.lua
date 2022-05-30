@@ -2,7 +2,6 @@ project "GLM"
 	location "%{prj.name}"
 	kind "None"
 	language "C++"
-	staticruntime "Off"
 
 	files {
 		"%{prj.name}/%{prj.name}/glm/**.hpp",
@@ -31,3 +30,4 @@ project "GLM"
 	filter {}
 		Dependency["GLM"] = {}
 		Dependency["GLM"]["include"] = depsloc .. "GLM/GLM"
+		

@@ -3,7 +3,7 @@ project "spdlog"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "Off"
+	staticruntime "On"
 
 	files {
 		"%{prj.name}/inlude/**.h",

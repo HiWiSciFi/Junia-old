@@ -10,9 +10,9 @@ namespace Junia
 		const int id;
 		const bool connected;
 
-		[[nodiscard]] EventType GetType() const override { return EventType::JoystickConnect; }
-		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("JoystickConnectEvent(" << id << "," << (connected ? "true" : "false") << ")"); }
+		EventType GetType() const override { return EventType::JoystickConnect; }
+		EventCategory GetCategory() const override { return EventCategory::Input; }
+		std::string ToString() const override { JE_EVENT_TOSTR_MCR("JoystickConnectEvent(" << id << "," << (connected ? "true" : "false") << ")"); }
 
 		JE_EVENT_FUNCS_IMPL_Q(JoystickConnectEvent)
 	};

@@ -25,9 +25,3 @@
 #else
 	#define JE_ONLY_JELOG_MAX_CRIT(f)
 #endif
-
-#ifdef JE_EXPORT
-	#define JE_API_IO __declspec(dllexport)
-#else
-	#define JE_API_IO __declspec(dllimport)
-#endif

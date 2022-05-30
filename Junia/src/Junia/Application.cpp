@@ -2,17 +2,20 @@
 
 #include <functional>
 
-#include "Events/EventSystem.hpp"
+#include <Junia/Events/EventSystem.hpp>
 #include <glad/glad.h>
 
-#include "Log.hpp"
-#include "Events/WindowEvents.hpp"
+#include <Junia/Log.hpp>
+#include <Junia/Events/WindowEvents.hpp>
 #include <Junia/Events/MouseEvents.hpp>
 
 namespace Junia
 {
+	Application* Application::s_app;
+
 	Application::Application()
 	{
+		s_app = this;
 		window = std::unique_ptr<Window>(Window::Create());
 		EventSystem::Subscribe(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 		EventSystem::Subscribe(std::bind(&Application::OnWindowClosed, this, std::placeholders::_1));
@@ -24,6 +27,16 @@ namespace Junia
 	{
 		JELOG_BASE_TRACE("Event Triggered: {0}", e->ToString());
 		return false;
+	}
+
+	Window& Application::GetWindow()
+	{
+		return *window.get();
+	}
+
+	Application& Application::Get()
+	{
+		return *s_app;
 	}
 
 	void Application::Run()

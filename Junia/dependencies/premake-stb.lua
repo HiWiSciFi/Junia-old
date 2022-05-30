@@ -2,7 +2,6 @@ project "stb"
 	location "%{prj.name}"
 	kind "None"
 	language "C"
-	staticruntime "Off"
 
 	files {
 		"%{prj.name}/include/%{prj.name}/*.h"

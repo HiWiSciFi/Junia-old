@@ -1,4 +1,4 @@
-#include "Version.hpp"
+#include <Junia/Version.hpp>
 
 namespace Junia
 {

@@ -8,9 +8,13 @@ workspace "Junia"
 		"Release"
 	}
 
+	defines {
+		"_CRT_SECURE_NO_WARNINGS"
+	}
+
 	flags {
 		"MultiProcessorCompile",
-		"RelativeLinks"
+		"FatalWarnings"
 	}
 
 	buildtargetname = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -19,3 +23,4 @@ workspace "Junia"
 
 	include "Junia/premake-junia.lua"
 	include "Testing/premake-testing.lua"
+	

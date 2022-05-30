@@ -2,7 +2,6 @@ project "EnTT"
 	location "%{prj.name}"
 	kind "None"
 	language "C++"
-	staticruntime "Off"
 
 	files {
 		"%{prj.name}/%{prj.name}/src/**.h",
@@ -16,3 +15,4 @@ project "EnTT"
 	filter {}
 		Dependency["EnTT"] = {}
 		Dependency["EnTT"]["include"] = depsloc .. "EnTT/EnTT/single_include"
+		

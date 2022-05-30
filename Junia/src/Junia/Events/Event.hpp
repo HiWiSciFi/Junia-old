@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Junia/Base.hpp>
 #include <sstream>
 #include <vector>
 #include <functional>
@@ -45,9 +46,9 @@ namespace Junia
 	public:
 		virtual ~Event() = default;
 
-		[[nodiscard]] virtual EventType GetType() const = 0;
-		[[nodiscard]] virtual EventCategory GetCategory() const = 0;
-		[[nodiscard]] virtual std::string ToString() const = 0;
+		virtual EventType GetType() const = 0;
+		virtual EventCategory GetCategory() const = 0;
+		virtual std::string ToString() const = 0;
 
 	protected:
 		Event() = default;

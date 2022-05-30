@@ -1,5 +1,5 @@
 #pragma once
-#include "Window.hpp"
+#include <Junia/Window.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -13,11 +13,13 @@ namespace Junia
 
 		void OnUpdate() override;
 
-		[[nodiscard]] inline unsigned GetWidth() const override { return data.width; }
-		[[nodiscard]] inline unsigned GetHeight() const override { return data.height; }
+		inline unsigned GetWidth() const override { return data.width; }
+		inline unsigned GetHeight() const override { return data.height; }
 
 		void SetVSync(bool enable) override;
-		[[nodiscard]] bool IsVSync() const override;
+		bool IsVSync() const override;
+
+		inline virtual void* getNativeWindow() const { return window; }
 
 	private:
 		virtual void Close();

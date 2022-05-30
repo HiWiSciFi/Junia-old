@@ -3,7 +3,7 @@
 #include <spdlog/logger.h>
 #include <spdlog/fmt/ostr.h>
 
-#include "Base.hpp"
+#include <Junia/Base.hpp>
 
 #if defined(JELOG_MAX_TRACE)
 	#define JELOG_BASE_TRACE(str, ...) Junia::Log::JuniaLogTrace (__FILE__, __LINE__, str, ##__VA_ARGS__)
@@ -46,7 +46,7 @@
 #endif
 
 namespace Junia {
-	class JE_API_IO Log
+	class Log
 	{
 	public:
 		static void Init();

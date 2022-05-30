@@ -5,11 +5,11 @@
 #include "Junia/Base.hpp"
 
 #include <queue>
-#include "Event.hpp"
+#include <Junia/Events/Event.hpp>
 
 namespace Junia
 {
-	class JE_API_IO EventSystem
+	class EventSystem
 	{
 	public:
 		static void Subscribe(const std::function<bool(const Event*)>& callback);

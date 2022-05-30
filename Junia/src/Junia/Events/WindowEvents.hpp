@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Event.hpp"
+#include <Junia/Events/Event.hpp>
 
 namespace Junia
 {
@@ -9,9 +9,9 @@ namespace Junia
 	public:
 		explicit WindowCloseEvent() = default;
 
-		[[nodiscard]] EventType GetType() const override { return EventType::WindowClose; }
-		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
-		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowCloseEvent()"); }
+		EventType GetType() const override { return EventType::WindowClose; }
+		EventCategory GetCategory() const override { return EventCategory::Window; }
+		std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowCloseEvent()"); }
 
 		JE_EVENT_FUNCS_IMPL_Q(WindowCloseEvent)
 	};
@@ -23,9 +23,9 @@ namespace Junia
 		const int x;
 		const int y;
 
-		[[nodiscard]] EventType GetType() const override { return EventType::WindowMove; }
-		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
-		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowMoveEvent(" << x << "," << y << ")"); }
+		EventType GetType() const override { return EventType::WindowMove; }
+		EventCategory GetCategory() const override { return EventCategory::Window; }
+		std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowMoveEvent(" << x << "," << y << ")"); }
 
 		JE_EVENT_FUNCS_IMPL_Q(WindowMoveEvent)
 	};
@@ -37,9 +37,9 @@ namespace Junia
 		const int x;
 		const int y;
 
-		[[nodiscard]] EventType GetType() const override { return EventType::WindowResize; }
-		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
-		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowResizeEvent(" << x << "," << y << ")"); }
+		EventType GetType() const override { return EventType::WindowResize; }
+		EventCategory GetCategory() const override { return EventCategory::Window; }
+		std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowResizeEvent(" << x << "," << y << ")"); }
 
 		JE_EVENT_FUNCS_IMPL_Q(WindowResizeEvent)
 	};
@@ -50,9 +50,9 @@ namespace Junia
 		explicit WindowMaximizeEvent(const bool maximized) : maximized(maximized) { }
 		const bool maximized;
 
-		[[nodiscard]] EventType GetType() const override { return EventType::WindowMaximize; }
-		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
-		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowMaximizeEvent(" << (maximized ? "true" : "false") << ")"); }
+		EventType GetType() const override { return EventType::WindowMaximize; }
+		EventCategory GetCategory() const override { return EventCategory::Window; }
+		std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowMaximizeEvent(" << (maximized ? "true" : "false") << ")"); }
 
 		JE_EVENT_FUNCS_IMPL_Q(WindowMaximizeEvent)
 	};
@@ -63,9 +63,9 @@ namespace Junia
 		explicit WindowFocusEvent(const bool focused) : focused(focused) { }
 		const bool focused;
 
-		[[nodiscard]] EventType GetType() const override { return EventType::WindowFocus; }
-		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Window; }
-		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowFocusEvent(" << (focused ? "true" : "false") << ")"); }
+		EventType GetType() const override { return EventType::WindowFocus; }
+		EventCategory GetCategory() const override { return EventCategory::Window; }
+		std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowFocusEvent(" << (focused ? "true" : "false") << ")"); }
 
 		JE_EVENT_FUNCS_IMPL_Q(WindowFocusEvent)
 	};

@@ -2,27 +2,31 @@
 
 #include <memory>
 
-#include "Base.hpp"
-#include "Window.hpp"
-#include "Events/Event.hpp"
+#include <Junia/Base.hpp>
+#include <Junia/Window.hpp>
+#include <Junia/Events/Event.hpp>
 
 namespace Junia
 {
-	class JE_API_IO Application
+	class Application
 	{
 	public:
 		Application();
 		virtual ~Application();
 
 		void Run();
-
 		bool OnEvent(const Event* e);
+
+		Window& GetWindow();
+		static Application& Get();
 
 	private:
 		bool OnWindowClosed(const Event* e);
 
 		std::unique_ptr<Window> window;
 		bool running = true;
+
+		static Application* s_app;
 	};
 
 	// To be defined in client

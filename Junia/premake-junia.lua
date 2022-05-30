@@ -6,10 +6,10 @@ group "Dependencies"
 group "Junia"
 project "Junia"
 	location "."
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "Off"
+	staticruntime "On"
 
 	targetdir ("../out/%{prj.name}/" .. buildtargetname)
 	objdir ("../out-obj/%{prj.name}/" .. buildtargetname)
@@ -48,15 +48,11 @@ project "Junia"
 			"JE_TARGETPLATFORM_WINDOWS",
 			"JE_EXPORT"
 		}
-		postbuildcommands {
-			("{COPY} %{cfg.buildtarget.relpath} ../out/Testing/" .. buildtargetname)
-		}
 
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "On"
 		optimize "Off"
-		buildoptions "/MDd"
 		defines {
 			"JE_CONFIG_DEBUG",
 			"JELOG_MAX_TRACE"--,
@@ -67,7 +63,6 @@ project "Junia"
 		runtime "Release"
 		symbols "Off"
 		optimize "On"
-		buildoptions "/MDd"
 		defines {
 			"JE_CONFIG_OPTIMIZED",
 			"JELOG_MAX_WARN"--,
@@ -78,7 +73,6 @@ project "Junia"
 		runtime "Release"
 		symbols "Off"
 		optimize "On"
-		buildoptions "/MDd"
 		defines {
 			"JE_CONFIG_RELEASE",
 			"JELOG_MAX_CRIT"

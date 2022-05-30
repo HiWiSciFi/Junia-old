@@ -1,11 +1,11 @@
 #include "GlfwWindow.hpp"
 
-#include "Log.hpp"
-#include "Events/EventSystem.hpp"
-#include "Events/JoystickEvents.hpp"
-#include "Events/KeyboardEvents.hpp"
-#include "Events/MouseEvents.hpp"
-#include "Events/WindowEvents.hpp"
+#include <Junia/Log.hpp>
+#include <Junia/Events/EventSystem.hpp>
+#include <Junia/Events/JoystickEvents.hpp>
+#include <Junia/Events/KeyboardEvents.hpp>
+#include <Junia/Events/MouseEvents.hpp>
+#include <Junia/Events/WindowEvents.hpp>
 
 namespace Junia
 {
