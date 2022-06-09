@@ -3,7 +3,9 @@
 #include <memory>
 
 #include <Junia/Window.hpp>
-#include <Junia/Events/Event.hpp>
+
+#include <Junia/LayerSystem.hpp>
+#include <Junia/Events/WindowEvents.hpp>
 
 namespace Junia
 {
@@ -13,19 +15,24 @@ namespace Junia
 		Application();
 		virtual ~Application();
 
-		void Run();
-		bool OnEvent(const Event* e);
+		void Run() const;
 
-		Window& GetWindow();
+		Layer* PushLayerFront(Layer* layer);
+		Layer* PushLayerBack(Layer* layer);
+		Layer* PopLayerFront();
+		Layer* PopLayerBack();
+
+		[[nodiscard]] Window& GetWindow() const;
 		static Application& Get();
 
 	private:
-		bool OnWindowClosed(const Event* e);
+		bool OnWindowClosed(const WindowCloseEvent* e);
 
 		std::unique_ptr<Window> window;
+		LayerSystem layerSystem;
 		bool running = true;
 
-		static Application* s_app;
+		static Application* app;
 	};
 
 	// To be defined in client

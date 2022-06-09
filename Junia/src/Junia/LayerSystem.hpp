@@ -1,5 +1,6 @@
 #pragma once
-#include "Layer.hpp"
+#include <Junia/Layer.hpp>
+
 #include <functional>
 #include <deque>
 
@@ -12,15 +13,15 @@ namespace Junia
 		LayerSystem(const LayerSystem& obj) = default;
 		LayerSystem& operator=(const LayerSystem&) = default;
 		LayerSystem& operator=(LayerSystem&&) = default;
-		virtual ~LayerSystem();
+		~LayerSystem();
 
 		Layer* PushLayerFront(Layer* layer);
 		Layer* PushLayerBack(Layer* layer);
 		Layer* PopLayerFront();
 		Layer* PopLayerBack();
 
-		void IterateForward(std::function<void(Layer* const layer)>);
-		void IterateBackward(std::function<void(Layer* const layer)>);
+		void IterateForward(const std::function<void(Layer* const layer)>&) const;
+		void IterateBackward(const std::function<void(Layer* const layer)>&) const;
 
 	private:
 		std::deque<Layer*> layerStack;

@@ -11,14 +11,13 @@ namespace Junia
 		explicit Layer(std::string name = "Layer") : name(std::move(name)) { }
 		virtual ~Layer() = default;
 
-		virtual void OnEnable();
-		virtual void OnDisable();
-		virtual void OnUpdate();
-		virtual void OnEvent(const Event*);
+		virtual void OnEnable() { }
+		virtual void OnDisable() { }
+		virtual void OnUpdate() { }
 
-		std::string GetName() const { return name; }
+		[[nodiscard]] std::string GetName() const { return name; }
 
-	private:
+	protected:
 		std::string name;
 	};
 }

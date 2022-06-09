@@ -26,7 +26,8 @@ project "Junia"
 	includedirs {
 		"src",
 		"%{Dependency.GLFW.include}",
-		"%{Dependency.spdlog.include}"
+		"%{Dependency.spdlog.include}",
+		"%{Dependency.GLM.include}"
 	}
 
 	libdirs {

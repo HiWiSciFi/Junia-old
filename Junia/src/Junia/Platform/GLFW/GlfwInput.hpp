@@ -7,6 +7,8 @@ namespace Junia
 	class GlfwInput : public Input
 	{
 	protected:
-		virtual bool IsKeyDownImplementation(int keycode) override;
+		bool IsKeyDownImplementation(int keycode) override;
+		bool IsMouseButtonDownImplementation(int button) override;
+		std::pair<float, float> GetMousePositionImplementation() override;
 	};
 }

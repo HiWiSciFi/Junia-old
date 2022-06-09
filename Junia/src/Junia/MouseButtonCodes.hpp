@@ -1,0 +1,14 @@
+#pragma once
+
+#define JE_MOUSEBUTTON_1         0
+#define JE_MOUSEBUTTON_2         1
+#define JE_MOUSEBUTTON_3         2
+#define JE_MOUSEBUTTON_4         3
+#define JE_MOUSEBUTTON_5         4
+#define JE_MOUSEBUTTON_6         5
+#define JE_MOUSEBUTTON_7         6
+#define JE_MOUSEBUTTON_8         7
+#define JE_MOUSEBUTTON_LAST      GLFW_MOUSE_BUTTON_8
+#define JE_MOUSEBUTTON_LEFT      GLFW_MOUSE_BUTTON_1
+#define JE_MOUSEBUTTON_RIGHT     GLFW_MOUSE_BUTTON_2
+#define JE_MOUSEBUTTON_MIDDLE    GLFW_MOUSE_BUTTON_3

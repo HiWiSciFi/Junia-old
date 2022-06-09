@@ -1,9 +1,7 @@
 #pragma once
 
 #include <spdlog/logger.h>
-#include <spdlog/fmt/ostr.h>
-
-#include <Junia/Base.hpp>
+#include <spdlog/fmt/ostr.h> // DO NOT REMOVE THIS INCLUDE ALTHOUGH NOT USED IN THIS FILE
 
 #if defined(JELOG_MAX_TRACE)
 	#define JELOG_BASE_TRACE(str, ...) Junia::Log::JuniaLogTrace (__FILE__, __LINE__, str, ##__VA_ARGS__)

@@ -1,54 +1,42 @@
 #include "Application.hpp"
 
 #include <functional>
-
-#include <Junia/Log.hpp>
 #include <Junia/Events/EventSystem.hpp>
 
 namespace Junia
 {
-	Application* Application::s_app;
+	Application* Application::app;
 
 	Application::Application()
 	{
-		s_app = this;
+		app = this;
 		window = std::unique_ptr<Window>(Window::Create());
-		EventSystem::Subscribe(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-		EventSystem::Subscribe(std::bind(&Application::OnWindowClosed, this, std::placeholders::_1));
+		WindowCloseEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(WindowCloseEvent, OnWindowClosed));
 	}
 
 	Application::~Application() = default;
 
-	bool Application::OnEvent(const Event* e)
-	{
-		JELOG_BASE_TRACE("Event Triggered: {0}", e->ToString());
-		return false;
-	}
+	Layer* Application::PushLayerFront(Layer* layer) { return layerSystem.PushLayerFront(layer); }
+	Layer* Application::PushLayerBack(Layer* layer) { return layerSystem.PushLayerBack(layer); }
+	Layer* Application::PopLayerFront() { return layerSystem.PopLayerFront(); }
+	Layer* Application::PopLayerBack() { return layerSystem.PopLayerBack(); }
 
-	Window& Application::GetWindow()
-	{
-		return *window.get();
-	}
+	Window& Application::GetWindow() const { return *window; }
+	Application& Application::Get() { return *app; }
 
-	Application& Application::Get()
+	void Application::Run() const
 	{
-		return *s_app;
-	}
-
-	void Application::Run()
-	{
-		//const auto w = std::unique_ptr<Window>(Window::Create(WindowProperties("Subwindow", 200, 300)));
 		while (running)
 		{
 			EventSystem::DispatchQueue();
+			layerSystem.IterateForward([](Layer* layer) { layer->OnUpdate(); });
 			window->OnUpdate();
-			//w->OnUpdate();
 		}
 	}
 
-	bool Application::OnWindowClosed(const Event* e)
+	bool Application::OnWindowClosed(const WindowCloseEvent* e)
 	{
-		if (e->GetType() != EventType::WindowClose) return false;
+		layerSystem.~LayerSystem();
 		running = false;
 		return true;
 	}

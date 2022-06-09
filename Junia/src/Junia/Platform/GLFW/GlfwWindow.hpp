@@ -9,17 +9,17 @@ namespace Junia
 	{
 	public:
 		explicit GlfwWindow(const WindowProperties& properties);
-		virtual ~GlfwWindow();
+		~GlfwWindow() override;
 
 		void OnUpdate() override;
 
-		inline unsigned GetWidth() const override { return data.width; }
-		inline unsigned GetHeight() const override { return data.height; }
+		[[nodiscard]] unsigned int GetWidth() const override { return data.width; }
+		[[nodiscard]] unsigned int GetHeight() const override { return data.height; }
 
 		void SetVSync(bool enable) override;
-		bool IsVSync() const override;
+		[[nodiscard]] bool IsVSync() const override;
 
-		inline virtual void* getNativeWindow() const { return window; }
+		[[nodiscard]] void* GetNativeWindow() const override { return window; }
 
 	private:
 		virtual void Close();

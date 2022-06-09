@@ -21,7 +21,8 @@ project "Testing"
 
 	includedirs {
 		"../Junia/src",
-		"%{Dependency.spdlog.include}"
+		"%{Dependency.spdlog.include}",
+		"%{Dependency.GLM.include}"
 	}
 
 	libdirs {

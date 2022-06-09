@@ -41,14 +41,14 @@ namespace Junia
 
 	#define JE_EVENT_DISPATCH_SWITCH_IMPL_Q(x)	case EventType:: ## x: \
 												{ \
-													const x ## Event* ev = reinterpret_cast<const x ## Event*>(e); \
+													const x ## Event* ev = dynamic_cast<const x ## Event*>(e); \
 													x ## Event::Dispatch(ev); \
 													break; \
 												}
 
 	void EventSystem::Dispatch(const Event* e)
 	{
-		for (const std::function<bool(const Event*)>& callback : subscribers) { if (callback(e)) break; }
+		for (const std::function<bool(const Event*)>& callback : subscribers) { if (callback(e)) return; }
 		switch (e->GetType())
 		{
 			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(JoystickConnect)
@@ -68,8 +68,6 @@ namespace Junia
 			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(WindowMaximize)
 			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(WindowMove)
 			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(WindowResize)
-		default:
-			break;
 		}
 	}
 }

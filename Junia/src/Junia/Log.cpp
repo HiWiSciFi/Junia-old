@@ -5,6 +5,8 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
+#include <Junia/Base.hpp>
+
 namespace Junia
 {
 	std::shared_ptr<spdlog::logger> Log::juniaLogger;

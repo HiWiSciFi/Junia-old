@@ -2,8 +2,6 @@
 #include <string>
 #include <sstream>
 
-#include <Junia/Base.hpp>
-
 namespace Junia
 {
 	#define JE_VERSION_MAJOR (unsigned int)1
