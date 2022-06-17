@@ -5,7 +5,9 @@
 
 namespace Junia
 {
+//#ifndef JE_TARGETPLATFORM_WINDOWS
 	Input* Input::instance = new GlfwInput();
+//#endif
 
 	bool GlfwInput::IsKeyDownImplementation(const int keycode)
 	{
