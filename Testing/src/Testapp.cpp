@@ -9,13 +9,13 @@ public:
 	void OnEnable() override
 	{
 		Junia::EventSystem::Subscribe(JE_EVENT_BIND_MEMBER_FUNC(OnEvent));
-		JELOG_INFO("Layer name: {0}", name);
+		JELOG_INFO("Layer name: " JELOG_CSTR, name.c_str());
 	}
 
 	bool OnEvent(const Junia::Event* e) const
 	{
 		if (e->GetCategory() != Junia::EventCategory::Window && e->GetType() != Junia::EventType::MouseMove)
-			JELOG_TRACE("(Layer) {0}: {1}", name, e->ToString());
+			JELOG_TRACE("(Layer) " JELOG_CSTR ": " JELOG_CSTR, name.c_str(), e->ToString().c_str());
 		return false;
 	}
 };

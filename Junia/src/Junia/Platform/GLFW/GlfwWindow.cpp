@@ -22,7 +22,7 @@ namespace Junia
 		data.width = properties.width;
 		data.height = properties.height;
 
-		JELOG_BASE_INFO("Creating window {0} ({1}, {2})", properties.title, properties.width, properties.height);
+		JELOG_BASE_INFO("Creating window %s (%u, %u)", properties.title.c_str(), properties.width, properties.height);
 
 		if (!glfw_initialized)
 		{
@@ -30,7 +30,7 @@ namespace Junia
 			if (!glfwInit()) JELOG_BASE_CRIT("GLFW could not be initialized!");
 			glfwSetErrorCallback([ ] (const int errorcode, const char* description)
 				{
-					JELOG_BASE_ERROR("GLFW Error ({0}) : {1}", errorcode, description);
+					JELOG_BASE_ERROR("GLFW Error (%i) : %s", errorcode, description);
 				});
 			glfw_initialized = true;
 		}

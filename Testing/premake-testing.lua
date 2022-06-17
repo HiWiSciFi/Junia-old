@@ -22,16 +22,17 @@ project "Testing"
 	includedirs {
 		"../Junia/src",
 		"%{Dependency.spdlog.include}",
-		"%{Dependency.GLM.include}"
+		"%{Dependency.GLM.include}",
+		"%{Dependency.fmt.include}"
 	}
 
 	libdirs {
-		"%{Dependency.spdlog.lib}"
+		--"%{Dependency.spdlog.lib}"
 	}
 
 	links {
-		"Junia",
-		"spdlog"
+		"Junia"--,
+		--"spdlog"
 	}
 
 	filter "system:windows"

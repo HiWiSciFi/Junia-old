@@ -27,8 +27,8 @@ int main(int argc, char** argv)
 	Junia::Log::Init();
 	JELOG_BASE_INFO("Junia initialized!");
 
-	JELOG_BASE_TRACE("Detected Junia Compile version: {0}", Junia::GetCompileVersion());
-	JELOG_BASE_TRACE("Detected Junia Header version:  {0}", Junia::GetHeaderVersion());
+	JELOG_BASE_TRACE("Detected Junia Compile version: %s", Junia::GetCompileVersion().c_str());
+	JELOG_BASE_TRACE("Detected Junia Header version:  %s", Junia::GetHeaderVersion().c_str());
 
 	JELOG_BASE_TRACE("Creating user application...");
 	auto const app = Junia::CreateApplication();

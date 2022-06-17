@@ -16,3 +16,6 @@
 [submodule "Junia/dependencies/glad/glad-junia"]
 	path = Junia/dependencies/glad/glad-junia
 	url = https://github.com/HiWiSciFi/glad-junia
+[submodule "Junia/dependencies/fmt"]
+	path = Junia/dependencies/fmt
+	url = https://github.com/fmtlib/fmt
