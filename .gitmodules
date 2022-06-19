@@ -1,6 +1,3 @@
-[submodule "Junia/dependencies/spdlog"]
-	path = Junia/dependencies/spdlog
-	url = https://github.com/gabime/spdlog
 [submodule "Junia/dependencies/GLFW"]
 	path = Junia/dependencies/GLFW
 	url = https://github.com/glfw/glfw
@@ -16,6 +13,3 @@
 [submodule "Junia/dependencies/glad/glad-junia"]
 	path = Junia/dependencies/glad/glad-junia
 	url = https://github.com/HiWiSciFi/glad-junia
-[submodule "Junia/dependencies/fmt"]
-	path = Junia/dependencies/fmt
-	url = https://github.com/fmtlib/fmt
