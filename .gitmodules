@@ -10,6 +10,3 @@
 [submodule "Junia/dependencies/EnTT/EnTT"]
 	path = Junia/dependencies/EnTT/EnTT
 	url = https://github.com/skypjack/entt
-[submodule "Junia/dependencies/glad/glad-junia"]
-	path = Junia/dependencies/glad/glad-junia
-	url = https://github.com/HiWiSciFi/glad-junia
