@@ -10,11 +10,15 @@ namespace Junia
 		OpenGLVertexBuffer(float* vertices, uint32_t size);
 		virtual ~OpenGLVertexBuffer();
 
-		virtual void Bind()   const;
-		virtual void Unbind() const;
+		virtual void Bind()   const override;
+		virtual void Unbind() const override;
+
+		virtual const BufferLayout& GetLayout() const override { return layout; }
+		virtual void SetLayout(const BufferLayout& layout) override { this->layout = layout; }
 
 	private:
 		uint32_t rendererId;
+		BufferLayout layout;
 	};
 
 	class OpenGLIndexBuffer : public IndexBuffer
@@ -23,8 +27,8 @@ namespace Junia
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
 		virtual ~OpenGLIndexBuffer();
 
-		virtual void Bind()   const;
-		virtual void Unbind() const;
+		virtual void Bind()   const override;
+		virtual void Unbind() const override;
 
 		virtual uint32_t GetCount() const { return count; }
 

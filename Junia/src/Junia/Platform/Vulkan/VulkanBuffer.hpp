@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Junia/Renderer/Buffer.hpp>
+#include <vulkan/vulkan.h>
 
 namespace Junia
 {
@@ -12,6 +13,14 @@ namespace Junia
 
 		virtual void Bind()   const;
 		virtual void Unbind() const;
+
+		virtual const BufferLayout& GetLayout() const override { return layout; }
+		virtual void SetLayout(const BufferLayout& layout) override { this->layout = layout; }
+
+	private:
+		VkDevice device = nullptr;
+		VkBuffer vkBuf = nullptr;
+		BufferLayout layout;
 	};
 
 	class VulkanIndexBuffer : public IndexBuffer
@@ -23,9 +32,11 @@ namespace Junia
 		virtual void Bind()   const;
 		virtual void Unbind() const;
 
-		virtual uint32_t GetCount() { return count; }
+		virtual uint32_t GetCount() const { return count; }
 
 	private:
-		uint32_t count;
+		uint32_t count = 0;
+		VkDevice device = nullptr;
+		VkBuffer vkBuf = nullptr;
 	};
 }

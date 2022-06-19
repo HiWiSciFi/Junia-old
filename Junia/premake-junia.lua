@@ -25,6 +25,8 @@ project "Junia"
 
 	includedirs {
 		"src",
+		"%{Dependency.Vulkan.include}",
+		"%{Dependency.glad.include}",
 		"%{Dependency.GLFW.include}",
 		"%{Dependency.spdlog.include}",
 		"%{Dependency.GLM.include}",
@@ -32,11 +34,15 @@ project "Junia"
 	}
 
 	libdirs {
+		"%{Dependency.Vulkan.libdir}",
+		"%{Dependency.glad.libdir}",
 		"%{Dependency.GLFW.libdir}",
 		"%{Dependency.spdlog.libdir}"
 	}
 
 	links {
+		"vulkan-1",
+		"glad",
 		"GLFW",
 		"spdlog"
 	}

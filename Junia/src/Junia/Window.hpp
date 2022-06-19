@@ -10,8 +10,8 @@ namespace Junia
 		unsigned int height;
 
 		WindowProperties(std::string title = "Junia Window",
-			const unsigned int width = 960,
-			const unsigned int height = 540)
+			const unsigned int width = 800,
+			const unsigned int height = 600)
 			: title(std::move(title)), width(width), height(height) { }
 	};
 

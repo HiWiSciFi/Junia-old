@@ -10,8 +10,8 @@ namespace Junia
 	public:
 		OpenGLRenderContext(Window* window);
 
-		virtual void Init() = 0;
-		virtual void SwapBuffers() = 0;
+		virtual void Init() override;
+		virtual void SwapBuffers() override;
 
 	private:
 		Window* window;

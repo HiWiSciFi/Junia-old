@@ -11,7 +11,7 @@ namespace Junia
 	void Log::Init()
 	{
 		juniaLogger = Logger::Create("Junia");
-		juniaLogger = Logger::Create("App");
+		applicationLogger = Logger::Create(" App ");
 
 	#ifdef JELOG_EXTENDED_INFO
 		JE_ONLY_JELOG_MAX_TRACE(std::cout << "[Junia-preinit] [at " << __FILE__ << ":" << __LINE__ << "] Initializing Logger..." << std::endl);

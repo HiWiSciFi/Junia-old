@@ -1,5 +1,6 @@
 #include <Junia.hpp>
 #include <Junia/Events/EventSystem.hpp>
+#include <cstdarg>
 
 class ExampleLayer final : public Junia::Layer
 {
@@ -9,7 +10,7 @@ public:
 	void OnEnable() override
 	{
 		Junia::EventSystem::Subscribe(JE_EVENT_BIND_MEMBER_FUNC(OnEvent));
-		JELOG_INFO("Layer name: " JELOG_CSTR, name.c_str());
+		JELOG_TRACE("Layer name: " JELOG_CSTR, name.c_str());
 	}
 
 	bool OnEvent(const Junia::Event* e) const
@@ -20,7 +21,7 @@ public:
 	}
 };
 
-class Testapp final : public Junia::Application
+class Testapp : public Junia::Application
 {
 public:
 	Testapp()

@@ -1,4 +1,6 @@
+include "premake-vulkan.lua"
 include "premake-EnTT.lua"
+include "premake-glad.lua"
 include "premake-GLFW.lua"
 include "premake-GLM.lua"
 include "premake-spdlog.lua"

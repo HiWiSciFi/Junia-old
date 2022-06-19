@@ -36,8 +36,10 @@ namespace Junia
 		}
 
 		window = glfwCreateWindow(static_cast<int>(properties.width), static_cast<int>(properties.height), data.title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(window);
-		// gladLoadGL();
+
+		context = new OpenGLRenderContext(this);
+		context->Init();
+
 		glfwSetWindowUserPointer(window, &data);
 		GlfwWindow::SetVSync(true);
 
@@ -144,7 +146,7 @@ namespace Junia
 	void GlfwWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(window);
+		context->SwapBuffers();
 	}
 
 	void GlfwWindow::SetVSync(const bool enable)

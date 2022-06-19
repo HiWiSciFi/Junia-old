@@ -16,8 +16,8 @@ namespace Junia
 	{
 		va_list args;
 		va_start(args, fmt);
-		const std::string fmts = "\x1b[37;40m[" + name + "]" + fmt + "\n\x1b[0m";
-		vfprintf(stdout, fmts.c_str(), args);
+		std::string fmts = "\x1b[37;40m[" + name + "] " + fmt + "\n\x1b[0m";
+		vprintf(fmts.c_str(), args);
 		va_end(args);
 	}
 
@@ -25,7 +25,8 @@ namespace Junia
 	{
 		va_list args;
 		va_start(args, fmt);
-		vfprintf(stdout, ("\x1b[32;40m[" + name + "]" + fmt + "\n\x1b[0m").c_str(), args);
+		std::string fmts = "\x1b[32;40m[" + name + "] " + fmt + "\n\x1b[0m";
+		vprintf(fmts.c_str(), args);
 		va_end(args);
 	}
 
@@ -33,7 +34,8 @@ namespace Junia
 	{
 		va_list args;
 		va_start(args, fmt);
-		vfprintf(stdout, ("\x1b[33;40m[" + name + "]" + fmt + "\n\x1b[0m").c_str(), args);
+		std::string fmts = "\x1b[33;40m[" + name + "] " + fmt + "\n\x1b[0m";
+		vprintf(fmts.c_str(), args);
 		va_end(args);
 	}
 
@@ -41,7 +43,8 @@ namespace Junia
 	{
 		va_list args;
 		va_start(args, fmt);
-		vfprintf(stdout, ("\x1b[31;40m[" + name + "]" + fmt + "\n\x1b[0m").c_str(), args);
+		std::string fmts = "\x1b[31;40m[" + name + "] " + fmt + "\n\x1b[0m";
+		vprintf(fmts.c_str(), args);
 		va_end(args);
 	}
 
@@ -49,7 +52,8 @@ namespace Junia
 	{
 		va_list args;
 		va_start(args, fmt);
-		vfprintf(stdout, ("\x1b[37;41m[" + name + "]" + fmt + "\n\x1b[0m").c_str(), args);
+		std::string fmts = "\x1b[37;41m[" + name + "] " + fmt + "\n\x1b[0m";
+		vprintf(fmts.c_str(), args);
 		va_end(args);
 	}
 }

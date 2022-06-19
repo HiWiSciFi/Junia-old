@@ -14,7 +14,7 @@
 #define JELOG_INT_B16    "%x"
 #define JELOG_PTR        "%p"
 #define JELOG_FLOAT      "%f"
-#define JELOG_uint       "%u"
+#define JELOG_UINT       "%u"
 #define JELOG_SFLOAT     "%e"
 #define JELOG_PERCENT    "%%"
 

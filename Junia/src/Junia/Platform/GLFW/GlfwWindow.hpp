@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #undef APIENTRY
 #include <Junia/Window.hpp>
+#include <Junia/Platform/OpenGL/OpenGLRenderContext.hpp>
 
 namespace Junia
 {
@@ -25,6 +26,7 @@ namespace Junia
 		virtual void Close();
 
 		GLFWwindow* window;
+		OpenGLRenderContext* context;
 
 		struct WindowData
 		{

@@ -6,6 +6,8 @@
 
 #include <Junia/LayerSystem.hpp>
 #include <Junia/Events/WindowEvents.hpp>
+#include <Junia/Renderer/Buffer.hpp>
+#include <Junia/Renderer/Shader.hpp>
 
 namespace Junia
 {
@@ -22,8 +24,8 @@ namespace Junia
 		Layer* PopLayerFront();
 		Layer* PopLayerBack();
 
-		[[nodiscard]] Window& GetWindow() const;
-		static Application& Get();
+		[[nodiscard]] Window& GetWindow() const { return *window; }
+		static Application& Get() { return *app; }
 
 	private:
 		bool OnWindowClosed(const WindowCloseEvent* e);
@@ -31,6 +33,11 @@ namespace Junia
 		std::unique_ptr<Window> window;
 		LayerSystem layerSystem;
 		bool running = true;
+
+		unsigned int vertexArray;
+		std::unique_ptr<Shader> shader;
+		std::unique_ptr<VertexBuffer> vertexBuffer;
+		std::unique_ptr<IndexBuffer> indexBuffer;
 
 		static Application* app;
 	};
