@@ -28,23 +28,19 @@ project "Junia"
 		"%{Dependency.Vulkan.include}",
 		"%{Dependency.glad.include}",
 		"%{Dependency.GLFW.include}",
-		"%{Dependency.spdlog.include}",
-		"%{Dependency.GLM.include}",
-		"%{Dependency.fmt.include}"
+		"%{Dependency.GLM.include}"
 	}
 
 	libdirs {
 		"%{Dependency.Vulkan.libdir}",
 		"%{Dependency.glad.libdir}",
-		"%{Dependency.GLFW.libdir}",
-		"%{Dependency.spdlog.libdir}"
+		"%{Dependency.GLFW.libdir}"
 	}
 
 	links {
 		"vulkan-1",
 		"glad",
-		"GLFW",
-		"spdlog"
+		"GLFW"
 	}
 
 	flags {
