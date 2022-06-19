@@ -10,35 +10,13 @@ namespace Junia
 {
 	Application* Application::app;
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-		case Junia::ShaderDataType::Float:
-		case Junia::ShaderDataType::Float2:
-		case Junia::ShaderDataType::Float3:
-		case Junia::ShaderDataType::Float4:
-		case Junia::ShaderDataType::Mat3:
-		case Junia::ShaderDataType::Mat4:   return GL_FLOAT;
-		case Junia::ShaderDataType::Int:
-		case Junia::ShaderDataType::Int2:
-		case Junia::ShaderDataType::Int3:
-		case Junia::ShaderDataType::Int4:     return GL_INT;
-		case Junia::ShaderDataType::Bool:    return GL_BOOL;
-		default:
-			JELOG_BASE_ERROR("Unknown ShaderDataType!");
-			return GL_NONE;
-		}
-	}
-
 	Application::Application()
 	{
 		app = this;
 		window = std::unique_ptr<Window>(Window::Create());
 		WindowCloseEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(WindowCloseEvent, OnWindowClosed));
 
-		glGenVertexArrays(1, &vertexArray);
-		glBindVertexArray(vertexArray);
+		vertexArray.reset(VertexArray::Create());
 
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
@@ -46,30 +24,37 @@ namespace Junia
 			 0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
 		};
 
-		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		std::shared_ptr<VertexBuffer> vertexBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		BufferLayout layout = {
 			{ ShaderDataType::Float3, "inPosition" },
-			{ ShaderDataType::Float4, "inColor"    }
+			{ ShaderDataType::Float4, "inColor" }
 		};
 		vertexBuffer->SetLayout(layout);
-
-		for (int i = 0; i < vertexBuffer->GetLayout().GetElements().size(); i++)
-		{
-			const auto& element = vertexBuffer->GetLayout().GetElements()[i];
-			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(
-				i,
-				element.GetComponentCount(),
-				ShaderDataTypeToOpenGLBaseType(element.type),
-				element.normalized ? GL_TRUE : GL_FALSE,
-				layout.GetStride(),
-				*((const void**)&element.offset)
-			);
-		}
+		vertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		std::shared_ptr<IndexBuffer> indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		vertexArray->SetIndexBuffer(indexBuffer);
+
+		float squareVertices[3 * 4] = {
+			-0.75f, -0.75f, 0.0f,
+			 0.75f, -0.75f, 0.0f,
+			 0.75f,  0.75f, 0.0f,
+			-0.75f,  0.75f, 0.0f
+		};
+
+		squareVertexArray.reset(VertexArray::Create());
+		std::shared_ptr<VertexBuffer> squareVertexBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+
+		squareVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3, "inPosition" }
+		});
+		squareVertexArray->AddVertexBuffer(squareVertexBuffer);
+
+		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
+		std::shared_ptr<IndexBuffer> squareIndexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		squareVertexArray->SetIndexBuffer(squareIndexBuffer);
 
 		std::string vertexSrc = R"(
 			#version 450
@@ -104,6 +89,35 @@ namespace Junia
 		)";
 
 		shader.reset(Shader::Create(vertexSrc, fragmentSrc));
+
+		std::string vertexSrc2 = R"(
+			#version 450
+
+			layout(location = 0) in vec3 inPosition;
+
+			out vec3 vPosition;
+
+			void main()
+			{
+				vPosition = inPosition;
+				gl_Position = vec4(inPosition, 1.0);
+			}
+		)";
+
+		std::string fragmentSrc2 = R"(
+			#version 450
+
+			layout(location = 0) out vec4 outColor;
+
+			in vec3 vPosition;
+
+			void main()
+			{
+				outColor = vec4(0.2, 0.3, 0.8, 1.0);
+			}
+		)";
+
+		shader2.reset(Shader::Create(vertexSrc2, fragmentSrc2));
 	}
 
 	Application::~Application() = default;
@@ -120,9 +134,13 @@ namespace Junia
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			shader2->Bind();
+			squareVertexArray->Bind();
+			glDrawElements(GL_TRIANGLES, squareVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
 			shader->Bind();
-			glBindVertexArray(vertexArray);
-			glDrawElements(GL_TRIANGLES, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			vertexArray->Bind();
+			glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			EventSystem::DispatchQueue();
 			layerSystem.IterateForward([](Layer* layer) { layer->OnUpdate(); });

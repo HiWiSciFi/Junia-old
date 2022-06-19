@@ -6,6 +6,7 @@
 
 #include <Junia/LayerSystem.hpp>
 #include <Junia/Events/WindowEvents.hpp>
+#include <Junia/Renderer/VertexArray.hpp>
 #include <Junia/Renderer/Buffer.hpp>
 #include <Junia/Renderer/Shader.hpp>
 
@@ -34,10 +35,11 @@ namespace Junia
 		LayerSystem layerSystem;
 		bool running = true;
 
-		unsigned int vertexArray;
-		std::unique_ptr<Shader> shader;
-		std::unique_ptr<VertexBuffer> vertexBuffer;
-		std::unique_ptr<IndexBuffer> indexBuffer;
+		std::shared_ptr<Shader> shader;
+		std::shared_ptr<VertexArray> vertexArray;
+
+		std::shared_ptr<Shader> shader2;
+		std::shared_ptr<VertexArray> squareVertexArray;
 
 		static Application* app;
 	};
