@@ -28,19 +28,22 @@ project "Junia"
 		"%{Dependency.Vulkan.include}",
 		"%{Dependency.glad.include}",
 		"%{Dependency.GLFW.include}",
-		"%{Dependency.GLM.include}"
+		"%{Dependency.GLM.include}",
+		"%{Dependency.imgui.include}"
 	}
 
 	libdirs {
 		"%{Dependency.Vulkan.libdir}",
 		"%{Dependency.glad.libdir}",
-		"%{Dependency.GLFW.libdir}"
+		"%{Dependency.GLFW.libdir}",
+		"%{Dependency.imgui.libdir}"
 	}
 
 	links {
 		"vulkan-1",
 		"glad",
-		"GLFW"
+		"GLFW",
+		"imgui"
 	}
 
 	flags {
