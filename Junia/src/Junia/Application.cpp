@@ -5,6 +5,7 @@
 #include <functional>
 #include <glad/glad.h>
 #include <Junia/Renderer/Renderer.hpp>
+#include <Junia/UI/ImGuiLayer.hpp>
 
 namespace Junia
 {
@@ -118,6 +119,8 @@ namespace Junia
 		)";
 
 		shader2.reset(Shader::Create(vertexSrc2, fragmentSrc2));
+
+		PushLayerFront(new ImGuiLayer());
 	}
 
 	Application::~Application() = default;

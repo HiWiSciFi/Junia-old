@@ -16,7 +16,9 @@ project "Junia"
 
 	files {
 		"src/**.hpp",
-		"src/**.cpp"
+		"src/**.cpp",
+		"dependencies/imgui/imgui/backends/imgui_impl_glfw.cpp",
+		"dependencies/imgui/imgui/backends/imgui_impl_opengl3.cpp"
 	}
 
 	defines {

@@ -7,6 +7,10 @@ project "imgui"
 	targetdir ("out/%{prj.name}/" .. buildtargetname)
 	objdir ("out-obj/%{prj.name}/" .. buildtargetname)
 
+	includedirs {
+		"%{prj.name}/%{prj.name}"
+	}
+
 	files {
 		"%{prj.name}/%{prj.name}/imconfig.h",
 		"%{prj.name}/%{prj.name}/imgui.h",
