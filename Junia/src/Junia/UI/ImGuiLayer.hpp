@@ -1,7 +1,9 @@
 #pragma once
 
 #include <Junia/Layer.hpp>
-#include <glm/vec4.hpp>
+#include <Junia/Events/MouseEvents.hpp>
+#include <Junia/Events/KeyboardEvents.hpp>
+#include <Junia/Events/WindowEvents.hpp>
 
 namespace Junia
 {
@@ -11,8 +13,8 @@ namespace Junia
 		void OnEnable() override;
 		void OnUpdate() override;
 		void OnDisable() override;
+
 	private:
 		bool show_demo_window = true;
-		bool show_another_window = false;
 	};
 }

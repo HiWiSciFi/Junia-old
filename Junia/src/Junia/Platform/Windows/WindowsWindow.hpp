@@ -24,7 +24,9 @@ namespace Junia
 	private:
 		virtual void Close();
 
-		HWND* window;
+		HWND window;
+		HDC hdc;
+		HGLRC ctx;
 
 		struct WindowData
 		{

@@ -16,9 +16,7 @@ project "Junia"
 
 	files {
 		"src/**.hpp",
-		"src/**.cpp",
-		"dependencies/imgui/imgui/backends/imgui_impl_glfw.cpp",
-		"dependencies/imgui/imgui/backends/imgui_impl_opengl3.cpp"
+		"src/**.cpp"
 	}
 
 	defines {
@@ -31,7 +29,8 @@ project "Junia"
 		"%{Dependency.glad.include}",
 		"%{Dependency.GLFW.include}",
 		"%{Dependency.GLM.include}",
-		"%{Dependency.imgui.include}"
+		"%{Dependency.imgui.include}",
+		"%{Dependency.stb.include}"
 	}
 
 	libdirs {

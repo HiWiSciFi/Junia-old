@@ -46,5 +46,5 @@ project "imgui"
 
     filter {}
 		Dependency["imgui"] = {}
-		Dependency["imgui"]["include"] = depsloc .. "imgui/imgui"
+		Dependency["imgui"]["include"] = depsloc .. "imgui"
 		Dependency["imgui"]["libdir"] = depsloc .. "out/imgui/" .. buildtargetname

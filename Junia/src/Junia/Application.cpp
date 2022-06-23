@@ -119,8 +119,6 @@ namespace Junia
 		)";
 
 		shader2.reset(Shader::Create(vertexSrc2, fragmentSrc2));
-
-		PushLayerFront(new ImGuiLayer());
 	}
 
 	Application::~Application() = default;
