@@ -6,6 +6,6 @@ namespace Junia
 	{
 	public:
 		virtual void Init() = 0;
-		virtual void SwapBuffers() = 0;
+		virtual void ContextSwapBuffers() = 0;
 	};
 }

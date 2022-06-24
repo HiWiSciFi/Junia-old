@@ -3,6 +3,7 @@
 #include <Junia/Events/KeyboardEvents.hpp>
 #include <Junia/Events/MouseEvents.hpp>
 #include <Junia/Events/WindowEvents.hpp>
+#include <Junia/Log.hpp>
 
 namespace Junia
 {

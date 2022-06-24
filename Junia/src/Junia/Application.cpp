@@ -16,7 +16,7 @@ namespace Junia
 		window = std::unique_ptr<Window>(Window::Create());
 		WindowCloseEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(WindowCloseEvent, OnWindowClosed));
 
-		vertexArray.reset(VertexArray::Create());
+		/*vertexArray.reset(VertexArray::Create());
 
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
@@ -117,7 +117,7 @@ namespace Junia
 			}
 		)";
 
-		shader2.reset(Shader::Create(vertexSrc2, fragmentSrc2));
+		shader2.reset(Shader::Create(vertexSrc2, fragmentSrc2));*/
 	}
 
 	Application::~Application() = default;
@@ -134,13 +134,13 @@ namespace Junia
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			shader2->Bind();
+			/*shader2->Bind();
 			squareVertexArray->Bind();
 			glDrawElements(GL_TRIANGLES, squareVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			shader->Bind();
 			vertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);*/
 
 			EventSystem::DispatchQueue();
 			layerSystem.IterateForward([](Layer* layer) { layer->OnUpdate(); });

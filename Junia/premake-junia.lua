@@ -29,26 +29,24 @@ project "Junia"
 		"%{Dependency.glad.include}",
 		"%{Dependency.GLFW.include}",
 		"%{Dependency.GLM.include}",
-		"%{Dependency.imgui.include}",
 		"%{Dependency.stb.include}"
 	}
 
 	libdirs {
 		"%{Dependency.Vulkan.libdir}",
 		"%{Dependency.glad.libdir}",
-		"%{Dependency.GLFW.libdir}",
-		"%{Dependency.imgui.libdir}"
+		"%{Dependency.GLFW.libdir}"
 	}
 
 	links {
+		"opengl32",
 		"vulkan-1",
 		"glad",
-		"GLFW",
-		"imgui"
+		"GLFW"
 	}
 
 	flags {
-		"FatalWarnings"
+		"FatalCompileWarnings"
 	}
 
 	filter "system:windows"

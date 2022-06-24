@@ -1,6 +1,5 @@
 #pragma once
 #include <GLFW/glfw3.h>
-#undef APIENTRY
 #include <Junia/Window.hpp>
 #include <Junia/Platform/OpenGL/OpenGLRenderContext.hpp>
 

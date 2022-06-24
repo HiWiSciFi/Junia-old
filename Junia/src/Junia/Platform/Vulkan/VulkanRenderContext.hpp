@@ -11,6 +11,6 @@ namespace Junia
 		VulkanRenderContext(Window* window);
 
 		virtual void Init() override;
-		virtual void SwapBuffers() override;
+		virtual void ContextSwapBuffers() override;
 	};
 }

@@ -23,7 +23,7 @@ namespace Junia
 		JELOG_BASE_INFO("  Version:  " JELOG_CSTR, glGetString(GL_VERSION));
 	}
 
-	void OpenGLRenderContext::SwapBuffers()
+	void OpenGLRenderContext::ContextSwapBuffers()
 	{
 		glfwSwapBuffers(static_cast<GLFWwindow*>(window->GetNativeWindow()));
 	}

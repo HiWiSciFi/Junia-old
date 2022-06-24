@@ -10,7 +10,7 @@ namespace Junia
 	{
 	}
 
-	void VulkanRenderContext::SwapBuffers()
+	void VulkanRenderContext::ContextSwapBuffers()
 	{
 	}
 }

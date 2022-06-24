@@ -146,7 +146,7 @@ namespace Junia
 	void GlfwWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		context->SwapBuffers();
+		context->ContextSwapBuffers();
 	}
 
 	void GlfwWindow::SetVSync(const bool enable)
