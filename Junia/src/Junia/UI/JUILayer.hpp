@@ -1,13 +1,10 @@
 #pragma once
 
 #include <Junia/Layer.hpp>
-#include <Junia/Events/MouseEvents.hpp>
-#include <Junia/Events/KeyboardEvents.hpp>
-#include <Junia/Events/WindowEvents.hpp>
 
 namespace Junia
 {
-	class ImGuiLayer : public Layer
+	class JUILayer : public Layer
 	{
 	public:
 		void OnEnable() override;

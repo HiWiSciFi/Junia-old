@@ -5,7 +5,6 @@
 #include <functional>
 #include <glad/glad.h>
 #include <Junia/Renderer/Renderer.hpp>
-#include <Junia/UI/ImGuiLayer.hpp>
 
 namespace Junia
 {

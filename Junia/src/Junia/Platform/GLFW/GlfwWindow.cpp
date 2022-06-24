@@ -11,10 +11,10 @@ namespace Junia
 {
 	static bool glfw_initialized = false;
 
-	Window* Window::Create(const WindowProperties& properties)
+	/*Window* Window::Create(const WindowProperties& properties)
 	{
 		return new GlfwWindow(properties);
-	}
+	}*/
 
 	GlfwWindow::GlfwWindow(const WindowProperties& properties)
 	{
