@@ -1,7 +1,10 @@
 #pragma once
 
+#ifdef JE_TARGETPLATFORM_WINDOWS
+
 #include <Junia/Window.hpp>
 #include <Windows.h>
+#include <Junia/Platform/OpenGL/OpenGLRenderContext.hpp>
 
 namespace Junia
 {
@@ -26,7 +29,7 @@ namespace Junia
 
 		HWND window = nullptr;
 		HDC hdc = nullptr;
-		HGLRC ctx = nullptr;
+		OpenGLRenderContext* context = nullptr;
 
 		struct WindowData
 		{
@@ -44,3 +47,5 @@ namespace Junia
 		WindowData data;
 	};
 }
+
+#endif

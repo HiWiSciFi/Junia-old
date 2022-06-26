@@ -1,5 +1,7 @@
+#ifdef JE_TARGETPLATFORM_WINDOWS
+
 #include "WindowsWindow.hpp"
-#include <iostream>
+
 #include <Junia/Events/EventSystem.hpp>
 #include <Junia/Events/WindowEvents.hpp>
 #include <Junia/Events/MouseEvents.hpp>
@@ -7,19 +9,27 @@
 #include <windowsx.h>
 #include <glad/glad.h>
 #include <Junia/Log.hpp>
+#include <Junia/KeyCodes.hpp>
 
 namespace Junia
 {
-	#define WGL_CONTEXT_MAJOR_VERSION_ARB 0x2091
-	#define WGL_CONTEXT_MINOR_VERSION_ARB 0X2092
-	#define WGL_CONTEXT_FLAGS_ARB 0X2094
-	#define WGL_CONTEXT_COREPROFILE_BIT_ARB 0x00000001
-	#define WGL_CONTEXT_PROFILE_MASK_ARB 0x9126
-	typedef HGLRC(WINAPI* PFNWGLCREATECONTEXTATTRIBSARBPROC) (HDC hDC, HGLRC hShareContext, const int* attribList);
-
+	#ifdef JE_TARGETPLATFORM_WINDOWS
 	Window* Window::Create(const WindowProperties& properties)
 	{
 		return new WindowsWindow(properties);
+	}
+	#endif
+
+	int WinToJeKey(int keyCode)
+	{
+		switch (keyCode)
+		{
+		case VK_LEFT:  return  JE_KEY_LEFT;
+		case VK_UP:    return    JE_KEY_UP;
+		case VK_RIGHT: return JE_KEY_RIGHT;
+		case VK_DOWN:  return  JE_KEY_DOWN;
+		default: return keyCode;
+		}
 	}
 
 	LRESULT CALLBACK WndProc(HWND window, unsigned int msg, WPARAM wp, LPARAM lp)
@@ -32,6 +42,7 @@ namespace Junia
 
 		case WM_SIZE: EventSystem::Trigger(new WindowMaximizeEvent(wp == 2)); break;
 		case WM_MOVE: EventSystem::Trigger(new WindowMoveEvent(GET_X_LPARAM(lp), GET_Y_LPARAM(lp))); break;
+		// TODO: WindowFocusEvent
 		case WM_SIZING:
 			{RECT* r = reinterpret_cast<RECT*>(lp);
 			EventSystem::Trigger(new WindowResizeEvent(r->right - r->left, r->bottom - r->top));
@@ -50,12 +61,13 @@ namespace Junia
 
 		// TODO: Use KeyCodes from <Junia/KeyCodes.hpp>
 		// API Reference: https://docs.microsoft.com/en-us/windows/win32/inputdev/keyboard-input <-- Cool other stuff too : refer to Junia::WindowsInput
-		case WM_KEYDOWN: EventSystem::Trigger(new KeyboardKeyDownEvent(static_cast<int>(wp))); break;
-		case WM_KEYUP: EventSystem::Trigger(new KeyboardKeyUpEvent(static_cast<int>(wp))); break;
-		case WM_CHAR: EventSystem::Trigger(new KeyboardKeyCharEvent(static_cast<int>(static_cast<unsigned int>(wp)))); break;
+		case WM_KEYDOWN: EventSystem::Trigger(new KeyboardKeyDownEvent(WinToJeKey(static_cast<int>(wp)))); break;
+		case WM_KEYUP:   EventSystem::Trigger(new KeyboardKeyUpEvent(WinToJeKey(static_cast<int>(wp))));   break;
+		case WM_CHAR:    EventSystem::Trigger(new KeyboardKeyCharEvent(static_cast<int>(static_cast<unsigned int>(wp)))); break;
 
 		// API Reference: https://docs.microsoft.com/en-us/windows/win32/inputdev/raw-input
 		// TODO: implement Raw Input (Touch, Controllers, microphones, etc.)
+		// TODO: JoystickConnectEvent
 		}
 		return DefWindowProc(window, msg, wp, lp);
 	}
@@ -65,10 +77,10 @@ namespace Junia
 		std::wstring titleWstr = std::wstring(properties.title.begin(), properties.title.end());
 		const wchar_t* className = titleWstr.c_str();
 
-		WNDCLASSEX  wndclass;
+		WNDCLASSEX wndclass{ };
 		wndclass.cbSize = sizeof(WNDCLASSEX);
 		wndclass.style = 0;
-		wndclass.style = CS_HREDRAW | CS_VREDRAW; // ACTIVATES RELOAD ON REDRAW
+		wndclass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC; // ACTIVATES RELOAD ON REDRAW
 		wndclass.lpfnWndProc = WndProc;
 		wndclass.cbClsExtra = 0;
 		wndclass.cbWndExtra = 0;
@@ -80,60 +92,43 @@ namespace Junia
 		wndclass.lpszMenuName = 0;
 		wndclass.lpszClassName = className;
 
-		if (!RegisterClassEx(&wndclass)) return;
+		if (!RegisterClassEx(&wndclass))
+		{
+			JELOG_BASE_CRIT("Could not register window!");
+			throw std::runtime_error("Could not register window!");
+		}
 
 		window = CreateWindowEx(0, wndclass.lpszClassName, className,
 			WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME,
 			CW_USEDEFAULT, CW_USEDEFAULT, properties.width, properties.height, 0, 0, GetModuleHandle(0), 0);
 		if (!window)
 		{
-			JELOG_BASE_ERROR("Could not create Window!");
-			return;
+			JELOG_BASE_CRIT("Could not create window!");
+			throw std::runtime_error("Could not create window!");
 		}
 		hdc = GetDC(window);
 
-		PIXELFORMATDESCRIPTOR pfd;
-		memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+		PIXELFORMATDESCRIPTOR pfd{ };
 		pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-		pfd.nVersion = 1;
-		pfd.dwFlags = PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW | PFD_DOUBLEBUFFER;
-		pfd.iPixelType = PFD_TYPE_RGBA;
-		pfd.cColorBits = 24;
-
-		pfd.cDepthBits = 32;
+		pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+		pfd.cColorBits = 32;
+		pfd.cDepthBits = 24;
 		pfd.cStencilBits = 8;
+		pfd.iLayerType = PFD_MAIN_PLANE;
 
-		int pixelFormat = ChoosePixelFormat(hdc, &pfd);
-		SetPixelFormat(hdc, pixelFormat, &pfd);
+		int format = ChoosePixelFormat(hdc, &pfd);
+		if (format == 0)
+		{
+			JELOG_BASE_CRIT("Could not find compatible pixel format!");
+			throw std::runtime_error("Could not find compatible pixel format!");
+		}
+		SetPixelFormat(hdc, format, &pfd);
 
-		ChoosePixelFormat(hdc, &pfd);
-		SetPixelFormat(hdc, 0, &pfd);
-
-		HGLRC dummyctx = wglCreateContext(hdc);
-		wglMakeCurrent(hdc, dummyctx);
-		PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = NULL;
-		wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
-		const int attribList[] = {
-			WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
-			WGL_CONTEXT_MINOR_VERSION_ARB, 3,
-			WGL_CONTEXT_FLAGS_ARB, 0,
-			WGL_CONTEXT_PROFILE_MASK_ARB,
-			WGL_CONTEXT_COREPROFILE_BIT_ARB, 0,
-		};
-		ctx = wglCreateContextAttribsARB(hdc, 0, attribList);
-		wglMakeCurrent(NULL, NULL);
-		wglDeleteContext(dummyctx);
-		wglMakeCurrent(hdc, ctx);
-
-		int status = gladLoadGL();
-		JELOG_BASE_INFO("GLAD loaded!");
-		if (!status) JELOG_BASE_CRIT("failed to initialize glad! Errorcode: " JELOG_INT, status);
+		context = new OpenGLRenderContext(this);
+		context->Init();
 
 		ShowWindow(window, SW_SHOWDEFAULT);
 		UpdateWindow(window);
-
-		glClearColor(1.0f, 0.0f, .7f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
 	WindowsWindow::~WindowsWindow()
@@ -149,7 +144,7 @@ namespace Junia
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		SwapBuffers(hdc);
+		context->ContextSwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enable)
@@ -164,7 +159,8 @@ namespace Junia
 
 	void WindowsWindow::Close()
 	{
-		wglMakeCurrent(hdc, ctx);
-		wglDeleteContext(ctx);
+		delete context;
 	}
 }
+
+#endif

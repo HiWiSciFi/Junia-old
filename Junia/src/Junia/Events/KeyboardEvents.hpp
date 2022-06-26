@@ -8,50 +8,33 @@ namespace Junia
 	class KeyboardKeyDownEvent : public Event
 	{
 	public:
-		explicit KeyboardKeyDownEvent(const int button) : button(button) { }
+		explicit KeyboardKeyDownEvent(const int keyCode) : keyCode(keyCode) { }
 
 		[[nodiscard]] EventType GetType() const override { return EventType::KeyboardKeyDown; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("KeyboardKeyDownEvent(" << button << ")"); }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("KeyboardKeyDownEvent(" << keyCode << ")"); }
 
-		[[nodiscard]] int GetButton() const { return button; }
+		[[nodiscard]] int GetKeyCode() const { return keyCode; }
 
 	private:
-		const int button;
+		const int keyCode;
 
 		JE_EVENT_FUNCS_IMPL_Q(KeyboardKeyDownEvent)
-	};
-
-	class KeyboardKeyRepeatEvent : public Event
-	{
-	public:
-		explicit KeyboardKeyRepeatEvent(const int button) : button(button) { }
-
-		[[nodiscard]] EventType GetType() const override { return EventType::KeyboardKeyRepeat; }
-		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("KeyboardKeyRepeatEvent(" << button << ")"); }
-
-		[[nodiscard]] int GetButton() const { return button; }
-
-	private:
-		const int button;
-
-		JE_EVENT_FUNCS_IMPL_Q(KeyboardKeyRepeatEvent)
 	};
 
 	class KeyboardKeyUpEvent : public Event
 	{
 	public:
-		explicit KeyboardKeyUpEvent(const int button) : button(button) { }
+		explicit KeyboardKeyUpEvent(const int keyCode) : keyCode(keyCode) { }
 
 		[[nodiscard]] EventType GetType() const override { return EventType::KeyboardKeyUp; }
 		[[nodiscard]] EventCategory GetCategory() const override { return EventCategory::Input; }
-		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("KeyboardKeyUpEvent(" << button << ")"); }
+		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("KeyboardKeyUpEvent(" << keyCode << ")"); }
 
-		[[nodiscard]] int GetButton() const { return button; }
+		[[nodiscard]] int GetButton() const { return keyCode; }
 
 	private:
-		const int button;
+		const int keyCode;
 
 		JE_EVENT_FUNCS_IMPL_Q(KeyboardKeyUpEvent)
 	};

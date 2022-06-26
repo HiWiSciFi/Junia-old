@@ -1,4 +1,7 @@
 #pragma once
+
+#ifdef JE_TARGETPLATFORM_GLFW
+
 #include <GLFW/glfw3.h>
 #include <Junia/Window.hpp>
 #include <Junia/Platform/OpenGL/OpenGLRenderContext.hpp>
@@ -42,3 +45,6 @@ namespace Junia
 		WindowData data;
 	};
 }
+
+#endif
+

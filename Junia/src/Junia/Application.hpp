@@ -3,12 +3,9 @@
 #include <memory>
 
 #include <Junia/Window.hpp>
-
 #include <Junia/LayerSystem.hpp>
 #include <Junia/Events/WindowEvents.hpp>
-#include <Junia/Renderer/VertexArray.hpp>
-#include <Junia/Renderer/Buffer.hpp>
-#include <Junia/Renderer/Shader.hpp>
+#include <Junia/Core/Timestep.hpp>
 
 namespace Junia
 {
@@ -18,7 +15,7 @@ namespace Junia
 		Application();
 		virtual ~Application();
 
-		void Run() const;
+		void Run();
 
 		Layer* PushLayerFront(Layer* layer);
 		Layer* PushLayerBack(Layer* layer);
@@ -34,12 +31,7 @@ namespace Junia
 		std::unique_ptr<Window> window;
 		LayerSystem layerSystem;
 		bool running = true;
-
-		std::shared_ptr<Shader> shader;
-		std::shared_ptr<VertexArray> vertexArray;
-
-		std::shared_ptr<Shader> shader2;
-		std::shared_ptr<VertexArray> squareVertexArray;
+		float lastFrameTime = 0.0f;
 
 		static Application* app;
 	};

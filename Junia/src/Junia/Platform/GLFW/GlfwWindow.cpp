@@ -1,3 +1,5 @@
+#ifdef JE_TARGETPLATFORM_GLFW
+
 #include "GlfwWindow.hpp"
 
 #include <Junia/Log.hpp>
@@ -11,10 +13,10 @@ namespace Junia
 {
 	static bool glfw_initialized = false;
 
-	/*Window* Window::Create(const WindowProperties& properties)
+	Window* Window::Create(const WindowProperties& properties)
 	{
 		return new GlfwWindow(properties);
-	}*/
+	}
 
 	GlfwWindow::GlfwWindow(const WindowProperties& properties)
 	{
@@ -84,9 +86,6 @@ namespace Junia
 					break;
 				case GLFW_RELEASE:
 					EventSystem::Trigger(new KeyboardKeyUpEvent(key));
-					break;
-				case GLFW_REPEAT:
-					EventSystem::Trigger(new KeyboardKeyRepeatEvent(key));
 					break;
 				default:
 					break;
@@ -164,3 +163,5 @@ namespace Junia
 		return data.vSync;
 	}
 }
+
+#endif

@@ -1,21 +1,27 @@
 #pragma once
 
+#include <Junia/Renderer/RenderCommand.hpp>
+#include <Junia/Renderer/OrthographicCamera.hpp>
+#include <Junia/Renderer/Shader.hpp>
+
 namespace Junia
 {
-	enum class RendererAPI
-	{
-		None = 0,
-		OpenGL = 1,
-		Vulkan = 2
-	};
-
 	class Renderer
 	{
 	public:
-		inline static RendererAPI GetAPI() { return rendererAPI; }
-		static void SetAPI(RendererAPI api) { rendererAPI = api; }
+		static void BeginScene(OrthographicCamera& camera);
+		static void EndScene();
+
+		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray);
+
+		static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
 	private:
-		static RendererAPI rendererAPI;
+		struct SceneData
+		{
+			glm::mat4 viewProjectionMatrix;
+		};
+
+		static SceneData* sceneData;
 	};
 }

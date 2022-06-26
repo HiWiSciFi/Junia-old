@@ -10,8 +10,8 @@ namespace Junia
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::OpenGL: return new OpenGLVertexArray();
-		case RendererAPI::Vulkan: return new VulkanVertexArray();
+		case RendererAPI::API::OpenGL: return new OpenGLVertexArray();
+		case RendererAPI::API::Vulkan: return new VulkanVertexArray();
 		default: return nullptr;
 		}
 	}

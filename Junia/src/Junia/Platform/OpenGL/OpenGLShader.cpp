@@ -3,6 +3,7 @@
 #include <Junia/Log.hpp>
 #include <glad/glad.h>
 #include <vector>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Junia
 {
@@ -94,5 +95,16 @@ namespace Junia
 	void OpenGLShader::Unbind() const
 	{
 		glUseProgram(0);
+	}
+
+	void OpenGLShader::UploadUniformMat4(const std::string name, const glm::mat4& matrix)
+	{
+		GLint location = glGetUniformLocation(rendererId, name.c_str());
+		if (location == -1)
+		{
+			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", name.c_str());
+			return;
+		}
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 }

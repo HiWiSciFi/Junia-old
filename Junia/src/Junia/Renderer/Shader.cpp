@@ -11,8 +11,8 @@ namespace Junia
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::OpenGL: return new OpenGLShader(vertexSrc, fragmentSrc);
-		case RendererAPI::Vulkan: return new VulkanShader(vertexSrc, fragmentSrc);
+		case RendererAPI::API::OpenGL: return new OpenGLShader(vertexSrc, fragmentSrc);
+		case RendererAPI::API::Vulkan: return new VulkanShader(vertexSrc, fragmentSrc);
 		default: return nullptr;
 		}
 	}

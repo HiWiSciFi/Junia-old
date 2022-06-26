@@ -11,8 +11,8 @@ namespace Junia
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::OpenGL: return new OpenGLVertexBuffer(vertices, size);
-		case RendererAPI::Vulkan: return new VulkanVertexBuffer(vertices, size);
+		case RendererAPI::API::OpenGL: return new OpenGLVertexBuffer(vertices, size);
+		case RendererAPI::API::Vulkan: return new VulkanVertexBuffer(vertices, size);
 		default: return nullptr;
 		}
 	}
@@ -21,8 +21,8 @@ namespace Junia
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::OpenGL: return new OpenGLIndexBuffer(indices, count);
-		case RendererAPI::Vulkan: return new VulkanIndexBuffer(indices, count);
+		case RendererAPI::API::OpenGL: return new OpenGLIndexBuffer(indices, count);
+		case RendererAPI::API::Vulkan: return new VulkanIndexBuffer(indices, count);
 		default: return nullptr;
 		}
 	}

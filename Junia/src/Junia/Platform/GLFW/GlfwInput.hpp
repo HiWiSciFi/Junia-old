@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_TARGETPLATFORM_GLFW
+
 #include <Junia/Input.hpp>
 
 namespace Junia
@@ -12,3 +14,5 @@ namespace Junia
 		std::pair<float, float> GetMousePositionImplementation() override;
 	};
 }
+
+#endif

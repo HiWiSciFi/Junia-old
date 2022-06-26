@@ -20,7 +20,6 @@ namespace Junia
 		MouseScroll,
 
 		KeyboardKeyDown,
-		KeyboardKeyRepeat,
 		KeyboardKeyUp,
 		KeyboardKeyChar,
 

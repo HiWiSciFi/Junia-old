@@ -1,3 +1,5 @@
+#ifdef JE_TARGETPLATFORM_GLFW
+
 #include "GlfwInput.hpp"
 
 #include <GLFW/glfw3.h>
@@ -5,9 +7,7 @@
 
 namespace Junia
 {
-//#ifndef JE_TARGETPLATFORM_WINDOWS
 	Input* Input::instance = new GlfwInput();
-//#endif
 
 	bool GlfwInput::IsKeyDownImplementation(const int keycode)
 	{
@@ -31,3 +31,6 @@ namespace Junia
 		return { static_cast<float>(x), static_cast<float>(y) };
 	}
 }
+
+#endif
+
