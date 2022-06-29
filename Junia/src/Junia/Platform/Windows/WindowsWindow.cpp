@@ -13,12 +13,10 @@
 
 namespace Junia
 {
-	#ifdef JE_TARGETPLATFORM_WINDOWS
 	Window* Window::Create(const WindowProperties& properties)
 	{
 		return new WindowsWindow(properties);
 	}
-	#endif
 
 	int WinToJeKey(int keyCode)
 	{
@@ -80,7 +78,7 @@ namespace Junia
 		WNDCLASSEX wndclass{ };
 		wndclass.cbSize = sizeof(WNDCLASSEX);
 		wndclass.style = 0;
-		wndclass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC; // ACTIVATES RELOAD ON REDRAW
+		wndclass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 		wndclass.lpfnWndProc = WndProc;
 		wndclass.cbClsExtra = 0;
 		wndclass.cbWndExtra = 0;

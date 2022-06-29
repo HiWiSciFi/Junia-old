@@ -29,15 +29,15 @@ namespace Junia
 
 	void Application::Run()
 	{
+		lastFrameTime = Platform::GetTime();
 		while (running)
 		{
 			float time = Platform::GetTime();
 			Timestep timestep = time - lastFrameTime;
 			lastFrameTime = time;
-			JELOG_BASE_TRACE("Timestep: %f", timestep.GetSeconds());
 
 			EventSystem::DispatchQueue();
-			layerSystem.IterateForward([](Layer* layer) { layer->OnUpdate(); });
+			layerSystem.IterateForward([timestep](Layer* layer) { layer->OnUpdate(timestep); layer->OnUpdate(); });
 			window->OnUpdate();
 		}
 	}

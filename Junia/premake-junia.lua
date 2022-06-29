@@ -51,6 +51,11 @@ project "Junia"
 
 	filter "system:windows"
 		systemversion "latest"
+
+		links {
+			"windowsapp"
+		}
+
 		defines {
 			"JE_TARGETPLATFORM_WINDOWS",
 			"JE_EXPORT"

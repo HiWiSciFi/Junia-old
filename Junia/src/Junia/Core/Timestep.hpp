@@ -10,6 +10,8 @@ namespace Junia
 		float GetSeconds() const { return time; }
 		float GetMilliseconds() const { return time * 1000.0f; }
 
+		operator float() const { return time; }
+
 	private:
 		float time;
 	};

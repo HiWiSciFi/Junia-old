@@ -125,22 +125,25 @@ public:
 		shader2.reset(Junia::Shader::Create(vertexSrc2, fragmentSrc2));
 	}
 
-	void OnUpdate() override
+	void OnUpdate(Junia::Timestep deltaTime) override
 	{
 		if (Junia::Input::IsKeyDown(JE_KEY_LEFT))
-			cameraPosition.x -= cameraMoveSpeed;
+			cameraPosition.x -= cameraMoveSpeed * deltaTime;
 		else if (Junia::Input::IsKeyDown(JE_KEY_RIGHT))
-			cameraPosition.x += cameraMoveSpeed;
+			cameraPosition.x += cameraMoveSpeed * deltaTime;
 		if (Junia::Input::IsKeyDown(JE_KEY_UP))
-			cameraPosition.y += cameraMoveSpeed;
+			cameraPosition.y += cameraMoveSpeed * deltaTime;
 		else if (Junia::Input::IsKeyDown(JE_KEY_DOWN))
-			cameraPosition.y -= cameraMoveSpeed;
+			cameraPosition.y -= cameraMoveSpeed * deltaTime;
 
 		if (Junia::Input::IsKeyDown(JE_KEY_A))
-			cameraRotation += cameraRotationSpeed;
+			cameraRotation += cameraRotationSpeed * deltaTime;
 		if (Junia::Input::IsKeyDown(JE_KEY_D))
-			cameraRotation -= cameraRotationSpeed;
+			cameraRotation -= cameraRotationSpeed * deltaTime;
+	}
 
+	void OnUpdate() override
+	{
 		Junia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Junia::RenderCommand::Clear();
 
@@ -164,9 +167,9 @@ private:
 
 	Junia::OrthographicCamera camera;
 	glm::vec3 cameraPosition;
-	float cameraMoveSpeed = 0.1f;
+	float cameraMoveSpeed = 5.0f;
 	float cameraRotation = 0.0f;
-	float cameraRotationSpeed = 1.0f;
+	float cameraRotationSpeed = 180.0f;
 };
 
 class Testapp : public Junia::Application

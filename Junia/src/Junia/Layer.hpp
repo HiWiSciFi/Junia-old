@@ -2,6 +2,7 @@
 #include <string>
 
 #include <Junia/Events/Event.hpp>
+#include <Junia/Core/Timestep.hpp>
 
 namespace Junia
 {
@@ -14,6 +15,7 @@ namespace Junia
 		virtual void OnEnable() { }
 		virtual void OnDisable() { }
 		virtual void OnUpdate() { }
+		virtual void OnUpdate(Timestep deltaTime) { }
 
 		[[nodiscard]] std::string GetName() const { return name; }
 
