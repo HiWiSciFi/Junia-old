@@ -3,7 +3,7 @@
 class ExampleLayer : public Junia::Layer
 {
 public:
-	ExampleLayer() : Junia::Layer("Example Layer"), camera(-1.0f, 1.0f, -1.0f, 1.0f), cameraPosition(0.0f)
+	ExampleLayer() : Junia::Layer("Example Layer"), camera(-2.0f, 2.0f, -1.5f, 1.5f), cameraPosition(0.0f)
 	{
 	}
 

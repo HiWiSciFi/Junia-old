@@ -6,6 +6,11 @@ namespace Junia
 {
 	class WindowsInput : public Input
 	{
+	public:
+		static unsigned char WinToJeKey[256];
+		static unsigned char JeToWinKey[256];
+		static void PopulateConversionArrays();
+
 	protected:
 		bool IsKeyDownImplementation(int keycode) override;
 		bool IsMouseButtonDownImplementation(int button) override;

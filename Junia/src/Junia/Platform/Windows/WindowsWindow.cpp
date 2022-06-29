@@ -10,24 +10,14 @@
 #include <glad/glad.h>
 #include <Junia/Log.hpp>
 #include <Junia/KeyCodes.hpp>
+#include <Junia/Platform/Windows/WindowsInput.hpp>
 
 namespace Junia
 {
 	Window* Window::Create(const WindowProperties& properties)
 	{
+		WindowsInput::PopulateConversionArrays();
 		return new WindowsWindow(properties);
-	}
-
-	int WinToJeKey(int keyCode)
-	{
-		switch (keyCode)
-		{
-		case VK_LEFT:  return  JE_KEY_LEFT;
-		case VK_UP:    return    JE_KEY_UP;
-		case VK_RIGHT: return JE_KEY_RIGHT;
-		case VK_DOWN:  return  JE_KEY_DOWN;
-		default: return keyCode;
-		}
 	}
 
 	LRESULT CALLBACK WndProc(HWND window, unsigned int msg, WPARAM wp, LPARAM lp)
@@ -59,8 +49,8 @@ namespace Junia
 
 		// TODO: Use KeyCodes from <Junia/KeyCodes.hpp>
 		// API Reference: https://docs.microsoft.com/en-us/windows/win32/inputdev/keyboard-input <-- Cool other stuff too : refer to Junia::WindowsInput
-		case WM_KEYDOWN: EventSystem::Trigger(new KeyboardKeyDownEvent(WinToJeKey(static_cast<int>(wp)))); break;
-		case WM_KEYUP:   EventSystem::Trigger(new KeyboardKeyUpEvent(WinToJeKey(static_cast<int>(wp))));   break;
+		case WM_KEYDOWN: EventSystem::Trigger(new KeyboardKeyDownEvent(Junia::WindowsInput::WinToJeKey[static_cast<int>(wp)])); break;
+		case WM_KEYUP:   EventSystem::Trigger(new KeyboardKeyUpEvent(Junia::WindowsInput::WinToJeKey[static_cast<int>(wp)]));   break;
 		case WM_CHAR:    EventSystem::Trigger(new KeyboardKeyCharEvent(static_cast<int>(static_cast<unsigned int>(wp)))); break;
 
 		// API Reference: https://docs.microsoft.com/en-us/windows/win32/inputdev/raw-input
