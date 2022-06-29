@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Junia/Base.hpp>
-#include <Junia/Application.hpp>
+#include <Junia/Core/Application.hpp>
 
 #include <Junia/Log.hpp>
 
@@ -11,7 +11,7 @@
 #include <Junia/KeyCodes.hpp>
 #include <Junia/MouseButtonCodes.hpp>
 
-#include <Junia/Version.hpp>
+#include <Junia/Core/Version.hpp>
 
 #include <Junia/Layer.hpp>
 
@@ -29,4 +29,4 @@
 #include <Junia/Events/JoystickEvents.hpp>
 
 // Entry Point
-#include <Junia/EntryPoint.hpp>
+#include <Junia/Core/EntryPoint.hpp>

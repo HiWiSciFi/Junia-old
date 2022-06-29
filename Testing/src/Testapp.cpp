@@ -1,4 +1,5 @@
 #include <Junia.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 class ExampleLayer : public Junia::Layer
 {
@@ -23,7 +24,7 @@ public:
 
 		Junia::BufferLayout layout = {
 			{ Junia::ShaderDataType::Float3, "inPosition" },
-			{ Junia::ShaderDataType::Float4, "inColor" }
+			{ Junia::ShaderDataType::Float4, "inColor"    }
 		};
 		vertexBuffer->SetLayout(layout);
 		vertexArray->AddVertexBuffer(vertexBuffer);
@@ -35,10 +36,10 @@ public:
 		vertexArray->SetIndexBuffer(indexBuffer);
 
 		float squareVertices[3 * 4] = {
-			-0.75f, -0.75f, 0.0f,
-			0.75f, -0.75f, 0.0f,
-			0.75f, 0.75f, 0.0f,
-			-0.75f, 0.75f, 0.0f
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
 		};
 
 		squareVertexArray.reset(Junia::VertexArray::Create());
@@ -64,6 +65,7 @@ public:
 			layout(location = 1) in vec4 inColor;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 vPosition;
 			out vec4 vColor;
@@ -72,7 +74,7 @@ public:
 			{
 				vPosition = inPosition;
 				vColor = inColor;
-				gl_Position = u_ViewProjection * vec4(inPosition, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(inPosition, 1.0);
 			}
 		)";
 
@@ -99,13 +101,14 @@ public:
 			layout(location = 0) in vec3 inPosition;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 vPosition;
 
 			void main()
 			{
 				vPosition = inPosition;
-				gl_Position = u_ViewProjection * vec4(inPosition, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(inPosition, 1.0);
 			}
 		)";
 
@@ -152,7 +155,17 @@ public:
 
 		Junia::Renderer::BeginScene(camera);
 
-		Junia::Renderer::Submit(shader2, squareVertexArray);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+		for (int y = 0; y < 20; y++)
+		{
+			for (int x = 0; x < 20; x++)
+			{
+				glm::vec3 pos(x * .11f, y * .11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				Junia::Renderer::Submit(shader2, squareVertexArray, transform);
+			}
+		}
 		Junia::Renderer::Submit(shader, vertexArray);
 
 		Junia::Renderer::EndScene();
@@ -175,7 +188,7 @@ private:
 class Testapp : public Junia::Application
 {
 public:
-	Testapp() { PushLayerFront(new ExampleLayer()); }
+	Testapp() { PushLayerBack(new ExampleLayer()); }
 	~Testapp() override = default;
 };
 
