@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace Junia
 {
@@ -6,5 +7,7 @@ namespace Junia
 	{
 	public:
 		static float GetTime();
+
+		static std::string LoadFileAsString(const std::string& path);
 	};
 }
