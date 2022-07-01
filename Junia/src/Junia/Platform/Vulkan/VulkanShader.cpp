@@ -18,6 +18,10 @@ namespace Junia
 	{
 	}
 
+	void VulkanShader::UploadUniformFloat4(const std::string name, const glm::vec4& values)
+	{
+	}
+
 	void VulkanShader::UploadUniformMat4(const std::string name, const glm::mat4& matrix)
 	{
 	}

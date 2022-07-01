@@ -119,9 +119,11 @@ public:
 
 			in vec3 vPosition;
 
+			uniform vec4 u_Color;
+
 			void main()
 			{
-				outColor = vec4(0.2, 0.3, 0.8, 1.0);
+				outColor = u_Color;
 			}
 		)";
 
@@ -157,13 +159,25 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
+		glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.0f);
+		glm::vec4 blueColor(0.2f, 0.3f, 0.8f, 1.0f);
+
+		Junia::MaterialRef material = new Junia::Material(shader2);
+		Junia::MaterialInstanceRef mi = new Junia::MaterialInstance(material);
+
+		mi->SetValue("u_Color", redColor);
+		mi->SetTexture("u_AlbedoMap", texture);
+		squareMesh->SetMaterial(mi);
+
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
 			{
 				glm::vec3 pos(x * .11f, y * .11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				Junia::Renderer::Submit(shader2, squareVertexArray, transform);
+				/*if (x % 2 == 0) shader2->UploadUniformFloat4("u_Color", redColor);
+				else shader2->UploadUniformFloat4("u_Color", blueColor);*/
+				Junia::Renderer::Submit(mi, squareVertexArray, transform);
 			}
 		}
 		Junia::Renderer::Submit(shader, vertexArray);

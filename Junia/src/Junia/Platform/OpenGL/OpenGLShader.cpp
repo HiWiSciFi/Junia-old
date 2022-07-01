@@ -7,7 +7,7 @@
 
 namespace Junia
 {
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc) : rendererId(0)
 	{
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -95,6 +95,17 @@ namespace Junia
 	void OpenGLShader::Unbind() const
 	{
 		glUseProgram(0);
+	}
+
+	void OpenGLShader::UploadUniformFloat4(const std::string name, const glm::vec4& values)
+	{
+		GLint location = glGetUniformLocation(rendererId, name.c_str());
+		if (location == -1)
+		{
+			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", name.c_str());
+			return;
+		}
+		glUniform4f(location, values.x, values.y, values.z, values.w);
 	}
 
 	void OpenGLShader::UploadUniformMat4(const std::string name, const glm::mat4& matrix)
