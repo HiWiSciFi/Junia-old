@@ -10,7 +10,7 @@ namespace Junia
 		static void SetClearColor(const glm::vec4& color) { rendererAPI->SetClearColor(color); }
 		static void Clear() { rendererAPI->Clear(); }
 
-		void static DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) { rendererAPI->DrawIndexed(vertexArray); }
+		void static DrawIndexed(const Ref<VertexArray>& vertexArray) { rendererAPI->DrawIndexed(vertexArray); }
 
 	private:
 		static RendererAPI* rendererAPI;

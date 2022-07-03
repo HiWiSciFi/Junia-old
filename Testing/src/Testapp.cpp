@@ -1,5 +1,6 @@
 #include <Junia.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <Junia/Platform/OpenGL/OpenGLShader.hpp>
 
 class ExampleLayer : public Junia::Layer
 {
@@ -18,7 +19,7 @@ public:
 			 0.0f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f
 		};
 
-		std::shared_ptr<Junia::VertexBuffer> vertexBuffer = std::shared_ptr<Junia::VertexBuffer>(
+		Junia::Ref<Junia::VertexBuffer> vertexBuffer = Junia::Ref<Junia::VertexBuffer>(
 			Junia::VertexBuffer::Create(vertices, sizeof(vertices))
 		);
 
@@ -30,7 +31,7 @@ public:
 		vertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		std::shared_ptr<Junia::IndexBuffer> indexBuffer = std::shared_ptr<Junia::IndexBuffer>(
+		Junia::Ref<Junia::IndexBuffer> indexBuffer = Junia::Ref<Junia::IndexBuffer>(
 			Junia::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t))
 		);
 		vertexArray->SetIndexBuffer(indexBuffer);
@@ -43,7 +44,7 @@ public:
 		};
 
 		squareVertexArray.reset(Junia::VertexArray::Create());
-		std::shared_ptr<Junia::VertexBuffer> squareVertexBuffer = std::shared_ptr<Junia::VertexBuffer>(
+		Junia::Ref<Junia::VertexBuffer> squareVertexBuffer = Junia::Ref<Junia::VertexBuffer>(
 			Junia::VertexBuffer::Create(squareVertices, sizeof(squareVertices))
 		);
 
@@ -53,7 +54,7 @@ public:
 		squareVertexArray->AddVertexBuffer(squareVertexBuffer);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Junia::IndexBuffer> squareIndexBuffer = std::shared_ptr<Junia::IndexBuffer>(
+		Junia::Ref<Junia::IndexBuffer> squareIndexBuffer = Junia::Ref<Junia::IndexBuffer>(
 			Junia::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t))
 		);
 		squareVertexArray->SetIndexBuffer(squareIndexBuffer);
@@ -119,11 +120,11 @@ public:
 
 			in vec3 vPosition;
 
-			uniform vec4 u_Color;
+			uniform vec3 u_Color;
 
 			void main()
 			{
-				outColor = u_Color;
+				outColor = vec4(u_Color, 1.0f);
 			}
 		)";
 
@@ -159,15 +160,8 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.0f);
-		glm::vec4 blueColor(0.2f, 0.3f, 0.8f, 1.0f);
-
-		Junia::MaterialRef material = new Junia::Material(shader2);
-		Junia::MaterialInstanceRef mi = new Junia::MaterialInstance(material);
-
-		mi->SetValue("u_Color", redColor);
-		mi->SetTexture("u_AlbedoMap", texture);
-		squareMesh->SetMaterial(mi);
+		std::dynamic_pointer_cast<Junia::OpenGLShader>(shader2)->Bind();
+		std::dynamic_pointer_cast<Junia::OpenGLShader>(shader2)->UploadUniformFloat3("u_Color", squareColor);
 
 		for (int y = 0; y < 20; y++)
 		{
@@ -175,9 +169,7 @@ public:
 			{
 				glm::vec3 pos(x * .11f, y * .11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				/*if (x % 2 == 0) shader2->UploadUniformFloat4("u_Color", redColor);
-				else shader2->UploadUniformFloat4("u_Color", blueColor);*/
-				Junia::Renderer::Submit(mi, squareVertexArray, transform);
+				Junia::Renderer::Submit(shader2, squareVertexArray, transform);
 			}
 		}
 		Junia::Renderer::Submit(shader, vertexArray);
@@ -186,17 +178,19 @@ public:
 	}
 
 private:
-	std::shared_ptr<Junia::Shader> shader;
-	std::shared_ptr<Junia::VertexArray> vertexArray;
+	Junia::Ref<Junia::Shader> shader;
+	Junia::Ref<Junia::VertexArray> vertexArray;
 
-	std::shared_ptr<Junia::Shader> shader2;
-	std::shared_ptr<Junia::VertexArray> squareVertexArray;
+	Junia::Ref<Junia::Shader> shader2;
+	Junia::Ref<Junia::VertexArray> squareVertexArray;
 
 	Junia::OrthographicCamera camera;
 	glm::vec3 cameraPosition;
 	float cameraMoveSpeed = 5.0f;
 	float cameraRotation = 0.0f;
 	float cameraRotationSpeed = 180.0f;
+
+	glm::vec3 squareColor = { .2f, .3f, .8f };
 };
 
 class Testapp : public Junia::Application

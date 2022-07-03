@@ -5,8 +5,8 @@
 
 namespace Junia
 {
-	std::shared_ptr<Logger> Log::juniaLogger;
-	std::shared_ptr<Logger> Log::applicationLogger;
+	Ref<Logger> Log::juniaLogger;
+	Ref<Logger> Log::applicationLogger;
 
 	void Log::Init()
 	{

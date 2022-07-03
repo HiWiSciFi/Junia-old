@@ -7,7 +7,7 @@ namespace Junia
 {
 	Logger::Logger(std::string name) : name(std::move(name)) { }
 
-	std::shared_ptr<Logger> Logger::Create(std::string name)
+	Ref<Logger> Logger::Create(std::string name)
 	{
 		return std::make_shared<Logger>(std::move(name));
 	}

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <sstream>
+#include <Junia/Base.hpp>
 
 namespace Junia
 {
@@ -11,7 +12,7 @@ namespace Junia
 
 		~Logger() = default;
 
-		static std::shared_ptr<Logger> Create(std::string name = "Logger");
+		static Ref<Logger> Create(std::string name = "Logger");
 
 		void Trace    (const std::string fmt, ...) const;
 		void Info     (const std::string fmt, ...) const;

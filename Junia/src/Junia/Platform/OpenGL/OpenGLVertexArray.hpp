@@ -13,15 +13,15 @@ namespace Junia
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
-		virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) override;
-		virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) override;
+		virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
+		virtual void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
 
-		virtual const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const override { return vertexBuffers; }
-		virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const override { return indexBuffer; }
+		virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override { return vertexBuffers; }
+		virtual const Ref<IndexBuffer>& GetIndexBuffer() const override { return indexBuffer; }
 
 	private:
 		uint32_t rendererId;
-		std::vector<std::shared_ptr<VertexBuffer>> vertexBuffers;
-		std::shared_ptr<IndexBuffer> indexBuffer;
+		std::vector<Ref<VertexBuffer>> vertexBuffers;
+		Ref<IndexBuffer> indexBuffer;
 	};
 }

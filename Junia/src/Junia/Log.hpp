@@ -1,5 +1,4 @@
 #pragma once
-
 #include <Junia/Logger.hpp>
 
 #define JELOG_CHAR       "%s"
@@ -89,7 +88,7 @@ namespace Junia {
 #endif
 
 	private:
-		static std::shared_ptr<Logger> juniaLogger;
-		static std::shared_ptr<Logger> applicationLogger;
+		static Ref<Logger> juniaLogger;
+		static Ref<Logger> applicationLogger;
 	};
 }

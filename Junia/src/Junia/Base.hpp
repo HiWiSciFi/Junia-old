@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #if defined(JELOG_MAX_TRACE)
 	#define JE_ONLY_JELOG_MAX_TRACE(f) f
 #else
@@ -25,3 +27,11 @@
 #else
 	#define JE_ONLY_JELOG_MAX_CRIT(f)
 #endif
+
+namespace Junia
+{
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}

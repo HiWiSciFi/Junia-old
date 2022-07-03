@@ -10,11 +10,11 @@ namespace Junia
 	{
 	}
 
-	void VulkanVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+	void VulkanVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
 	}
 
-	void VulkanVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+	void VulkanVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
 	}
 }
