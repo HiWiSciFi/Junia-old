@@ -17,6 +17,9 @@ namespace Junia
 		app = this;
 		window = std::unique_ptr<Window>(Window::Create());
 		WindowCloseEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(WindowCloseEvent, OnWindowClosed));
+
+		Renderer::Init();
+
 		PushLayerFront(new JUILayer());
 	}
 

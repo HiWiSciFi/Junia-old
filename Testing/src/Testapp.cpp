@@ -2,10 +2,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Junia/Platform/OpenGL/OpenGLShader.hpp>
 
+#include <Junia/Renderer/Shader.hpp>
+
 class ExampleLayer : public Junia::Layer
 {
 public:
-	ExampleLayer() : Junia::Layer("Example Layer"), camera(-2.0f, 2.0f, -1.5f, 1.5f), cameraPosition(0.0f)
+	ExampleLayer() : Junia::Layer("Example Layer"), camera(-1.5f, 1.5f, -1.0f, 1.0f), cameraPosition(0.0f)
 	{
 	}
 
@@ -36,11 +38,11 @@ public:
 		);
 		vertexArray->SetIndexBuffer(indexBuffer);
 
-		float squareVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		squareVertexArray.reset(Junia::VertexArray::Create());
@@ -49,8 +51,9 @@ public:
 		);
 
 		squareVertexBuffer->SetLayout({
-			{ Junia::ShaderDataType::Float3, "inPosition" }
-			});
+			{ Junia::ShaderDataType::Float3, "inPosition" },
+			{ Junia::ShaderDataType::Float2, "texCoord" }
+		});
 		squareVertexArray->AddVertexBuffer(squareVertexBuffer);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
@@ -94,7 +97,7 @@ public:
 			}
 		)";
 
-		shader.reset(Junia::Shader::Create(vertexSrc, fragmentSrc));
+		shader = Junia::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 
 		std::string vertexSrc2 = R"(
 			#version 450
@@ -128,7 +131,15 @@ public:
 			}
 		)";
 
-		shader2.reset(Junia::Shader::Create(vertexSrc2, fragmentSrc2));
+		shader2 = Junia::Shader::Create("FlatColor", vertexSrc2, fragmentSrc2);
+
+		auto textureShader = shaderLibrary.Load("assets/shaders/Texture.glsl");
+
+		texture = Junia::Texture2D::Create("assets/textures/Checkerboard.png");
+		sdLogoTexture = Junia::Texture2D::Create("assets/textures/SDLogo.png");
+
+		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Junia::Timestep deltaTime) override
@@ -158,7 +169,7 @@ public:
 
 		Junia::Renderer::BeginScene(camera);
 
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(.1f));
 
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(shader2)->Bind();
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(shader2)->UploadUniformFloat3("u_Color", squareColor);
@@ -172,17 +183,31 @@ public:
 				Junia::Renderer::Submit(shader2, squareVertexArray, transform);
 			}
 		}
-		Junia::Renderer::Submit(shader, vertexArray);
+
+		auto textureShader = shaderLibrary.Get("Texture");
+
+		texture->Bind();
+		Junia::Renderer::Submit(textureShader, squareVertexArray,
+			glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		sdLogoTexture->Bind();
+		Junia::Renderer::Submit(textureShader, squareVertexArray,
+			glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+		// Triangle
+		// Junia::Renderer::Submit(shader, vertexArray);
 
 		Junia::Renderer::EndScene();
 	}
 
 private:
+	Junia::ShaderLibrary shaderLibrary;
 	Junia::Ref<Junia::Shader> shader;
 	Junia::Ref<Junia::VertexArray> vertexArray;
 
 	Junia::Ref<Junia::Shader> shader2;
 	Junia::Ref<Junia::VertexArray> squareVertexArray;
+
+	Junia::Ref<Junia::Texture2D> texture, sdLogoTexture;
 
 	Junia::OrthographicCamera camera;
 	glm::vec3 cameraPosition;

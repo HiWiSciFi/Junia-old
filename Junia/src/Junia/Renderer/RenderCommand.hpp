@@ -7,6 +7,7 @@ namespace Junia
 	class RenderCommand
 	{
 	public:
+		static void Init() { rendererAPI->Init(); }
 		static void SetClearColor(const glm::vec4& color) { rendererAPI->SetClearColor(color); }
 		static void Clear() { rendererAPI->Clear(); }
 

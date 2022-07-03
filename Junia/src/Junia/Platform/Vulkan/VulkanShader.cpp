@@ -2,7 +2,10 @@
 
 namespace Junia
 {
-	VulkanShader::VulkanShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	VulkanShader::VulkanShader(const std::string& filepath)
+	{
+	}
+	VulkanShader::VulkanShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
 	}
 

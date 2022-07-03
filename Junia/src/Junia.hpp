@@ -19,6 +19,7 @@
 #include <Junia/Renderer/RenderCommand.hpp>
 #include <Junia/Renderer/VertexArray.hpp>
 #include <Junia/Renderer/Shader.hpp>
+#include <Junia/Renderer/Texture.hpp>
 #include <Junia/Renderer/OrthographicCamera.hpp>
 
 #include <Junia/Events/EventSystem.hpp>

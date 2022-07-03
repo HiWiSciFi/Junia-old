@@ -1,85 +1,41 @@
 #include "OpenGLShader.hpp"
 
 #include <Junia/Log.hpp>
+#include <Junia/Platform/Platform.hpp>
 #include <glad/glad.h>
 #include <vector>
+#include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Junia
 {
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc) : rendererId(0)
+	static GLenum ShaderTypeFromString(const std::string& type)
 	{
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		if (type == "vertex")                      return GL_VERTEX_SHADER;
+		if (type == "fragment" || type == "pixel") return GL_FRAGMENT_SHADER;
+		JELOG_BASE_ERROR("Unknown shader type!");
+		return 0;
+	}
 
-		const GLchar* source = static_cast<const GLchar*>(vertexSrc.c_str());
-		glShaderSource(vertexShader, 1, &source, 0);
+	OpenGLShader::OpenGLShader(const std::string& filepath)
+	{
+		std::string source = Platform::ReadFile(filepath);
+		auto shaderSources = PreProcess(source);
+		Compile(shaderSources);
 
-		glCompileShader(vertexShader);
+		auto lastSlash = filepath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filepath.rfind('.');
+		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		name = filepath.substr(lastSlash, count);
+	}
 
-		GLint isCompiled = 0;
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
-
-			glDeleteShader(vertexShader);
-			JELOG_BASE_ERROR(infoLog.data());
-			return;
-		}
-
-
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-		source = static_cast<const GLchar*>(fragmentSrc.c_str());
-		glShaderSource(fragmentShader, 1, &source, 0);
-
-		glCompileShader(fragmentShader);
-
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
-
-			glDeleteShader(vertexShader);
-			glDeleteShader(fragmentShader);
-			JELOG_BASE_ERROR(infoLog.data());
-			return;
-		}
-
-		rendererId = glCreateProgram();
-
-		glAttachShader(rendererId, vertexShader);
-		glAttachShader(rendererId, fragmentShader);
-
-		glLinkProgram(rendererId);
-
-		GLint isLinked = 0;
-		glGetProgramiv(rendererId, GL_LINK_STATUS, static_cast<int*>(&isLinked));
-		if (isLinked == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetProgramiv(rendererId, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<GLchar> infoLog(maxLength);
-			glGetProgramInfoLog(rendererId, maxLength, &maxLength, &infoLog[0]);
-
-			glDeleteProgram(rendererId);
-			glDeleteShader(vertexShader);
-			glDeleteShader(fragmentShader);
-			JELOG_BASE_ERROR(infoLog.data());
-			return;
-		}
-
-		glDetachShader(rendererId, vertexShader);
-		glDetachShader(rendererId, fragmentShader);
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) : rendererId(0), name(name)
+	{
+		std::unordered_map<GLenum, std::string> sources;
+		sources[GL_VERTEX_SHADER] = vertexSrc;
+		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
+		Compile(sources);
 	}
 
 	OpenGLShader::~OpenGLShader()
@@ -95,6 +51,90 @@ namespace Junia
 	void OpenGLShader::Unbind() const
 	{
 		glUseProgram(0);
+	}
+
+	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
+	{
+		std::unordered_map<GLenum, std::string> shaderSources;
+
+		const char* typeToken = "#type";
+		size_t typeTokenLength = strlen(typeToken);
+		size_t pos = source.find(typeToken, 0);
+		while (pos != std::string::npos)
+		{
+			size_t eol = source.find_first_of("\n", pos);
+			if (eol == std::string::npos) JELOG_BASE_ERROR("Shader syntax error!");
+			size_t begin = pos + typeTokenLength + 1;
+			std::string type = source.substr(begin, eol - begin);
+			if (type != "vertex" && type != "fragment" && type != "pixel") JELOG_BASE_ERROR("Invalid Shader type!");
+
+			size_t nextLinePos = source.find_first_not_of("\n", eol);
+			pos = source.find(typeToken, nextLinePos);
+			shaderSources[ShaderTypeFromString(type)] =
+				source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
+		}
+
+		return shaderSources;
+	}
+
+	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string> shaderSources)
+	{
+		GLuint program = glCreateProgram();
+		std::vector<GLenum> glShaderIDs;
+		glShaderIDs.reserve(shaderSources.size());
+		for (auto& kv : shaderSources)
+		{
+			GLenum type = kv.first;
+			const std::string& source = kv.second;
+
+			GLuint shader = glCreateShader(type);
+
+			const GLchar* sourceC = static_cast<const GLchar*>(source.c_str());
+			glShaderSource(shader, 1, &sourceC, 0);
+
+			glCompileShader(shader);
+
+			GLint isCompiled = 0;
+			glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+			if (isCompiled == GL_FALSE)
+			{
+				GLint maxLength = 0;
+				glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+				std::vector<GLchar> infoLog(maxLength);
+				glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
+
+				glDeleteShader(shader);
+				JELOG_BASE_ERROR("Shader could not be compiled! Error: " JELOG_CSTR, infoLog.data());
+				break;
+			}
+
+			glAttachShader(program, shader);
+			glShaderIDs.push_back(shader);
+		}
+
+		glLinkProgram(program);
+
+		GLint isLinked = 0;
+		glGetProgramiv(program, GL_LINK_STATUS, static_cast<int*>(&isLinked));
+		if (isLinked == GL_FALSE)
+		{
+			GLint maxLength = 0;
+			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+
+			std::vector<GLchar> infoLog(maxLength);
+			glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
+
+			glDeleteProgram(program);
+
+			for (auto id : glShaderIDs) glDeleteShader(id);
+			JELOG_BASE_ERROR(infoLog.data());
+			return;
+		}
+
+		for (auto id : glShaderIDs) glDetachShader(program, id);
+
+		rendererId = program;
 	}
 
 	void OpenGLShader::UploadUniformInt(const std::string name, int value)
