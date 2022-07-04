@@ -17,6 +17,7 @@ namespace Junia
 		app = this;
 		window = std::unique_ptr<Window>(Window::Create());
 		WindowCloseEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(WindowCloseEvent, OnWindowClosed));
+		WindowResizeEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(WindowResizeEvent, OnWindowResize));
 
 		Renderer::Init();
 
@@ -40,7 +41,7 @@ namespace Junia
 			lastFrameTime = time;
 
 			EventSystem::DispatchQueue();
-			layerSystem.IterateForward([timestep](Layer* layer) { layer->OnUpdate(timestep); layer->OnUpdate(); });
+			if (!minimized) layerSystem.IterateForward([timestep](Layer* layer) { layer->OnUpdate(timestep); layer->OnUpdate(); });
 			window->OnUpdate();
 		}
 	}
@@ -50,5 +51,12 @@ namespace Junia
 		layerSystem.~LayerSystem();
 		running = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(const WindowResizeEvent& e)
+	{
+		if (e.GetWindowWidth() == 0 || e.GetWindowHeight() == 0) minimized = true;
+		else minimized = false;
+		return false;
 	}
 }

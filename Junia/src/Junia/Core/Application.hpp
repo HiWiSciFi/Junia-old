@@ -27,11 +27,13 @@ namespace Junia
 
 	private:
 		bool OnWindowClosed(const WindowCloseEvent& e);
+		bool OnWindowResize(const WindowResizeEvent& e);
 
 		std::unique_ptr<Window> window;
 		LayerSystem layerSystem;
 		bool running = true;
 		float lastFrameTime = 0.0f;
+		bool minimized = false;
 
 		static Application* app;
 	};

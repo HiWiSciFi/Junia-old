@@ -12,6 +12,8 @@ namespace Junia
 
 	unsigned char WindowsInput::JeToWinKey[256] = { };
 	unsigned char WindowsInput::WinToJeKey[256] = { };
+	unsigned char WindowsInput::WinToJeButton[8] = { };
+	unsigned char WindowsInput::JeToWinButton[8] = { };
 
 
 	void WindowsInput::PopulateConversionArrays()
