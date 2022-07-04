@@ -9,6 +9,8 @@ namespace Junia
 	public:
 		static unsigned char WinToJeKey[256];
 		static unsigned char JeToWinKey[256];
+		static unsigned char WinToJeButton[8];
+		static unsigned char JeToWinButton[8];
 		static void PopulateConversionArrays();
 
 	protected:

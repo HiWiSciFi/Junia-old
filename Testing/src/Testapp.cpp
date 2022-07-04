@@ -140,18 +140,10 @@ public:
 
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->Bind();
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
-		Junia::WindowResizeEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(Junia::WindowResizeEvent, OnWindowResize));
-	}
-
-	bool OnWindowResize(const Junia::WindowResizeEvent& e)
-	{
-		//JELOG_WARN(e.ToString().c_str());
-		return false;
 	}
 
 	void OnUpdate(Junia::Timestep deltaTime) override
 	{
-		//JELOG_INFO("Delta time: " JELOG_FLOAT, (float)deltaTime);
 		cameraController.OnUpdate(deltaTime);
 	}
 

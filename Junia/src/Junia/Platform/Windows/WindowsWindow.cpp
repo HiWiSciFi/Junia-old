@@ -26,7 +26,7 @@ namespace Junia
 
 	LRESULT CALLBACK WndProc(HWND window, unsigned int msg, WPARAM wp, LPARAM lp)
 	{
-		//JELOG_BASE_WARN("Handling message: " JELOG_UINT, msg);
+		// Helpful webpage: https://wiki.winehq.org/List_Of_Windows_Messages
 		switch (msg)
 		{
 		// API Reference: https://docs.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
@@ -193,7 +193,7 @@ namespace Junia
 	{
 		if (movingWindow)
 		{
-			if (GetKeyState(VK_LBUTTON) & 0x8000)
+			if (Input::IsMouseButtonDown(JE_MOUSEBUTTON_LEFT))
 			{
 				RECT rect;
 				GetWindowRect(window, &rect);
@@ -210,7 +210,7 @@ namespace Junia
 
 		if (resizingWindow)
 		{
-			if (GetKeyState(VK_LBUTTON) & 0x8000)
+			if (Input::IsMouseButtonDown(JE_MOUSEBUTTON_LEFT))
 			{
 				RECT rect;
 				GetWindowRect(window, &rect);

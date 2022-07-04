@@ -13,6 +13,7 @@ namespace Junia
 	unsigned char WindowsInput::JeToWinKey[256] = { };
 	unsigned char WindowsInput::WinToJeKey[256] = { };
 
+
 	void WindowsInput::PopulateConversionArrays()
 	{
 		JeToWinKey[JE_KEY_HOME] = VK_HOME;
@@ -250,6 +251,15 @@ namespace Junia
 		WinToJeKey[VK_NUMPAD8] = JE_KEY_KP_8;
 		WinToJeKey[VK_NUMPAD9] = JE_KEY_KP_9;
 		//WinToJeKey[VK_OEM_PLUS] = JE_KEY_KP_EQUAL; // WRONG
+
+
+		JeToWinButton[JE_MOUSEBUTTON_LEFT]   = VK_LBUTTON;
+		JeToWinButton[JE_MOUSEBUTTON_MIDDLE] = VK_MBUTTON;
+		JeToWinButton[JE_MOUSEBUTTON_RIGHT]  = VK_RBUTTON;
+
+		WinToJeButton[VK_LBUTTON] =   JE_MOUSEBUTTON_LEFT;
+		WinToJeButton[VK_MBUTTON] = JE_MOUSEBUTTON_MIDDLE;
+		WinToJeButton[VK_RBUTTON] =  JE_MOUSEBUTTON_RIGHT;
 	}
 
 	bool WindowsInput::IsKeyDownImplementation(int keycode)
@@ -259,7 +269,7 @@ namespace Junia
 
 	bool WindowsInput::IsMouseButtonDownImplementation(int button)
 	{
-		return GetKeyState(JeToWinKey[button]) & 0x8000;
+		return GetKeyState(JeToWinButton[button]) & 0x8000;
 	}
 
 	std::pair<int, int> WindowsInput::GetMousePositionImplementation()
