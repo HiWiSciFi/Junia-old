@@ -59,6 +59,7 @@ namespace Junia
 				wnd->movingWindow = true;
 				RECT rect;
 				GetWindowRect(window, &rect);
+				ShowWindow(window, SW_RESTORE);
 				wnd->movingWindowCursorOffsetX = GET_X_LPARAM(lp) - rect.left;
 				wnd->movingWindowCursorOffsetY = GET_Y_LPARAM(lp) - rect.top;
 				break;
