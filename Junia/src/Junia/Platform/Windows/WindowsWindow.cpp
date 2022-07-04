@@ -72,7 +72,6 @@ namespace Junia
 				int mouseX = Input::GetMouseX();
 				int mouseY = Input::GetMouseY();
 				int offset = static_cast<int>(GetDpiForSystem() / 4.0f);
-				JELOG_WARN("DPI: " JELOG_INT " Offset: " JELOG_INT, static_cast<int>(GetDpiForSystem()), offset);
 				wnd->resizingWindowLeft = mouseX < rect.left + offset && mouseX > rect.left - offset;
 				wnd->resizingWindowRight = !wnd->resizingWindowLeft && mouseX < rect.right + offset && mouseX > rect.right - offset;
 				wnd->resizingWindowBottom = mouseY < rect.bottom + offset && mouseY > rect.bottom - offset;
