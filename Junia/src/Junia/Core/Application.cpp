@@ -55,7 +55,7 @@ namespace Junia
 
 	bool Application::OnWindowResize(const WindowResizeEvent& e)
 	{
-		if (e.GetWindowWidth() == 0 || e.GetWindowHeight() == 0) minimized = true;
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) minimized = true;
 		else minimized = false;
 		return false;
 	}

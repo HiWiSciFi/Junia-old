@@ -47,8 +47,8 @@ namespace Junia
 		[[nodiscard]] std::string ToString() const override { JE_EVENT_TOSTR_MCR("WindowResizeEvent(" << x << "," << y << ")"); }
 
 		[[nodiscard]] std::pair<int, int> GetWindowSize() const { return std::pair<int, int>(x, y); }
-		[[nodiscard]] int GetWindowWidth() const { return x; }
-		[[nodiscard]] int GetWindowHeight() const { return y; }
+		[[nodiscard]] int GetWidth() const { return x; }
+		[[nodiscard]] int GetHeight() const { return y; }
 
 	private:
 		const int x;
