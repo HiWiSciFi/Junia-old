@@ -15,6 +15,9 @@ namespace Junia
 		void OnUpdate(Timestep deltaTime);
 		const OrthographicCamera& GetCamera() const { return camera; }
 
+		void SetZoomLevel(float level) { zoomLevel = level; }
+		float GetZoomLevel() { return zoomLevel; }
+
 	private:
 		bool OnMouseScrolled(const MouseScrollEvent& e);
 		bool OnWindowResized(const WindowResizeEvent& e);

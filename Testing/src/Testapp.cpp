@@ -140,6 +140,15 @@ public:
 
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->Bind();
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+
+		Junia::WindowResizeEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(Junia::WindowResizeEvent, OnWindowResize));
+	}
+
+	bool OnWindowResize(const Junia::WindowResizeEvent& e)
+	{
+		/*float zoom = e.GetWidth() / 1280.0f;
+		cameraController.SetZoomLevel(zoom);*/
+		return false;
 	}
 
 	void OnUpdate(Junia::Timestep deltaTime) override

@@ -45,7 +45,6 @@ namespace Junia
 
 	bool OrthographicCameraController::OnWindowResized(const WindowResizeEvent& e)
 	{
-		JELOG_INFO(e.ToString().c_str());
 		aspectRatio = static_cast<float>(e.GetWidth()) / static_cast<float>(e.GetHeight());
 		camera.SetProjection(-aspectRatio * zoomLevel, aspectRatio * zoomLevel, -zoomLevel, zoomLevel);
 		return false;

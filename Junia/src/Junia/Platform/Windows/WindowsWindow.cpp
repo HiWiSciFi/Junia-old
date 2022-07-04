@@ -87,8 +87,19 @@ namespace Junia
 		case WM_CLOSE:
 		case WM_DESTROY: EventSystem::Trigger(new WindowCloseEvent()); return 0L;
 
-		case WM_SIZE: EventSystem::Trigger(new WindowMaximizeEvent(wp == 2)); return 0L;
+		case WM_SIZE:
+			RECT rect;
+			GetWindowRect(window, &rect);
+			EventSystem::Trigger(new WindowResizeEvent(rect.right - rect.left, rect.bottom - rect.top));
+			EventSystem::Trigger(new WindowMaximizeEvent(wp == 2));
+			return 0L;
 		case WM_MOVE: EventSystem::Trigger(new WindowMoveEvent(GET_X_LPARAM(lp), GET_Y_LPARAM(lp))); return 0L;
+		case WM_SIZING:
+		{
+			RECT* rect = reinterpret_cast<RECT*>(lp);
+			EventSystem::Trigger(new WindowResizeEvent(rect->right - rect->left, rect->bottom - rect->top));
+			return 0L;
+		}
 		// TODO: WindowFocusEvent
 
 		// API Reference: https://docs.microsoft.com/en-us/windows/win32/inputdev/mouse-input
