@@ -3,7 +3,7 @@ depsloc = "../Junia/dependencies/"
 group "Dependencies"
 	include "dependencies/premake-dependencies.lua"
 
-group "Junia"
+group ""
 project "Junia"
 	location "."
 	kind "StaticLib"

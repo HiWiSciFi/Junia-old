@@ -3,7 +3,7 @@ depsloc = "../Testing/dependencies/"
 group "Dependencies"
 	include "dependencies/premake-dependencies.lua"
 
-group "Junia"
+group ""
 project "Testing"
 	location "."
 	kind "ConsoleApp"

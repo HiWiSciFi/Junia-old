@@ -18,6 +18,3 @@
 	path = Junia/dependencies/glad
 	url = https://github.com/HiWiSciFi/glad-junia.git
 	ignore = dirty
-[submodule "Junia/dependencies/imgui/imgui"]
-	path = Junia/dependencies/imgui/imgui
-	url = https://github.com/ocornut/imgui
