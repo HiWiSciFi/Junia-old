@@ -5,6 +5,7 @@
 #include <Junia/Window.hpp>
 #include <Windows.h>
 #include <Junia/Platform/OpenGL/OpenGLRenderContext.hpp>
+#include <unordered_map>
 
 namespace Junia
 {
@@ -23,6 +24,19 @@ namespace Junia
 		[[nodiscard]] bool IsVSync() const override;
 
 		[[nodiscard]] void* GetNativeWindow() const override { return window; }
+
+		static WindowsWindow* GetWindow(HWND handle) { return windowMap[handle]; }
+
+		bool movingWindow = false;
+		int movingWindowCursorOffsetX = 0;
+		int movingWindowCursorOffsetY = 0;
+		int resizeOffsetX = 0;
+		int resizeOffsetY = 0;
+		bool resizingWindow = false;
+		bool resizingWindowLeft = false;
+		bool resizingWindowRight = false;
+		bool resizingWindowTop = false;
+		bool resizingWindowBottom = false;
 
 	private:
 		virtual void Close();
@@ -45,6 +59,8 @@ namespace Junia
 		};
 
 		WindowData data;
+
+		static std::unordered_map<HWND, WindowsWindow*> windowMap;
 	};
 }
 

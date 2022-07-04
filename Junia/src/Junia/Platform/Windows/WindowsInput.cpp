@@ -115,7 +115,7 @@ namespace Junia
 		JeToWinKey[JE_KEY_RIGHT_ALT] = VK_RMENU;
 		JeToWinKey[JE_KEY_LEFT_SUPER] = VK_LWIN;
 		JeToWinKey[JE_KEY_RIGHT_SUPER] = VK_RWIN;
-		//JeToWinKey[JE_KEY_KP_ENTER] = VK_RETURN; // FALSE
+		//JeToWinKey[JE_KEY_KP_ENTER] = VK_RETURN; // WRONG
 		JeToWinKey[JE_KEY_KP_MULTIPLY] = VK_MULTIPLY;
 		JeToWinKey[JE_KEY_KP_ADD] = VK_ADD;
 		JeToWinKey[JE_KEY_KP_SUBTRACT] = VK_SUBTRACT;
@@ -233,7 +233,7 @@ namespace Junia
 		WinToJeKey[VK_RMENU] = JE_KEY_RIGHT_ALT;
 		WinToJeKey[VK_LWIN] = JE_KEY_LEFT_SUPER;
 		WinToJeKey[VK_RWIN] = JE_KEY_RIGHT_SUPER;
-		//WinToJeKey[VK_RETURN] = JE_KEY_KP_ENTER; // FALSE
+		//WinToJeKey[VK_RETURN] = JE_KEY_KP_ENTER; // WRONG
 		WinToJeKey[VK_MULTIPLY] = JE_KEY_KP_MULTIPLY;
 		WinToJeKey[VK_ADD] = JE_KEY_KP_ADD;
 		WinToJeKey[VK_SUBTRACT] = JE_KEY_KP_SUBTRACT;
@@ -249,7 +249,7 @@ namespace Junia
 		WinToJeKey[VK_NUMPAD7] = JE_KEY_KP_7;
 		WinToJeKey[VK_NUMPAD8] = JE_KEY_KP_8;
 		WinToJeKey[VK_NUMPAD9] = JE_KEY_KP_9;
-		//WinToJeKey[VK_OEM_PLUS] = JE_KEY_KP_EQUAL; // FALSE
+		//WinToJeKey[VK_OEM_PLUS] = JE_KEY_KP_EQUAL; // WRONG
 	}
 
 	bool WindowsInput::IsKeyDownImplementation(int keycode)
@@ -262,9 +262,11 @@ namespace Junia
 		return GetKeyState(JeToWinKey[button]) & 0x8000;
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePositionImplementation()
+	std::pair<int, int> WindowsInput::GetMousePositionImplementation()
 	{
-		return std::pair<float, float>();
+		POINT pos;
+		GetCursorPos(&pos);
+		return std::pair<int, int>(static_cast<int>(pos.x), static_cast<int>(pos.y));
 	}
 }
 

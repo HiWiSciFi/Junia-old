@@ -12,8 +12,12 @@
 #include <Junia/KeyCodes.hpp>
 #include <Junia/Platform/Windows/WindowsInput.hpp>
 
+#include <Junia/Input.hpp>
+
 namespace Junia
 {
+	std::unordered_map<HWND, WindowsWindow*> WindowsWindow::windowMap;
+
 	Window* Window::Create(const WindowProperties& properties)
 	{
 		WindowsInput::PopulateConversionArrays();
@@ -22,19 +26,77 @@ namespace Junia
 
 	LRESULT CALLBACK WndProc(HWND window, unsigned int msg, WPARAM wp, LPARAM lp)
 	{
+		//JELOG_BASE_WARN("Handling message: " JELOG_UINT, msg);
 		switch (msg)
 		{
+		// API Reference: https://docs.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
+		case WM_SYSCOMMAND:
+		{
+			wp &= 0xFFF0;
+			switch (wp)
+			{
+			/*case SC_DEFAULT: break;
+			case SC_CONTEXTHELP: break;
+			case SC_HOTKEY: break;
+			case SCF_ISSECURE: break;
+			case SC_KEYMENU: break;
+			case SC_MONITORPOWER: break;
+			case SC_MOUSEMENU: break;
+			case SC_NEXTWINDOW: break;
+			case SC_PREVWINDOW: break;
+			case SC_SCREENSAVE: break;
+			case SC_TASKLIST: break;
+			case SC_VSCROLL: break;
+			case SC_HSCROLL: break;*/
+
+			case SC_CLOSE: EventSystem::Trigger(new WindowCloseEvent()); break;
+			case SC_MAXIMIZE: ShowWindow(window, SW_MAXIMIZE); break;
+			case SC_MINIMIZE: ShowWindow(window, SW_MINIMIZE); break;
+			case SC_RESTORE: ShowWindow(window, SW_RESTORE); break;
+			case SC_MOVE:
+			{
+				WindowsWindow* wnd = WindowsWindow::GetWindow(window);
+				wnd->movingWindow = true;
+				RECT rect;
+				GetWindowRect(window, &rect);
+				wnd->movingWindowCursorOffsetX = GET_X_LPARAM(lp) - rect.left;
+				wnd->movingWindowCursorOffsetY = GET_Y_LPARAM(lp) - rect.top;
+				break;
+			}
+			case SC_SIZE:
+			{
+				WindowsWindow* wnd = WindowsWindow::GetWindow(window);
+				wnd->resizingWindow = true;
+				RECT rect;
+				GetWindowRect(window, &rect);
+				int mouseX = Input::GetMouseX();
+				int mouseY = Input::GetMouseY();
+				int offset = static_cast<int>(GetDpiForSystem() / 4.0f);
+				JELOG_WARN("DPI: " JELOG_INT " Offset: " JELOG_INT, static_cast<int>(GetDpiForSystem()), offset);
+				wnd->resizingWindowLeft = mouseX < rect.left + offset && mouseX > rect.left - offset;
+				wnd->resizingWindowRight = !wnd->resizingWindowLeft && mouseX < rect.right + offset && mouseX > rect.right - offset;
+				wnd->resizingWindowBottom = mouseY < rect.bottom + offset && mouseY > rect.bottom - offset;
+				wnd->resizingWindowTop = !wnd->resizingWindowBottom && mouseY < rect.top + offset && mouseY > rect.top - offset;
+				break;
+			}
+			default: return DefWindowProc(window, msg, wp, lp);
+			}
+			return 0L;
+		}
+
 		// API Reference: https://docs.microsoft.com/en-us/windows/win32/winmsg/window-notifications
 		case WM_CLOSE:
 		case WM_DESTROY: EventSystem::Trigger(new WindowCloseEvent()); return 0L;
 
-		case WM_SIZE: EventSystem::Trigger(new WindowMaximizeEvent(wp == 2)); break;
-		case WM_MOVE: EventSystem::Trigger(new WindowMoveEvent(GET_X_LPARAM(lp), GET_Y_LPARAM(lp))); break;
+		case WM_SIZE: EventSystem::Trigger(new WindowMaximizeEvent(wp == 2)); return 0L;
+		case WM_MOVE: EventSystem::Trigger(new WindowMoveEvent(GET_X_LPARAM(lp), GET_Y_LPARAM(lp))); return 0L;
 		// TODO: WindowFocusEvent
 		case WM_SIZING:
-			{RECT* r = reinterpret_cast<RECT*>(lp);
+		{
+			RECT* r = reinterpret_cast<RECT*>(lp);
 			EventSystem::Trigger(new WindowResizeEvent(r->right - r->left, r->bottom - r->top));
-			break;}
+			return 0L;
+		}
 
 		// API Reference: https://docs.microsoft.com/en-us/windows/win32/inputdev/mouse-input
 		case WM_LBUTTONDOWN: EventSystem::Trigger(new MouseButtonDownEvent(0)); break;
@@ -47,7 +109,6 @@ namespace Junia
 		case WM_MOUSEWHEEL:  EventSystem::Trigger(new MouseScrollEvent(0, static_cast<float>(GET_WHEEL_DELTA_WPARAM(wp) / WHEEL_DELTA))); return 0L;
 		case WM_MOUSEMOVE:   EventSystem::Trigger(new MouseMoveEvent(static_cast<float>(GET_X_LPARAM(lp)), static_cast<float>(GET_Y_LPARAM(lp)))); break;
 
-		// TODO: Use KeyCodes from <Junia/KeyCodes.hpp>
 		// API Reference: https://docs.microsoft.com/en-us/windows/win32/inputdev/keyboard-input <-- Cool other stuff too : refer to Junia::WindowsInput
 		case WM_KEYDOWN: EventSystem::Trigger(new KeyboardKeyDownEvent(Junia::WindowsInput::WinToJeKey[static_cast<int>(wp)])); break;
 		case WM_KEYUP:   EventSystem::Trigger(new KeyboardKeyUpEvent(Junia::WindowsInput::WinToJeKey[static_cast<int>(wp)]));   break;
@@ -62,6 +123,8 @@ namespace Junia
 
 	WindowsWindow::WindowsWindow(const WindowProperties& properties)
 	{
+		static bool isDpiAwarenessSet = SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+
 		std::wstring titleWstr = std::wstring(properties.title.begin(), properties.title.end());
 		const wchar_t* className = titleWstr.c_str();
 
@@ -117,6 +180,8 @@ namespace Junia
 
 		ShowWindow(window, SW_SHOWDEFAULT);
 		UpdateWindow(window);
+
+		windowMap[window] = this;
 	}
 
 	WindowsWindow::~WindowsWindow()
@@ -126,6 +191,42 @@ namespace Junia
 
 	void WindowsWindow::OnUpdate()
 	{
+		if (movingWindow)
+		{
+			if (GetKeyState(VK_LBUTTON) & 0x8000)
+			{
+				RECT rect;
+				GetWindowRect(window, &rect);
+				MoveWindow(
+					window,
+					static_cast<long>(Input::GetMouseX()) - movingWindowCursorOffsetX,
+					static_cast<long>(Input::GetMouseY()) - movingWindowCursorOffsetY,
+					rect.right - rect.left,
+					rect.bottom - rect.top,
+					false
+				);
+			} else movingWindow = false;
+		}
+
+		if (resizingWindow)
+		{
+			if (GetKeyState(VK_LBUTTON) & 0x8000)
+			{
+				RECT rect;
+				GetWindowRect(window, &rect);
+				int mouseX = Input::GetMouseX();
+				int mouseY = Input::GetMouseY();
+				MoveWindow(
+					window,
+					resizingWindowLeft ? mouseX : rect.left,
+					resizingWindowTop ? mouseY : rect.top,
+					resizingWindowLeft ? rect.right - mouseX : (resizingWindowRight ? mouseX - rect.left : rect.right - rect.left),
+					resizingWindowTop ? rect.bottom - mouseY : (resizingWindowBottom ? mouseY - rect.top : rect.bottom - rect.top),
+					false
+				);
+			} else resizingWindow = false;
+		}
+
 		MSG msg;
 		while (PeekMessage(&msg, window, 0, 0, PM_REMOVE))
 		{

@@ -14,6 +14,6 @@ namespace Junia
 	protected:
 		bool IsKeyDownImplementation(int keycode) override;
 		bool IsMouseButtonDownImplementation(int button) override;
-		std::pair<float, float> GetMousePositionImplementation() override;
+		std::pair<int, int> GetMousePositionImplementation() override;
 	};
 }
