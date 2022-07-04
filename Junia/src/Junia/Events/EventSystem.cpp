@@ -7,10 +7,10 @@
 
 namespace Junia
 {
-	std::vector<std::function<bool(const Event*)>> EventSystem::subscribers;
+	std::vector<std::function<bool(const Event&)>> EventSystem::subscribers;
 	std::deque<Event*> EventSystem::eventQueue;
 
-	void EventSystem::Subscribe(const std::function<bool(const Event*)>& callback)
+	void EventSystem::Subscribe(const std::function<bool(const Event&)>& callback)
 	{
 		subscribers.push_back(callback);
 	}
@@ -20,12 +20,7 @@ namespace Junia
 		eventQueue.push_back(e);
 	}
 
-	void EventSystem::TriggerImmediate(const Event* e)
-	{
-		TriggerImmediate(e, true);
-	}
-
-	void EventSystem::TriggerImmediate(const Event* e, const bool deletePtr)
+	void EventSystem::TriggerImmediate(const Event* e, bool deletePtr)
 	{
 		Dispatch(e);
 		if (deletePtr) delete e;
@@ -42,14 +37,14 @@ namespace Junia
 
 	#define JE_EVENT_DISPATCH_SWITCH_IMPL_Q(x)	case EventType:: ## x: \
 												{ \
-													const x ## Event* ev = dynamic_cast<const x ## Event*>(e); \
+													const x ## Event* ev = static_cast<const x ## Event*>(e); \
 													x ## Event::Dispatch(ev); \
 													break; \
 												}
 
 	void EventSystem::Dispatch(const Event* e)
 	{
-		for (const std::function<bool(const Event*)>& callback : subscribers) { if (callback(e)) return; }
+		for (const std::function<bool(const Event&)>& callback : subscribers) { if (callback(*e)) return; }
 		switch (e->GetType())
 		{
 			JE_EVENT_DISPATCH_SWITCH_IMPL_Q(JoystickConnect)

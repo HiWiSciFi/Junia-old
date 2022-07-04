@@ -26,7 +26,7 @@ namespace Junia
 		static Application& Get() { return *app; }
 
 	private:
-		bool OnWindowClosed(const WindowCloseEvent* e);
+		bool OnWindowClosed(const WindowCloseEvent& e);
 
 		std::unique_ptr<Window> window;
 		LayerSystem layerSystem;

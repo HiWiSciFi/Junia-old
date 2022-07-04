@@ -45,7 +45,7 @@ namespace Junia
 		}
 	}
 
-	bool Application::OnWindowClosed(const WindowCloseEvent* e)
+	bool Application::OnWindowClosed(const WindowCloseEvent& e)
 	{
 		layerSystem.~LayerSystem();
 		running = false;

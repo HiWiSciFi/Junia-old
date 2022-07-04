@@ -2,5 +2,5 @@
 
 namespace Junia
 {
-	std::vector<std::function<bool(const JoystickConnectEvent*)>> JoystickConnectEvent::subscribers;
+	std::vector<std::function<bool(const JoystickConnectEvent&)>> JoystickConnectEvent::subscribers;
 }
