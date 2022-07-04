@@ -1,5 +1,7 @@
 #pragma once
 #include <utility>
+#include <Junia/KeyCodes.hpp>
+#include <Junia/MouseButtonCodes.hpp>
 
 namespace Junia
 {

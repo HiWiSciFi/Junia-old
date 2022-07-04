@@ -1,13 +1,13 @@
 #include <Junia.hpp>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <Junia/Platform/OpenGL/OpenGLShader.hpp>
-
-#include <Junia/Renderer/Shader.hpp>
+#include <Junia/OrthographicCameraController.hpp>
 
 class ExampleLayer : public Junia::Layer
 {
 public:
-	ExampleLayer() : Junia::Layer("Example Layer"), camera(-1.5f, 1.5f, -1.0f, 1.0f), cameraPosition(0.0f)
+	ExampleLayer() : Junia::Layer("Example Layer"), cameraController(1280.0f / 720.0f, true)
 	{
 	}
 
@@ -140,34 +140,23 @@ public:
 
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->Bind();
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		Junia::WindowResizeEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(Junia::WindowResizeEvent, OnWindowResize));
 	}
 
-	void OnUpdate(Junia::Timestep deltaTime) override
+	bool OnWindowResize(const Junia::WindowResizeEvent& e)
 	{
-		if (Junia::Input::IsKeyDown(JE_KEY_LEFT))
-			cameraPosition.x -= cameraMoveSpeed * deltaTime;
-		else if (Junia::Input::IsKeyDown(JE_KEY_RIGHT))
-			cameraPosition.x += cameraMoveSpeed * deltaTime;
-		if (Junia::Input::IsKeyDown(JE_KEY_UP))
-			cameraPosition.y += cameraMoveSpeed * deltaTime;
-		else if (Junia::Input::IsKeyDown(JE_KEY_DOWN))
-			cameraPosition.y -= cameraMoveSpeed * deltaTime;
-
-		if (Junia::Input::IsKeyDown(JE_KEY_A))
-			cameraRotation += cameraRotationSpeed * deltaTime;
-		if (Junia::Input::IsKeyDown(JE_KEY_D))
-			cameraRotation -= cameraRotationSpeed * deltaTime;
+		JELOG_WARN(e.ToString().c_str());
+		return false;
 	}
+
+	void OnUpdate(Junia::Timestep deltaTime) override { JELOG_INFO("Delta time: " JELOG_FLOAT, (float)deltaTime); cameraController.OnUpdate(deltaTime); }
 
 	void OnUpdate() override
 	{
 		Junia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Junia::RenderCommand::Clear();
 
-		camera.SetPosition(cameraPosition);
-		camera.SetRotation(cameraRotation);
-
-		Junia::Renderer::BeginScene(camera);
+		Junia::Renderer::BeginScene(cameraController.GetCamera());
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(.1f));
 
@@ -209,11 +198,7 @@ private:
 
 	Junia::Ref<Junia::Texture2D> texture, sdLogoTexture;
 
-	Junia::OrthographicCamera camera;
-	glm::vec3 cameraPosition;
-	float cameraMoveSpeed = 5.0f;
-	float cameraRotation = 0.0f;
-	float cameraRotationSpeed = 180.0f;
+	Junia::OrthographicCameraController cameraController;
 
 	glm::vec3 squareColor = { .2f, .3f, .8f };
 };

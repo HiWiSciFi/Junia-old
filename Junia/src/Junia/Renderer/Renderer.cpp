@@ -10,7 +10,7 @@ namespace Junia
 		RenderCommand::Init();
 	}
 
-	void Renderer::BeginScene(OrthographicCamera& camera)
+	void Renderer::BeginScene(const OrthographicCamera& camera)
 	{
 		sceneData->viewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
