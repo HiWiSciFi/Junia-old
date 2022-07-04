@@ -90,12 +90,6 @@ namespace Junia
 		case WM_SIZE: EventSystem::Trigger(new WindowMaximizeEvent(wp == 2)); return 0L;
 		case WM_MOVE: EventSystem::Trigger(new WindowMoveEvent(GET_X_LPARAM(lp), GET_Y_LPARAM(lp))); return 0L;
 		// TODO: WindowFocusEvent
-		case WM_SIZING:
-		{
-			RECT* r = reinterpret_cast<RECT*>(lp);
-			EventSystem::Trigger(new WindowResizeEvent(r->right - r->left, r->bottom - r->top));
-			return 0L;
-		}
 
 		// API Reference: https://docs.microsoft.com/en-us/windows/win32/inputdev/mouse-input
 		case WM_LBUTTONDOWN: EventSystem::Trigger(new MouseButtonDownEvent(0)); break;
@@ -223,6 +217,8 @@ namespace Junia
 					resizingWindowTop ? rect.bottom - mouseY : (resizingWindowBottom ? mouseY - rect.top : rect.bottom - rect.top),
 					false
 				);
+				GetWindowRect(window, &rect);
+				EventSystem::Trigger(new WindowResizeEvent(rect.right - rect.left, rect.bottom - rect.top));
 			} else resizingWindow = false;
 		}
 
