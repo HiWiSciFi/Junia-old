@@ -14,8 +14,8 @@ namespace Junia
 		const glm::vec3& GetPosition() const { return position; }
 		float GetRotation() const { return rotation; }
 
-		void SetPosition(const glm::vec3& position) { this->position = position; RecalculateViewMatrix(); }
-		void SetRotation(float rotation) { this->rotation = rotation; RecalculateViewMatrix(); }
+		void SetPosition(const glm::vec3& pos) { position = pos; RecalculateViewMatrix(); }
+		void SetRotation(float rot) { rotation = rot; RecalculateViewMatrix(); }
 
 		const glm::mat4& GetProjectionMatrix()     const { return     projectionMatrix; }
 		const glm::mat4& GetViewMatrix()           const { return           viewMatrix; }

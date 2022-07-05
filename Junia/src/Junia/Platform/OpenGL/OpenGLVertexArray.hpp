@@ -20,8 +20,8 @@ namespace Junia
 		virtual const Ref<IndexBuffer>& GetIndexBuffer() const override { return indexBuffer; }
 
 	private:
-		uint32_t rendererId;
-		std::vector<Ref<VertexBuffer>> vertexBuffers;
-		Ref<IndexBuffer> indexBuffer;
+		uint32_t rendererId = 0;
+		std::vector<Ref<VertexBuffer>> vertexBuffers { };
+		Ref<IndexBuffer> indexBuffer { };
 	};
 }

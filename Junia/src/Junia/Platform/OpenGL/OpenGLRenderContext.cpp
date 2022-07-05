@@ -20,7 +20,23 @@ namespace Junia
 	#ifdef JE_TARGETPLATFORM_WINDOWS
 	OpenGLRenderContext::OpenGLRenderContext(Window* window) : window(window)
 	{
+		static bool gladInitialized = false;
+		if (!gladInitialized)
+		{
+			HDC dc = GetDeviceContext();
+			HGLRC dummyctx = wglCreateContext(dc);
+			wglMakeCurrent(dc, dummyctx);
 
+			if (!gladLoadGL())
+			{
+				JELOG_BASE_CRIT("OpenGL could not be loaded!");
+				throw std::runtime_error("OpenGL could not be loaded!");
+			}
+			gladInitialized = true;
+
+			wglMakeCurrent(dc, NULL);
+			wglDeleteContext(dummyctx);
+		}
 	}
 
 	OpenGLRenderContext::~OpenGLRenderContext()
@@ -35,22 +51,6 @@ namespace Junia
 	void OpenGLRenderContext::Init()
 	{
 		HDC dc = GetDeviceContext();
-		static bool gladInitialized = false;
-		if (!gladInitialized)
-		{
-			HGLRC dummyctx = wglCreateContext(dc);
-			wglMakeCurrent(dc, dummyctx);
-
-			if (!gladLoadGL())
-			{
-				JELOG_BASE_CRIT("OpenGL could not be loaded!");
-				throw std::runtime_error("OpenGL could not be loaded!");
-			}
-			gladInitialized = true;
-
-			wglMakeCurrent(dc, NULL);
-			wglDeleteContext(dummyctx);
-		}
 		ctx = wglCreateContext(dc);
 		wglMakeCurrent(dc, ctx);
 

@@ -15,7 +15,7 @@ namespace Junia
 		virtual void Unbind() const;
 
 		virtual const BufferLayout& GetLayout() const override { return layout; }
-		virtual void SetLayout(const BufferLayout& layout) override { this->layout = layout; }
+		virtual void SetLayout(const BufferLayout& nlayout) override { layout = nlayout; }
 
 	private:
 		VkDevice device = nullptr;

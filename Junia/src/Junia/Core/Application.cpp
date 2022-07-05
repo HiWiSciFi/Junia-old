@@ -42,7 +42,9 @@ namespace Junia
 			lastFrameTime = time;
 
 			EventSystem::DispatchQueue();
-			if (!minimized) layerSystem.IterateForward([timestep](Layer* layer) { layer->OnUpdate(timestep); layer->OnUpdate(); });
+			if (!minimized) layerSystem.IterateForward([timestep](Layer* layer) {
+				layer->OnUpdate(timestep); layer->OnUpdate();
+			});
 			window->OnUpdate();
 		}
 	}

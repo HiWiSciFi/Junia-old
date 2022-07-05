@@ -64,11 +64,11 @@ namespace Junia
 		vertexBuffers.push_back(vertexBuffer);
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
+	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& nindexBuffer)
 	{
 		glBindVertexArray(rendererId);
-		indexBuffer->Bind();
+		nindexBuffer->Bind();
 
-		this->indexBuffer = indexBuffer;
+		indexBuffer = nindexBuffer;
 	}
 }
