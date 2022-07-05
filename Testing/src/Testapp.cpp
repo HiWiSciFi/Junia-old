@@ -164,7 +164,7 @@ public:
 
 		Junia::Renderer::BeginScene(cameraController.GetCamera());
 
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(.1f));
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(shader2)->Bind();
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(shader2)->UploadUniformFloat3("u_Color", squareColor);
@@ -173,7 +173,7 @@ public:
 		{
 			for (int x = 0; x < 20; x++)
 			{
-				glm::vec3 pos(x * .11f, y * .11f, 0.0f);
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 				Junia::Renderer::Submit(shader2, squareVertexArray, transform);
 			}
@@ -206,7 +206,7 @@ private:
 
 	Junia::OrthographicCameraController cameraController;
 
-	glm::vec3 squareColor = { .2f, .3f, .8f };
+	glm::vec3 squareColor = { 0.2f, 0.3f, 0.8f };
 };
 
 class Testapp : public Junia::Application

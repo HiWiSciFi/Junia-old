@@ -13,6 +13,6 @@ namespace Junia
 		operator float() const { return time; }
 
 	private:
-		float time;
+		float time = 0.0f;
 	};
 }

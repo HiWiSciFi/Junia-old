@@ -20,6 +20,6 @@ namespace Junia
 		[[nodiscard]] std::string GetName() const { return name; }
 
 	protected:
-		std::string name;
+		std::string name = "";
 	};
 }

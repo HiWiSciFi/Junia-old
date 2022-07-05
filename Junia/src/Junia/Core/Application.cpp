@@ -20,7 +20,7 @@ namespace Junia
 		WindowResizeEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(WindowResizeEvent, OnWindowResize));
 
 		Renderer::Init();
-		Renderer::OnWindowResize(window->GetWidth(), window->GetHeight());
+		//Renderer::OnWindowResize(window->GetWidth(), window->GetHeight());
 
 		PushLayerFront(new JUILayer());
 	}

@@ -5,9 +5,9 @@ namespace Junia
 {
 	struct WindowProperties
 	{
-		const std::string title;
-		unsigned int width;
-		unsigned int height;
+		const std::string title = "";
+		unsigned int width = 0;
+		unsigned int height = 0;
 
 		WindowProperties(std::string title = "Junia Window",
 			const unsigned int width = 1280,

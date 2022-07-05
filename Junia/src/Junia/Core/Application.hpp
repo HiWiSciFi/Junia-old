@@ -30,7 +30,7 @@ namespace Junia
 		bool OnWindowResize(const WindowResizeEvent& e);
 
 		std::unique_ptr<Window> window;
-		LayerSystem layerSystem;
+		LayerSystem layerSystem = { };
 		bool running = true;
 		float lastFrameTime = 0.0f;
 		bool minimized = false;

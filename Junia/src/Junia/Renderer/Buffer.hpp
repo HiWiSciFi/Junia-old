@@ -40,7 +40,7 @@ namespace Junia
 
 	struct BufferElement
 	{
-		std::string name;
+		std::string name = "";
 		ShaderDataType type = ShaderDataType::None;
 		uint32_t size = 0;
 		uint32_t offset = 0;

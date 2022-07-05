@@ -30,6 +30,6 @@ namespace Junia
 
 		float aspectRatio = 0.0f;
 		float zoomLevel = 1.0f;
-		OrthographicCamera camera;
+		OrthographicCamera camera = { 1.0f, 1.0f, 1.0f, 1.0f };
 	};
 }

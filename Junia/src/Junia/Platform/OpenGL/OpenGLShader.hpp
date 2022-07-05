@@ -31,7 +31,7 @@ namespace Junia
 		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
 		void Compile(const std::unordered_map<GLenum, std::string> shaderSources);
 
-		uint32_t rendererId;
-		std::string name;
+		uint32_t rendererId = 0;
+		std::string name = "";
 	};
 }

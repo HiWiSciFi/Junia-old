@@ -21,6 +21,6 @@ namespace Junia
 		void Critical (const std::string fmt, ...) const;
 
 	private:
-		std::string name;
+		std::string name = "";
 	};
 }

@@ -58,7 +58,7 @@ namespace Junia
 			}
 		};
 
-		WindowData data;
+		WindowData data { };
 
 		static std::unordered_map<HWND, WindowsWindow*> windowMap;
 	};

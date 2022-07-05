@@ -18,7 +18,11 @@
 #define JELOG_PERCENT    "%%"
 
 #if defined(JELOG_MAX_TRACE)
-	#define JELOG_BASE_TRACE(str, ...) Junia::Log::JuniaLogTrace (__FILE__, __LINE__, str, __VA_ARGS__)
+	#define JELOG_BASE_TRACE(str,
+
+
+
+	..) Junia::Log::JuniaLogTrace (__FILE__, __LINE__, str, __VA_ARGS__)
 	#define JELOG_TRACE(str, ...)      Junia::Log::LogTrace      (__FILE__, __LINE__, str, __VA_ARGS__)
 #else
 	#define JELOG_BASE_TRACE(...) while(0)

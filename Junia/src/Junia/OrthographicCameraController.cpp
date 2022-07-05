@@ -38,7 +38,7 @@ namespace Junia
 	bool OrthographicCameraController::OnMouseScrolled(const MouseScrollEvent& e)
 	{
 		zoomLevel -= e.GetYOffset() * 0.25f;
-		zoomLevel = std::max(zoomLevel, .25f);
+		zoomLevel = std::max(zoomLevel, 0.25f);
 		camera.SetProjection(-aspectRatio * zoomLevel, aspectRatio * zoomLevel, -zoomLevel, zoomLevel);
 		return false;
 	}
