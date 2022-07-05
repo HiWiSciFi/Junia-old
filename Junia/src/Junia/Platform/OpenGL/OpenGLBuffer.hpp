@@ -8,13 +8,13 @@ namespace Junia
 	{
 	public:
 		OpenGLVertexBuffer(float* vertices, uint32_t size);
-		virtual ~OpenGLVertexBuffer();
+		~OpenGLVertexBuffer() override;
 
-		virtual void Bind()   const override;
-		virtual void Unbind() const override;
+		void Bind()   const override;
+		void Unbind() const override;
 
-		virtual const BufferLayout& GetLayout() const override { return layout; }
-		virtual void SetLayout(const BufferLayout& nlayout) override { layout = nlayout; }
+		[[nodiscard]] const BufferLayout& GetLayout() const override { return layout; }
+		void SetLayout(const BufferLayout& nlayout) override { layout = nlayout; }
 
 	private:
 		uint32_t rendererId = 0;
@@ -25,12 +25,12 @@ namespace Junia
 	{
 	public:
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
-		virtual ~OpenGLIndexBuffer();
+		~OpenGLIndexBuffer() override;
 
-		virtual void Bind()   const override;
-		virtual void Unbind() const override;
+		void Bind()   const override;
+		void Unbind() const override;
 
-		virtual uint32_t GetCount() const { return count; }
+		[[nodiscard]] uint32_t GetCount() const override { return count; }
 
 	private:
 		uint32_t rendererId = 0;

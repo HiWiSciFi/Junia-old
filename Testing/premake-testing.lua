@@ -35,7 +35,7 @@ project "Testing"
 	filter "system:windows"
 		systemversion "latest"
 		defines {
-			"JE_TARGETPLATFORM_GLFW"
+			"JE_TARGETPLATFORM_WINDOWS"
 		}
 
 		filter "configurations:Debug"

@@ -10,14 +10,14 @@ namespace Junia
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& filepath);
+		explicit OpenGLShader(const std::string& filepath);
 		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
-		~OpenGLShader();
+		~OpenGLShader() override;
 
 		void Bind() const override;
 		void Unbind() const override;
 
-		const std::string& GetName() const override { return name; }
+		[[nodiscard]] const std::string& GetName() const override { return name; }
 
 		void UploadUniformInt(const std::string vname, int value);
 		void UploadUniformFloat(const std::string vname, float value);
@@ -32,6 +32,6 @@ namespace Junia
 		void Compile(const std::unordered_map<GLenum, std::string> shaderSources);
 
 		uint32_t rendererId = 0;
-		std::string name = "";
+		std::string name;
 	};
 }

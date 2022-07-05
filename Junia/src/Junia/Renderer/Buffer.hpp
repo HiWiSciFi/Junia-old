@@ -40,18 +40,18 @@ namespace Junia
 
 	struct BufferElement
 	{
-		std::string name = "";
+		std::string name;
 		ShaderDataType type = ShaderDataType::None;
 		uint32_t size = 0;
 		uint32_t offset = 0;
 		bool normalized = false;
 
-		BufferElement() { }
+		BufferElement() = default;
 
-		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
-		: name(name), type(type), size(ShaderDataTypeSize(type)), offset(0), normalized(normalized) { }
+		BufferElement(const ShaderDataType type, std::string name, const bool normalized = false)
+		: name(std::move(name)), type(type), size(ShaderDataTypeSize(type)), offset(0), normalized(normalized) { }
 
-		uint32_t GetComponentCount() const
+		[[nodiscard]] uint32_t GetComponentCount() const
 		{
 			switch (type)
 			{
@@ -77,15 +77,15 @@ namespace Junia
 	{
 	public:
 
-		BufferLayout() { }
+		BufferLayout() = default;
 
 		BufferLayout(const std::initializer_list<BufferElement>& elements) : elements(elements)
 		{
 			CalculateOffsetsAndStride();
 		}
 
-		uint32_t GetStride() const { return stride; };
-		const std::vector<BufferElement>& GetElements() const { return elements; };
+		[[nodiscard]] uint32_t GetStride() const { return stride; };
+		[[nodiscard]] const std::vector<BufferElement>& GetElements() const { return elements; };
 
 	private:
 		void CalculateOffsetsAndStride()
@@ -112,7 +112,7 @@ namespace Junia
 		virtual void Bind()   const = 0;
 		virtual void Unbind() const = 0;
 
-		virtual const BufferLayout& GetLayout() const = 0;
+		[[nodiscard]] virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
 		static VertexBuffer* Create(float* vertices, uint32_t size);
@@ -126,7 +126,7 @@ namespace Junia
 		virtual void Bind()   const = 0;
 		virtual void Unbind() const = 0;
 
-		virtual uint32_t GetCount() const = 0;
+		[[nodiscard]] virtual uint32_t GetCount() const = 0;
 
 		static IndexBuffer* Create(uint32_t* indices, uint32_t count);
 	};

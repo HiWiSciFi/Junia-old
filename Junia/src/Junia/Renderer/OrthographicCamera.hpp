@@ -12,15 +12,15 @@ namespace Junia
 
 		void SetProjection(float left, float right, float bottom, float top);
 
-		const glm::vec3& GetPosition() const { return position; }
-		float GetRotation() const { return rotation; }
+		[[nodiscard]] const glm::vec3& GetPosition() const { return position; }
+		[[nodiscard]] float GetRotation() const { return rotation; }
 
 		void SetPosition(const glm::vec3& pos) { position = pos; RecalculateViewMatrix(); }
-		void SetRotation(float rot) { rotation = rot; RecalculateViewMatrix(); }
+		void SetRotation(const float rot) { rotation = rot; RecalculateViewMatrix(); }
 
-		const glm::mat4& GetProjectionMatrix()     const { return     projectionMatrix; }
-		const glm::mat4& GetViewMatrix()           const { return           viewMatrix; }
-		const glm::mat4& GetViewProjectionMatrix() const { return viewProjectionMatrix; }
+		[[nodiscard]] const glm::mat4& GetProjectionMatrix()     const { return     projectionMatrix; }
+		[[nodiscard]] const glm::mat4& GetViewMatrix()           const { return           viewMatrix; }
+		[[nodiscard]] const glm::mat4& GetViewProjectionMatrix() const { return viewProjectionMatrix; }
 
 	private:
 		void RecalculateViewMatrix();

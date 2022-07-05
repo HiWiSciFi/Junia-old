@@ -57,7 +57,7 @@ project "Junia"
 		}
 
 		defines {
-			"JE_TARGETPLATFORM_GLFW"
+			"JE_TARGETPLATFORM_WINDOWS"
 		}
 
 	filter "configurations:Debug"

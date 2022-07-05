@@ -21,11 +21,11 @@ public:
 			 0.0f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f
 		};
 
-		Junia::Ref<Junia::VertexBuffer> vertexBuffer = Junia::Ref<Junia::VertexBuffer>(
+		const auto vertexBuffer = Junia::Ref<Junia::VertexBuffer>(
 			Junia::VertexBuffer::Create(vertices, sizeof(vertices))
 		);
 
-		Junia::BufferLayout layout {
+		const Junia::BufferLayout layout {
 			{ Junia::ShaderDataType::Float3, "inPosition" },
 			{ Junia::ShaderDataType::Float4, "inColor"    }
 		};
@@ -33,7 +33,7 @@ public:
 		vertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] { 0, 1, 2 };
-		Junia::Ref<Junia::IndexBuffer> indexBuffer = Junia::Ref<Junia::IndexBuffer>(
+		const auto indexBuffer = Junia::Ref<Junia::IndexBuffer>(
 			Junia::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t))
 		);
 		vertexArray->SetIndexBuffer(indexBuffer);
@@ -46,7 +46,7 @@ public:
 		};
 
 		squareVertexArray.reset(Junia::VertexArray::Create());
-		Junia::Ref<Junia::VertexBuffer> squareVertexBuffer = Junia::Ref<Junia::VertexBuffer>(
+		const auto squareVertexBuffer = Junia::Ref<Junia::VertexBuffer>(
 			Junia::VertexBuffer::Create(squareVertices, sizeof(squareVertices))
 		);
 
@@ -57,12 +57,12 @@ public:
 		squareVertexArray->AddVertexBuffer(squareVertexBuffer);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		Junia::Ref<Junia::IndexBuffer> squareIndexBuffer = Junia::Ref<Junia::IndexBuffer>(
+		const auto squareIndexBuffer = Junia::Ref<Junia::IndexBuffer>(
 			Junia::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t))
 		);
 		squareVertexArray->SetIndexBuffer(squareIndexBuffer);
 
-		std::string vertexSrc = R"(
+		const std::string vertexSrc = R"(
 			#version 450
 
 			layout(location = 0) in vec3 inPosition;
@@ -82,7 +82,7 @@ public:
 			}
 		)";
 
-		std::string fragmentSrc = R"(
+		const std::string fragmentSrc = R"(
 			#version 450
 
 			layout(location = 0) out vec4 outColor;
@@ -99,7 +99,7 @@ public:
 
 		shader = Junia::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 
-		std::string vertexSrc2 = R"(
+		const std::string vertexSrc2 = R"(
 			#version 450
 
 			layout(location = 0) in vec3 inPosition;
@@ -116,7 +116,7 @@ public:
 			}
 		)";
 
-		std::string fragmentSrc2 = R"(
+		const std::string fragmentSrc2 = R"(
 			#version 450
 
 			layout(location = 0) out vec4 outColor;
@@ -133,7 +133,7 @@ public:
 
 		shader2 = Junia::Shader::Create("FlatColor", vertexSrc2, fragmentSrc2);
 
-		auto textureShader = shaderLibrary.Load("assets/shaders/Texture.glsl");
+		const auto textureShader = shaderLibrary.Load("assets/shaders/Texture.glsl");
 
 		texture = Junia::Texture2D::Create("assets/textures/Checkerboard.png");
 		sdLogoTexture = Junia::Texture2D::Create("assets/textures/SDLogo.png");
@@ -164,7 +164,7 @@ public:
 
 		Junia::Renderer::BeginScene(cameraController.GetCamera());
 
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		const glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(shader2)->Bind();
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(shader2)->UploadUniformFloat3("u_Color", squareColor);
@@ -179,7 +179,7 @@ public:
 			}
 		}
 
-		auto textureShader = shaderLibrary.Get("Texture");
+		const auto textureShader = shaderLibrary.Get("Texture");
 
 		texture->Bind();
 		Junia::Renderer::Submit(textureShader, squareVertexArray,

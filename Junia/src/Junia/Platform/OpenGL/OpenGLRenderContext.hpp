@@ -12,8 +12,8 @@ namespace Junia
 	class OpenGLRenderContext : public RenderContext
 	{
 	public:
-		OpenGLRenderContext(Window* window);
-		virtual ~OpenGLRenderContext();
+		explicit OpenGLRenderContext(Window* window);
+		~OpenGLRenderContext() override;
 
 		virtual void Init() override;
 		virtual void ContextSwapBuffers() override;
