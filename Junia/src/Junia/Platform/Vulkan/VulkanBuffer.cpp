@@ -1,6 +1,6 @@
 #include "VulkanBuffer.hpp"
 
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 #include <vulkan/vulkan.hpp>
 
 namespace Junia

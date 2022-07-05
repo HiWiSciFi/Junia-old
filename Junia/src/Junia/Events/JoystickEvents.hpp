@@ -21,6 +21,11 @@ namespace Junia
 		const int id;
 		const bool connected;
 
-		JE_EVENT_FUNCS_IMPL_Q(JoystickConnectEvent)
+		//JE_EVENT_FUNCS_IMPL_Q(JoystickConnectEvent)
+	public:
+		static void Subscribe(std::function<bool(const JoystickConnectEvent&)> callback) { subscribers.push_back(callback); }
+		static void Dispatch(const JoystickConnectEvent* e) { for (const auto& f : subscribers) if (f(*e)) break; }
+	private:
+		static std::vector<std::function<bool(const JoystickConnectEvent&)>> subscribers;
 	};
 }

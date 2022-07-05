@@ -1,6 +1,6 @@
 #include "OpenGLRenderContext.hpp"
 
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 #include <glad/glad.h>
 
 #ifdef JE_TARGETPLATFORM_WINDOWS

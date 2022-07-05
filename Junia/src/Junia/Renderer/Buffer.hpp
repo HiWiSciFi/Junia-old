@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <vector>
 #include <string>
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 #include <functional>
 
 namespace Junia
@@ -33,6 +33,7 @@ namespace Junia
 		case ShaderDataType::Bool:   return 1;
 		default:
 			JELOG_BASE_ERROR("Unknown ShaderDataType!");
+			Junia::Log::JuniaLogError("D:\\Projekte\\VisualStudio\\source\\repos\\Junia\\Junia\\src\\Junia\\Renderer\\Buffer.hpp", 35, "Unknown ShaderDataType!");
 			return 0;
 		}
 	}

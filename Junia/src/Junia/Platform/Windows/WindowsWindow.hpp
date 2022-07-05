@@ -2,7 +2,7 @@
 
 #ifdef JE_TARGETPLATFORM_WINDOWS
 
-#include <Junia/Window.hpp>
+#include <Junia/Core/Window.hpp>
 #include <Windows.h>
 #include <Junia/Platform/OpenGL/OpenGLRenderContext.hpp>
 #include <unordered_map>

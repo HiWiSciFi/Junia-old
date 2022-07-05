@@ -29,7 +29,7 @@ namespace Junia
 
 	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
-		if (Exists(name)) JELOG_BASE_ERROR("Shader already exists!");
+		JELOG_BASE_ASSERT(!Exists(name), "Shader \"" JELOG_CSTR "\" already exists in this Library!", name.c_str());
 		shaders[name] = shader;
 	}
 
@@ -55,7 +55,7 @@ namespace Junia
 
 	Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
-		if (!Exists(name)) JELOG_BASE_ERROR("\"" JELOG_CSTR "\" Shader not found!", name.c_str());
+		JELOG_BASE_ASSERT(Exists(name), "\"" JELOG_CSTR "\" Shader not found!", name.c_str());
 		return shaders[name];
 	}
 

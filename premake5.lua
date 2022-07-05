@@ -12,10 +12,6 @@ workspace "Junia"
 		"_CRT_SECURE_NO_WARNINGS"
 	}
 
-	flags {
-		"MultiProcessorCompile"
-	}
-
 	buildtargetname = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 	Dependency = {}

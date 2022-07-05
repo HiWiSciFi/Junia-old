@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Junia/Layer.hpp>
+#include <Junia/Core/Layer.hpp>
 
 namespace Junia
 {

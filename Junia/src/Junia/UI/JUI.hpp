@@ -14,7 +14,7 @@ namespace Junia
 
 		static void Shutdown();
 
-		static void Text(std::string text);
+		static void Text(const std::string& text);
 
 	private:
 		static bool OnEvent(const Event* e);

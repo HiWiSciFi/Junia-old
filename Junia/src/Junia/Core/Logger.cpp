@@ -5,11 +5,11 @@
 
 namespace Junia
 {
-	Logger::Logger(std::string name) : name(std::move(name)) { }
+	Logger::Logger(const std::string& name) : name(name) { }
 
-	Ref<Logger> Logger::Create(std::string name)
+	Ref<Logger> Logger::Create(const std::string& name)
 	{
-		return std::make_shared<Logger>(std::move(name));
+		return std::make_shared<Logger>(name);
 	}
 
 	void Logger::Trace(const std::string fmt, ...) const

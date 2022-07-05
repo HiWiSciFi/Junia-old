@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Junia/Input.hpp>
+#include <Junia/Core/Input.hpp>
 
 namespace Junia
 {

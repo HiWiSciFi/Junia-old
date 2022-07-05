@@ -1,6 +1,6 @@
 #include "OpenGLShader.hpp"
 
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 #include <Junia/Platform/Platform.hpp>
 #include <glad/glad.h>
 #include <vector>
@@ -63,10 +63,10 @@ namespace Junia
 		while (pos != std::string::npos)
 		{
 			size_t eol = source.find_first_of("\n", pos);
-			if (eol == std::string::npos) JELOG_BASE_ERROR("Shader syntax error!");
+			JELOG_BASE_ASSERT(eol != std::string::npos, "Shader syntax error!");
 			size_t begin = pos + typeTokenLength + 1;
 			std::string type = source.substr(begin, eol - begin);
-			if (type != "vertex" && type != "fragment" && type != "pixel") JELOG_BASE_ERROR("Invalid Shader type!");
+			JELOG_BASE_ASSERT(type == "vertex" || type == "fragment" || type == "pixel", "Invalid Shader type!");
 
 			size_t nextLinePos = source.find_first_not_of("\n", eol);
 			pos = source.find(typeToken, nextLinePos);

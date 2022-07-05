@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <Junia/Renderer/VertexArray.hpp>
-#include <Junia/Base.hpp>
+#include <Junia/Core/Base.hpp>
 
 namespace Junia
 {

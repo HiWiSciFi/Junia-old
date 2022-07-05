@@ -10,7 +10,7 @@ namespace Junia
 	class OrthographicCameraController
 	{
 	public:
-		OrthographicCameraController(float aspectRatio, bool rotation = false);
+		explicit OrthographicCameraController(float aspectRatio, bool rotation = false);
 
 		void OnUpdate(Timestep deltaTime);
 		const OrthographicCamera& GetCamera() const { return camera; }
@@ -22,7 +22,7 @@ namespace Junia
 		bool OnMouseScrolled(const MouseScrollEvent& e);
 		bool OnWindowResized(const WindowResizeEvent& e);
 
-		bool rotation;
+		bool rotation = false;
 		float cameraRotation = 0.0f;
 		glm::vec3 cameraPosition = { 0.0f, 0.0f, 0.0f };
 		float cameraRotationSpeed = 180.0f;

@@ -1,7 +1,7 @@
 #include "OpenGLTexture.hpp"
 
 #include <stb/stb_image.h>
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 #include <glad/glad.h>
 
 namespace Junia

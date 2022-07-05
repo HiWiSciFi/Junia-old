@@ -1,7 +1,7 @@
 #include "Log.hpp"
 
 #include <iostream>
-#include <Junia/Base.hpp>
+#include <Junia/Core/Base.hpp>
 
 namespace Junia
 {

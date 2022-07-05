@@ -154,11 +154,17 @@ public:
 	void OnUpdate(Junia::Timestep deltaTime) override
 	{
 		cameraController.OnUpdate(deltaTime);
+		JELOG_WARN("Pos: %d:%d:%d",
+			cameraController.GetCamera().GetPosition().x,
+			cameraController.GetCamera().GetPosition().y,
+			cameraController.GetCamera().GetPosition().z
+		);
 	}
 
 	void OnUpdate() override
 	{
 		Junia::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		//Junia::RenderCommand::SetClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
 		Junia::RenderCommand::Clear();
 
 		Junia::Renderer::BeginScene(cameraController.GetCamera());
@@ -186,6 +192,8 @@ public:
 		sdLogoTexture->Bind();
 		Junia::Renderer::Submit(textureShader, squareVertexArray,
 			glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+		JELOG_WARN("Submitting: %d", cameraController.GetCamera().GetRotation());
 
 		// Triangle
 		// Junia::Renderer::Submit(shader, vertexArray);

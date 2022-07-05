@@ -8,11 +8,11 @@
 #include <Junia/Events/KeyboardEvents.hpp>
 #include <windowsx.h>
 #include <glad/glad.h>
-#include <Junia/Log.hpp>
-#include <Junia/KeyCodes.hpp>
+#include <Junia/Core/Log.hpp>
+#include <Junia/Core/KeyCodes.hpp>
 #include <Junia/Platform/Windows/WindowsInput.hpp>
 
-#include <Junia/Input.hpp>
+#include <Junia/Core/Input.hpp>
 
 namespace Junia
 {
@@ -166,7 +166,7 @@ namespace Junia
 
 		PIXELFORMATDESCRIPTOR pfd{ };
 		pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-		pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+		pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER | PFD_DRAW_TO_WINDOW;
 		pfd.cColorBits = 32;
 		pfd.cDepthBits = 24;
 		pfd.cStencilBits = 8;

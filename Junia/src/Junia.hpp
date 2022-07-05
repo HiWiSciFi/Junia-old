@@ -1,19 +1,19 @@
 #pragma once
 
-#include <Junia/Base.hpp>
+#include <Junia/Core/Base.hpp>
 #include <Junia/Core/Application.hpp>
 
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 
 #include <Junia/Core/Timestep.hpp>
 
-#include <Junia/Input.hpp>
-#include <Junia/KeyCodes.hpp>
-#include <Junia/MouseButtonCodes.hpp>
+#include <Junia/Core/Input.hpp>
+#include <Junia/Core/KeyCodes.hpp>
+#include <Junia/Core/MouseButtonCodes.hpp>
 
 #include <Junia/Core/Version.hpp>
 
-#include <Junia/Layer.hpp>
+#include <Junia/Core/Layer.hpp>
 
 #include <Junia/Renderer/Renderer.hpp>
 #include <Junia/Renderer/RenderCommand.hpp>

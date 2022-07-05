@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 #include <Junia/Events/EventSystem.hpp>
 #include <Junia/Renderer/Renderer.hpp>
 #include <Junia/UI/JUILayer.hpp>
@@ -20,6 +20,7 @@ namespace Junia
 		WindowResizeEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(WindowResizeEvent, OnWindowResize));
 
 		Renderer::Init();
+		Renderer::OnWindowResize(window->GetWidth(), window->GetHeight());
 
 		PushLayerFront(new JUILayer());
 	}

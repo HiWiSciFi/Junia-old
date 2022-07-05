@@ -2,9 +2,9 @@
 
 #include "WindowsInput.hpp"
 #include <Windows.h>
-#include <Junia/KeyCodes.hpp>
-#include <Junia/MouseButtonCodes.hpp>
-#include <Junia/Log.hpp>
+#include <Junia/Core/KeyCodes.hpp>
+#include <Junia/Core/MouseButtonCodes.hpp>
+#include <Junia/Core/Log.hpp>
 
 namespace Junia
 {

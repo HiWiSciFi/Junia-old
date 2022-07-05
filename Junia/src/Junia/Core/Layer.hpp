@@ -9,7 +9,7 @@ namespace Junia
 	class Layer
 	{
 	public:
-		explicit Layer(std::string name = "Layer") : name(std::string(name)) { }
+		explicit Layer(const std::string& name = "Layer") : name(name) { }
 		virtual ~Layer() = default;
 
 		virtual void OnEnable() { }

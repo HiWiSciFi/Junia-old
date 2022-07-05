@@ -23,7 +23,7 @@ project "glad"
 
 	filter "configurations:Optimized"
 		runtime "Release"
-		symbols "Off"
+		symbols "On"
 		optimize "On"
 
 	filter "configurations:Release"

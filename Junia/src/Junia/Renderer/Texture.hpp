@@ -2,7 +2,7 @@
 
 #include <cstdint>
 #include <string>
-#include <Junia/Base.hpp>
+#include <Junia/Core/Base.hpp>
 
 namespace Junia
 {

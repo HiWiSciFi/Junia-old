@@ -2,7 +2,7 @@
 
 #include <map>
 #include <Junia/Events/Event.hpp>
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 #include <stb/stb_truetype.h>
 
 namespace Junia
@@ -27,7 +27,7 @@ namespace Junia
 
 	}
 
-	void JUI::Text(std::string text)
+	void JUI::Text(const std::string& text)
 	{
 
 	}

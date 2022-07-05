@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Junia/Renderer/RenderContext.hpp>
-#include <Junia/Window.hpp>
+#include <Junia/Core/Window.hpp>
 
 #ifdef JE_TARGETPLATFORM_WINDOWS
 #include <Windows.h>

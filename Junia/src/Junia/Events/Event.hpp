@@ -32,9 +32,9 @@ namespace Junia
 		WindowFocus
 	};
 
-#define JE_EVENT_BIND_MEMBER_FUNC(x) [this](const Junia::Event& e) -> bool { return x##(e); }
-#define JE_EVENTTYPE_BIND_MEMBER_FUNC(et,x) [this](const et##& e) -> bool { return x##(e); }
-#define JE_EVENT_TOSTR_MCR(x) std::stringstream ss; ss << ##x; return ss.str()
+#define JE_EVENT_BIND_MEMBER_FUNC(x) [this](const Junia::Event& e) -> bool { return x(e); }
+#define JE_EVENTTYPE_BIND_MEMBER_FUNC(et,x) [this](const et &e) -> bool { return x(e); }
+#define JE_EVENT_TOSTR_MCR(x) std::stringstream ss; ss << x; return ss.str()
 #define JE_EVENT_FUNCS_IMPL_Q(x) public: \
 									static void Subscribe(std::function<bool(const x&)> callback) { subscribers.push_back(callback); } \
 									static void Dispatch(const x* e) { for (auto f : subscribers) if (f(*e)) break; } \

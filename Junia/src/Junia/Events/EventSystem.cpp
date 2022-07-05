@@ -3,7 +3,7 @@
 #include <Junia/Events/KeyboardEvents.hpp>
 #include <Junia/Events/MouseEvents.hpp>
 #include <Junia/Events/WindowEvents.hpp>
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 
 namespace Junia
 {
@@ -35,10 +35,10 @@ namespace Junia
 		}
 	}
 
-	#define JE_EVENT_DISPATCH_SWITCH_IMPL_Q(x)	case EventType:: ## x: \
+	#define JE_EVENT_DISPATCH_SWITCH_IMPL_Q(x)	case EventType::x: \
 												{ \
-													const x ## Event* ev = static_cast<const x ## Event*>(e); \
-													x ## Event::Dispatch(ev); \
+													const x##Event* ev = static_cast<const x##Event*>(e); \
+													x##Event::Dispatch(ev); \
 													break; \
 												}
 

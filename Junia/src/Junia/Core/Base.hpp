@@ -5,27 +5,27 @@
 #if defined(JELOG_MAX_TRACE)
 	#define JE_ONLY_JELOG_MAX_TRACE(f) f
 #else
-	#define JE_ONLY_JELOG_MAX_TRACE(f)
+	#define JE_ONLY_JELOG_MAX_TRACE(f) while(0)
 #endif
 #if defined(JELOG_MAX_TRACE) || defined(JELOG_MAX_INFO)
 	#define JE_ONLY_JELOG_MAX_INFO(f)  f
 #else
-	#define JE_ONLY_JELOG_MAX_INFO(f)
+	#define JE_ONLY_JELOG_MAX_INFO(f) while(0)
 #endif
 #if defined(JELOG_MAX_TRACE) || defined(JELOG_MAX_INFO) || defined(JELOG_MAX_WARN)
 	#define JE_ONLY_JELOG_MAX_WARN(f)  f
 #else
-	#define JE_ONLY_JELOG_MAX_WARN(f)
+	#define JE_ONLY_JELOG_MAX_WARN(f) while(0)
 #endif
 #if defined(JELOG_MAX_TRACE) || defined(JELOG_MAX_INFO) || defined(JELOG_MAX_WARN) || defined(JELOG_MAX_ERROR)
 	#define JE_ONLY_JELOG_MAX_ERROR(f) f
 #else
-	#define JE_ONLY_JELOG_MAX_ERROR(f)
+	#define JE_ONLY_JELOG_MAX_ERROR(f) while(0)
 #endif
 #if defined(JELOG_MAX_TRACE) || defined(JELOG_MAX_INFO) || defined(JELOG_MAX_WARN) || defined(JELOG_MAX_ERROR) || defined(JELOG_MAX_CRIT)
 	#define JE_ONLY_JELOG_MAX_CRIT(f)  f
 #else
-	#define JE_ONLY_JELOG_MAX_CRIT(f)
+	#define JE_ONLY_JELOG_MAX_CRIT(f) while(0)
 #endif
 
 namespace Junia

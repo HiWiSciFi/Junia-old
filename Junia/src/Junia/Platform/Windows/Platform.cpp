@@ -3,7 +3,7 @@
 #include "../Platform.hpp"
 
 #include <Windows.h>
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 #include <fstream>
 
 namespace Junia
@@ -23,8 +23,7 @@ namespace Junia
 
 		if (hfile == INVALID_HANDLE_VALUE)
 		{
-			if (GetLastError() == ERROR_FILE_NOT_FOUND)
-				JELOG_BASE_ERROR("File at \"%s\" does not exist!", path.c_str());
+			JELOG_BASE_ASSERT(GetLastError() != ERROR_FILE_NOT_FOUND, "File at \"%s\" does not exist!", path.c_str());
 			return "";
 		}
 

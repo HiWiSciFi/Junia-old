@@ -1,18 +1,18 @@
 #pragma once
 #include <string>
 #include <sstream>
-#include <Junia/Base.hpp>
+#include <Junia/Core/Base.hpp>
 
 namespace Junia
 {
 	class Logger
 	{
 	public:
-		Logger(std::string name);
+		explicit Logger(const std::string& name);
 
 		~Logger() = default;
 
-		static Ref<Logger> Create(std::string name = "Logger");
+		static Ref<Logger> Create(const std::string& name = "Logger");
 
 		void Trace    (const std::string fmt, ...) const;
 		void Info     (const std::string fmt, ...) const;

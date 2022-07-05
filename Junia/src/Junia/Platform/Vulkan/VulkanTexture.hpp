@@ -7,7 +7,7 @@ namespace Junia
 	class VulkanTexture2D : public Texture2D
 	{
 	public:
-		VulkanTexture2D(const std::string& path);
+		explicit VulkanTexture2D(const std::string& path);
 		~VulkanTexture2D();
 
 		uint32_t GetWidth() const override { return width; }

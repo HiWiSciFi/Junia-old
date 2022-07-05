@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include <Junia/Window.hpp>
-#include <Junia/LayerSystem.hpp>
+#include <Junia/Core/Window.hpp>
+#include <Junia/Core/LayerSystem.hpp>
 #include <Junia/Events/WindowEvents.hpp>
 #include <Junia/Core/Timestep.hpp>
 

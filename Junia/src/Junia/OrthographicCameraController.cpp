@@ -1,6 +1,6 @@
 #include "OrthographicCameraController.hpp"
-#include <Junia/Input.hpp>
-#include <Junia/Log.hpp>
+#include <Junia/Core/Input.hpp>
+#include <Junia/Core/Log.hpp>
 
 namespace Junia
 {

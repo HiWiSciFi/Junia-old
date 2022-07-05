@@ -2,7 +2,7 @@
 
 #include <string>
 #include <glm/glm.hpp>
-#include <Junia/Base.hpp>
+#include <Junia/Core/Base.hpp>
 #include <unordered_map>
 
 namespace Junia

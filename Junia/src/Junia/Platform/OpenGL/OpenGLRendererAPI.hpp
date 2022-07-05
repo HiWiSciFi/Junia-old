@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Junia/Renderer/RendererAPI.hpp>
-#include <Junia/Base.hpp>
+#include <Junia/Core/Base.hpp>
 
 namespace Junia
 {
