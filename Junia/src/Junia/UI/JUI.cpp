@@ -27,12 +27,12 @@ namespace Junia
 
 	}
 
-	void JUI::Text(const std::string& text)
+	void JUI::Text(const std::string&)
 	{
 
 	}
 
-	bool JUI::OnEvent(const Event* e)
+	bool JUI::OnEvent(const Event*)
 	{
 		return false;
 	}

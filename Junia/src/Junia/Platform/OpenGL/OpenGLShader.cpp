@@ -137,78 +137,78 @@ namespace Junia
 		rendererId = program;
 	}
 
-	void OpenGLShader::UploadUniformInt(const std::string name, int value)
+	void OpenGLShader::UploadUniformInt(const std::string vname, int value)
 	{
-		GLint location = glGetUniformLocation(rendererId, name.c_str());
+		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
 		{
-			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", name.c_str());
+			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", vname.c_str());
 			return;
 		}
 		glUniform1i(location, value);
 	}
 
-	void OpenGLShader::UploadUniformFloat(const std::string name, float value)
+	void OpenGLShader::UploadUniformFloat(const std::string vname, float value)
 	{
-		GLint location = glGetUniformLocation(rendererId, name.c_str());
+		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
 		{
-			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", name.c_str());
+			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", vname.c_str());
 			return;
 		}
 		glUniform1f(location, value);
 	}
 
-	void OpenGLShader::UploadUniformFloat2(const std::string name, const glm::vec2& values)
+	void OpenGLShader::UploadUniformFloat2(const std::string vname, const glm::vec2& values)
 	{
-		GLint location = glGetUniformLocation(rendererId, name.c_str());
+		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
 		{
-			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", name.c_str());
+			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", vname.c_str());
 			return;
 		}
 		glUniform2f(location, values.x, values.y);
 	}
 
-	void OpenGLShader::UploadUniformFloat3(const std::string name, const glm::vec3& values)
+	void OpenGLShader::UploadUniformFloat3(const std::string vname, const glm::vec3& values)
 	{
-		GLint location = glGetUniformLocation(rendererId, name.c_str());
+		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
 		{
-			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", name.c_str());
+			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", vname.c_str());
 			return;
 		}
 		glUniform3f(location, values.x, values.y, values.z);
 	}
 
-	void OpenGLShader::UploadUniformFloat4(const std::string name, const glm::vec4& values)
+	void OpenGLShader::UploadUniformFloat4(const std::string vname, const glm::vec4& values)
 	{
-		GLint location = glGetUniformLocation(rendererId, name.c_str());
+		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
 		{
-			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", name.c_str());
+			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", vname.c_str());
 			return;
 		}
 		glUniform4f(location, values.x, values.y, values.z, values.w);
 	}
 
-	void OpenGLShader::UploadUniformMat3(const std::string name, const glm::mat3& matrix)
+	void OpenGLShader::UploadUniformMat3(const std::string vname, const glm::mat3& matrix)
 	{
-		GLint location = glGetUniformLocation(rendererId, name.c_str());
+		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
 		{
-			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", name.c_str());
+			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", vname.c_str());
 			return;
 		}
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
-	void OpenGLShader::UploadUniformMat4(const std::string name, const glm::mat4& matrix)
+	void OpenGLShader::UploadUniformMat4(const std::string vname, const glm::mat4& matrix)
 	{
-		GLint location = glGetUniformLocation(rendererId, name.c_str());
+		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
 		{
-			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", name.c_str());
+			JELOG_BASE_ERROR("Invalid Uniform name! \"" JELOG_CSTR "\"", vname.c_str());
 			return;
 		}
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));

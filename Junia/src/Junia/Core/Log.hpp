@@ -57,12 +57,12 @@
 	#define JELOG_CRIT(...) while(0)
 #endif
 
-#ifndef NDEBUG
+#if defined(JE_CONFIG_DEBUG) || defined(JE_CONFIG_OPTIMIZED)
 	#define JELOG_BASE_ASSERT(x, msg, ...) if (!(x)) { JELOG_BASE_ERROR(msg, __VA_ARGS__); __debugbreak(); } while(0)
 	#define JELOG_ASSERT(x, msg, ...) if (!(x)) { JELOG_ERROR(msg, __VA_ARGS__); __debugbreak(); } while(0)
 #else
-	#define JELOG_BASE_ASSERT(x, msg, ...) while(0)
-	#define JELOG_ASSERT(x, msg, ...) while(0)
+	#define JELOG_BASE_ASSERT(x, msg, ...) if (!(x)) { JELOG_BASE_ERROR(msg, __VA_ARGS__); } while(0)
+	#define JELOG_ASSERT(x, msg, ...) if (!(x)) { JELOG_ERROR(msg, __VA_ARGS__); } while(0)
 #endif
 
 namespace Junia {
@@ -83,16 +83,16 @@ namespace Junia {
 		template<typename... Args> static void JuniaLogCrit  (const char* file, const size_t line, const char* str, Args... args) {       juniaLogger->Critical ("[at " + std::string(file) + ":" + std::to_string(line) + "] " + std::string(str), args...); }
 		template<typename... Args> static void LogCrit       (const char* file, const size_t line, const char* str, Args... args) { applicationLogger->Critical ("[at " + std::string(file) + ":" + std::to_string(line) + "] " + std::string(str), args...); }
 #else
-		template<typename... Args> static void JuniaLogTrace (const char* file, const size_t line, const char* str, Args... args) {           juniaLogger->Trace(str, args...); }
-		template<typename... Args> static void LogTrace      (const char* file, const size_t line, const char* str, Args... args) {     applicationLogger->Trace(str, args...); }
-		template<typename... Args> static void JuniaLogInfo  (const char* file, const size_t line, const char* str, Args... args) {            juniaLogger->Info(str, args...); }
-		template<typename... Args> static void LogInfo       (const char* file, const size_t line, const char* str, Args... args) {      applicationLogger->Info(str, args...); }
-		template<typename... Args> static void JuniaLogWarn  (const char* file, const size_t line, const char* str, Args... args) {            juniaLogger->Warn(str, args...); }
-		template<typename... Args> static void LogWarn       (const char* file, const size_t line, const char* str, Args... args) {      applicationLogger->Warn(str, args...); }
-		template<typename... Args> static void JuniaLogError (const char* file, const size_t line, const char* str, Args... args) {           juniaLogger->Error(str, args...); }
-		template<typename... Args> static void LogError      (const char* file, const size_t line, const char* str, Args... args) {     applicationLogger->Error(str, args...); }
-		template<typename... Args> static void JuniaLogCrit  (const char* file, const size_t line, const char* str, Args... args) {        juniaLogger->Critical(str, args...); }
-		template<typename... Args> static void LogCrit       (const char* file, const size_t line, const char* str, Args... args) {  applicationLogger->Critical(str, args...); }
+		template<typename... Args> static void JuniaLogTrace (const char*, const size_t, const char* str, Args... args) {           juniaLogger->Trace(str, args...); }
+		template<typename... Args> static void LogTrace      (const char*, const size_t, const char* str, Args... args) {     applicationLogger->Trace(str, args...); }
+		template<typename... Args> static void JuniaLogInfo  (const char*, const size_t, const char* str, Args... args) {            juniaLogger->Info(str, args...); }
+		template<typename... Args> static void LogInfo       (const char*, const size_t, const char* str, Args... args) {      applicationLogger->Info(str, args...); }
+		template<typename... Args> static void JuniaLogWarn  (const char*, const size_t, const char* str, Args... args) {            juniaLogger->Warn(str, args...); }
+		template<typename... Args> static void LogWarn       (const char*, const size_t, const char* str, Args... args) {      applicationLogger->Warn(str, args...); }
+		template<typename... Args> static void JuniaLogError (const char*, const size_t, const char* str, Args... args) {           juniaLogger->Error(str, args...); }
+		template<typename... Args> static void LogError      (const char*, const size_t, const char* str, Args... args) {     applicationLogger->Error(str, args...); }
+		template<typename... Args> static void JuniaLogCrit  (const char*, const size_t, const char* str, Args... args) {        juniaLogger->Critical(str, args...); }
+		template<typename... Args> static void LogCrit       (const char*, const size_t, const char* str, Args... args) {  applicationLogger->Critical(str, args...); }
 #endif
 
 	private:

@@ -25,14 +25,14 @@ public:
 			Junia::VertexBuffer::Create(vertices, sizeof(vertices))
 		);
 
-		Junia::BufferLayout layout = {
+		Junia::BufferLayout layout {
 			{ Junia::ShaderDataType::Float3, "inPosition" },
 			{ Junia::ShaderDataType::Float4, "inColor"    }
 		};
 		vertexBuffer->SetLayout(layout);
 		vertexArray->AddVertexBuffer(vertexBuffer);
 
-		uint32_t indices[3] = { 0, 1, 2 };
+		uint32_t indices[3] { 0, 1, 2 };
 		Junia::Ref<Junia::IndexBuffer> indexBuffer = Junia::Ref<Junia::IndexBuffer>(
 			Junia::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t))
 		);

@@ -2,7 +2,7 @@
 
 #ifdef JE_TARGETPLATFORM_GLFW
 
-#include <Junia/Input.hpp>
+#include <Junia/Core/Input.hpp>
 
 namespace Junia
 {
@@ -11,7 +11,7 @@ namespace Junia
 	protected:
 		bool IsKeyDownImplementation(int keycode) override;
 		bool IsMouseButtonDownImplementation(int button) override;
-		std::pair<float, float> GetMousePositionImplementation() override;
+		std::pair<int, int> GetMousePositionImplementation() override;
 	};
 }
 

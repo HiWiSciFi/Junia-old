@@ -2,7 +2,7 @@
 
 #include "GlfwWindow.hpp"
 
-#include <Junia/Log.hpp>
+#include <Junia/Core/Log.hpp>
 #include <Junia/Events/EventSystem.hpp>
 #include <Junia/Events/JoystickEvents.hpp>
 #include <Junia/Events/KeyboardEvents.hpp>
@@ -37,7 +37,7 @@ namespace Junia
 			glfw_initialized = true;
 		}
 
-		window = glfwCreateWindow(static_cast<int>(properties.width), static_cast<int>(properties.height), data.title.c_str(), nullptr, nullptr);
+		window = glfwCreateWindow(static_cast<int>(properties.width), static_cast<int>(properties.height), "GLFW Window"/*data.title.c_str()*/, nullptr, nullptr);
 
 		context = new OpenGLRenderContext(this);
 		context->Init();

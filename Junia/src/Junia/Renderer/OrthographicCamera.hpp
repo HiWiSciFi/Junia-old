@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Junia
 {
@@ -24,8 +25,8 @@ namespace Junia
 	private:
 		void RecalculateViewMatrix();
 
-		glm::mat4 projectionMatrix = glm::mat4(1.0f);
 		glm::mat4 viewMatrix = glm::mat4(1.0f);
+		glm::mat4 projectionMatrix = glm::ortho(1.0f, 1.0f, -1.0f, -1.0f, -1.0f, 1.0f);
 		glm::mat4 viewProjectionMatrix = glm::mat4(1.0f);
 
 		glm::vec3 position = { 0.0f, 0.0f, 0.0f };

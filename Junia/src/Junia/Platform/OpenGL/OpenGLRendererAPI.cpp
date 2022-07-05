@@ -5,7 +5,7 @@
 
 namespace Junia
 {
-	void GLAPIENTRY OpenGLMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+	void GLAPIENTRY OpenGLMessageCallback(GLenum, GLenum, GLuint, GLenum severity, GLsizei, const GLchar* message, const void*)
 	{
 		if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) JELOG_BASE_TRACE("OpenGL: " JELOG_CSTR, message);
 		else if (severity == GL_DEBUG_SEVERITY_LOW) JELOG_BASE_INFO("OpenGL: " JELOG_CSTR, message);

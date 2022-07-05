@@ -5,7 +5,7 @@
 namespace Junia
 {
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
-		: aspectRatio(aspectRatio), camera(-aspectRatio * zoomLevel, aspectRatio* zoomLevel, -zoomLevel, zoomLevel), rotation(rotation)
+		: rotation(rotation), aspectRatio(aspectRatio), camera(-aspectRatio * zoomLevel, aspectRatio* zoomLevel, -zoomLevel, zoomLevel)
 	{
 		MouseScrollEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(MouseScrollEvent, OnMouseScrolled));
 		WindowResizeEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(WindowResizeEvent, OnWindowResized));

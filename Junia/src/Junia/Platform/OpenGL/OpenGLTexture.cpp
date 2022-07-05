@@ -12,8 +12,8 @@ namespace Junia
 		stbi_set_flip_vertically_on_load(1);
 		stbi_uc* data = stbi_load(path.c_str(), &w, &h, &channels, 0);
 		if (data == NULL) { JELOG_BASE_ERROR("Image file could not be loaded!"); return; }
-		width = w;
-		height = h;
+		width = static_cast<uint32_t>(w);
+		height = static_cast<uint32_t>(h);
 
 		GLenum glFormat = 0, dataFormat = 0;
 		switch (channels)
@@ -34,12 +34,12 @@ namespace Junia
 		}
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &rendererId);
-		glTextureStorage2D(rendererId, 1, glFormat, width, height);
+		glTextureStorage2D(rendererId, 1, glFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
 
 		glTextureParameteri(rendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(rendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glTextureSubImage2D(rendererId, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(rendererId, 0, 0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height), dataFormat, GL_UNSIGNED_BYTE, data);
 
 		stbi_image_free(data);
 	}

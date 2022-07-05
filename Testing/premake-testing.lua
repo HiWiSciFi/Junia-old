@@ -35,11 +35,10 @@ project "Testing"
 	filter "system:windows"
 		systemversion "latest"
 		defines {
-			"JE_TARGETPLATFORM_WINDOWS"
+			"JE_TARGETPLATFORM_GLFW"
 		}
 
 		filter "configurations:Debug"
-		runtime "Debug"
 		symbols "On"
 		optimize "Off"
 		defines {
@@ -48,7 +47,6 @@ project "Testing"
 		}
 
 	filter "configurations:Optimized"
-		runtime "Release"
 		symbols "On"
 		optimize "Off"
 		defines {
@@ -57,7 +55,6 @@ project "Testing"
 		}
 
 	filter "configurations:Release"
-		runtime "Release"
 		symbols "Off"
 		optimize "Off"
 		defines {

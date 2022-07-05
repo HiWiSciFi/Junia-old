@@ -15,7 +15,7 @@ namespace Junia
 		virtual void OnEnable() { }
 		virtual void OnDisable() { }
 		virtual void OnUpdate() { }
-		virtual void OnUpdate(Timestep deltaTime) { }
+		virtual void OnUpdate(Timestep) { }
 
 		[[nodiscard]] std::string GetName() const { return name; }
 

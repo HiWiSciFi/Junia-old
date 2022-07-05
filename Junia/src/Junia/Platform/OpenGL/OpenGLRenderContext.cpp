@@ -23,9 +23,23 @@ namespace Junia
 		static bool gladInitialized = false;
 		if (!gladInitialized)
 		{
-			HDC dc = GetDeviceContext();
+			HDC dc = GetDC(reinterpret_cast<HWND>(window->GetNativeWindow()));
+			if (dc == NULL)
+			{
+				JELOG_BASE_CRIT("Could not retrieve DeviceContext!");
+				throw std::runtime_error("Could not retrieve DeviceContext!");
+			}
 			HGLRC dummyctx = wglCreateContext(dc);
-			wglMakeCurrent(dc, dummyctx);
+			if (dummyctx == NULL)
+			{
+				JELOG_BASE_CRIT("OpenGL Context could not be created!");
+				throw std::runtime_error("OpenGL Context could not be created!");
+			}
+			if (wglMakeCurrent(dc, dummyctx) == FALSE)
+			{
+				JELOG_BASE_CRIT("OpenGL Context could not be assigned!");
+				throw std::runtime_error("OpenGL Context could not be assigned!");
+			}
 
 			if (!gladLoadGL())
 			{
@@ -51,8 +65,22 @@ namespace Junia
 	void OpenGLRenderContext::Init()
 	{
 		HDC dc = GetDeviceContext();
+		if (dc == NULL)
+		{
+			JELOG_BASE_CRIT("Could not retrieve DeviceContext!");
+			throw std::runtime_error("Could not retrieve DeviceContext!");
+		}
 		ctx = wglCreateContext(dc);
-		wglMakeCurrent(dc, ctx);
+		if (ctx == NULL)
+		{
+			JELOG_BASE_CRIT("OpenGL Context could not be created!");
+			throw std::runtime_error("OpenGL Context could not be created!");
+		}
+		if (wglMakeCurrent(dc, ctx) == FALSE)
+		{
+			JELOG_BASE_CRIT("OpenGL Context could not be assigned!");
+			throw std::runtime_error("OpenGL Context could not be assigned!");
+		}
 
 		JELOG_BASE_INFO("OpenGL Info:");
 		JELOG_BASE_INFO("  Vendor:   " JELOG_CSTR, glGetString(GL_VENDOR));
@@ -62,7 +90,11 @@ namespace Junia
 
 	void OpenGLRenderContext::ContextSwapBuffers()
 	{
-		SwapBuffers(GetDeviceContext());
+		if (SwapBuffers(GetDeviceContext()) == FALSE)
+		{
+			JELOG_BASE_CRIT("Failed to swap buffers!");
+			throw std::runtime_error("Failed to swap buffers!");
+		}
 	}
 
 	HDC OpenGLRenderContext::GetDeviceContext() const

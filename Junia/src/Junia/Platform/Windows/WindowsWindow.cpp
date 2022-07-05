@@ -129,24 +129,24 @@ namespace Junia
 	WindowsWindow::WindowsWindow(const WindowProperties& properties)
 	{
 		static bool isDpiAwarenessSet = SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+		JELOG_BASE_ASSERT(isDpiAwarenessSet, "DPI Awareness is not set! Defaulted to 96 DPI");
 
 		std::wstring titleWstr = std::wstring(properties.title.begin(), properties.title.end());
 		const wchar_t* className = titleWstr.c_str();
 
 		WNDCLASSEX wndclass{ };
 		wndclass.cbSize = sizeof(WNDCLASSEX);
-		wndclass.style = 0;
 		wndclass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 		wndclass.lpfnWndProc = WndProc;
 		wndclass.cbClsExtra = 0;
 		wndclass.cbWndExtra = 0;
 		wndclass.hInstance = GetModuleHandle(0);
 		wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-		wndclass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 		wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wndclass.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
 		wndclass.lpszMenuName = 0;
 		wndclass.lpszClassName = className;
+		wndclass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
 		if (!RegisterClassEx(&wndclass))
 		{
@@ -163,28 +163,56 @@ namespace Junia
 			throw std::runtime_error("Could not create window!");
 		}
 		hdc = GetDC(window);
+		if (hdc == NULL)
+		{
+			JELOG_BASE_CRIT("Could not retrieve DeviceContext!");
+			throw std::runtime_error("Could not retrieve DeviceContext!");
+		}
 
 		PIXELFORMATDESCRIPTOR pfd{ };
 		pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-		pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER | PFD_DRAW_TO_WINDOW;
+		pfd.nVersion = 1;
+		pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+		pfd.iPixelType = PFD_TYPE_RGBA;
 		pfd.cColorBits = 32;
+		pfd.cRedBits = 0;
+		pfd.cRedShift = 0;
+		pfd.cGreenBits = 0;
+		pfd.cGreenShift = 0;
+		pfd.cBlueBits = 0;
+		pfd.cBlueShift = 0;
+		pfd.cAlphaBits = 0;
+		pfd.cAlphaShift = 0;
+		pfd.cAccumBits = 0;
+		pfd.cAccumRedBits = 0;
+		pfd.cAccumGreenBits = 0;
+		pfd.cAccumBlueBits = 0;
+		pfd.cAccumAlphaBits = 0;
 		pfd.cDepthBits = 24;
 		pfd.cStencilBits = 8;
+		pfd.cAuxBuffers = 0;
 		pfd.iLayerType = PFD_MAIN_PLANE;
+		pfd.bReserved = 0;
+		pfd.dwLayerMask = 0;
+		pfd.dwVisibleMask = 0;
+		pfd.dwDamageMask = 0;
 
 		int format = ChoosePixelFormat(hdc, &pfd);
 		if (format == 0)
 		{
-			JELOG_BASE_CRIT("Could not find compatible pixel format!");
+			JELOG_BASE_CRIT("Could not find compatible pixel format! Win32 Error: " JELOG_CSTR, GetLastError());
 			throw std::runtime_error("Could not find compatible pixel format!");
 		}
-		SetPixelFormat(hdc, format, &pfd);
+		if (SetPixelFormat(hdc, format, &pfd) == FALSE)
+		{
+			JELOG_BASE_CRIT("Could not set pixelFormat! Win32 Error: " JELOG_CSTR, GetLastError());
+			throw std::runtime_error("Could not set pixelFormat!");
+		}
 
 		context = new OpenGLRenderContext(this);
 		context->Init();
 
 		ShowWindow(window, SW_SHOWDEFAULT);
-		UpdateWindow(window);
 
 		windowMap[window] = this;
 	}
@@ -243,7 +271,7 @@ namespace Junia
 		context->ContextSwapBuffers();
 	}
 
-	void WindowsWindow::SetVSync(bool enable)
+	void WindowsWindow::SetVSync(bool)
 	{
 
 	}

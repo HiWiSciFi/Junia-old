@@ -48,12 +48,12 @@ namespace Junia
 	{
 		glBindVertexArray(rendererId);
 		vertexBuffer->Bind();
-		for (int i = 0; i < vertexBuffer->GetLayout().GetElements().size(); i++)
+		for (size_t i = 0; i < vertexBuffer->GetLayout().GetElements().size(); i++)
 		{
-			const auto& element = vertexBuffer->GetLayout().GetElements()[i];
-			glEnableVertexAttribArray(i);
+			const Junia::BufferElement& element = vertexBuffer->GetLayout().GetElements()[i];
+			glEnableVertexAttribArray(static_cast<GLuint>(i));
 			glVertexAttribPointer(
-				i,
+				static_cast<GLuint>(i),
 				element.GetComponentCount(),
 				ShaderDataTypeToOpenGLBaseType(element.type),
 				element.normalized ? GL_TRUE : GL_FALSE,

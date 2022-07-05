@@ -26,14 +26,14 @@ namespace Junia
 		static Application& Get() { return *app; }
 
 	private:
-		bool OnWindowClosed(const WindowCloseEvent& e);
+		bool OnWindowClosed(const WindowCloseEvent&);
 		bool OnWindowResize(const WindowResizeEvent& e);
 
 		std::unique_ptr<Window> window;
 		LayerSystem layerSystem = { };
 		bool running = true;
-		float lastFrameTime = 0.0f;
 		bool minimized = false;
+		float lastFrameTime = 0.0f;
 
 		static Application* app;
 	};

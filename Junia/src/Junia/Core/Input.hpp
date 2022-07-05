@@ -8,6 +8,7 @@ namespace Junia
 	class Input
 	{
 	public:
+		virtual ~Input() = default;
 		static bool IsKeyDown(const int keycode) { return instance->IsKeyDownImplementation(keycode); }
 		static bool IsKeyUp(const int keycode) { return !IsKeyDown(keycode); }
 		static bool IsMouseButtonDown(const int button) { return instance->IsMouseButtonDownImplementation(button); }

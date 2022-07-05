@@ -3,7 +3,7 @@
 #include "GlfwInput.hpp"
 
 #include <GLFW/glfw3.h>
-#include <Junia/Application.hpp>
+#include <Junia/Core/Application.hpp>
 
 namespace Junia
 {
@@ -23,12 +23,12 @@ namespace Junia
 		return state == GLFW_PRESS;
 	}
 
-	std::pair<float, float> GlfwInput::GetMousePositionImplementation()
+	std::pair<int, int> GlfwInput::GetMousePositionImplementation()
 	{
 		const auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		double x, y;
 		glfwGetCursorPos(window, &x, &y);
-		return { static_cast<float>(x), static_cast<float>(y) };
+		return { static_cast<int>(x), static_cast<int>(y) };
 	}
 }
 

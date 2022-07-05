@@ -49,7 +49,7 @@ namespace Junia
 		}
 	}
 
-	bool Application::OnWindowClosed(const WindowCloseEvent& e)
+	bool Application::OnWindowClosed(const WindowCloseEvent&)
 	{
 		layerSystem.~LayerSystem();
 		running = false;
@@ -63,7 +63,7 @@ namespace Junia
 			minimized = true;
 		}
 		minimized = false;
-		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+		Renderer::OnWindowResize(static_cast<uint32_t>(e.GetWidth()), static_cast<uint32_t>(e.GetHeight()));
 		return false;
 	}
 }
