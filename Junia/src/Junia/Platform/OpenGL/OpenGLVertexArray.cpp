@@ -44,7 +44,7 @@ namespace Junia
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
+	void OpenGLVertexArray::AddVertexBuffer(Ref<VertexBuffer>& vertexBuffer)
 	{
 		glBindVertexArray(rendererId);
 		vertexBuffer->Bind();
@@ -52,13 +52,28 @@ namespace Junia
 		{
 			const Junia::BufferElement& element = vertexBuffer->GetLayout().GetElements()[i];
 			glEnableVertexAttribArray(static_cast<GLuint>(i));
+			// This debugging remnant will stay here forever as a reminder of the lost week
+			/*JELOG_BASE_ERROR(
+				"Pointers: %u : %p : %p",
+				element.offset,
+				*((const void**)&element.offset),
+				reinterpret_cast<const void*>(static_cast<unsigned long long>(element.offset))
+			);*/
 			glVertexAttribPointer(
 				static_cast<GLuint>(i),
-				element.GetComponentCount(),
+				static_cast<GLint>(element.GetComponentCount()),
 				ShaderDataTypeToOpenGLBaseType(element.type),
 				element.normalized ? GL_TRUE : GL_FALSE,
-				vertexBuffer->GetLayout().GetStride(),
-				*((const void**)&element.offset)
+				static_cast<GLsizei>(vertexBuffer->GetLayout().GetStride()),
+				// wtf?????
+				// fixes no rendered output...
+				// idk why
+				// please send help
+				// why does this:
+				//*((const void**)&element.offset)
+				// not work but this does:
+				reinterpret_cast<const void*>(static_cast<unsigned long long>(element.offset))
+				// i am so confused...
 			);
 		}
 		vertexBuffers.push_back(vertexBuffer);

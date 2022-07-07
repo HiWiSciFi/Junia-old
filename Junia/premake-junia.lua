@@ -61,24 +61,18 @@ project "Junia"
 		}
 
 	filter "configurations:Debug"
-		symbols "On"
-		optimize "Off"
 		defines {
 			"JE_CONFIG_DEBUG",
 			"JELOG_MAX_TRACE"
 		}
 
 	filter "configurations:Optimized"
-		symbols "On"
-		optimize "Off"
 		defines {
 			"JE_CONFIG_OPTIMIZED",
 			"JELOG_MAX_WARN"
 		}
 
 	filter "configurations:Release"
-		symbols "Off"
-		optimize "Off"
 		defines {
 			"JE_CONFIG_RELEASE",
 			"JELOG_MAX_ERROR"

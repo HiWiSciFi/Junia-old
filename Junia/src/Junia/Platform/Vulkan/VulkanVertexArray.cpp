@@ -10,7 +10,7 @@ namespace Junia
 	{
 	}
 
-	void VulkanVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
+	void VulkanVertexArray::AddVertexBuffer(Ref<VertexBuffer>& vertexBuffer)
 	{
 	}
 

@@ -21,7 +21,7 @@ public:
 			 0.0f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f
 		};
 
-		const auto vertexBuffer = Junia::Ref<Junia::VertexBuffer>(
+		auto vertexBuffer = Junia::Ref<Junia::VertexBuffer>(
 			Junia::VertexBuffer::Create(vertices, sizeof(vertices))
 		);
 
@@ -46,7 +46,7 @@ public:
 		};
 
 		squareVertexArray.reset(Junia::VertexArray::Create());
-		const auto squareVertexBuffer = Junia::Ref<Junia::VertexBuffer>(
+		auto squareVertexBuffer = Junia::Ref<Junia::VertexBuffer>(
 			Junia::VertexBuffer::Create(squareVertices, sizeof(squareVertices))
 		);
 
@@ -138,7 +138,8 @@ public:
 		texture = Junia::Texture2D::Create("assets/textures/Checkerboard.png");
 		sdLogoTexture = Junia::Texture2D::Create("assets/textures/SDLogo.png");
 
-		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->Bind();
+		textureShader->Bind();
+		//dynamic_cast<Junia::OpenGLShader>(*textureShader.get()).UploadUniformInt("u_Texture", 0);
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 
 		Junia::WindowResizeEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(Junia::WindowResizeEvent, OnWindowResize));
@@ -166,7 +167,8 @@ public:
 
 		const glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		std::dynamic_pointer_cast<Junia::OpenGLShader>(shader2)->Bind();
+		shader2->Bind();
+		//dynamic_cast<Junia::OpenGLShader>(*shader2.get()).UploadUniformFloat3("u_Color", squareColor);
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(shader2)->UploadUniformFloat3("u_Color", squareColor);
 
 		for (int y = 0; y < 20; y++)

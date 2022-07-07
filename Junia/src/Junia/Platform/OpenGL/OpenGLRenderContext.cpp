@@ -24,13 +24,13 @@ namespace Junia
 		if (!gladInitialized)
 		{
 			HDC dc = GetDC(reinterpret_cast<HWND>(window->GetNativeWindow()));
-			if (dc == NULL)
+			if (dc == nullptr)
 			{
 				JELOG_BASE_CRIT("Could not retrieve DeviceContext!");
 				throw std::runtime_error("Could not retrieve DeviceContext!");
 			}
 			HGLRC dummyctx = wglCreateContext(dc);
-			if (dummyctx == NULL)
+			if (dummyctx == nullptr)
 			{
 				JELOG_BASE_CRIT("OpenGL Context could not be created!");
 				throw std::runtime_error("OpenGL Context could not be created!");
@@ -48,7 +48,7 @@ namespace Junia
 			}
 			gladInitialized = true;
 
-			wglMakeCurrent(dc, NULL);
+			wglMakeCurrent(dc, nullptr);
 			wglDeleteContext(dummyctx);
 		}
 	}
@@ -57,7 +57,7 @@ namespace Junia
 	{
 		if (ctx != nullptr)
 		{
-			try { wglMakeCurrent(GetDeviceContext(), NULL); } catch (std::exception e) { }
+			try { wglMakeCurrent(GetDeviceContext(), nullptr); } catch (std::exception e) { }
 			wglDeleteContext(ctx);
 		}
 	}
@@ -65,13 +65,13 @@ namespace Junia
 	void OpenGLRenderContext::Init()
 	{
 		HDC dc = GetDeviceContext();
-		if (dc == NULL)
+		if (dc == nullptr)
 		{
 			JELOG_BASE_CRIT("Could not retrieve DeviceContext!");
 			throw std::runtime_error("Could not retrieve DeviceContext!");
 		}
 		ctx = wglCreateContext(dc);
-		if (ctx == NULL)
+		if (ctx == nullptr)
 		{
 			JELOG_BASE_CRIT("OpenGL Context could not be created!");
 			throw std::runtime_error("OpenGL Context could not be created!");
@@ -99,7 +99,7 @@ namespace Junia
 
 	HDC OpenGLRenderContext::GetDeviceContext() const
 	{
-		return GetDC(static_cast<HWND>(window->GetNativeWindow()));
+		return GetDC(reinterpret_cast<HWND>(window->GetNativeWindow()));
 	}
 	#endif
 
@@ -120,7 +120,7 @@ namespace Junia
 
 	void OpenGLRenderContext::Init()
 	{
-		glfwMakeContextCurrent(static_cast<GLFWwindow*>(window->GetNativeWindow()));
+		glfwMakeContextCurrent(reinterpret_cast<GLFWwindow*>(window->GetNativeWindow()));
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		if (!status) JELOG_BASE_CRIT("failed to initialize glad!");
 
@@ -132,7 +132,7 @@ namespace Junia
 
 	void OpenGLRenderContext::ContextSwapBuffers()
 	{
-		glfwSwapBuffers(static_cast<GLFWwindow*>(window->GetNativeWindow()));
+		glfwSwapBuffers(reinterpret_cast<GLFWwindow*>(window->GetNativeWindow()));
 	}
 	#endif
 }

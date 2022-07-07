@@ -278,7 +278,7 @@ namespace Junia
 	{
 		POINT pos;
 		GetCursorPos(&pos);
-		return std::pair<int, int>(static_cast<int>(pos.x), static_cast<int>(pos.y));
+		return { static_cast<int>(pos.x), static_cast<int>(pos.y) };
 	}
 }
 

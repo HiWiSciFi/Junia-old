@@ -48,21 +48,6 @@ project "GLFW"
 		defines {
 			"_GLFW_WIN32"
 		}
-
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "On"
-		optimize "Off"
-
-	filter "configurations:Optimized"
-		runtime "Release"
-		symbols "On"
-		optimize "On"
-
-	filter "configurations:Release"
-		runtime "Release"
-		symbols "Off"
-		optimize "On"
 	
 	filter {}
 		Dependency["GLFW"] = {}

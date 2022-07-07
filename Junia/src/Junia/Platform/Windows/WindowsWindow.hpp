@@ -38,6 +38,8 @@ namespace Junia
 		bool resizingWindowTop = false;
 		bool resizingWindowBottom = false;
 
+		static std::unordered_map<HWND, WindowsWindow*> windowMap;
+
 	private:
 		virtual void Close();
 
@@ -59,8 +61,6 @@ namespace Junia
 		};
 
 		WindowData data { };
-
-		static std::unordered_map<HWND, WindowsWindow*> windowMap;
 	};
 }
 

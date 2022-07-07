@@ -16,21 +16,6 @@ project "glad"
 		"%{prj.name}/include"
 	}
 
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "On"
-		optimize "Off"
-
-	filter "configurations:Optimized"
-		runtime "Release"
-		symbols "On"
-		optimize "On"
-
-	filter "configurations:Release"
-		runtime "Release"
-		symbols "Off"
-		optimize "On"
-
 	filter {}
 		Dependency["glad"] = {}
 		Dependency["glad"]["include"] = depsloc .. "glad/include"

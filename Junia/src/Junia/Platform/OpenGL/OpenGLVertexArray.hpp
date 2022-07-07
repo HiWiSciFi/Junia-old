@@ -13,7 +13,7 @@ namespace Junia
 		void Bind() const override;
 		void Unbind() const override;
 
-		void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
+		void AddVertexBuffer(Ref<VertexBuffer>& vertexBuffer) override;
 		void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
 
 		[[nodiscard]] const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override { return vertexBuffers; }

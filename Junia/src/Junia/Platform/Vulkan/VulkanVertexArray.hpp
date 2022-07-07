@@ -9,13 +9,13 @@ namespace Junia
 	public:
 		virtual ~VulkanVertexArray() { }
 
-		virtual void Bind() const override;
-		virtual void Unbind() const override;
+		void Bind() const override;
+		void Unbind() const override;
 
-		virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
-		virtual void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
+		void AddVertexBuffer(Ref<VertexBuffer>& vertexBuffer) override;
+		void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
 
-		virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override { return *(new std::vector<Ref<VertexBuffer>>());  }
-		virtual const Ref<IndexBuffer>& GetIndexBuffer() const override { return *(new Ref<IndexBuffer>());  }
+		[[nodiscard]] const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override { return *(new std::vector<Ref<VertexBuffer>>());  }
+		[[nodiscard]] const Ref<IndexBuffer>& GetIndexBuffer() const override { return *(new Ref<IndexBuffer>());  }
 	};
 }

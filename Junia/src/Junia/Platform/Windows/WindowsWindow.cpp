@@ -26,6 +26,8 @@ namespace Junia
 
 	LRESULT CALLBACK WndProc(HWND window, unsigned int msg, WPARAM wp, LPARAM lp)
 	{
+		 if (WindowsWindow::windowMap.find(window) == WindowsWindow::windowMap.end())
+			return DefWindowProc(window, msg, wp, lp);
 		// Helpful webpage: https://wiki.winehq.org/List_Of_Windows_Messages
 		switch (msg)
 		{
@@ -35,20 +37,6 @@ namespace Junia
 			wp &= 0xFFF0;
 			switch (wp)
 			{
-			/*case SC_DEFAULT: break;
-			case SC_CONTEXTHELP: break;
-			case SC_HOTKEY: break;
-			case SCF_ISSECURE: break;
-			case SC_KEYMENU: break;
-			case SC_MONITORPOWER: break;
-			case SC_MOUSEMENU: break;
-			case SC_NEXTWINDOW: break;
-			case SC_PREVWINDOW: break;
-			case SC_SCREENSAVE: break;
-			case SC_TASKLIST: break;
-			case SC_VSCROLL: break;
-			case SC_HSCROLL: break;*/
-
 			case SC_CLOSE: EventSystem::Trigger(new WindowCloseEvent()); break;
 			case SC_MAXIMIZE: ShowWindow(window, SW_MAXIMIZE); break;
 			case SC_MINIMIZE: ShowWindow(window, SW_MINIMIZE); break;
@@ -70,9 +58,9 @@ namespace Junia
 				wnd->resizingWindow = true;
 				RECT rect;
 				GetWindowRect(window, &rect);
-				int mouseX = Input::GetMouseX();
-				int mouseY = Input::GetMouseY();
-				int offset = static_cast<int>(GetDpiForSystem() / 4.0f);
+				const int mouseX = Input::GetMouseX();
+				const int mouseY = Input::GetMouseY();
+				const int offset = static_cast<int>(static_cast<float>(GetDpiForSystem()) / 4.0f);
 				wnd->resizingWindowLeft = mouseX < rect.left + offset && mouseX > rect.left - offset;
 				wnd->resizingWindowRight = !wnd->resizingWindowLeft && mouseX < rect.right + offset && mouseX > rect.right - offset;
 				wnd->resizingWindowBottom = mouseY < rect.bottom + offset && mouseY > rect.bottom - offset;
@@ -89,15 +77,17 @@ namespace Junia
 		case WM_DESTROY: EventSystem::Trigger(new WindowCloseEvent()); return 0L;
 
 		case WM_SIZE:
+		{
 			RECT rect;
 			GetWindowRect(window, &rect);
 			EventSystem::Trigger(new WindowResizeEvent(rect.right - rect.left, rect.bottom - rect.top));
 			EventSystem::Trigger(new WindowMaximizeEvent(wp == 2));
 			return 0L;
+		}
 		case WM_MOVE: EventSystem::Trigger(new WindowMoveEvent(GET_X_LPARAM(lp), GET_Y_LPARAM(lp))); return 0L;
 		case WM_SIZING:
 		{
-			RECT* rect = reinterpret_cast<RECT*>(lp);
+			const RECT* rect = reinterpret_cast<RECT*>(lp);
 			EventSystem::Trigger(new WindowResizeEvent(rect->right - rect->left, rect->bottom - rect->top));
 			return 0L;
 		}
@@ -131,7 +121,7 @@ namespace Junia
 		static bool isDpiAwarenessSet = SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
 		JELOG_BASE_ASSERT(isDpiAwarenessSet, "DPI Awareness is not set! Defaulted to 96 DPI");
 
-		std::wstring titleWstr = std::wstring(properties.title.begin(), properties.title.end());
+		const auto titleWstr = std::wstring(properties.title.begin(), properties.title.end());
 		const wchar_t* className = titleWstr.c_str();
 
 		WNDCLASSEX wndclass{ };
@@ -140,13 +130,13 @@ namespace Junia
 		wndclass.lpfnWndProc = WndProc;
 		wndclass.cbClsExtra = 0;
 		wndclass.cbWndExtra = 0;
-		wndclass.hInstance = GetModuleHandle(0);
-		wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-		wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
-		wndclass.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
-		wndclass.lpszMenuName = 0;
+		wndclass.hInstance = GetModuleHandle(nullptr);
+		wndclass.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+		wndclass.hCursor = LoadCursor(nullptr, IDC_ARROW);
+		wndclass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BTNFACE + 1);
+		wndclass.lpszMenuName = nullptr;
 		wndclass.lpszClassName = className;
-		wndclass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+		wndclass.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 
 		if (!RegisterClassEx(&wndclass))
 		{
@@ -163,7 +153,7 @@ namespace Junia
 			throw std::runtime_error("Could not create window!");
 		}
 		hdc = GetDC(window);
-		if (hdc == NULL)
+		if (hdc == nullptr)
 		{
 			JELOG_BASE_CRIT("Could not retrieve DeviceContext!");
 			throw std::runtime_error("Could not retrieve DeviceContext!");
@@ -175,29 +165,11 @@ namespace Junia
 		pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
 		pfd.iPixelType = PFD_TYPE_RGBA;
 		pfd.cColorBits = 32;
-		pfd.cRedBits = 0;
-		pfd.cRedShift = 0;
-		pfd.cGreenBits = 0;
-		pfd.cGreenShift = 0;
-		pfd.cBlueBits = 0;
-		pfd.cBlueShift = 0;
-		pfd.cAlphaBits = 0;
-		pfd.cAlphaShift = 0;
-		pfd.cAccumBits = 0;
-		pfd.cAccumRedBits = 0;
-		pfd.cAccumGreenBits = 0;
-		pfd.cAccumBlueBits = 0;
-		pfd.cAccumAlphaBits = 0;
 		pfd.cDepthBits = 24;
 		pfd.cStencilBits = 8;
-		pfd.cAuxBuffers = 0;
 		pfd.iLayerType = PFD_MAIN_PLANE;
-		pfd.bReserved = 0;
-		pfd.dwLayerMask = 0;
-		pfd.dwVisibleMask = 0;
-		pfd.dwDamageMask = 0;
 
-		int format = ChoosePixelFormat(hdc, &pfd);
+		const int format = ChoosePixelFormat(hdc, &pfd);
 		if (format == 0)
 		{
 			JELOG_BASE_CRIT("Could not find compatible pixel format! Win32 Error: " JELOG_CSTR, GetLastError());
@@ -219,7 +191,7 @@ namespace Junia
 
 	WindowsWindow::~WindowsWindow()
 	{
-		Close();
+		WindowsWindow::Close();
 	}
 
 	void WindowsWindow::OnUpdate()
@@ -247,8 +219,8 @@ namespace Junia
 			{
 				RECT rect;
 				GetWindowRect(window, &rect);
-				int mouseX = Input::GetMouseX();
-				int mouseY = Input::GetMouseY();
+				const int mouseX = Input::GetMouseX();
+				const int mouseY = Input::GetMouseY();
 				MoveWindow(
 					window,
 					resizingWindowLeft ? mouseX : rect.left,
@@ -283,6 +255,7 @@ namespace Junia
 
 	void WindowsWindow::Close()
 	{
+		windowMap.erase(window);
 		delete context;
 	}
 }

@@ -37,7 +37,7 @@ namespace Junia
 
 	#define JE_EVENT_DISPATCH_SWITCH_IMPL_Q(x)	case EventType::x: \
 												{ \
-													const x##Event* ev = static_cast<const x##Event*>(e); \
+													const x##Event* ev = dynamic_cast<const x##Event*>(e); \
 													x##Event::Dispatch(ev); \
 													break; \
 												}

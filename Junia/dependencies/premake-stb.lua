@@ -10,21 +10,6 @@ project "stb"
 	includedirs {
 		"%{prj.name}/include"
 	}
-
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "On"
-		optimize "Off"
-
-	filter "configurations:Optimized"
-		runtime "Release"
-		symbols "On"
-		optimize "On"
-
-	filter "configurations:Release"
-		runtime "Release"
-		symbols "Off"
-		optimize "On"
 	
 	filter {}
 		Dependency["stb"] = {}

@@ -6,12 +6,12 @@
 
 namespace Junia
 {
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path(path), width(0), height(0), rendererId(0)
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path(path)
 	{
 		int w, h, channels;
 		stbi_set_flip_vertically_on_load(1);
 		stbi_uc* data = stbi_load(path.c_str(), &w, &h, &channels, 0);
-		if (data == NULL) { JELOG_BASE_ERROR("Image file could not be loaded!"); return; }
+		if (data == nullptr) { JELOG_BASE_ERROR("Image file could not be loaded!"); return; }
 		width = static_cast<uint32_t>(w);
 		height = static_cast<uint32_t>(h);
 
