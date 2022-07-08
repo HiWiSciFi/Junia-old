@@ -12,7 +12,7 @@ IF "%VULKAN_SDK%"=="" (
 ECHO VulkanSDK found at "%VULKAN_SDK%"
 ECHO Generating project files for vs2022...
 ECHO -------------------------------------------
-CALL .\external\premake\premake5.exe vs2022 --opengl --vulkan --vulkanpath="%VULKAN_SDK%" --windowapi=win32
+CALL .\external\premake\premake5.exe vs2022 --opengl --windowapi=win32
 GOTO END
 
 :INSTALL
@@ -28,3 +28,5 @@ GOTO END
 
 :END
 PAUSE
+
+REM --vulkan --vulkanpath="%VULKAN_SDK%"

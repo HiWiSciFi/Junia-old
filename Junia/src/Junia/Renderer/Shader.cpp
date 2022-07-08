@@ -2,8 +2,12 @@
 
 #include <Junia/Renderer/Renderer.hpp>
 
+#ifdef JE_GAPI_SUPPORTED_OPENGL
 #include <Junia/Platform/OpenGL/OpenGLShader.hpp>
+#endif
+#ifdef JE_GAPI_SUPPORTED_VULKAN
 #include <Junia/Platform/Vulkan/VulkanShader.hpp>
+#endif
 
 namespace Junia
 {
@@ -11,8 +15,12 @@ namespace Junia
 	{
 		switch (Renderer::GetAPI())
 		{
+		#ifdef JE_GAPI_SUPPORTED_OPENGL
 		case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>(filepath);
+		#endif
+		#ifdef JE_GAPI_SUPPORTED_VULKAN
 		case RendererAPI::API::Vulkan: return std::make_shared<VulkanShader>(filepath);
+		#endif
 		default: return nullptr;
 		}
 	}
@@ -21,8 +29,12 @@ namespace Junia
 	{
 		switch (Renderer::GetAPI())
 		{
+		#ifdef JE_GAPI_SUPPORTED_OPENGL
 		case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
+		#endif
+		#ifdef JE_GAPI_SUPPORTED_VULKAN
 		case RendererAPI::API::Vulkan: return std::make_shared<VulkanShader>(name, vertexSrc, fragmentSrc);
+		#endif
 		default: return nullptr;
 		}
 	}
