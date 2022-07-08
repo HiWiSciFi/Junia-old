@@ -3,7 +3,6 @@
 #ifdef JE_TARGETPLATFORM_WINDOWS
 
 #include <Junia/Core/Window.hpp>
-#include <Windows.h>
 #include <Junia/Platform/OpenGL/OpenGLRenderContext.hpp>
 #include <unordered_map>
 
@@ -25,7 +24,7 @@ namespace Junia
 
 		[[nodiscard]] void* GetNativeWindow() const override { return window; }
 
-		static WindowsWindow* GetWindow(HWND handle) { return windowMap[handle]; }
+		static WindowsWindow* GetWindow(Win32_HWND handle) { return windowMap[handle]; }
 
 		bool movingWindow = false;
 		int movingWindowCursorOffsetX = 0;
@@ -38,13 +37,13 @@ namespace Junia
 		bool resizingWindowTop = false;
 		bool resizingWindowBottom = false;
 
-		static std::unordered_map<HWND, WindowsWindow*> windowMap;
+		static std::unordered_map<Win32_HWND, WindowsWindow*> windowMap;
 
 	private:
 		virtual void Close();
 
-		HWND window = nullptr;
-		HDC hdc = nullptr;
+		Win32_HWND window = nullptr;
+		Win32_HDC hdc = nullptr;
 		OpenGLRenderContext* context = nullptr;
 
 		struct WindowData

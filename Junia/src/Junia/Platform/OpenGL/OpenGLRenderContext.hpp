@@ -4,7 +4,7 @@
 #include <Junia/Core/Window.hpp>
 
 #ifdef JE_TARGETPLATFORM_WINDOWS
-#include <Windows.h>
+#include <Junia/Platform/Windows/Win32.hpp>
 #endif
 
 namespace Junia
@@ -15,14 +15,14 @@ namespace Junia
 		explicit OpenGLRenderContext(Window* window);
 		~OpenGLRenderContext() override;
 
-		virtual void Init() override;
-		virtual void ContextSwapBuffers() override;
+		void Init() override;
+		void ContextSwapBuffers() override;
 
 	private:
 		Window* window = nullptr;
 		#ifdef JE_TARGETPLATFORM_WINDOWS
-		HGLRC ctx = nullptr;
-		HDC GetDeviceContext() const;
+		Win32_HGLRC ctx = nullptr;
+		[[nodiscard]] Win32_HDC GetDeviceContext() const;
 		#endif
 	};
 }

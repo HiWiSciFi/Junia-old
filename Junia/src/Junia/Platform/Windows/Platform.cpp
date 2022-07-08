@@ -1,8 +1,7 @@
 #ifdef JE_TARGETPLATFORM_WINDOWS
 
 #include "../Platform.hpp"
-
-#include <Windows.h>
+#include <Junia/Platform/Windows/Win32.hpp>
 #include <Junia/Core/Log.hpp>
 #include <fstream>
 
@@ -10,22 +9,22 @@ namespace Junia
 {
 	float Platform::GetTime()
 	{
-		unsigned long timems = timeGetTime();
-		return timems / 1000.0f;
+		const auto timems = WinTime_GetTime();
+		return static_cast<float>(timems) / 1000.0f;
 	}
 
 	std::string Platform::LoadFileAsString(const std::string& path)
 	{
-		HANDLE hfile;
-		std::wstring stemp = std::wstring(path.begin(), path.end());
-		LPCWSTR winpath = stemp.c_str();
-		hfile = CreateFile(winpath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, NULL /*FILE_ATTRIBUTE_NORMAL*/, NULL);
+		//const auto stemp = std::wstring(path.begin(), path.end());
+		//const LPCWSTR winpath = stemp.c_str();
+		//const HANDLE hfile = CreateFile(winpath, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+		//                                NULL /*FILE_ATTRIBUTE_NORMAL*/, nullptr);
 
-		if (hfile == INVALID_HANDLE_VALUE)
-		{
-			JELOG_BASE_ASSERT(GetLastError() != ERROR_FILE_NOT_FOUND, "File at \"%s\" does not exist!", path.c_str());
-			return "";
-		}
+		//if (hfile == INVALID_HANDLE_VALUE)
+		//{
+		//	JELOG_BASE_ASSERT(GetLastError() != ERROR_FILE_NOT_FOUND, "File at \"%s\" does not exist!", path.c_str());
+		//	return "";
+		//}
 
 		// TODO: continue
 		return "";
