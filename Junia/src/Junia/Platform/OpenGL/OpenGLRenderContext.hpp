@@ -1,9 +1,11 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include <Junia/Renderer/RenderContext.hpp>
 #include <Junia/Core/Window.hpp>
 
-#ifdef JE_TARGETPLATFORM_WINDOWS
+#if JE_WINDOWAPI == JE_WINDOWAPI_WIN32
 #include <Junia/Platform/Windows/Win32.hpp>
 #endif
 
@@ -20,9 +22,11 @@ namespace Junia
 
 	private:
 		Window* window = nullptr;
-		#ifdef JE_TARGETPLATFORM_WINDOWS
+		#if JE_WINDOWAPI == JE_WINDOWAPI_WIN32
 		Win32_HGLRC ctx = nullptr;
 		[[nodiscard]] Win32_HDC GetDeviceContext() const;
 		#endif
 	};
 }
+
+#endif

@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include <Junia/Renderer/RendererAPI.hpp>
 #include <Junia/Core/Base.hpp>
 
@@ -16,3 +18,5 @@ namespace Junia
 		void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
 	};
 }
+
+#endif

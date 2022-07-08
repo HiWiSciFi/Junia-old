@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include <Junia/Renderer/Texture.hpp>
 
 namespace Junia
@@ -22,3 +24,5 @@ namespace Junia
 		uint32_t rendererId = 0;
 	};
 }
+
+#endif

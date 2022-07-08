@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef JE_TARGETPLATFORM_GLFW
+#if JE_WINDOWAPI == JE_WINDOWAPI_GLFW
 
 #include <GLFW/glfw3.h>
 #include <Junia/Core/Window.hpp>

@@ -1,3 +1,5 @@
+#ifdef JE_GAPI_SUPPORTED_VULKAN
+
 #include "VulkanVertexArray.hpp"
 
 namespace Junia
@@ -18,3 +20,5 @@ namespace Junia
 	{
 	}
 }
+
+#endif

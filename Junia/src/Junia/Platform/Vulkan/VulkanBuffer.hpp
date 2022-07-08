@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_VULKAN
+
 #include <Junia/Renderer/Buffer.hpp>
 #include <vulkan/vulkan.h>
 
@@ -40,3 +42,5 @@ namespace Junia
 		VkBuffer vkBuf = nullptr;
 	};
 }
+
+#endif

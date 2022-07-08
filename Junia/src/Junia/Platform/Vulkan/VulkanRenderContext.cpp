@@ -1,3 +1,5 @@
+#ifdef JE_GAPI_SUPPORTED_VULKAN
+
 #include "VulkanRenderContext.hpp"
 
 namespace Junia
@@ -14,3 +16,5 @@ namespace Junia
 	{
 	}
 }
+
+#endif

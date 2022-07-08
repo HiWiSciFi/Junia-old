@@ -1,5 +1,7 @@
 #pragma once
 
+#if JE_WINDOWAPI == JE_WINDOWAPI_WIN32
+
 #include <Junia/Core/Input.hpp>
 
 namespace Junia
@@ -19,3 +21,4 @@ namespace Junia
 		std::pair<int, int> GetMousePositionImplementation() override;
 	};
 }
+#endif

@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include <Junia/Renderer/Shader.hpp>
 #include <unordered_map>
 
@@ -35,3 +37,5 @@ namespace Junia
 		std::string name;
 	};
 }
+
+#endif

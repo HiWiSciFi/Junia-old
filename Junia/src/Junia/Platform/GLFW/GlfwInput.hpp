@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef JE_TARGETPLATFORM_GLFW
+#if JE_WINDOWAPI == JE_WINDOWAPI_GLFW
 
 #include <Junia/Core/Input.hpp>
 

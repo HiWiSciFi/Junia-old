@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_VULKAN
+
 #include <Junia/Renderer/Shader.hpp>
 
 namespace Junia
@@ -23,3 +25,5 @@ namespace Junia
 		std::string name;
 	};
 }
+
+#endif

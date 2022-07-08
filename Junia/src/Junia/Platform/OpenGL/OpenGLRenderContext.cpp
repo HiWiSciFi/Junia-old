@@ -1,13 +1,15 @@
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include "OpenGLRenderContext.hpp"
 
 #include <Junia/Core/Log.hpp>
 #include <glad/glad.h>
 
-#ifdef JE_TARGETPLATFORM_WINDOWS
+#if JE_WINDOWAPI == JE_WINDOWAPI_WIN32
 #include <Junia/Platform/Windows/Win32.hpp>
 #endif
 
-#ifdef JE_TARGETPLATFORM_GLFW
+#if JE_WINDOWAPI == JE_WINDOWAPI_GLFW
 #include <GLFW/glfw3.h>
 #endif
 
@@ -17,7 +19,7 @@ namespace Junia
 	///////////////////////////////////  WINDOWS  ///////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////
 
-	#ifdef JE_TARGETPLATFORM_WINDOWS
+	#if JE_WINDOWAPI == JE_WINDOWAPI_WIN32
 	OpenGLRenderContext::OpenGLRenderContext(Window* window) : window(window)
 	{
 		static bool gladInitialized = false;
@@ -107,7 +109,7 @@ namespace Junia
 	////////////////////////////////////  GLFW  /////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////
 
-	#ifdef JE_TARGETPLATFORM_GLFW
+	#if JE_WINDOWAPI == JE_WINDOWAPI_GLFW
 	OpenGLRenderContext::OpenGLRenderContext(Window* window) : window(window)
 	{
 
@@ -136,3 +138,5 @@ namespace Junia
 	}
 	#endif
 }
+
+#endif

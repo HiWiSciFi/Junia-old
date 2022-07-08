@@ -1,3 +1,5 @@
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include "OpenGLTexture.hpp"
 
 #include <stb/stb_image.h>
@@ -54,3 +56,5 @@ namespace Junia
 		glBindTextureUnit(slot, rendererId);
 	}
 }
+
+#endif

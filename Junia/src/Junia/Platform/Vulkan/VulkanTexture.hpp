@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_VULKAN
+
 #include <Junia/Renderer/Texture.hpp>
 
 namespace Junia
@@ -20,3 +22,5 @@ namespace Junia
 		uint32_t width, height;
 	};
 }
+
+#endif

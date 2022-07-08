@@ -19,46 +19,54 @@ project "Junia"
 		"src/**.cpp"
 	}
 
-	defines {
-
-	}
-
 	includedirs {
 		"src",
-		"%{Dependency.Vulkan.include}",
-		"%{Dependency.glad.include}",
-		"%{Dependency.GLFW.include}",
 		"%{Dependency.GLM.include}",
 		"%{Dependency.stb.include}"
-	}
-
-	libdirs {
-		"%{Dependency.Vulkan.libdir}",
-		"%{Dependency.glad.libdir}",
-		"%{Dependency.GLFW.libdir}"
-	}
-
-	links {
-		"opengl32",
-		"vulkan-1",
-		"glad",
-		"GLFW"
 	}
 
 	flags {
 		"FatalCompileWarnings"
 	}
 
+	filter "options:opengl"
+		defines "JE_GAPI_SUPPORTED_OPENGL"
+		includedirs "%{Dependency.glad.include}"
+		libdirs "%{Dependency.glad.libdir}"
+		links {
+			"opengl32",
+			"glad"
+		}
+
+	filter "options:vulkan"
+		defines "JE_GAPI_SUPPORTED_VULKAN"
+		includedirs "%{Dependency.Vulkan.include}"
+		libdirs "%{Dependency.Vulkan.libdir}"
+		links "vulkan-1"
+
+	filter "options:windowapi=glfw"
+		defines "JE_WINDOWAPI=0"
+		includedirs "%{Dependency.GLFW.include}"
+		libdirs "%{Dependency.GLFW.libdir}"
+		links "GLFW"
+
+	filter "options:windowapi=win32"
+		defines "JE_WINDOWAPI=1"
+		links "windowsapp"
+
+	filter { "system:windows", "options:windowapi=native" }
+		defines "JE_WINDOWAPI=1"
+		links "windowsapp"
+
+	filter { not "system:windows", "options:windowapi=native" }
+		defines "JE_WINDOWAPI=0"
+		includedirs "%{Dependency.GLFW.include}"
+		libdirs "%{Dependency.GLFW.libdir}"
+		links "GLFW"
+
 	filter "system:windows"
 		systemversion "latest"
-
-		links {
-			"windowsapp"
-		}
-
-		defines {
-			"JE_TARGETPLATFORM_WINDOWS"
-		}
+		defines "JE_TARGETPLATFORM_WINDOWS"
 
 	filter "configurations:Debug"
 		defines {

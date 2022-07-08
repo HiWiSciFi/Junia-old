@@ -1,3 +1,5 @@
+#ifdef JE_GAPI_SUPPORTED_VULKAN
+
 #include "VulkanShader.hpp"
 
 namespace Junia
@@ -29,3 +31,5 @@ namespace Junia
 	{
 	}
 }
+
+#endif

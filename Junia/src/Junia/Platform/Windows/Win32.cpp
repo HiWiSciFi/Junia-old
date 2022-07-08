@@ -1,5 +1,7 @@
 #include "Win32.hpp"
 
+#if JE_WINDOWAPI == JE_WINDOWAPI_WIN32
+
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <timeapi.h>
@@ -53,3 +55,5 @@ int WGL_MakeCurrent(Win32_HDC hdc, Win32_HGLRC hglrc) { return wglMakeCurrent(hd
 
 short Win32_GetKeyState(int nVirtKey) { return GetKeyState(nVirtKey); }
 int Win32_GetCursorPos(Win32_LPPOINT lpPoint) { return GetCursorPos(reinterpret_cast<LPPOINT>(lpPoint)); }
+
+#endif

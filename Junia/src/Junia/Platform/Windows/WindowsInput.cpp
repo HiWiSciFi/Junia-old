@@ -1,4 +1,4 @@
-#ifdef JE_TARGETPLATFORM_WINDOWS
+#if JE_WINDOWAPI == JE_WINDOWAPI_WIN32
 
 #include "WindowsInput.hpp"
 #include <Junia/Platform/Windows/Win32.hpp>

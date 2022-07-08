@@ -1,3 +1,5 @@
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include "OpenGLRendererAPI.hpp"
 
 #include <glad/glad.h>
@@ -41,3 +43,5 @@ namespace Junia
 		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vertexArray->GetIndexBuffer()->GetCount()), GL_UNSIGNED_INT, nullptr);
 	}
 }
+
+#endif

@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef JE_TARGETPLATFORM_WINDOWS
+#if JE_WINDOWAPI == JE_WINDOWAPI_WIN32
 
 #include <Junia/Core/Window.hpp>
 #include <Junia/Platform/OpenGL/OpenGLRenderContext.hpp>

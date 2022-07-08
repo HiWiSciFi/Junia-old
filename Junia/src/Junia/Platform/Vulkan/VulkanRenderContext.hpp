@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_VULKAN
+
 #include <Junia/Renderer/RenderContext.hpp>
 #include <Junia/Core/Window.hpp>
 
@@ -14,3 +16,5 @@ namespace Junia
 		virtual void ContextSwapBuffers() override;
 	};
 }
+
+#endif

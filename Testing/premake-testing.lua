@@ -32,6 +32,11 @@ project "Testing"
 		"Junia"
 	}
 
+	--REMOVE
+	filter "options:opengl"
+		defines "JE_GAPI_SUPPORTED_OPENGL"
+	--END
+
 	filter "system:windows"
 		systemversion "latest"
 		defines {

@@ -1,4 +1,4 @@
-#ifdef JE_TARGETPLATFORM_GLFW
+#if JE_WINDOWAPI == JE_WINDOWAPI_GLFW
 
 #include "GlfwInput.hpp"
 
@@ -33,4 +33,3 @@ namespace Junia
 }
 
 #endif
-

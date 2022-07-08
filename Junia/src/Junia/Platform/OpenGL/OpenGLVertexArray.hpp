@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include <Junia/Renderer/VertexArray.hpp>
 
 namespace Junia
@@ -25,3 +27,5 @@ namespace Junia
 		Ref<IndexBuffer> indexBuffer { };
 	};
 }
+
+#endif

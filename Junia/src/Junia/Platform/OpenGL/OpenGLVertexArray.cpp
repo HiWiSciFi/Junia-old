@@ -1,3 +1,5 @@
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include "OpenGLVertexArray.hpp"
 #include <glad/glad.h>
 
@@ -87,3 +89,5 @@ namespace Junia
 		indexBuffer = nindexBuffer;
 	}
 }
+
+#endif

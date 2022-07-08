@@ -1,3 +1,5 @@
+#ifdef JE_GAPI_SUPPORTED_VULKAN
+
 #include "VulkanBuffer.hpp"
 
 #include <Junia/Core/Log.hpp>
@@ -54,3 +56,5 @@ namespace Junia
 	{
 	}
 }
+
+#endif

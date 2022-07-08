@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_VULKAN
+
 #include <Junia/Renderer/VertexArray.hpp>
 
 namespace Junia
@@ -19,3 +21,5 @@ namespace Junia
 		[[nodiscard]] const Ref<IndexBuffer>& GetIndexBuffer() const override { return *(new Ref<IndexBuffer>());  }
 	};
 }
+
+#endif

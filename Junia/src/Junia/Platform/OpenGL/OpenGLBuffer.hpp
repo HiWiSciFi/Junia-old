@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include <Junia/Renderer/Buffer.hpp>
 
 namespace Junia
@@ -37,3 +39,5 @@ namespace Junia
 		uint32_t count = 0;
 	};
 }
+
+#endif

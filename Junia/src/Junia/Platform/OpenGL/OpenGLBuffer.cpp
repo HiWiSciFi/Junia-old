@@ -1,3 +1,5 @@
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include "OpenGLBuffer.hpp"
 
 #include <glad/glad.h>
@@ -52,3 +54,5 @@ namespace Junia
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }
+
+#endif

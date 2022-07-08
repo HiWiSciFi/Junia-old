@@ -1,3 +1,5 @@
+#ifdef JE_GAPI_SUPPORTED_OPENGL
+
 #include "OpenGLShader.hpp"
 
 #include <Junia/Core/Log.hpp>
@@ -214,3 +216,5 @@ namespace Junia
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 }
+
+#endif
