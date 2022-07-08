@@ -5,7 +5,6 @@
 #include <Junia/Core/Window.hpp>
 #include <Junia/Core/LayerSystem.hpp>
 #include <Junia/Events/WindowEvents.hpp>
-#include <Junia/Core/Timestep.hpp>
 
 namespace Junia
 {

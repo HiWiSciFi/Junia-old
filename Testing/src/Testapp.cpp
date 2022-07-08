@@ -46,7 +46,7 @@ public:
 		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
-	void OnUpdate(Junia::Timestep deltaTime) override
+	void OnUpdate(const Junia::Timestep& deltaTime) override
 	{
 		cameraController.OnUpdate(deltaTime);
 	}

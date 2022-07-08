@@ -12,7 +12,7 @@ namespace Junia
 	public:
 		explicit OrthographicCameraController(float aspectRatio, bool rotation = false);
 
-		void OnUpdate(Timestep deltaTime);
+		void OnUpdate(const Timestep& deltaTime);
 		[[nodiscard]] const OrthographicCamera& GetCamera() const { return camera; }
 
 		void SetZoomLevel(const float level) { zoomLevel = level; }

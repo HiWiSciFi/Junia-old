@@ -11,7 +11,7 @@ namespace Junia
 		WindowResizeEvent::Subscribe(JE_EVENTTYPE_BIND_MEMBER_FUNC(WindowResizeEvent, OnWindowResized));
 	}
 
-	void OrthographicCameraController::OnUpdate(Timestep deltaTime)
+	void OrthographicCameraController::OnUpdate(const Timestep& deltaTime)
 	{
 		if (Input::IsKeyDown(JE_KEY_A))
 			cameraPosition.x -= cameraMoveSpeed * deltaTime;
