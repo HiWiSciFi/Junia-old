@@ -33,7 +33,6 @@ namespace Junia
 		case ShaderDataType::Bool:   return 1;
 		default:
 			JELOG_BASE_ERROR("Unknown ShaderDataType!");
-			Junia::Log::JuniaLogError("D:\\Projekte\\VisualStudio\\source\\repos\\Junia\\Junia\\src\\Junia\\Renderer\\Buffer.hpp", 35, "Unknown ShaderDataType!");
 			return 0;
 		}
 	}
@@ -115,7 +114,7 @@ namespace Junia
 		[[nodiscard]] virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
-		static VertexBuffer* Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
 	class IndexBuffer
@@ -128,6 +127,6 @@ namespace Junia
 
 		[[nodiscard]] virtual uint32_t GetCount() const = 0;
 
-		static IndexBuffer* Create(uint32_t* indices, uint32_t count);
+		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
 	};
 }

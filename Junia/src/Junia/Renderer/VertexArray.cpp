@@ -11,15 +11,15 @@
 
 namespace Junia
 {
-	VertexArray* VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
 		#ifdef JE_GAPI_SUPPORTED_OPENGL
-		case RendererAPI::API::OpenGL: return new OpenGLVertexArray();
+		case RendererAPI::API::OpenGL: return std::make_shared<OpenGLVertexArray>();
 		#endif
 		#ifdef JE_GAPI_SUPPORTED_VULKAN
-		case RendererAPI::API::Vulkan: return new VulkanVertexArray();
+		case RendererAPI::API::Vulkan: return std::make_shared<VulkanVertexArray>();
 		#endif
 		default: return nullptr;
 		}

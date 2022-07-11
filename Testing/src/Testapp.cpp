@@ -1,8 +1,11 @@
 #include <Junia.hpp>
+#include <Junia/Core/EntryPoint.hpp>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <Junia/Platform/OpenGL/OpenGLShader.hpp>
 #include <Junia/OrthographicCameraController.hpp>
+
+#include "Sandbox2D.hpp"
 
 class ExampleLayer : public Junia::Layer
 {
@@ -20,7 +23,7 @@ public:
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
-		squareVertexArray.reset(Junia::VertexArray::Create());
+		squareVertexArray = Junia::VertexArray::Create();
 		auto squareVertexBuffer = Junia::Ref<Junia::VertexBuffer>(
 			Junia::VertexBuffer::Create(squareVertices, sizeof(squareVertices))
 		);
@@ -98,7 +101,10 @@ private:
 class Testapp : public Junia::Application
 {
 public:
-	Testapp() { PushLayerBack(new ExampleLayer()); }
+	Testapp() {
+		//PushLayerBack(new ExampleLayer());
+		PushLayerBack(new Sandbox2D());
+	}
 	~Testapp() override = default;
 };
 

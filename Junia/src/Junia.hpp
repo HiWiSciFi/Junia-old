@@ -28,6 +28,3 @@
 #include <Junia/Events/KeyboardEvents.hpp>
 #include <Junia/Events/MouseEvents.hpp>
 #include <Junia/Events/JoystickEvents.hpp>
-
-// Entry Point
-#include <Junia/Core/EntryPoint.hpp>
