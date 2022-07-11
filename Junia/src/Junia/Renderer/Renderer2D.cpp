@@ -2,6 +2,7 @@
 #include <Junia/Renderer/VertexArray.hpp>
 #include <Junia/Renderer/Shader.hpp>
 #include <Junia/Renderer/RenderCommand.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Junia
 {
@@ -48,7 +49,6 @@ namespace Junia
 	{
 		rendererData->shader->Bind();
 		rendererData->shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-		rendererData->shader->SetMat4("u_Transform", glm::mat4(1.0f));
 	}
 
 	void Renderer2D::EndScene()
@@ -65,6 +65,12 @@ namespace Junia
 	{
 		rendererData->shader->Bind();
 		rendererData->shader->SetFloat4("u_Color", color);
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			// * rotation
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		rendererData->shader->SetMat4("u_Transform", transform);
+
 		rendererData->vertexArray->Bind();
 		RenderCommand::DrawIndexed(rendererData->vertexArray);
 	}
