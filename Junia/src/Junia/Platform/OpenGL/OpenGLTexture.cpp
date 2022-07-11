@@ -41,6 +41,9 @@ namespace Junia
 		glTextureParameteri(rendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(rendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+		glTextureParameteri(rendererId, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(rendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 		glTextureSubImage2D(rendererId, 0, 0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height), dataFormat, GL_UNSIGNED_BYTE, data);
 
 		stbi_image_free(data);

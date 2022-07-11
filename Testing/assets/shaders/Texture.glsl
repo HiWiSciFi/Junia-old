@@ -2,7 +2,7 @@
 #version 450
 
 layout(location = 0) in vec3 inPosition;
-layout(location = 1) in vec2 texCoord;
+layout(location = 1) in vec2 inTexCoord;
 
 uniform mat4 u_ViewProjection;
 uniform mat4 u_Transform;
@@ -11,7 +11,7 @@ out vec2 vTexCoord;
 
 void main()
 {
-	vTexCoord = texCoord;
+	vTexCoord = inTexCoord;
 	gl_Position = u_ViewProjection * u_Transform * vec4(inPosition, 1.0);
 }
 
@@ -27,6 +27,6 @@ uniform sampler2D u_Texture;
 
 void main()
 {
-	outColor = texture(u_Texture, vTexCoord);
+	outColor = texture(u_Texture, vTexCoord * 10.0);
 	//outColor = vec4(vTexCoord, 0.0, 1.0);
 }

@@ -17,6 +17,7 @@ private:
 	Junia::Ref<Junia::Shader> flatColorShader;
 	Junia::Ref<Junia::VertexArray> squareVa;
 	Junia::OrthographicCameraController cameraController;
+	Junia::Ref<Junia::Texture2D> checkerboardTexture;
 
 	glm::vec4 squareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 };
