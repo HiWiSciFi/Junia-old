@@ -4,10 +4,24 @@
 
 #include <stb/stb_image.h>
 #include <Junia/Core/Log.hpp>
-#include <glad/glad.h>
 
 namespace Junia
 {
+	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height) : width(width), height(height)
+	{
+		internalFormat = GL_RGBA8;
+		format = GL_RGBA;
+
+		glCreateTextures(GL_TEXTURE_2D, 1, &rendererId);
+		glTextureStorage2D(rendererId, 1, internalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+
+		glTextureParameteri(rendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(rendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTextureParameteri(rendererId, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(rendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
+
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path(path)
 	{
 		int w, h, channels;
@@ -35,6 +49,9 @@ namespace Junia
 			break;
 		}
 
+		internalFormat = glFormat;
+		format = dataFormat;
+
 		glCreateTextures(GL_TEXTURE_2D, 1, &rendererId);
 		glTextureStorage2D(rendererId, 1, glFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
 
@@ -52,6 +69,11 @@ namespace Junia
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
 		glDeleteTextures(1, &rendererId);
+	}
+
+	void OpenGLTexture2D::SetData(void* data, uint32_t size)
+	{
+		glTextureSubImage2D(rendererId, 0, 0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height), format, GL_UNSIGNED_BYTE, data);
 	}
 
 	void OpenGLTexture2D::Bind(uint32_t slot) const

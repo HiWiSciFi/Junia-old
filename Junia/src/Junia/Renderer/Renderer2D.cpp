@@ -9,8 +9,8 @@ namespace Junia
 	struct Renderer2DStorage
 	{
 		Ref<VertexArray> vertexArray;
-		Ref<Shader> flatColorShader;
-		Ref<Shader> textureShader;
+		Ref<Shader> shader;
+		Ref<Texture2D> whiteTexture;
 	};
 
 	static Renderer2DStorage* rendererData;
@@ -39,10 +39,13 @@ namespace Junia
 		Ref<IndexBuffer> squareIb = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		rendererData->vertexArray->SetIndexBuffer(squareIb);
 
-		rendererData->flatColorShader = Shader::Create("assets/shaders/FlatColor.glsl");
-		rendererData->textureShader = Shader::Create("assets/shaders/Texture.glsl");
-		rendererData->textureShader->Bind();
-		rendererData->textureShader->SetInt("u_Texture", 0);
+		rendererData->whiteTexture = Texture2D::Create(1, 1);
+		uint32_t whiteTextureData = 0xffffffff;
+		rendererData->whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+
+		rendererData->shader = Shader::Create("assets/shaders/Texture.glsl");
+		rendererData->shader->Bind();
+		rendererData->shader->SetInt("u_Texture", 0);
 	}
 
 	void Renderer2D::Shutdown()
@@ -52,10 +55,8 @@ namespace Junia
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
-		rendererData->flatColorShader->Bind();
-		rendererData->flatColorShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-		rendererData->textureShader->Bind();
-		rendererData->textureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		rendererData->shader->Bind();
+		rendererData->shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer2D::EndScene()
@@ -65,13 +66,13 @@ namespace Junia
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		rendererData->flatColorShader->Bind();
-		rendererData->flatColorShader->SetFloat4("u_Color", color);
+		rendererData->shader->SetFloat4("u_Color", color);
+		rendererData->whiteTexture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			// * rotation
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		rendererData->flatColorShader->SetMat4("u_Transform", transform);
+		rendererData->shader->SetMat4("u_Transform", transform);
 
 		rendererData->vertexArray->Bind();
 		RenderCommand::DrawIndexed(rendererData->vertexArray);
@@ -79,14 +80,13 @@ namespace Junia
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D> texture)
 	{
-		rendererData->textureShader->Bind();
+		rendererData->shader->SetFloat4("u_Color", { .2f, .3f, .8f, .5f });//glm::vec4(1.0f));
+		texture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			// * rotation
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		rendererData->textureShader->SetMat4("u_Transform", transform);
-
-		texture->Bind();
+		rendererData->shader->SetMat4("u_Transform", transform);
 
 		rendererData->vertexArray->Bind();
 		RenderCommand::DrawIndexed(rendererData->vertexArray);
