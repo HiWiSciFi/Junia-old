@@ -15,6 +15,14 @@ namespace Junia
 		virtual void Bind()   const = 0;
 		virtual void Unbind() const = 0;
 
+		virtual void SetInt(const std::string& vname, int value) = 0;
+		virtual void SetFloat(const std::string& vname, float value) = 0;
+		virtual void SetFloat2(const std::string& vname, const glm::vec2& values) = 0;
+		virtual void SetFloat3(const std::string& vname, const glm::vec3& values) = 0;
+		virtual void SetFloat4(const std::string& vname, const glm::vec4& values) = 0;
+		virtual void SetMat3(const std::string& vname, const glm::mat3& matrix) = 0;
+		virtual void SetMat4(const std::string& vname, const glm::mat4& matrix) = 0;
+
 		[[nodiscard]] virtual const std::string& GetName() const = 0;
 
 		static Ref<Shader> Create(const std::string& filepath);

@@ -1,8 +1,6 @@
 #include <Junia.hpp>
 #include <Junia/Core/EntryPoint.hpp>
-
 #include <glm/gtc/matrix_transform.hpp>
-#include <Junia/Platform/OpenGL/OpenGLShader.hpp>
 #include <Junia/OrthographicCameraController.hpp>
 
 #include "Sandbox2D.hpp"
@@ -46,7 +44,7 @@ public:
 		texture = Junia::Texture2D::Create("assets/textures/Checkerboard.png");
 		sdLogoTexture = Junia::Texture2D::Create("assets/textures/SDLogo.png");
 		textureShader->Bind();
-		std::dynamic_pointer_cast<Junia::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		textureShader->SetInt("u_Texture", 0);
 	}
 
 	void OnUpdate(const Junia::Timestep& deltaTime) override
@@ -65,7 +63,7 @@ public:
 
 		const auto flatColorShader = shaderLibrary.Get("FlatColor");
 		flatColorShader->Bind();
-		std::dynamic_pointer_cast<Junia::OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", squareColor);
+		flatColorShader->SetFloat3("u_Color", squareColor);
 
 		for (int y = 0; y < 20; y++)
 		{

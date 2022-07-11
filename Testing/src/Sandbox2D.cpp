@@ -1,14 +1,11 @@
 #include "Sandbox2D.hpp"
 
-#include <Junia/Platform/OpenGL/OpenGLShader.hpp>
-
 Sandbox2D::Sandbox2D() : Layer("Sandbox2D"), cameraController(1280.0f / 720.0f)
 {
 }
 
 void Sandbox2D::OnEnable()
 {
-
 }
 
 void Sandbox2D::OnDisable()

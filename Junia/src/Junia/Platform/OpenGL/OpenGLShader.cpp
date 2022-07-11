@@ -139,7 +139,7 @@ namespace Junia
 		rendererId = program;
 	}
 
-	void OpenGLShader::UploadUniformInt(const std::string vname, int value)
+	void OpenGLShader::UploadUniformInt(const std::string& vname, int value)
 	{
 		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
@@ -150,7 +150,7 @@ namespace Junia
 		glUniform1i(location, value);
 	}
 
-	void OpenGLShader::UploadUniformFloat(const std::string vname, float value)
+	void OpenGLShader::UploadUniformFloat(const std::string& vname, float value)
 	{
 		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
@@ -161,7 +161,7 @@ namespace Junia
 		glUniform1f(location, value);
 	}
 
-	void OpenGLShader::UploadUniformFloat2(const std::string vname, const glm::vec2& values)
+	void OpenGLShader::UploadUniformFloat2(const std::string& vname, const glm::vec2& values)
 	{
 		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
@@ -172,7 +172,7 @@ namespace Junia
 		glUniform2f(location, values.x, values.y);
 	}
 
-	void OpenGLShader::UploadUniformFloat3(const std::string vname, const glm::vec3& values)
+	void OpenGLShader::UploadUniformFloat3(const std::string& vname, const glm::vec3& values)
 	{
 		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
@@ -183,7 +183,7 @@ namespace Junia
 		glUniform3f(location, values.x, values.y, values.z);
 	}
 
-	void OpenGLShader::UploadUniformFloat4(const std::string vname, const glm::vec4& values)
+	void OpenGLShader::UploadUniformFloat4(const std::string& vname, const glm::vec4& values)
 	{
 		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
@@ -194,7 +194,7 @@ namespace Junia
 		glUniform4f(location, values.x, values.y, values.z, values.w);
 	}
 
-	void OpenGLShader::UploadUniformMat3(const std::string vname, const glm::mat3& matrix)
+	void OpenGLShader::UploadUniformMat3(const std::string& vname, const glm::mat3& matrix)
 	{
 		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)
@@ -205,7 +205,7 @@ namespace Junia
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
-	void OpenGLShader::UploadUniformMat4(const std::string vname, const glm::mat4& matrix)
+	void OpenGLShader::UploadUniformMat4(const std::string& vname, const glm::mat4& matrix)
 	{
 		GLint location = glGetUniformLocation(rendererId, vname.c_str());
 		if (location == -1)

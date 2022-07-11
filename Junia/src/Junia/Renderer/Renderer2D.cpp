@@ -3,8 +3,6 @@
 #include <Junia/Renderer/Shader.hpp>
 #include <Junia/Renderer/RenderCommand.hpp>
 
-#include <Junia/Platform/OpenGL/OpenGLShader.hpp>
-
 namespace Junia
 {
 	struct Renderer2DStorage
@@ -49,8 +47,8 @@ namespace Junia
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		rendererData->shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(rendererData->shader)->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-		std::dynamic_pointer_cast<OpenGLShader>(rendererData->shader)->UploadUniformMat4("u_Transform", glm::mat4(1.0f));
+		rendererData->shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		rendererData->shader->SetMat4("u_Transform", glm::mat4(1.0f));
 	}
 
 	void Renderer2D::EndScene()
@@ -66,7 +64,7 @@ namespace Junia
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		rendererData->shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(rendererData->shader)->UploadUniformFloat4("u_Color", color);
+		rendererData->shader->SetFloat4("u_Color", color);
 		rendererData->vertexArray->Bind();
 		RenderCommand::DrawIndexed(rendererData->vertexArray);
 	}
