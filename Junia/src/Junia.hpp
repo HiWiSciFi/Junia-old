@@ -15,6 +15,8 @@
 
 #include <Junia/Core/Layer.hpp>
 
+#include <Junia/Renderer/Renderer2D.hpp>
+
 #include <Junia/Renderer/Renderer.hpp>
 #include <Junia/Renderer/RenderCommand.hpp>
 #include <Junia/Renderer/VertexArray.hpp>
