@@ -23,6 +23,7 @@
 #include <Junia/Renderer/Shader.hpp>
 #include <Junia/Renderer/Texture.hpp>
 #include <Junia/Renderer/OrthographicCamera.hpp>
+#include <Junia/Renderer/Font.hpp>
 
 #include <Junia/Events/EventSystem.hpp>
 #include <Junia/Events/Event.hpp>

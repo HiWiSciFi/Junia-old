@@ -11,3 +11,4 @@ filter {}
 include "premake-EnTT.lua"
 include "premake-GLM.lua"
 include "premake-stb.lua"
+include "premake-freetype.lua"

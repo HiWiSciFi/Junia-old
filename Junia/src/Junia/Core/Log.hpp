@@ -1,7 +1,7 @@
 #pragma once
 #include <Junia/Core/Logger.hpp>
 
-#define JELOG_CHAR       "%s"
+#define JELOG_CHAR       "%c"
 #define JELOG_CSTR       "%s"
 #define JELOG_SHORT      "%hi"
 #define JELOG_USHORT     "%hu"

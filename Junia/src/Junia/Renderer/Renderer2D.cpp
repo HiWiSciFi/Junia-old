@@ -22,10 +22,10 @@ namespace Junia
 		rendererData->vertexArray = VertexArray::Create();
 
 		float squareVertices[5 * 4] = {
-			-0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
-			 0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-			 0.5f,  0.5f,  0.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f,  0.0f, 0.0f, 1.0f
+			-0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
+			 0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+			 0.5f,  0.5f,  0.0f, 1.0f, 0.0f,
+			-0.5f,  0.5f,  0.0f, 0.0f, 0.0f
 		};
 
 		Ref<VertexBuffer> squareVb = VertexBuffer::Create(squareVertices, sizeof(squareVertices));
@@ -78,13 +78,43 @@ namespace Junia
 		RenderCommand::DrawIndexed(rendererData->vertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D> texture)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4& tintColor)
 	{
-		rendererData->shader->SetFloat4("u_Color", { .2f, .3f, .8f, .5f });//glm::vec4(1.0f));
+		rendererData->shader->SetFloat4("u_Color", tintColor);
+		rendererData->shader->SetFloat("u_TilingFactor", tilingFactor);
 		texture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			// * rotation
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		rendererData->shader->SetMat4("u_Transform", transform);
+
+		rendererData->vertexArray->Bind();
+		RenderCommand::DrawIndexed(rendererData->vertexArray);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	{
+		rendererData->shader->SetFloat4("u_Color", color);
+		rendererData->whiteTexture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		rendererData->shader->SetMat4("u_Transform", transform);
+
+		rendererData->vertexArray->Bind();
+		RenderCommand::DrawIndexed(rendererData->vertexArray);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4& tintColor)
+	{
+		rendererData->shader->SetFloat4("u_Color", tintColor);
+		rendererData->shader->SetFloat("u_TilingFactor", tilingFactor);
+		texture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 		rendererData->shader->SetMat4("u_Transform", transform);
 

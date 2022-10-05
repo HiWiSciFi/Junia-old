@@ -22,11 +22,20 @@ project "Junia"
 	includedirs {
 		"src",
 		"%{Dependency.GLM.include}",
-		"%{Dependency.stb.include}"
+		"%{Dependency.stb.include}",
+		"%{Dependency.freetype.include}"
 	}
 
 	flags {
 		"FatalCompileWarnings"
+	}
+
+	libdirs {
+		"${Dependency.freetype.libdir}"
+	}
+
+	links {
+		"freetype"
 	}
 
 	filter "options:opengl"

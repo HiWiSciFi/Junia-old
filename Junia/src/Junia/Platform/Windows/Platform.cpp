@@ -32,17 +32,16 @@ namespace Junia
 
 	std::string Platform::ReadFile(const std::string& filepath)
 	{
-		std::string result;
-		std::ifstream in(filepath, std::ios::in | std::ios::binary);
-		if (in)
-		{
-			in.seekg(0, std::ios::end);
-			result.resize(in.tellg());
-			in.seekg(0, std::ios::beg);
-			in.read(&result[0], result.size());
-			in.close();
-		} else JELOG_BASE_ERROR("File at " JELOG_CSTR " could not be loaded!", filepath.c_str());
-		return result;
+		FILE* file = fopen(filepath.c_str(), "rb");
+		fseek(file, 0, SEEK_END);
+		long size = ftell(file);
+		fseek(file, 0, SEEK_SET);
+
+		std::string fileBuffer(size, '\0');
+
+		fread(&fileBuffer.at(0), size, 1, file);
+		fclose(file);
+		return fileBuffer;
 	}
 }
 
