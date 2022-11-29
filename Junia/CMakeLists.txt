@@ -12,3 +12,8 @@
 	)
 
 	add_subdirectory("dependencies")
+
+	target_link_libraries(Junia
+		PRIVATE
+			glfw
+	)
