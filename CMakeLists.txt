@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.2)
 
-project(Tutorial)
-	set(CMAKE_CXX_STANDARD 17)
-	set(CMAKE_CXX_STANDARD_REQUIRED true)
-	add_executable(Tutorial src/Main.cpp src/Calc.cpp)
+project(Junia)
+	add_subdirectory("Junia")
+	add_subdirectory("Editor")

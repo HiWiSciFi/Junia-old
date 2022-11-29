@@ -1,8 +1,9 @@
-#include "Calc.hpp"
+﻿#include "Editor.hpp"
+#include <Junia.hpp>
 
 #include <iostream>
 
-int main(int argc, char** argv)
+int main()
 {
 	std::cout << "Hello World!" << std::endl;
 	std::cout << "1 + 2 = " << add(1, 2) << std::endl;
