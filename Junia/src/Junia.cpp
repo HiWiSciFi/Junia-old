@@ -1,11 +1,5 @@
 ﻿#include <Junia.hpp>
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <unistd.h>
-#endif
-
 #include <iostream>
 #include <GLFW/glfw3.h>
 
@@ -17,6 +11,12 @@ int add(int a, int b)
 int subtract(int a, int b)
 {
 	return a - b;
+}
+
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
 void MakeWindow()
@@ -34,12 +34,21 @@ void MakeWindow()
 		});
 
 	GLFWwindow* window = glfwCreateWindow(800, 600, "Testwindow", nullptr, nullptr);
+	if (!window)
+	{
+		const char* msg;
+		glfwGetError(&msg);
+		std::cerr << "Window could not be created!" << std::endl << msg << std::endl;
+		return;
+	}
 
-	#ifdef _WIN32
-	Sleep(5000);
-	#else
-	sleep(5);
-	#endif
+	glfwSetKeyCallback(window, key_callback);
+
+	while (!glfwWindowShouldClose(window))
+	{
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
