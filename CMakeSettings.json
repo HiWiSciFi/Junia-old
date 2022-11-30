@@ -14,7 +14,7 @@
 		{
 			"name": "x64-Release",
 			"generator": "Ninja",
-			"configurationType": "RelWithDebInfo",
+			"configurationType": "Release",
 			"buildRoot": "${projectDir}\\out\\build\\${name}",
 			"installRoot": "${projectDir}\\out\\install\\${name}",
 			"cmakeCommandArgs": "",
@@ -38,14 +38,13 @@
 			"remoteInstallRoot": "$HOME/.vs/${projectDirName}/${workspaceHash}/out/install/${name}",
 			"remoteCopySources": true,
 			"rsyncCommandArgs": "-t --delete",
-			"remoteCopyBuildOutput": false,
-			"remoteCopySourcesMethod": "rsync",
-			"variables": []
+			"remoteCopyBuildOutput": true,
+			"remoteCopySourcesMethod": "rsync"
 		},
 		{
 			"name": "Linux-GCC-Release",
 			"generator": "Ninja",
-			"configurationType": "RelWithDebInfo",
+			"configurationType": "Release",
 			"cmakeExecutable": "cmake",
 			"remoteCopySourcesExclusionList": [ ".vs", ".git", "out" ],
 			"cmakeCommandArgs": "",
@@ -58,9 +57,8 @@
 			"remoteInstallRoot": "$HOME/.vs/${projectDirName}/${workspaceHash}/out/install/${name}",
 			"remoteCopySources": true,
 			"rsyncCommandArgs": "-t --delete",
-			"remoteCopyBuildOutput": false,
-			"remoteCopySourcesMethod": "rsync",
-			"variables": []
+			"remoteCopyBuildOutput": true,
+			"remoteCopySourcesMethod": "rsync"
 		}
 	]
 }

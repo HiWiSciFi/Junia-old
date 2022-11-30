@@ -9,11 +9,11 @@
 	target_include_directories(Junia
 		PUBLIC
 			"${CMAKE_CURRENT_SOURCE_DIR}/include"
+		PRIVATE
+			"${GLFW_INCLUDE_DIR}"
 	)
-
-	add_subdirectory("dependencies")
 
 	target_link_libraries(Junia
 		PRIVATE
-			glfw
+			"${GLFW_LIB}"
 	)
