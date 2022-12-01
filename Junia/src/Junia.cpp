@@ -1,25 +1,10 @@
 ﻿#include <Junia.hpp>
 
 #include <iostream>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-int add(int a, int b)
-{
-	return a + b;
-}
-
-int subtract(int a, int b)
-{
-	return a - b;
-}
-
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GLFW_TRUE);
-}
-
-void MakeWindow()
+void Init()
 {
 	if (!glfwInit())
 	{
@@ -32,7 +17,15 @@ void MakeWindow()
 		{
 			std::cerr << "GLFW Error: (0x" << std::hex << code << ") : " << desc << std::endl;
 		});
+}
 
+void Terminate()
+{
+	glfwTerminate();
+}
+
+void MakeWindow()
+{
 	GLFWwindow* window = glfwCreateWindow(800, 600, "Testwindow", nullptr, nullptr);
 	if (!window)
 	{
@@ -42,7 +35,12 @@ void MakeWindow()
 		return;
 	}
 
-	glfwSetKeyCallback(window, key_callback);
+	glfwSetKeyCallback(window,
+		[](GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+				glfwSetWindowShouldClose(window, GLFW_TRUE);
+		});
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -51,6 +49,4 @@ void MakeWindow()
 	}
 
 	glfwDestroyWindow(window);
-	glfwTerminate();
-	std::cout << "done" << std::endl;
 }

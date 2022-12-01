@@ -1,5 +1,10 @@
 ﻿#pragma once
 
-int add(int a, int b);
-int subtract(int a, int b);
+/// @brief Initializes Junia
+void Init();
+
+/// @brief Terminates Junia
+void Terminate();
+
+/// @brief Creates a window
 void MakeWindow();
