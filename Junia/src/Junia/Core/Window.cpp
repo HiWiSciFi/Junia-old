@@ -1,4 +1,4 @@
-#define BUILD_JUNIA
+#include "Core.hpp"
 #include <Junia/Core/Window.hpp>
 
 #include <iostream>

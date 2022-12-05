@@ -1,4 +1,5 @@
-﻿#include <Junia.hpp>
+﻿#include "Junia/Core/Core.hpp"
+#include <Junia.hpp>
 
 #include <iostream>
 #include <glad/glad.h>

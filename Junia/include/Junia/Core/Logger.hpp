@@ -6,42 +6,59 @@
 
 namespace Junia
 {
-	class Logstream
+	namespace Log
 	{
-	public:
-		Logstream(FILE* _stream);
-		Logstream(const Logstream& other);
-		~Logstream();
-
-		template<typename T>
-		Logstream& operator<<(T const& value)
+		enum class LogLevel : uint8_t
 		{
-			stream << value;
-			return *this;
-		}
+			None = 0,
+			Critical = 1,
+			Error = 2,
+			Warn = 3,
+			Info = 4,
+			Trace = 5
+		};
 
-	private:
-		FILE* fp;
-		std::ofstream stream;
-	};
+		class Logstream
+		{
+		public:
+			Logstream(std::ofstream& _stream);
+			Logstream(const Logstream& other);
+			~Logstream();
 
-	class Logger
-	{
-	public:
-		explicit Logger(const std::string& name);
+			template<typename T>
+			Logstream& operator<<(T const& value)
+			{
+				stream << value;
+				return *this;
+			}
 
-		~Logger();
+		private:
+			std::ofstream& stream;
+		};
 
-		static std::shared_ptr<Logger> Create(const std::string& name = "Logger");
+		class Logger
+		{
+		public:
+			Logger();
+			explicit Logger(const std::string& name);
+			explicit Logger(const std::string& name, const std::string& path);
 
-		Logstream Trace();
-		Logstream Info();
-		Logstream Warn();
-		Logstream Error();
-		Logstream Critical();
+			/// @brief DO NOT COPY LOGGERS
+			Logger(const Logger& other);
 
-	private:
-		std::string name = "";
-		Logstream stream;
-	};
+			~Logger();
+
+			Logstream Trace();
+			Logstream Info();
+			Logstream Warn();
+			Logstream Error();
+			Logstream Critical();
+
+			LogLevel maxLevel = LogLevel::Trace;
+
+		private:
+			std::string name = "";
+			std::ofstream stream;
+		};
+	}
 }

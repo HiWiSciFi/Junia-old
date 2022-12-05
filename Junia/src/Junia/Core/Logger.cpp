@@ -1,78 +1,79 @@
+#include "Core.hpp"
 #include <Junia/Core/Logger.hpp>
 
 #include <cstdarg>
 #include <cstdio>
+#include <fstream>
 #include <iostream>
 #include <memory>
+#include <ostream>
 #include <utility>
 
 #define ANSI_ESC_RESET  "\x1b[0m"
 #define ANSI_ESC_WHITE  "\x1b[37;40m" // WHITE  BLACK
 #define ANSI_ESC_GREEN  "\x1b[32;40m" // GREEN  BLACK
 #define ANSI_ESC_ORANGE "\x1b[33;40m" // YELLOW BLACK
-#define ANSI_ESC_RED    "\x1b[31;40m" // RED    BLACK
+#define ANSI_ESC_RED    "\x1b[91;40m" // BRED   BLACK
 #define ANSI_ESC_DRED   "\x1b[37;41m" // WHITE  RED
 
 namespace Junia
 {
-	Logstream::Logstream(FILE* _stream)
+	namespace Log
 	{
-		fp = _stream;
-		stream = std::ofstream(_stream);
-	}
+		static std::ofstream emptystream = std::ofstream();
+		static Logstream emptylogstream = Logstream(emptystream);
 
-	Logstream::Logstream(const Logstream& other)
-	{
-		fp = other.fp;
-		stream = std::ofstream(other.fp);
-	}
+		Logstream::Logstream(std::ofstream& _stream) : stream(_stream) { }
+		Logstream::Logstream(const Logstream& other) : stream(other.stream) { }
+		Logstream::~Logstream()
+		{
+			stream << ANSI_ESC_RESET << std::endl;
+			stream.flush();
+		}
 
-	Logstream::~Logstream()
-	{
-		stream << ANSI_ESC_RESET << std::endl;
-		stream.flush();
-	}
+		Logger::Logger() : name(""), stream(stdout) { }
+		Logger::Logger(const std::string& _name) : name(_name), stream(stdout) { }
+		Logger::Logger(const std::string& _name, const std::string& path) : name(_name), stream(path, std::ios::out) { }
+		Logger::Logger(const Logger& other) : name(other.name) { }
 
-	Logger::Logger(const std::string& name) : name(name), stream(stdout)
-	{ }
+		Logger::~Logger()
+		{
+			stream << ANSI_ESC_RESET;
+		}
 
-	std::shared_ptr<Logger> Logger::Create(const std::string& name)
-	{
-		return std::make_shared<Logger>(name);
-	}
+		Logstream Logger::Trace()
+		{
+			if (maxLevel < LogLevel::Trace) return emptylogstream;
+			stream << "[" << name << "] " << ANSI_ESC_WHITE;
+			return stream;
+		}
 
-	Logger::~Logger()
-	{
-		stream << ANSI_ESC_RESET;
-	}
+		Logstream Logger::Info()
+		{
+			if (maxLevel < LogLevel::Info) return emptylogstream;
+			stream << "[" << name << "] " << ANSI_ESC_GREEN;
+			return stream;
+		}
 
-	Logstream Logger::Trace()
-	{
-		stream << "[" << name << "] " << ANSI_ESC_WHITE;
-		return stream;
-	}
+		Logstream Logger::Warn()
+		{
+			if (maxLevel < LogLevel::Warn) return emptylogstream;
+			stream << "[" << name << "] " << ANSI_ESC_ORANGE;
+			return stream;
+		}
 
-	Logstream Logger::Info()
-	{
-		stream << "[" << name << "] " << ANSI_ESC_GREEN;
-		return stream;
-	}
+		Logstream Logger::Error()
+		{
+			if (maxLevel < LogLevel::Error) return emptylogstream;
+			stream << "[" << name << "] " << ANSI_ESC_RED;
+			return stream;
+		}
 
-	Logstream Logger::Warn()
-	{
-		stream << "[" << name << "] " << ANSI_ESC_ORANGE;
-		return stream;
-	}
-
-	Logstream Logger::Error()
-	{
-		stream << "[" << name << "] " << ANSI_ESC_RED;
-		return stream;
-	}
-
-	Logstream Logger::Critical()
-	{
-		stream << "[" << name << "] " << ANSI_ESC_DRED;
-		return stream;
+		Logstream Logger::Critical()
+		{
+			if (maxLevel < LogLevel::Critical) return emptylogstream;
+			stream << "[" << name << "] " << ANSI_ESC_DRED;
+			return stream;
+		}
 	}
 }

@@ -11,6 +11,7 @@
 	target_sources(Junia
 		PRIVATE
 			"${SRC_DIR}/Junia.cpp"
+			"${SRC_DIR}/Junia/Core/Core.hpp"
 			"${SRC_DIR}/Junia/Core/Window.cpp"
 			"${SRC_DIR}/Junia/Core/Logger.cpp"
 			"${SRC_DIR}/Junia/Core/Log.cpp"

@@ -14,18 +14,15 @@ void RunGame()
 
 int main(int argc, char** argv)
 {
-	std::shared_ptr<Junia::Logger> logger = Junia::Logger::Create("YeetusLoggus");
+	//Junia::Log::log.maxLevel = Junia::Log::LogLevel::Warn;
+	//Junia::Log::corelog.maxLevel = Junia::Log::LogLevel::Warn;
 
-	logger->Trace() << "Helo mah boii";
-	logger->Info() << "This is informative";
-	logger->Warn() << "A warning apparently";
-	logger->Error() << "Oopsies that didn't sound good...";
-	logger->Critical() << "your code is now broken";
-
+	JELOG_INFO << "Initializing Junia...";
 	Junia::Init();
-
+	JELOG_INFO << "Creating Window...";
 	RunGame();
-
+	JELOG_INFO << "Terminating Junia...";
 	Junia::Terminate();
+	JELOG_INFO << "Done.";
 	return 0;
 }

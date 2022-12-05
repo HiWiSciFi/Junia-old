@@ -1,5 +1,6 @@
 #pragma once
 #ifdef BUILD_JUNIA
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #endif
 
