@@ -6,9 +6,11 @@
 void RunGame()
 {
 	Junia::Window window;
+	Junia::Window window2;
 	while (!window.shouldClose)
 	{
-		window.Update();
+		for (int i = 1; i < Junia::Window::GetWindowCount(); i++)
+			Junia::Window::GetWindow(i)->Update();
 	}
 }
 

@@ -1,5 +1,7 @@
 ﻿add_library(Junia STATIC)
 
+	set_property(TARGET Junia PROPERTY CXX_STANDARD 17)
+
 	set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 	set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 

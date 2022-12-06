@@ -1,9 +1,13 @@
 ﻿add_executable(Editor)
 
+	set_property(TARGET Junia PROPERTY CXX_STANDARD 17)
+
+	set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+
 	target_sources(Editor
 		PRIVATE
-			"${CMAKE_CURRENT_SOURCE_DIR}/src/Editor.cpp"
-			"${CMAKE_CURRENT_SOURCE_DIR}/src/Editor.hpp"
+			"${SRC_DIR}/Editor.cpp"
+			"${SRC_DIR}/Editor.hpp"
 	)
 
 	target_link_libraries(Editor

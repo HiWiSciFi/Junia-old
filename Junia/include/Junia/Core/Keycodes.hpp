@@ -147,7 +147,12 @@ namespace Junia
 	static std::string KeyToString(KeyCode keycode)
 	{
 		std::stringstream ss;
-		if (keycode >= 202) // NUMPAD
+		if (keycode == 32 || keycode == 39 || (keycode >= 44 && keycode <= 57) ||
+				keycode == 59 || keycode == 61 || (keycode >= 65 && keycode <= 93) || keycode == 96) // direct ascii keys
+		{
+			ss << static_cast<char>(keycode);
+		}
+		else if (keycode >= 202) // NUMPAD
 		{
 			ss << "NUM ";
 			if ((keycode >= 237 && keycode <= 249) || keycode == 234 || keycode == 235 || keycode == 253) ss << static_cast<char>(keycode & ~192);
@@ -157,10 +162,6 @@ namespace Junia
 		else if (keycode >= 101 && keycode <= 125) // F-Keys
 		{
 			ss << "F" << static_cast<int>(keycode - 100);
-		}
-		else if (keycode == 32 || keycode == 39 || (keycode >= 44 && keycode <= 57) || keycode == 59 || keycode == 61 || (keycode >= 65 && keycode <= 93) || keycode == 96) // Number keys
-		{
-			ss << static_cast<char>(keycode);
 		}
 		else
 		{
