@@ -21,19 +21,19 @@ namespace Junia
 		class Logstream
 		{
 		public:
-			Logstream(std::ofstream& _stream);
+			Logstream(std::ostream* _stream);
 			Logstream(const Logstream& other);
 			~Logstream();
 
 			template<typename T>
 			Logstream& operator<<(T const& value)
 			{
-				stream << value;
+				(*stream) << value;
 				return *this;
 			}
 
 		private:
-			std::ofstream& stream;
+			std::ostream* stream = nullptr;
 		};
 
 		class Logger
@@ -58,7 +58,8 @@ namespace Junia
 
 		private:
 			std::string name = "";
-			std::ofstream stream;
+			bool ownStream = false;
+			std::ostream* stream;
 		};
 	}
 }

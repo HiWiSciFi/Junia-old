@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+#include <inttypes.h>
 
 namespace Junia
 {

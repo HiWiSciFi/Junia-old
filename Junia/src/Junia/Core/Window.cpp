@@ -9,7 +9,7 @@ namespace Junia
 
 	int Window::GetWindowCount()
 	{
-		return windows.size();
+		return windows.size() - 1;
 	}
 
 	Window** Window::GetWindows()
@@ -22,8 +22,24 @@ namespace Junia
 		return windows.at(id);
 	}
 
+	Window* Window::CreateWindow()
+	{
+		return new Window();
+	}
+
+	void Window::DestroyWindow(int id)
+	{
+		DestroyWindow(GetWindow(id));
+	}
+
+	void Window::DestroyWindow(Window* window)
+	{
+		delete window;
+	}
+
 	Window::Window()
 	{
+		index = -1;
 		window = glfwCreateWindow(800, 600, "Window", NULL, NULL);
 		if (!window)
 		{
@@ -45,12 +61,13 @@ namespace Junia
 
 	Window::~Window()
 	{
-		int lastIndex = windows.size() - 1;
+		int lastIndex = GetWindowCount();
 		if (lastIndex != index)
 		{
 			windows[index] = windows[lastIndex];
 			windows[index]->index = index;
 		}
+		windows.pop_back();
 		glfwDestroyWindow(window);
 	}
 

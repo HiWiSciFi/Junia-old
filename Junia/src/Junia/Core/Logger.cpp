@@ -21,58 +21,63 @@ namespace Junia
 	namespace Log
 	{
 		static std::ofstream emptystream = std::ofstream();
-		static Logstream emptylogstream = Logstream(emptystream);
+		static Logstream emptylogstream = Logstream(&emptystream);
 
-		Logstream::Logstream(std::ofstream& _stream) : stream(_stream) { }
+		Logstream::Logstream(std::ostream* _stream) : stream(_stream) { }
 		Logstream::Logstream(const Logstream& other) : stream(other.stream) { }
 		Logstream::~Logstream()
 		{
-			stream << ANSI_ESC_RESET << std::endl;
-			stream.flush();
+			(*stream) << ANSI_ESC_RESET << std::endl;
+			(*stream).flush();
 		}
 
-		Logger::Logger() : name(""), stream(stdout) { }
-		Logger::Logger(const std::string& _name) : name(_name), stream(stdout) { }
-		Logger::Logger(const std::string& _name, const std::string& path) : name(_name), stream(path, std::ios::out) { }
-		Logger::Logger(const Logger& other) : name(other.name) { }
+		Logger::Logger() : name(""), stream(&std::cout) { }
+		Logger::Logger(const std::string& _name) : name(_name), stream(&std::cout) { }
+		Logger::Logger(const std::string& _name, const std::string& path) : name(_name)
+		{
+			ownStream = true;
+			stream = new std::ofstream(path, std::ios_base::out);
+		}
+		Logger::Logger(const Logger& other) : name(other.name), stream(other.stream) { }
 
 		Logger::~Logger()
 		{
-			stream << ANSI_ESC_RESET;
+			(*stream) << ANSI_ESC_RESET;
+			if (ownStream) delete stream;
 		}
 
 		Logstream Logger::Trace()
 		{
 			if (maxLevel < LogLevel::Trace) return emptylogstream;
-			stream << "[" << name << "] " << ANSI_ESC_WHITE;
+			(*stream) << "[" << name << "] " << ANSI_ESC_WHITE;
 			return stream;
 		}
 
 		Logstream Logger::Info()
 		{
 			if (maxLevel < LogLevel::Info) return emptylogstream;
-			stream << "[" << name << "] " << ANSI_ESC_GREEN;
+			(*stream) << "[" << name << "] " << ANSI_ESC_GREEN;
 			return stream;
 		}
 
 		Logstream Logger::Warn()
 		{
 			if (maxLevel < LogLevel::Warn) return emptylogstream;
-			stream << "[" << name << "] " << ANSI_ESC_ORANGE;
+			(*stream) << "[" << name << "] " << ANSI_ESC_ORANGE;
 			return stream;
 		}
 
 		Logstream Logger::Error()
 		{
 			if (maxLevel < LogLevel::Error) return emptylogstream;
-			stream << "[" << name << "] " << ANSI_ESC_RED;
+			(*stream) << "[" << name << "] " << ANSI_ESC_RED;
 			return stream;
 		}
 
 		Logstream Logger::Critical()
 		{
 			if (maxLevel < LogLevel::Critical) return emptylogstream;
-			stream << "[" << name << "] " << ANSI_ESC_DRED;
+			(*stream) << "[" << name << "] " << ANSI_ESC_DRED;
 			return stream;
 		}
 	}

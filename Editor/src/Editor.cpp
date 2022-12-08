@@ -5,13 +5,24 @@
 
 void RunGame()
 {
-	Junia::Window window;
-	Junia::Window window2;
-	while (!window.shouldClose)
+	Junia::Window* window = Junia::Window::CreateWindow();
+	Junia::Window* window2 = Junia::Window::CreateWindow();
+	JELOG_WARN << "Remaining windows: " << Junia::Window::GetWindowCount();
+	while (!window->shouldClose)
 	{
-		for (int i = 1; i < Junia::Window::GetWindowCount(); i++)
+		for (int i = 1; i < Junia::Window::GetWindowCount()+1; i++)
 			Junia::Window::GetWindow(i)->Update();
+		if (window2 != nullptr && window2->shouldClose)
+		{
+			Junia::Window::DestroyWindow(window2);
+			JELOG_WARN << "Remaining windows: " << Junia::Window::GetWindowCount();
+			window2 = nullptr;
+		}
 	}
+	Junia::Window** windows = Junia::Window::GetWindows();
+	for (int i = Junia::Window::GetWindowCount(); i > 0; i--)
+		Junia::Window::DestroyWindow(windows[i]);
+	JELOG_WARN << "Remaining windows: " << Junia::Window::GetWindowCount();
 }
 
 int main(int argc, char** argv)

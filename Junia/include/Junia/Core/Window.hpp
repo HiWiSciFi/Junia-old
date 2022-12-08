@@ -24,6 +24,10 @@ namespace Junia
 		static Window** GetWindows();
 		static Window* GetWindow(int id);
 
+		static Window* CreateWindow();
+		static void DestroyWindow(int id);
+		static void DestroyWindow(Window* window);
+
 
 		bool shouldClose = false;
 
