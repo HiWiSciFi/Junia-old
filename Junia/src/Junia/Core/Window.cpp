@@ -9,7 +9,7 @@ namespace Junia
 
 	int Window::GetWindowCount()
 	{
-		return windows.size() - 1;
+		return static_cast<int>(windows.size() - 1);
 	}
 
 	Window** Window::GetWindows()
@@ -40,21 +40,21 @@ namespace Junia
 	Window::Window()
 	{
 		index = -1;
-		window = glfwCreateWindow(800, 600, "Window", NULL, NULL);
-		if (!window)
+		nativeWindow = glfwCreateWindow(800, 600, "Window", NULL, NULL);
+		if (!nativeWindow)
 		{
 			const char* msg;
 			glfwGetError(&msg);
 			std::cerr << "Window could not be created!" << std::endl << msg << std::endl;
 			return;
 		}
-		glfwSetKeyCallback(window,
+		glfwSetKeyCallback(nativeWindow,
 			[](GLFWwindow* window, int key, int scancode, int action, int mods)
 				{
 					if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 					glfwSetWindowShouldClose(window, GLFW_TRUE);
 				});
-		index = windows.size();
+		index = static_cast<int>(windows.size());
 		windows.push_back(this);
 		if (windows[0] == nullptr) windows[0] = this;
 	}
@@ -68,7 +68,7 @@ namespace Junia
 			windows[index]->index = index;
 		}
 		windows.pop_back();
-		glfwDestroyWindow(window);
+		glfwDestroyWindow(nativeWindow);
 	}
 
 	int Window::GetID()
@@ -78,12 +78,12 @@ namespace Junia
 
 	void Window::Update()
 	{
-		if (glfwWindowShouldClose(window))
+		if (glfwWindowShouldClose(nativeWindow))
 		{
 			shouldClose = true;
 			return;
 		}
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(nativeWindow);
 		glfwPollEvents();
 	}
 }

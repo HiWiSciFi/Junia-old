@@ -10,13 +10,6 @@ namespace Junia
 	class Window
 	{
 	private:
-		#ifdef BUILD_JUNIA
-		GLFWwindow* window;
-		#else
-		void* window;
-		#endif
-		int index;
-
 		static std::vector<Window*> windows;
 
 	public:
@@ -28,6 +21,16 @@ namespace Junia
 		static void DestroyWindow(int id);
 		static void DestroyWindow(Window* window);
 
+	private:
+		int index;
+
+	public:
+
+#ifdef BUILD_JUNIA
+		GLFWwindow* nativeWindow;
+#else
+		void* nativeWindow;
+#endif
 
 		bool shouldClose = false;
 
