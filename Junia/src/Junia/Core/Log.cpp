@@ -6,6 +6,6 @@ namespace Junia
 	namespace Log
 	{
 		Logger log = Logger("Game");
-		Logger baselog = Logger("Junia");
+		Logger corelog = Logger("Junia");
 	}
 }
