@@ -1,6 +1,6 @@
 #include "Core.hpp"
 #include <Junia/Core/Window.hpp>
-
+#include <Junia/Core/Log.hpp>
 #include <iostream>
 
 namespace Junia
@@ -37,6 +37,23 @@ namespace Junia
 		delete window;
 	}
 
+	static int gladStatus = 0;
+	static void LoadGlad()
+	{
+		gladStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		if (!gladStatus)
+		{
+			JELOG_CORE_CRITICAL << "OpenGL could not be initialized!";
+		}
+		else
+		{
+			JELOG_CORE_TRACE << "OpenGL Info:";
+			JELOG_CORE_TRACE << "  Vendor:   " << glGetString(GL_VENDOR);
+			JELOG_CORE_TRACE << "  Renderer: " << glGetString(GL_RENDERER);
+			JELOG_CORE_TRACE << "  Version:  " << glGetString(GL_VERSION);
+		}
+	}
+
 	Window::Window()
 	{
 		index = -1;
@@ -45,7 +62,7 @@ namespace Junia
 		{
 			const char* msg;
 			glfwGetError(&msg);
-			std::cerr << "Window could not be created!" << std::endl << msg << std::endl;
+			JELOG_CORE_ERROR << "Window could not be created!\n" << msg;
 			return;
 		}
 		glfwSetKeyCallback(nativeWindow,
@@ -57,6 +74,9 @@ namespace Junia
 		index = static_cast<int>(windows.size());
 		windows.push_back(this);
 		if (windows[0] == nullptr) windows[0] = this;
+
+		glfwMakeContextCurrent(nativeWindow);
+		if (!gladStatus) LoadGlad();
 	}
 
 	Window::~Window()
@@ -83,6 +103,9 @@ namespace Junia
 			shouldClose = true;
 			return;
 		}
+		glfwMakeContextCurrent(nativeWindow);
+		glClearColor(1, 0, 1, 1);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glfwSwapBuffers(nativeWindow);
 		glfwPollEvents();
 	}
