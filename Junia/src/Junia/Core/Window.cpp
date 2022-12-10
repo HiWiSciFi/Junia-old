@@ -12,7 +12,7 @@ namespace Junia
 		return static_cast<int>(windows.size() - 1);
 	}
 
-	Window** Window::GetWindows()
+	Window** const Window::GetWindows()
 	{
 		return windows.data();
 	}
@@ -32,7 +32,7 @@ namespace Junia
 		DestroyWindow(GetWindow(id));
 	}
 
-	void Window::DestroyWindow(Window* window)
+	void Window::DestroyWindow(const Window* window)
 	{
 		delete window;
 	}
@@ -89,6 +89,16 @@ namespace Junia
 		}
 		windows.pop_back();
 		glfwDestroyWindow(nativeWindow);
+	}
+
+	void Window::Open()
+	{
+
+	}
+
+	void Window::Close()
+	{
+
 	}
 
 	int Window::GetID()

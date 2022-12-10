@@ -1,6 +1,5 @@
-﻿#include "Editor.hpp"
+#include "Editor.hpp"
 #include <Junia.hpp>
-
 #include <iostream>
 
 void RunGame()
@@ -10,7 +9,7 @@ void RunGame()
 	JELOG_WARN << "Remaining windows: " << Junia::Window::GetWindowCount();
 	while (!window->shouldClose)
 	{
-		for (int i = 1; i < Junia::Window::GetWindowCount()+1; i++)
+		for (int i = 1; i < Junia::Window::GetWindowCount() + 1; i++)
 			Junia::Window::GetWindow(i)->Update();
 		if (window2 != nullptr && window2->shouldClose)
 		{
@@ -19,7 +18,7 @@ void RunGame()
 			window2 = nullptr;
 		}
 	}
-	Junia::Window** windows = Junia::Window::GetWindows();
+	Junia::Window** const windows = Junia::Window::GetWindows();
 	for (int i = Junia::Window::GetWindowCount(); i > 0; i--)
 		Junia::Window::DestroyWindow(windows[i]);
 	JELOG_WARN << "Remaining windows: " << Junia::Window::GetWindowCount();
