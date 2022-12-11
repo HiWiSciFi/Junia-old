@@ -23,26 +23,22 @@ namespace Junia
 		static std::ofstream emptystream = std::ofstream();
 		static Logstream emptylogstream = Logstream(&emptystream);
 
-		Logstream::Logstream(std::ostream* _stream) : stream(_stream) { }
+		Logstream::Logstream(std::ostream* stream) : stream(stream) { }
 		Logstream::Logstream(const Logstream& other) : stream(other.stream) { }
-		Logstream::~Logstream()
-		{
-			(*stream) << ANSI_ESC_RESET << std::endl;
-			(*stream).flush();
-		}
+		Logstream::~Logstream() { (*stream) << ANSI_ESC_RESET << std::endl; }
 
 		Logger::Logger() : name(""), stream(&std::cout) { }
-		Logger::Logger(const std::string& _name) : name(_name), stream(&std::cout) { }
-		Logger::Logger(const std::string& _name, const std::string& path) : name(_name)
+		Logger::Logger(const std::string& name) : name(name), stream(&std::cout) { }
+		Logger::Logger(const std::string& name, std::ostream* stream) : name(name), stream(stream) { }
+		Logger::Logger(const std::string& name, const std::string& path) : name(name)
 		{
 			ownStream = true;
-			stream = new std::ofstream(path, std::ios_base::out);
+			stream = new std::ofstream(path, std::ios_base::out | std::ios_base::app);
 		}
 		Logger::Logger(const Logger& other) : name(other.name), stream(other.stream) { }
 
 		Logger::~Logger()
 		{
-			(*stream) << ANSI_ESC_RESET;
 			if (ownStream) delete stream;
 		}
 
