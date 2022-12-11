@@ -33,8 +33,9 @@ namespace Junia
 		/**
 		* @brief Get a window by its ID
 		* @param id the ID of the window to fetch
-		* @return a pointer to the window with the specified ID or a nullptr if
-		*         there is no currently opened window with that ID
+		* @return a pointer to the window with the specified ID or nullptr if
+		*         there is no currently opened window with that ID. Call with
+		*         ID 0 to get a pointer to the currently focused window
 		*/
 		static Window* GetWindow(IdType id);
 		/**

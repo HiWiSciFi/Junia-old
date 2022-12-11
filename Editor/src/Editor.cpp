@@ -11,9 +11,9 @@ void RunGame()
 	{
 		for (Junia::Window::IdType i = 1; i <= Junia::Window::GetWindowCount(); i++)
 		{
-			Junia::Window::GetWindow(i)->Update();
 			if (Junia::Input::IsKeyDown(Junia::KeyCode::ESCAPE, i))
 				Junia::Window::GetWindow(i)->Close();
+			Junia::Window::GetWindow(i)->Update();
 		}
 	}
 	Junia::Window** const windows = Junia::Window::GetWindows();

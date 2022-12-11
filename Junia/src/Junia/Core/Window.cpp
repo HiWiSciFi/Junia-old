@@ -19,6 +19,7 @@ namespace Junia
 
 	Window* Window::GetWindow(Window::IdType id)
 	{
+		if (id >= windows.size() || id < 0) return nullptr;
 		return windows.at(id);
 	}
 
