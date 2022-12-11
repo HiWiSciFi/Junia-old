@@ -18,6 +18,7 @@
 			"${SRC_DIR}/Junia/Core/Log.cpp"
 			"${SRC_DIR}/Junia/Core/Window.cpp"
 			"${SRC_DIR}/Junia/Core/Input.cpp"
+			"${SRC_DIR}/Junia/Core/Keycodes.cpp"
 
 			"${INCLUDE_DIR}/Junia.hpp"
 			"${INCLUDE_DIR}/Junia/Core/Logger.hpp"
