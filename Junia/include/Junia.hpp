@@ -1,6 +1,7 @@
-﻿#pragma once
-#include "Junia/Core/Window.hpp"
+#pragma once
+#include <Junia/Core/Input.hpp>
 #include <Junia/Core/Log.hpp>
+#include <Junia/Core/Window.hpp>
 
 namespace Junia
 {
