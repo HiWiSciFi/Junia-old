@@ -23,6 +23,11 @@ namespace Junia
 		return windows.at(id);
 	}
 
+	Window* Window::GetWindow()
+	{
+		return GetWindow(0);
+	}
+
 	Window* Window::Create(const std::string& title)
 	{
 		return new Window(title);
@@ -63,7 +68,7 @@ namespace Junia
 
 	Window::~Window()
 	{
-		if (open) Close();
+		Close();
 	}
 
 	Window::IdType Window::GetID()
@@ -82,9 +87,58 @@ namespace Junia
 		if (open) glfwSetWindowTitle(nativeWindow, title.c_str());
 	}
 
+	std::pair<int, int> Window::GetPosition()
+	{
+		int x, y;
+		glfwGetWindowPos(nativeWindow, &x, &y);
+		return { x, y };
+	}
+
+	void Window::SetPosition(std::pair<int, int> position)
+	{
+		glfwSetWindowPos(nativeWindow, position.first, position.second);
+	}
+
+	std::pair<int, int> Window::GetSize()
+	{
+		int width, height;
+		glfwGetWindowSize(nativeWindow, &width, &height);
+		return { width, height };
+	}
+
+	void Window::SetSize(std::pair<int, int> size)
+	{
+		glfwSetWindowSize(nativeWindow, size.first, size.second);
+	}
+
+	float Window::GetOpacity()
+	{
+		return glfwGetWindowOpacity(nativeWindow);
+	}
+
+	void Window::SetOpacity(float opacity)
+	{
+		glfwSetWindowOpacity(nativeWindow, opacity);
+	}
+
 	bool Window::IsOpen()
 	{
 		return open;
+	}
+
+	static void WindowFocusCallback(GLFWwindow* nativeWindow, int focused)
+	{
+		for (Window::IdType i = 1; i < Window::GetWindowCount() + 1; i++)
+		{
+			Window* window = Window::GetWindow(i);
+			if (window == nullptr || window->nativeWindow != nativeWindow) continue;
+
+			if (focused) Window::GetWindows()[0] = window;
+			else if (Window::GetWindows()[0] == window) Window::GetWindows()[0] = nullptr;
+
+			window->focused = focused;
+			break;
+		}
 	}
 
 	void Window::Open()
@@ -99,6 +153,7 @@ namespace Junia
 			JELOG_CORE_ERROR << "Window could not be created!\n" << msg;
 			return;
 		}
+		glfwSetWindowFocusCallback(nativeWindow, WindowFocusCallback);
 		index = static_cast<int>(windows.size());
 		windows.push_back(this);
 		if (windows[0] == nullptr) windows[0] = this;
@@ -111,6 +166,7 @@ namespace Junia
 	void Window::Close()
 	{
 		if (!open) return;
+		focused = false;
 		open = false;
 
 		int lastIndex = GetWindowCount();
@@ -122,6 +178,16 @@ namespace Junia
 		index = -1;
 		windows.pop_back();
 		glfwDestroyWindow(nativeWindow);
+	}
+
+	bool Window::IsFocused()
+	{
+		return focused;
+	}
+
+	void Window::Focus()
+	{
+		glfwFocusWindow(nativeWindow);
 	}
 
 	void Window::Update()
