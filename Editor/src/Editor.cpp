@@ -4,22 +4,23 @@
 
 void RunGame()
 {
-	Junia::Window::Create("First Window ©")->Open();
+	Junia::Window* mainWindow = Junia::Window::Create("First Window ©");
+	mainWindow->Open();
 	Junia::Window::Create("Second Window")->Open();
-	JELOG_WARN << "Remaining windows: " << Junia::Window::GetWindowCount();
-	while (Junia::Window::GetWindow(0)->IsOpen())
+	mainWindow->Focus();
+	while (mainWindow->IsOpen())
 	{
 		for (Junia::Window::IdType i = 1; i <= Junia::Window::GetWindowCount(); i++)
-		{
-			if (Junia::Input::IsKeyDown(Junia::KeyCode::ESCAPE, i))
-				Junia::Window::GetWindow(i)->Close();
 			Junia::Window::GetWindow(i)->Update();
-		}
+
+		if (Junia::Input::IsKeyDown(Junia::KeyCode::ESCAPE))
+			Junia::Window::GetWindow()->Close();
+		JELOG_INFO << "Main Window Focus: " << mainWindow->IsFocused();
 	}
+
 	Junia::Window** const windows = Junia::Window::GetWindows();
 	for (Junia::Window::IdType i = Junia::Window::GetWindowCount(); i > 0; i--)
 		Junia::Window::Destroy(windows[i]);
-	JELOG_WARN << "Remaining windows: " << Junia::Window::GetWindowCount();
 }
 
 int main(int argc, char** argv)
