@@ -32,13 +32,17 @@ namespace Junia
 
 	bool Input::IsKeyDown(KeyCode keycode, Window::IdType window)
 	{
-		const auto state = glfwGetKey(Window::GetWindow(window)->nativeWindow, JeToGlfwKey[static_cast<int>(keycode)]);
+		Window* w = Window::GetWindow(window);
+		if (w == nullptr) return false;
+		const auto state = glfwGetKey(w->nativeWindow, JeToGlfwKey[static_cast<int>(keycode)]);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
 	bool Input::IsMouseButtonDown(MouseButton button, Window::IdType window)
 	{
-		const auto state = glfwGetMouseButton(Window::GetWindow(window)->nativeWindow,
+		Window* w = Window::GetWindow(window);
+		if (w == nullptr) return false;
+		const auto state = glfwGetMouseButton(w->nativeWindow,
 			JeToGlfwButton[static_cast<int>(button)]);
 		return state == GLFW_PRESS;
 	}
@@ -46,7 +50,9 @@ namespace Junia
 	std::pair<int, int> Input::GetMousePosition(Window::IdType window)
 	{
 		double x, y;
-		glfwGetCursorPos(Window::GetWindow(window)->nativeWindow, &x, &y);
+		Window* w = Window::GetWindow(window);
+		if (w == nullptr) return { 0, 0 };
+		glfwGetCursorPos(w->nativeWindow, &x, &y);
 		return { static_cast<int>(x), static_cast<int>(y) };
 	}
 }
