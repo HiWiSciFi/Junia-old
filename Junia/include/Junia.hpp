@@ -3,6 +3,8 @@
 #include <Junia/Core/Log.hpp>
 #include <Junia/Core/Window.hpp>
 
+#include <Junia/ECS/ECS.hpp>
+
 namespace Junia
 {
 	/// @brief Initializes Junia
