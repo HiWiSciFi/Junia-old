@@ -23,10 +23,44 @@ void RunGame()
 		Junia::Window::Destroy(windows[i]);
 }
 
+struct Transform
+{
+	float x, y, z;
+};
+
+class GravitySystem : public Junia::ECS::System
+{
+public:
+	virtual void Init() override
+	{
+		RequireComponent<Transform>();
+	}
+
+	virtual void Update(float dt) override
+	{
+		for (auto const& e : entities)
+		{
+			Transform& transform = e.GetComponent<Transform>();
+			transform.z -= 1.0f * dt;
+		}
+	}
+};
+
+#define ENTITY_COUNT (1000000)
+
 int main(int argc, char** argv)
 {
-	//Junia::Log::log.maxLevel = Junia::Log::LogLevel::Warn;
-	//Junia::Log::corelog.maxLevel = Junia::Log::LogLevel::Warn;
+	Junia::ECS::RegisterComponent<Transform>();
+	Junia::ECS::RegisterSystem<GravitySystem>();
+	for (Junia::ECS::EntityType i = 0; i < ENTITY_COUNT; i++)
+	{
+		Junia::ECS::Entity e = Junia::ECS::Entity::Create();
+		e.AddComponent<Transform>();
+	}
+	for (int i = 0; i < ENTITY_COUNT; i++) Junia::ECS::Entity::Create();
+	JELOG_WARN << "Entities created!";
+	for (int i = (ENTITY_COUNT * 2) - 1; i >= 0; i--) Junia::ECS::Entity::Destroy(Junia::ECS::Entity(i));
+	JELOG_WARN << "Entities destroyed!";
 
 	JELOG_INFO << "Initializing Junia...";
 	Junia::Init();

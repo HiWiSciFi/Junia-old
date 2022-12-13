@@ -2,6 +2,7 @@
 
 #include <Junia/ECS/ComponentContainer.hpp>
 #include <Junia/Core/IdPool.hpp>
+#include <stdexcept>
 #include <typeindex>
 #include <typeinfo>
 #include <unordered_map>
@@ -12,17 +13,34 @@ namespace Junia
 {
 	namespace ECS
 	{
-		using EntityType = size_t;
+		using EntityType = std::size_t;
 		class System;
 
-		extern std::unordered_map<std::type_index, std::shared_ptr<ComponentContainer>> componentStores;
-		extern std::unordered_map<std::type_index, std::shared_ptr<System>> systems;
-		extern IdPool<EntityType> entityIdPool;
-
-		template<typename T>
-		inline std::shared_ptr<ComponentStore<T>> GetComponentStore()
+		namespace Internal
 		{
-			return std::static_pointer_cast<ComponentStore<T>>(componentStores[typeid(T)]);
+			extern std::unordered_map<std::type_index, std::shared_ptr<ComponentContainer>> componentStores;
+			extern std::unordered_map<std::type_index, std::shared_ptr<System>> systems;
+			extern IdPool<EntityType> entityIdPool;
+
+			/**
+			 * @brief Get the ECS::Internal::ComponentStore for a specific
+			 *        component
+			 * @tparam T the component to get the store for
+			 * @return a shared pointer to the ECS::Internal::ComponentStore or
+			 *         a nullptr if the component has not been registered
+			*/
+			template<typename T>
+			inline std::shared_ptr<ComponentStore<T>> GetComponentStore()
+			{
+				try
+				{
+					return std::static_pointer_cast<ComponentStore<T>>(componentStores[typeid(T)]);
+				}
+				catch (std::out_of_range)
+				{
+					return std::shared_ptr<ComponentStore<T>>(nullptr);
+				}
+			}
 		}
 
 		class Entity
@@ -31,29 +49,61 @@ namespace Junia
 			EntityType id;
 
 		public:
+			/**
+			 * @brief Create an entity
+			 * @return a valid new entity
+			*/
+			static Entity Create();
+
+			/**
+			 * @brief Destroy an entity that has been created using ECS::CreateEntity()
+			 * @param e the entity to destroy
+			*/
+			static void Destroy(Entity e);
+
+			/**
+			 * @brief Create an Entity by ID
+			 * @param id the id for the entity
+			*/
 			Entity(EntityType id) : id(id) { }
 
+			/**
+			 * @brief Get the entity ID
+			 * @return the ID of the entity
+			*/
 			EntityType GetId() const { return id; }
-			operator EntityType() const { return id; }
 
+			/**
+			 * @brief Add a component
+			 * @tparam T the component type to add
+			 * @param component the component to add
+			*/
 			template<typename T>
 			inline void AddComponent(T component) const
 			{
-				for (auto const& spair : systems)
+				for (auto const& spair : Internal::systems)
 				{
 					std::shared_ptr<System> system = spair.second;
 					if (system->GetRequirements().find(typeid(T)) != system->GetRequirements().end())
 						system->entities.insert(*this);
 				}
-				GetComponentStore<T>()->Insert(id, component);
+				Internal::GetComponentStore<T>()->Insert(id, component);
 			}
 
+			/**
+			 * @brief Add a component
+			 * @tparam T the component type to add
+			*/
 			template<typename T>
 			inline void AddComponent() const
 			{
 				AddComponent<T>(T{ });
 			}
 
+			/**
+			 * @brief Remove a component
+			 * @tparam T the component type to remove
+			*/
 			template<typename T>
 			inline void RemoveComponent() const
 			{
@@ -61,18 +111,35 @@ namespace Junia
 				GetComponentStore<T>()->Erase(id);
 			}
 
+			/**
+			 * @brief Get if the entity has a component
+			 * @tparam T the type of component to check for
+			 * @return true if it has the component, false otherwise
+			*/
 			template<typename T>
 			inline bool HasComponent() const
 			{
-				GetComponentStore<T>()->HasStored(id);
+				std::shared_ptr<Internal::ComponentStore<T>> store = Internal::GetComponentStore<T>();
+				if (store == nullptr) return false;
+				return store->HasStored(id);
 			}
 
+			/**
+			 * @brief Get a component. This function will throw an
+			 *        std::invalid_argument exception if the entity does not
+			 *        have a component of this type
+			 * @tparam T the type of the component to get
+			 * @return a reference to the component
+			*/
 			template<typename T>
 			T& GetComponent() const
 			{
-				return GetComponentStore<T>()->Get(id);
+				if (!HasComponent<T>())
+					throw std::invalid_argument("There is no component of that type for this entity");
+				return Internal::GetComponentStore<T>()->Get(id);
 			}
 
+			operator EntityType() const { return id; }
 			bool operator==(const Entity& other) const { return id == other.id; }
 			bool operator>(const Entity& other) const { return id > other.id; }
 			bool operator<(const Entity& other) const { return id < other.id; }
@@ -84,6 +151,7 @@ namespace Junia
 	}
 }
 
+// template specification for Hashing entities
 template<>
 struct std::hash<Junia::ECS::Entity>
 {
@@ -98,11 +166,20 @@ namespace Junia
 {
 	namespace ECS
 	{
+		/**
+		 * @brief A representation of a System. All Systems should be derived
+		 *        publicly from this class
+		*/
 		class System
 		{
 		protected:
 			std::unordered_set<std::type_index> requirements{ };
 
+			/**
+			 * @brief Register a component requirement for entities that should
+			 *        be handled by this system
+			 * @tparam T the component type to require
+			*/
 			template<typename T>
 			inline void RequireComponent()
 			{
@@ -110,49 +187,77 @@ namespace Junia
 			}
 
 		public:
+			/**
+			 * @brief A set of entities that are relevant to this system
+			*/
 			std::unordered_set<Entity> entities;
 
+			/**
+			 * @brief Get a set of components that are required for the system
+			 *        to apply to an entity
+			 * @return a reference to a set containing type indices for each
+			 *         component that is required by the system
+			*/
 			inline const std::unordered_set<std::type_index>& GetRequirements() const
 			{
 				return requirements;
 			}
 
+			/**
+			 * @brief Initializes the system (set component requirements here)
+			*/
 			virtual void Init() { }
+
+			/**
+			 * @brief Called each frame (handle entities here)
+			 * @param dt the delta time
+			*/
 			virtual void Update(float dt) { }
 		};
 
+		/**
+		 * @brief Register a component type
+		 * @tparam T the component type to register
+		*/
 		template<typename T>
 		inline void RegisterComponent()
 		{
-			componentStores.insert({ typeid(T), std::make_shared<ComponentStore<T>>() });
+			Internal::componentStores.insert({ typeid(T), std::make_shared<Internal::ComponentStore<T>>() });
 		}
 
+		/**
+		 * @brief [WIP:NYI] Unregister a component type
+		 * @tparam T the component type to unregister
+		*/
 		template<typename T>
-		inline std::shared_ptr<System> RegisterSystem()
+		inline void UnregisterComponent()
+		{
+			// TODO: implement
+		}
+
+		/**
+		 * @brief Register a system
+		 * @tparam T the system type to register
+		 * @return a pointer containing the system instance used
+		*/
+		template<typename T>
+		inline std::shared_ptr<T> RegisterSystem()
 		{
 			std::shared_ptr<System> system = std::make_shared<T>();
-			systems.insert({ typeid(T), system });
+			Internal::systems.insert({ typeid(T), system });
 			system->Init();
-			return system;
+			return std::static_pointer_cast<T>(system);
 		}
 
-		inline Entity CreateEntity()
+		/**
+		 * @brief Unregister a system. If the system hasn't been registered (see
+		 *        ECS::RegisterSystem()) this will do nothing
+		 * @tparam T the system type to unregister
+		*/
+		template<typename T>
+		inline void UnregisterSystem()
 		{
-			Entity e(entityIdPool.Next());
-			for (auto const& spair : systems)
-			{
-				std::shared_ptr<System> system = spair.second;
-				if (system->GetRequirements().size() > 0) continue;
-				system->entities.insert(e);
-			}
-			return e;
-		}
-
-		inline void DestroyEntity(Entity e)
-		{
-			entityIdPool.Free(e);
-			for (auto const& cspair : componentStores) cspair.second->Erase(e);
-			for (auto const& spair : systems) spair.second->entities.erase(e);
+			Internal::systems.erase(typeid(T));
 		}
 	}
 }
