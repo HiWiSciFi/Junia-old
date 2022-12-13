@@ -16,11 +16,6 @@ void RunGame()
 
 		if (Junia::Input::IsKeyDown(Junia::KeyCode::ESCAPE))
 			Junia::Window::GetWindow()->Close();
-
-		for (const auto& spair : Junia::ECS::systems)
-		{
-			spair.second->Update(.0000001f);
-		}
 	}
 
 	Junia::Window** const windows = Junia::Window::GetWindows();
@@ -28,38 +23,10 @@ void RunGame()
 		Junia::Window::Destroy(windows[i]);
 }
 
-struct Transform
-{
-	float x, y, z;
-};
-
-class GravitySystem : public Junia::ECS::System
-{
-	virtual void Init() override
-	{
-		RequireComponent<Transform>();
-	}
-
-	virtual void Update(float dt) override
-	{
-		for (auto const& entity : entities)
-		{
-			Transform& transform = entity.GetComponent<Transform>();
-			transform.z -= 1.0f * dt;
-		}
-	}
-};
-
 int main(int argc, char** argv)
 {
 	//Junia::Log::log.maxLevel = Junia::Log::LogLevel::Warn;
 	//Junia::Log::corelog.maxLevel = Junia::Log::LogLevel::Warn;
-
-	Junia::ECS::RegisterComponent<Transform>();
-	Junia::ECS::RegisterSystem<GravitySystem>();
-
-	Junia::ECS::Entity e = Junia::ECS::CreateEntity();
-	e.AddComponent<Transform>();
 
 	JELOG_INFO << "Initializing Junia...";
 	Junia::Init();
