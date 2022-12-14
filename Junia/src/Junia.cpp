@@ -1,4 +1,8 @@
-﻿#include "Junia/Core/Core.hpp"
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
+#include "Junia/Core/Core.hpp"
 #include <Junia.hpp>
 
 #include <iostream>
@@ -9,6 +13,14 @@ namespace Junia
 {
 	void Init()
 	{
+#ifdef _WIN32
+			DWORD dwMode;
+			HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+			GetConsoleMode(hOutput, &dwMode);
+			dwMode |= ENABLE_PROCESSED_OUTPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+			SetConsoleMode(hOutput, dwMode);
+#endif
+
 		if (!glfwInit())
 		{
 			const char* msg = nullptr;

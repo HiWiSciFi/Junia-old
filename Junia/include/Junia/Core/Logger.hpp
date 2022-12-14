@@ -1,7 +1,9 @@
 #pragma once
 #include <fstream>
+#include <cinttypes>
 #include <string>
 #include <sstream>
+#include <vector>
 
 namespace Junia
 {
@@ -20,69 +22,103 @@ namespace Junia
 			Trace = 5     /** @brief LogLevel for Trace messages */
 		};
 
+		namespace Internal
+		{
+			struct StreamData
+			{
+				bool own = false;
+				bool ansi = false;
+				std::ostream* const stream;
+			};
+		}
+
 		class Logstream
 		{
 		public:
 			/**
-			* @brief Creates a Logstream from an std::ostream*
+			* @brief Create a Logstream from an std::ostream*
 			*/
-			Logstream(std::ostream* stream);
+			Logstream(std::vector<Internal::StreamData>* streams, LogLevel level);
 			/**
-			* @brief Copies a Logstream
+			* @brief Copy a Logstream
 			*/
 			Logstream(const Logstream& other);
 			/**
-			* @brief Resets ANSI Escape codes, adds a linebreak and flushes the
+			* @brief Reset ANSI Escape codes, adds a linebreak and flushes the
 			*        stream
 			*/
 			~Logstream();
 
 			/**
-			* @brief Inserts a value into the log buffer
+			* @brief Insert a value into the log buffer
 			* @return a reference to this Logstream
 			*/
 			template<typename T> Logstream& operator<<(T const& value)
 			{
-				(*stream) << value;
+				if (streams == nullptr) return *this;
+				for (auto const& streamData : *streams)
+				{
+					if (streamData.level < level) continue;
+					(*streamData.stream) << value;
+				}
 				return *this;
 			}
 
 		private:
-			std::ostream* stream = nullptr;
+			LogLevel level;
+			std::vector<Internal::StreamData>* streams = nullptr;
 		};
 
 		class Logger
 		{
 		public:
 			/**
-			* @brief Creates a Logger with an empty name writing to stdout
+			* @brief Create a Logger with an empty name writing to stdout
 			*/
 			Logger();
 			/**
-			* @brief Creates a Logger writing to stdout
+			* @brief Create a Logger writing to stdout
 			* @param name the name for the Logger
 			*/
 			Logger(const std::string& name);
 			/**
-			* @brief Creates a Logger writing to an existing stream
+			* @brief Create a Logger writing to an existing stream
 			* @param name the name for the Logger
 			* @param stream a pointer to an opened stream that this Logger shall
 			*        write to
+			* @param ansi if the stream should include ANSI Escape Sequences
 			*/
-			Logger(const std::string& name, std::ostream* stream);
+			Logger(const std::string& name, std::ostream* const stream, bool ansi = true);
 			/**
-			* @brief Creates a Logger writing to a file
+			* @brief Create a Logger writing to a file
 			* @param name the name for the Logger
 			* @param path the path to the file the Logger should write to. The
 			*        file will be created if it doesn't exist.
+			* @param ansi if the file should include ANSI Escape Sequences
 			*/
-			Logger(const std::string& name, const std::string& path);
+			Logger(const std::string& name, const std::string& path, bool ansi = false);
 
 			/**
-			* @brief disposes of the stream the Logger is writing to if it was
+			* @brief Dispose of the stream the Logger is writing to if it was
 			*        opened by the Logger
 			*/
 			~Logger();
+
+			/**
+			* @brief Add an output stream the logger
+			* @param stream a pointer to an opened stream that this Logger shall
+			*        write to
+			* @param ansi if the stream should include ANSI Escape Sequences
+			*/
+			void AddStream(std::ostream* const stream, bool ansi = true);
+
+			/**
+			* @brief Add a file output to the logger
+			* @param path the path to the file the Logger should write to. The
+			*        file will be created if it doesn't exist.
+			* @param ansi if the file should include ANSI Escape Sequences
+			*/
+			void AddStream(const std::string& path, bool ansi = false);
 
 			/**
 			* @brief Write a trace message if the Logger::maxLevel &ge;
@@ -129,8 +165,7 @@ namespace Junia
 			Logger(const Logger& other);
 
 			std::string name = "";
-			bool ownStream = false;
-			std::ostream* stream;
+			std::vector<Internal::StreamData> streams{ };
 		};
 	}
 }
