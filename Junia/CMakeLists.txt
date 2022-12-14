@@ -34,6 +34,27 @@
 
 			"${INCLUDE_DIR}/Junia/ECS/ECS.hpp"
 			"${INCLUDE_DIR}/Junia/ECS/ComponentContainer.hpp"
+
+			"${INCLUDE_DIR}/Junia/Events/Event.hpp"
+
+			"${INCLUDE_DIR}/JMath.hpp"
+			"${INCLUDE_DIR}/JMath/Types.hpp"
+			"${INCLUDE_DIR}/JMath/Constants.hpp"
+			"${INCLUDE_DIR}/JMath/Vectors.hpp"
+			"${INCLUDE_DIR}/JMath/Vector1.hpp"
+			"${INCLUDE_DIR}/JMath/Vector2.hpp"
+			"${INCLUDE_DIR}/JMath/Vector3.hpp"
+			"${INCLUDE_DIR}/JMath/Vector4.hpp"
+			"${INCLUDE_DIR}/JMath/Matrices.hpp"
+			"${INCLUDE_DIR}/JMath/Matrix2x2.hpp"
+			"${INCLUDE_DIR}/JMath/Matrix2x3.hpp"
+			"${INCLUDE_DIR}/JMath/Matrix2x4.hpp"
+			"${INCLUDE_DIR}/JMath/Matrix3x2.hpp"
+			"${INCLUDE_DIR}/JMath/Matrix3x3.hpp"
+			"${INCLUDE_DIR}/JMath/Matrix3x4.hpp"
+			"${INCLUDE_DIR}/JMath/Matrix4x2.hpp"
+			"${INCLUDE_DIR}/JMath/Matrix4x3.hpp"
+			"${INCLUDE_DIR}/JMath/Matrix4x4.hpp"
 	)
 
 	target_include_directories(Junia
