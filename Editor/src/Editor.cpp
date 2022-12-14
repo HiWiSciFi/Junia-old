@@ -48,8 +48,11 @@ public:
 
 #define ENTITY_COUNT (1000000)
 
+#include <chrono>
+
 int main(int argc, char** argv)
 {
+	auto starttime = std::chrono::high_resolution_clock::now();
 	Junia::ECS::RegisterComponent<Transform>();
 	Junia::ECS::RegisterSystem<GravitySystem>();
 	for (Junia::ECS::EntityType i = 0; i < ENTITY_COUNT; i++)
@@ -58,9 +61,14 @@ int main(int argc, char** argv)
 		e.AddComponent<Transform>();
 	}
 	for (int i = 0; i < ENTITY_COUNT; i++) Junia::ECS::Entity::Create();
-	JELOG_WARN << "Entities created!";
+	auto endtime = std::chrono::high_resolution_clock::now();
+	float creationtime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
+	JELOG_WARN << "Entities created! Time: " << creationtime << "s";
+	starttime = std::chrono::high_resolution_clock::now();
 	for (int i = (ENTITY_COUNT * 2) - 1; i >= 0; i--) Junia::ECS::Entity::Destroy(Junia::ECS::Entity(i));
-	JELOG_WARN << "Entities destroyed!";
+	endtime = std::chrono::high_resolution_clock::now();
+	float destructiontime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
+	JELOG_WARN << "Entities destroyed! Time: " << destructiontime << "s";
 
 	JELOG_INFO << "Initializing Junia...";
 	Junia::Init();
