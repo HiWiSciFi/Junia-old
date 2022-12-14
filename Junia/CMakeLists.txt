@@ -20,11 +20,11 @@
 			"${SRC_DIR}/Junia/Core/Window.cpp"
 			"${SRC_DIR}/Junia/Core/Input.cpp"
 			"${SRC_DIR}/Junia/Core/Keycodes.cpp"
-			
+
 			"${SRC_DIR}/Junia/ECS/ECS.cpp"
 
 			"${INCLUDE_DIR}/Junia.hpp"
-			
+
 			"${INCLUDE_DIR}/Junia/Core/Logger.hpp"
 			"${INCLUDE_DIR}/Junia/Core/Log.hpp"
 			"${INCLUDE_DIR}/Junia/Core/Window.hpp"
