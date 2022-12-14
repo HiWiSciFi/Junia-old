@@ -119,7 +119,7 @@ namespace Junia
 		F24            = 124,
 		F25            = 125,
 
-		DELETE         = 127, /* DEL */
+		DEL            = 127, /* Delete */
 
 		LEFT_SHIFT     = 128,
 		RIGHT_SHIFT    = 129,
