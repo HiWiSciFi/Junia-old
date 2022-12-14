@@ -79,37 +79,21 @@ namespace Junia
 			 * @param component the component to add
 			*/
 			template<typename T>
-			inline void AddComponent(T component) const
-			{
-				for (auto const& spair : Internal::systems)
-				{
-					std::shared_ptr<System> system = spair.second;
-					if (system->GetRequirements().find(typeid(T)) != system->GetRequirements().end())
-						system->entities.insert(*this);
-				}
-				Internal::GetComponentStore<T>()->Insert(id, component);
-			}
+			inline void AddComponent(T component) const;
 
 			/**
 			 * @brief Add a component
 			 * @tparam T the component type to add
 			*/
 			template<typename T>
-			inline void AddComponent() const
-			{
-				AddComponent<T>(T{ });
-			}
+			inline void AddComponent() const;
 
 			/**
 			 * @brief Remove a component
 			 * @tparam T the component type to remove
 			*/
 			template<typename T>
-			inline void RemoveComponent() const
-			{
-				for (auto const& spair : systems) spair.second->entities.erase(*this);
-				GetComponentStore<T>()->Erase(id);
-			}
+			inline void RemoveComponent() const;
 
 			/**
 			 * @brief Get if the entity has a component
@@ -117,12 +101,7 @@ namespace Junia
 			 * @return true if it has the component, false otherwise
 			*/
 			template<typename T>
-			inline bool HasComponent() const
-			{
-				std::shared_ptr<Internal::ComponentStore<T>> store = Internal::GetComponentStore<T>();
-				if (store == nullptr) return false;
-				return store->HasStored(id);
-			}
+			inline bool HasComponent() const;
 
 			/**
 			 * @brief Get a component. This function will throw an
@@ -132,12 +111,7 @@ namespace Junia
 			 * @return a reference to the component
 			*/
 			template<typename T>
-			T& GetComponent() const
-			{
-				if (!HasComponent<T>())
-					throw std::invalid_argument("There is no component of that type for this entity");
-				return Internal::GetComponentStore<T>()->Get(id);
-			}
+			T& GetComponent() const;
 
 			operator EntityType() const { return id; }
 			bool operator==(const Entity& other) const { return id == other.id; }
@@ -172,19 +146,17 @@ namespace Junia
 		*/
 		class System
 		{
-		protected:
+		private:
 			std::unordered_set<std::type_index> requirements{ };
 
+		protected:
 			/**
 			 * @brief Register a component requirement for entities that should
 			 *        be handled by this system
 			 * @tparam T the component type to require
 			*/
 			template<typename T>
-			inline void RequireComponent()
-			{
-				requirements.insert(typeid(T));
-			}
+			inline void RequireComponent();
 
 		public:
 			/**
@@ -198,10 +170,7 @@ namespace Junia
 			 * @return a reference to a set containing type indices for each
 			 *         component that is required by the system
 			*/
-			inline const std::unordered_set<std::type_index>& GetRequirements() const
-			{
-				return requirements;
-			}
+			inline const std::unordered_set<std::type_index>& GetRequirements() const;
 
 			/**
 			 * @brief Initializes the system (set component requirements here)
@@ -214,6 +183,70 @@ namespace Junia
 			*/
 			virtual void Update(float dt) { }
 		};
+
+// ---------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------- Entity ------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+
+		template<typename T>
+		inline void Entity::AddComponent(T component) const
+		{
+			for (auto const& spair : Internal::systems)
+			{
+				std::shared_ptr<System> system = spair.second;
+				if (system->GetRequirements().find(typeid(T)) != system->GetRequirements().end())
+					system->entities.insert(*this);
+			}
+			Internal::GetComponentStore<T>()->Insert(id, component);
+		}
+
+		template<typename T>
+		inline void Entity::AddComponent() const
+		{
+			AddComponent<T>(T{ });
+		}
+
+		template<typename T>
+		inline void Entity::RemoveComponent() const
+		{
+			for (auto const& spair : Internal::systems) spair.second->entities.erase(*this);
+			Internal::GetComponentStore<T>()->Erase(id);
+		}
+
+		template<typename T>
+		inline bool Entity::HasComponent() const
+		{
+			std::shared_ptr<Internal::ComponentStore<T>> store = Internal::GetComponentStore<T>();
+			if (store == nullptr) return false;
+			return store->HasStored(id);
+		}
+
+		template<typename T>
+		T& Entity::GetComponent() const
+		{
+			if (!HasComponent<T>())
+				throw std::invalid_argument("There is no component of that type for this entity");
+			return Internal::GetComponentStore<T>()->Get(id);
+		}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------- System ------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+
+		template<typename T>
+		inline void System::RequireComponent()
+		{
+			requirements.insert(typeid(T));
+		}
+
+		inline const std::unordered_set<std::type_index>& System::GetRequirements() const
+		{
+			return requirements;
+		}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------- Global functions -------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * @brief Register a component type
