@@ -87,33 +87,6 @@ namespace JMath
 		}
 		#pragma endregion
 
-		#pragma region ConstructorsVectors
-		template<typename A, typename B> constexpr Vector(Vector<2, A> const& _xy, B _z) :
-			x(static_cast<T>(_xy.x)),
-			y(static_cast<T>(_xy.y)),
-			z(static_cast<T>(_z))
-		{
-		}
-		template<typename A, typename B> constexpr Vector(Vector<2, A> const& _xy, Vector<1, B> const& _z) :
-			x(static_cast<T>(_xy.x)),
-			y(static_cast<T>(_xy.y)),
-			z(static_cast<T>(_z.x))
-		{
-		}
-		template<typename A, typename B> constexpr Vector(A _x, Vector<2, B> const& _yz) :
-			x(static_cast<T>(_x)),
-			y(static_cast<T>(_yz.x)),
-			z(static_cast<T>(_yz.y))
-		{
-		}
-		template<typename A, typename B> constexpr Vector(Vector<1, A> const& _x, Vector<2, B> const& _yz) :
-			x(static_cast<T>(_x.x)),
-			y(static_cast<T>(_yz.x)),
-			z(static_cast<T>(_yz.y))
-		{
-		}
-		#pragma endregion
-
 		#pragma region ConstructorsSize
 		template<typename U> constexpr explicit Vector(Vector<2, U> const& v) :
 			x(static_cast<T>(v.x)),
