@@ -1,6 +1,7 @@
 #include "Editor.hpp"
 #include <Junia.hpp>
 #include <iostream>
+#include <chrono>
 
 void RunGame()
 {
@@ -23,42 +24,35 @@ void RunGame()
 		Junia::Window::Destroy(windows[i]);
 }
 
-struct Transform
-{
-	float x, y, z;
-};
-
 class GravitySystem : public Junia::ECS::System
 {
 public:
 	virtual void Init() override
 	{
-		RequireComponent<Transform>();
+		RequireComponent<Junia::Transform>();
 	}
 
 	virtual void Update(float dt) override
 	{
 		for (auto const& e : entities)
 		{
-			Transform& transform = e.GetComponent<Transform>();
-			transform.z -= 1.0f * dt;
+			Junia::Transform& transform = e.GetComponent<Junia::Transform>();
+			transform.position.z -= 1.0f * dt;
 		}
 	}
 };
 
 #define ENTITY_COUNT (1000000)
 
-#include <chrono>
-
 int main(int argc, char** argv)
 {
 	auto starttime = std::chrono::high_resolution_clock::now();
-	Junia::ECS::RegisterComponent<Transform>();
+	Junia::ECS::RegisterComponent<Junia::Transform>();
 	Junia::ECS::RegisterSystem<GravitySystem>();
 	for (Junia::ECS::EntityType i = 0; i < ENTITY_COUNT; i++)
 	{
 		Junia::ECS::Entity e = Junia::ECS::Entity::Create();
-		e.AddComponent<Transform>();
+		e.AddComponent<Junia::Transform>();
 	}
 	for (int i = 0; i < ENTITY_COUNT; i++) Junia::ECS::Entity::Create();
 	auto endtime = std::chrono::high_resolution_clock::now();
