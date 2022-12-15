@@ -56,11 +56,7 @@ namespace Junia
 			template<typename T> Logstream& operator<<(T const& value)
 			{
 				if (streams == nullptr) return *this;
-				for (auto const& streamData : *streams)
-				{
-					if (streamData.level < level) continue;
-					(*streamData.stream) << value;
-				}
+				for (auto const& streamData : *streams) (*streamData.stream) << value;
 				return *this;
 			}
 

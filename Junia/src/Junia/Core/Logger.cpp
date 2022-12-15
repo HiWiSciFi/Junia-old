@@ -63,14 +63,15 @@ namespace Junia
 			for (auto& streamData : streams) streamData.own = false;
 		}
 
-		void Logger::AddStream(std::ostream* const stream, bool ansi = true)
+		void Logger::AddStream(std::ostream* const stream, bool ansi)
 		{
 			streams.push_back({ false, ansi, stream });
 		}
 
-		void Logger::AddStream(const std::string& path, bool ansi = false)
+		void Logger::AddStream(const std::string& path, bool ansi)
 		{
-
+			std::ofstream* stream = new std::ofstream(path, std::ios_base::out | std::ios_base::app);
+			streams.push_back({ true, ansi, stream });
 		}
 
 		Logger::~Logger()
