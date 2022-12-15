@@ -4,6 +4,7 @@
 #include <Junia/Core/Window.hpp>
 
 #include <Junia/ECS/ECS.hpp>
+#include <Junia/ECS/Components.hpp>
 
 namespace Junia
 {
