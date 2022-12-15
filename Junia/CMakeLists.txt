@@ -34,6 +34,9 @@
 
 			"${INCLUDE_DIR}/Junia/ECS/ECS.hpp"
 			"${INCLUDE_DIR}/Junia/ECS/ComponentContainer.hpp"
+			"${INCLUDE_DIR}/Junia/ECS/Components.hpp"
+			"${INCLUDE_DIR}/Junia/ECS/Components/Transform.hpp"
+			"${INCLUDE_DIR}/Junia/ECS/Components/EntityInfo.hpp"
 
 			"${INCLUDE_DIR}/Junia/Events/Event.hpp"
 
