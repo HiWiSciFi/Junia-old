@@ -6,6 +6,7 @@
 #include <inttypes.h>
 #include <string>
 #include <vector>
+#include <JMath/Vector2.hpp>
 
 namespace Junia
 {
@@ -110,24 +111,24 @@ namespace Junia
 
 		/**
 		 * @brief Get the window position
-		 * @return a pair containing the window postion as { x, y }
+		 * @return a 2D vector containing the window postion
 		*/
-		std::pair<int, int> GetPosition();
+		JMath::iVec2 GetPosition();
 		/**
 		 * @brief Set the window position
-		 * @param position the position to move the window to as { x, y }
+		 * @param position the position to move the window to
 		*/
-		void SetPosition(std::pair<int, int> position);
+		void SetPosition(JMath::iVec2 position);
 		/**
 		 * @brief Get the window size
-		 * @return a pair containing the window size as { width, height }
+		 * @return a 2D vector containing the window size as { width, height }
 		*/
-		std::pair<int, int> GetSize();
+		JMath::iVec2 GetSize();
 		/**
 		 * @brief Set the window size
 		 * @param size the new size for the window as { width, height }
 		*/
-		void SetSize(std::pair<int, int> size);
+		void SetSize(JMath::iVec2 size);
 
 		// TODO: implement size limit setting / getting
 		// TODO: implement aspect ratio getting / setting

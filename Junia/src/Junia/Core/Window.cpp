@@ -63,7 +63,7 @@ namespace Junia
 
 	Window::Window(const std::string& title) : title(title), nativeWindow(nullptr)
 	{
-		
+
 	}
 
 	Window::~Window()
@@ -87,28 +87,28 @@ namespace Junia
 		if (open) glfwSetWindowTitle(nativeWindow, title.c_str());
 	}
 
-	std::pair<int, int> Window::GetPosition()
+	JMath::iVec2 Window::GetPosition()
 	{
 		int x, y;
 		glfwGetWindowPos(nativeWindow, &x, &y);
 		return { x, y };
 	}
 
-	void Window::SetPosition(std::pair<int, int> position)
+	void Window::SetPosition(JMath::iVec2 position)
 	{
-		glfwSetWindowPos(nativeWindow, position.first, position.second);
+		glfwSetWindowPos(nativeWindow, position.x, position.y);
 	}
 
-	std::pair<int, int> Window::GetSize()
+	JMath::iVec2 Window::GetSize()
 	{
 		int width, height;
 		glfwGetWindowSize(nativeWindow, &width, &height);
 		return { width, height };
 	}
 
-	void Window::SetSize(std::pair<int, int> size)
+	void Window::SetSize(JMath::iVec2 size)
 	{
-		glfwSetWindowSize(nativeWindow, size.first, size.second);
+		glfwSetWindowSize(nativeWindow, size.x, size.y);
 	}
 
 	float Window::GetOpacity()
