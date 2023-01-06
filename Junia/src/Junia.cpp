@@ -13,6 +13,8 @@ namespace Junia
 {
 	void Init()
 	{
+		Events::Register<KeyDownEvent>();
+
 #ifdef _WIN32
 			DWORD dwMode;
 			HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);

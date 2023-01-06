@@ -6,6 +6,8 @@
 #include <Junia/ECS/ECS.hpp>
 #include <Junia/ECS/Components.hpp>
 
+#include <Junia/Events/Event.hpp>
+
 namespace Junia
 {
 	/// @brief Initializes Junia

@@ -23,6 +23,8 @@
 
 			"${SRC_DIR}/Junia/ECS/ECS.cpp"
 
+			"${SRC_DIR}/Junia/Events/Event.cpp"
+
 			"${INCLUDE_DIR}/Junia.hpp"
 
 			"${INCLUDE_DIR}/Junia/Core/Logger.hpp"
