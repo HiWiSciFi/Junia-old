@@ -60,15 +60,25 @@
 			"${INCLUDE_DIR}/JMath/Matrix4x2.hpp"
 			"${INCLUDE_DIR}/JMath/Matrix4x3.hpp"
 			"${INCLUDE_DIR}/JMath/Matrix4x4.hpp"
+
+			"${INCLUDE_DIR}/Platform/Vulkan/Vulkan.hpp"
+			"${SRC_DIR}/Platform/Vulkan/Vulkan.cpp"
+
+			"${INCLUDE_DIR}/Platform/OpenAL/OpenAL.hpp"
+			"${SRC_DIR}/Platform/OpenAL/OpenAL.cpp"
 	)
 
 	target_include_directories(Junia
 		PUBLIC
 			"${INCLUDE_DIR}"
+			"${Vulkan_INCLUDE_DIRS}"
+			"${OPENAL_INCLUDE_DIR}"
 	)
 
 	target_link_libraries(Junia
 		PRIVATE
 			"${GLFW_LIB}"
 			"${GLAD_LIB}"
+			"${Vulkan_LIBRARIES}"
+			"${OPENAL_LIBRARY}"
 	)

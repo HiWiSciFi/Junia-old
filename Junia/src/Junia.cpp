@@ -9,6 +9,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <Platform/Vulkan/Vulkan.hpp>
+#include <Platform/OpenAL/OpenAL.hpp>
+
 namespace Junia
 {
 	void Init()
@@ -19,6 +22,9 @@ namespace Junia
 		Events::Register<MouseButtonDownEvent>();
 		Events::Register<MouseButtonUpEvent>();
 		Events::Register<MouseMoveEvent>();
+
+		Vulkan::Init("Testapp", 0, "Junia", 0, true);
+		OpenAL::Init();
 
 #ifdef _WIN32
 			DWORD dwMode;
@@ -32,12 +38,12 @@ namespace Junia
 		{
 			const char* msg = nullptr;
 			glfwGetError(&msg);
-			std::cerr << "GLFW could not be initialized!" << std::endl << msg << std::endl;
+			JELOG_CORE_ERROR << "GLFW could not be initialized!\n" << msg;
 			return;
 		}
 		glfwSetErrorCallback([](const int code, const char* desc)
 			{
-				std::cerr << "GLFW Error: (0x" << std::hex << code << ") : " << desc << std::endl;
+				JELOG_CORE_ERROR << "GLFW Error: (0x" << std::hex << code << ") : " << desc;
 			});
 	}
 
