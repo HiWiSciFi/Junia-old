@@ -10,13 +10,22 @@ void RunGame()
 	Junia::Window::Create("Second Window")->Open();
 	mainWindow->Focus();
 
+	Junia::Events::Subscribe<Junia::KeyDownEvent>([ ] (const Junia::KeyDownEvent* e)
+		{
+			if (e->GetKeyCode() == Junia::KeyCode::ESCAPE) Junia::Window::GetWindow()->Close();
+		});
+
+	Junia::Events::Subscribe([ ] (const Junia::Event* e)
+		{
+			JELOG_INFO << "Event Triggered: " << e->ToString();
+		});
+
 	while (mainWindow->IsOpen())
 	{
+		Junia::Events::DispatchQueue();
+
 		for (Junia::Window::IdType i = 1; i <= Junia::Window::GetWindowCount(); i++)
 			Junia::Window::GetWindow(i)->Update();
-
-		if (Junia::Input::IsKeyDown(Junia::KeyCode::ESCAPE))
-			Junia::Window::GetWindow()->Close();
 	}
 
 	Junia::Window** const windows = Junia::Window::GetWindows();
@@ -42,10 +51,13 @@ public:
 	}
 };
 
-#define ENTITY_COUNT (1000000)
+#define ENTITY_COUNT (100)
 
 int main(int argc, char** argv)
 {
+	JELOG_INFO << "Initializing Junia...";
+	Junia::Init();
+
 	auto starttime = std::chrono::high_resolution_clock::now();
 	Junia::ECS::RegisterComponent<Junia::Transform>();
 	Junia::ECS::RegisterSystem<GravitySystem>();
@@ -64,8 +76,6 @@ int main(int argc, char** argv)
 	float destructiontime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
 	JELOG_WARN << "Entities destroyed! Time: " << destructiontime << "s";
 
-	JELOG_INFO << "Initializing Junia...";
-	Junia::Init();
 	JELOG_INFO << "Creating Window...";
 	RunGame();
 	JELOG_INFO << "Terminating Junia...";

@@ -4,7 +4,7 @@
 
 namespace Junia
 {
-	std::string ButtonToString(MouseButton button)
+	std::string MouseButtonToString(MouseButton button)
 	{
 		switch (button)
 		{

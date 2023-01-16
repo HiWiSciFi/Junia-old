@@ -14,6 +14,11 @@ namespace Junia
 	void Init()
 	{
 		Events::Register<KeyDownEvent>();
+		Events::Register<KeyUpEvent>();
+		Events::Register<KeyCharEvent>();
+		Events::Register<MouseButtonDownEvent>();
+		Events::Register<MouseButtonUpEvent>();
+		Events::Register<MouseMoveEvent>();
 
 #ifdef _WIN32
 			DWORD dwMode;

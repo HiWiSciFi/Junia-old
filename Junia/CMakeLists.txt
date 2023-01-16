@@ -23,7 +23,8 @@
 
 			"${SRC_DIR}/Junia/ECS/ECS.cpp"
 
-			"${SRC_DIR}/Junia/Events/Event.cpp"
+			"${SRC_DIR}/Junia/Events/Events.cpp"
+			"${SRC_DIR}/Junia/Events/InputEvents.cpp"
 
 			"${INCLUDE_DIR}/Junia.hpp"
 
@@ -40,7 +41,8 @@
 			"${INCLUDE_DIR}/Junia/ECS/Components/Transform.hpp"
 			"${INCLUDE_DIR}/Junia/ECS/Components/EntityInfo.hpp"
 
-			"${INCLUDE_DIR}/Junia/Events/Event.hpp"
+			"${INCLUDE_DIR}/Junia/Events/Events.hpp"
+			"${INCLUDE_DIR}/Junia/Events/InputEvents.hpp"
 
 			"${INCLUDE_DIR}/JMath.hpp"
 			"${INCLUDE_DIR}/JMath/Types.hpp"

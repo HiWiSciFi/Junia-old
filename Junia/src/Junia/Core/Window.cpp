@@ -1,6 +1,9 @@
 #include "Core.hpp"
 #include <Junia/Core/Window.hpp>
 #include <Junia/Core/Log.hpp>
+#include <Junia/Events/Events.hpp>
+#include <Junia/Events/InputEvents.hpp>
+#include <Junia/Core/Input.hpp>
 #include <iostream>
 
 namespace Junia
@@ -153,10 +156,51 @@ namespace Junia
 			JELOG_CORE_ERROR << "Window could not be created!\n" << msg;
 			return;
 		}
+		glfwSetWindowUserPointer(nativeWindow, this);
 		glfwSetWindowFocusCallback(nativeWindow, WindowFocusCallback);
 		index = static_cast<int>(windows.size());
 		windows.push_back(this);
 		if (windows[0] == nullptr) windows[0] = this;
+
+		glfwSetKeyCallback(nativeWindow, [ ] (GLFWwindow* _, const int key, int scancode, const int action, int mods)
+			{
+				switch (action)
+				{
+				case GLFW_PRESS:
+					Events::Trigger<KeyDownEvent>(static_cast<KeyCode>(GlfwToJeKey[key]));
+					break;
+				case GLFW_RELEASE:
+					Events::Trigger<KeyUpEvent>(static_cast<KeyCode>(GlfwToJeKey[key]));
+					break;
+				default:
+					break;
+				}
+			});
+
+		glfwSetCharCallback(nativeWindow, [ ] (GLFWwindow* window, unsigned int codepoint)
+			{
+				Events::Trigger<KeyCharEvent>(codepoint);
+			});
+
+		glfwSetMouseButtonCallback(nativeWindow, [ ] (GLFWwindow* _, int button, int action, int mods)
+			{
+				switch (action)
+				{
+				case GLFW_PRESS:
+					Events::Trigger<MouseButtonDownEvent>(static_cast<MouseButton>(GlfwToJeButton[button]));
+					break;
+				case GLFW_RELEASE:
+					Events::Trigger<MouseButtonUpEvent>(static_cast<MouseButton>(GlfwToJeButton[button]));
+					break;
+				default:
+					break;
+				}
+			});
+
+		glfwSetCursorPosCallback(nativeWindow, [ ] (GLFWwindow* _, double xpos, double ypos)
+			{
+				Events::Trigger<MouseMoveEvent>(JMath::iVec2(static_cast<int>(xpos), static_cast<int>(ypos)));
+			});
 
 		glfwMakeContextCurrent(nativeWindow);
 		if (!gladStatus) LoadGlad();

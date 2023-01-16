@@ -6,7 +6,8 @@
 #include <Junia/ECS/ECS.hpp>
 #include <Junia/ECS/Components.hpp>
 
-#include <Junia/Events/Event.hpp>
+#include <Junia/Events/Events.hpp>
+#include <Junia/Events/InputEvents.hpp>
 
 namespace Junia
 {
