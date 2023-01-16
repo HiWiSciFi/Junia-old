@@ -12,37 +12,35 @@
 
 	target_sources(Junia
 		PRIVATE
+			"${INCLUDE_DIR}/Junia.hpp"
 			"${SRC_DIR}/Junia.cpp"
 
 			"${SRC_DIR}/Junia/Core/Core.hpp"
+			"${INCLUDE_DIR}/Junia/Core/Logger.hpp"
 			"${SRC_DIR}/Junia/Core/Logger.cpp"
+			"${INCLUDE_DIR}/Junia/Core/Log.hpp"
 			"${SRC_DIR}/Junia/Core/Log.cpp"
+			"${INCLUDE_DIR}/Junia/Core/Window.hpp"
 			"${SRC_DIR}/Junia/Core/Window.cpp"
+			"${INCLUDE_DIR}/Junia/Core/Input.hpp"
 			"${SRC_DIR}/Junia/Core/Input.cpp"
+			"${INCLUDE_DIR}/Junia/Core/Keycodes.hpp"
 			"${SRC_DIR}/Junia/Core/Keycodes.cpp"
 
+			"${INCLUDE_DIR}/Junia/ECS/ECS.hpp"
 			"${SRC_DIR}/Junia/ECS/ECS.cpp"
 
+			"${INCLUDE_DIR}/Junia/Events/Events.hpp"
 			"${SRC_DIR}/Junia/Events/Events.cpp"
+			"${INCLUDE_DIR}/Junia/Events/InputEvents.hpp"
 			"${SRC_DIR}/Junia/Events/InputEvents.cpp"
 
-			"${INCLUDE_DIR}/Junia.hpp"
-
-			"${INCLUDE_DIR}/Junia/Core/Logger.hpp"
-			"${INCLUDE_DIR}/Junia/Core/Log.hpp"
-			"${INCLUDE_DIR}/Junia/Core/Window.hpp"
-			"${INCLUDE_DIR}/Junia/Core/Input.hpp"
-			"${INCLUDE_DIR}/Junia/Core/Keycodes.hpp"
 			"${INCLUDE_DIR}/Junia/Core/IdPool.hpp"
 
-			"${INCLUDE_DIR}/Junia/ECS/ECS.hpp"
-			"${INCLUDE_DIR}/Junia/ECS/ComponentContainer.hpp"
 			"${INCLUDE_DIR}/Junia/ECS/Components.hpp"
+			"${INCLUDE_DIR}/Junia/ECS/ComponentContainer.hpp"
 			"${INCLUDE_DIR}/Junia/ECS/Components/Transform.hpp"
 			"${INCLUDE_DIR}/Junia/ECS/Components/EntityInfo.hpp"
-
-			"${INCLUDE_DIR}/Junia/Events/Events.hpp"
-			"${INCLUDE_DIR}/Junia/Events/InputEvents.hpp"
 
 			"${INCLUDE_DIR}/JMath.hpp"
 			"${INCLUDE_DIR}/JMath/Types.hpp"
