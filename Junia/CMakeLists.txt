@@ -60,6 +60,8 @@
 			"${INCLUDE_DIR}/JMath/Matrix4x2.hpp"
 			"${INCLUDE_DIR}/JMath/Matrix4x3.hpp"
 			"${INCLUDE_DIR}/JMath/Matrix4x4.hpp"
+			"${INCLUDE_DIR}/JMath/Quaternion.hpp"
+			"${INCLUDE_DIR}/JMath/Mathf.hpp"
 
 			"${INCLUDE_DIR}/Platform/Vulkan/Vulkan.hpp"
 			"${SRC_DIR}/Platform/Vulkan/Vulkan.cpp"
