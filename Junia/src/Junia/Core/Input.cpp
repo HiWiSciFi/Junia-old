@@ -2,7 +2,6 @@
 #include <Junia/Core/Input.hpp>
 #include <Junia/Core/Window.hpp>
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace Junia

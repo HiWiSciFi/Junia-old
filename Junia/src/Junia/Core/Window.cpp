@@ -46,24 +46,6 @@ namespace Junia
 		delete window;
 	}
 
-	static int gladStatus = 0;
-	static void LoadGlad()
-	{
-		gladStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		if (!gladStatus)
-		{
-			JELOG_CORE_CRITICAL << "OpenGL could not be initialized!";
-		}
-		else
-		{
-			JELOG_CORE_TRACE << "OpenGL Info:";
-			JELOG_CORE_TRACE << "  Vendor:       " << glGetString(GL_VENDOR);
-			JELOG_CORE_TRACE << "  Renderer:     " << glGetString(GL_RENDERER);
-			JELOG_CORE_TRACE << "  Version:      " << glGetString(GL_VERSION);
-			JELOG_CORE_TRACE << "  GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
-		}
-	}
-
 	Window::Window(const std::string& title) : title(title), nativeWindow(nullptr)
 	{
 
@@ -148,6 +130,7 @@ namespace Junia
 	{
 		if (open) return;
 		index = -1;
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		nativeWindow = glfwCreateWindow(800, 600, title.c_str(), NULL, NULL);
 		if (nativeWindow == NULL)
 		{
@@ -202,8 +185,7 @@ namespace Junia
 				Events::Trigger<MouseMoveEvent>(JMath::iVec2(static_cast<int>(xpos), static_cast<int>(ypos)));
 			});
 
-		glfwMakeContextCurrent(nativeWindow);
-		if (!gladStatus) LoadGlad();
+		// TODO: create vulkan surface & swapchain
 		open = true;
 	}
 
@@ -242,10 +224,10 @@ namespace Junia
 			Close();
 			return;
 		}
-		glfwMakeContextCurrent(nativeWindow);
+		/*glfwMakeContextCurrent(nativeWindow);
 		glClearColor(1, 0, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-		glfwSwapBuffers(nativeWindow);
+		glfwSwapBuffers(nativeWindow);*/
 		glfwPollEvents();
 	}
 }

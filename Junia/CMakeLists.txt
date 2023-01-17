@@ -16,6 +16,8 @@
 			"${SRC_DIR}/Junia.cpp"
 
 			"${SRC_DIR}/Junia/Core/Core.hpp"
+			"${INCLUDE_DIR}/Junia/Core/Version.hpp"
+			"${SRC_DIR}/Junia/Core/Version.cpp"
 			"${INCLUDE_DIR}/Junia/Core/Logger.hpp"
 			"${SRC_DIR}/Junia/Core/Logger.cpp"
 			"${INCLUDE_DIR}/Junia/Core/Log.hpp"
@@ -26,6 +28,7 @@
 			"${SRC_DIR}/Junia/Core/Input.cpp"
 			"${INCLUDE_DIR}/Junia/Core/Keycodes.hpp"
 			"${SRC_DIR}/Junia/Core/Keycodes.cpp"
+			"${INCLUDE_DIR}/Junia/Core/IdPool.hpp"
 
 			"${INCLUDE_DIR}/Junia/ECS/ECS.hpp"
 			"${SRC_DIR}/Junia/ECS/ECS.cpp"
@@ -34,8 +37,6 @@
 			"${SRC_DIR}/Junia/Events/Events.cpp"
 			"${INCLUDE_DIR}/Junia/Events/InputEvents.hpp"
 			"${SRC_DIR}/Junia/Events/InputEvents.cpp"
-
-			"${INCLUDE_DIR}/Junia/Core/IdPool.hpp"
 
 			"${INCLUDE_DIR}/Junia/ECS/Components.hpp"
 			"${INCLUDE_DIR}/Junia/ECS/ComponentContainer.hpp"
@@ -63,11 +64,15 @@
 			"${INCLUDE_DIR}/JMath/Quaternion.hpp"
 			"${INCLUDE_DIR}/JMath/Mathf.hpp"
 
-			"${INCLUDE_DIR}/Platform/Vulkan/Vulkan.hpp"
-			"${SRC_DIR}/Platform/Vulkan/Vulkan.cpp"
+			"${INCLUDE_DIR}/Platform/Vulkan.hpp"
+			"${SRC_DIR}/Platform/Vulkan.cpp"
+			"${INCLUDE_DIR}/Platform/Vulkan/Exception.hpp"
+			"${INCLUDE_DIR}/Platform/Vulkan/Surface.hpp"
+			"${SRC_DIR}/Platform/Vulkan/Surface.cpp"
 
-			"${INCLUDE_DIR}/Platform/OpenAL/OpenAL.hpp"
-			"${SRC_DIR}/Platform/OpenAL/OpenAL.cpp"
+			"${INCLUDE_DIR}/Platform/OpenAL.hpp"
+			"${SRC_DIR}/Platform/OpenAL.cpp"
+			"${INCLUDE_DIR}/Platform/OpenAL/Exception.hpp"
 	)
 
 	target_include_directories(Junia

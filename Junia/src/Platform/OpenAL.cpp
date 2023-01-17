@@ -1,4 +1,4 @@
-#include <Platform/OpenAL/OpenAL.hpp>
+#include <Platform/OpenAL.hpp>
 #include <al.h>
 #include <alc.h>
 #include <iostream>

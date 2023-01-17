@@ -2,15 +2,17 @@
 #include <Windows.h>
 #endif
 
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
 #include "Junia/Core/Core.hpp"
 #include <Junia.hpp>
 
-#include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <Platform/Vulkan.hpp>
+#include <Platform/Vulkan/Exception.hpp>
 
-#include <Platform/Vulkan/Vulkan.hpp>
-#include <Platform/OpenAL/OpenAL.hpp>
+#include <Platform/OpenAL.hpp>
+#include <Platform/OpenAL/Exception.hpp>
 
 namespace Junia
 {
@@ -22,9 +24,6 @@ namespace Junia
 		Events::Register<MouseButtonDownEvent>();
 		Events::Register<MouseButtonUpEvent>();
 		Events::Register<MouseMoveEvent>();
-
-		Vulkan::Init("Testapp", 0, "Junia", 0, true);
-		OpenAL::Init();
 
 #ifdef _WIN32
 			DWORD dwMode;
@@ -45,6 +44,20 @@ namespace Junia
 			{
 				JELOG_CORE_ERROR << "GLFW Error: (0x" << std::hex << code << ") : " << desc;
 			});
+
+		try
+		{
+			Vulkan::Init("Testapp", Junia::Version(1, 0, 0), "Junia", Junia::Version(1, 0, 0), true);
+			OpenAL::Init();
+		}
+		catch (Vulkan::Exception e)
+		{
+			JELOG_ERROR << "Vulkan ERROR: " << e.what();
+		}
+		catch (OpenAL::Exception e)
+		{
+			JELOG_ERROR << "OpenAL ERROR: " << e.what();
+		}
 	}
 
 	void Terminate()
