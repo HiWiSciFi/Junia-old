@@ -9,7 +9,7 @@ namespace Vulkan
 	extern void* instance;
 	extern bool debug;
 
-	#define GetVkInstance(i) reinterpret_cast<VkInstance>(i)
+	template<typename T> constexpr T GetAs(void* i) { return reinterpret_cast<T>(i); }
 
 	void Init(std::string const& appName, Junia::Version const& appVersion, std::string const& engineName, Junia::Version const& engineVersion, bool debug = false);
 	void Cleanup();

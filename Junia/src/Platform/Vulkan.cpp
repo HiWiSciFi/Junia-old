@@ -122,15 +122,15 @@ namespace Vulkan
 			vkCreateDebugUtilsMessengerEXT = vkLoadFunc<PFN_vkCreateDebugUtilsMessengerEXT>("vkCreateDebugUtilsMessengerEXT");
 			vkDestroyDebugUtilsMessengerEXT = vkLoadFunc<PFN_vkDestroyDebugUtilsMessengerEXT>("vkDestroyDebugUtilsMessengerEXT");
 
-			if (vkCreateDebugUtilsMessengerEXT(GetVkInstance(instance), &debugMessengerCreateInfo, nullptr, &debugMessenger) != VK_SUCCESS)
+			if (vkCreateDebugUtilsMessengerEXT(GetAs<VkInstance>(instance), &debugMessengerCreateInfo, nullptr, &debugMessenger) != VK_SUCCESS)
 				throw Exception("vulkan debug messenger could not be created");
 		}
 	}
 
 	void Cleanup()
 	{
-		if (debug) vkDestroyDebugUtilsMessengerEXT(GetVkInstance(instance), debugMessenger, nullptr);
-		vkDestroyInstance(GetVkInstance(instance), nullptr);
+		if (debug) vkDestroyDebugUtilsMessengerEXT(GetAs<VkInstance>(instance), debugMessenger, nullptr);
+		vkDestroyInstance(GetAs<VkInstance>(instance), nullptr);
 	}
 
 	void RequireExtension(std::string const& extension)
