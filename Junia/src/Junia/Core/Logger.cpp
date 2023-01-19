@@ -11,7 +11,7 @@
 
 #define ANSI_ESC_RESET "\x1b[0m"     // RESET
 #define ANSI_ESC_TRACE "\x1b[90m"    // FG: bright_gray  |
-#define ANSI_ESC_INFO  "\x1b[97m"    // FG: bright_white |
+#define ANSI_ESC_INFO  "\x1b[37m"    // FG: white        |
 #define ANSI_ESC_WARN  "\x1b[33m"    // FG: yellow       |
 #define ANSI_ESC_ERROR "\x1b[91m"    // FG: bright_red   |
 #define ANSI_ESC_CRIT  "\x1b[37;41m" // FG: white        | BG: RED
