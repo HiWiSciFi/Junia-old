@@ -9,12 +9,12 @@
 #include <ostream>
 #include <utility>
 
-#define ANSI_ESC_RESET  "\x1b[0m"
-#define ANSI_ESC_WHITE  "\x1b[37;40m" // WHITE  BLACK
-#define ANSI_ESC_GREEN  "\x1b[32;40m" // GREEN  BLACK
-#define ANSI_ESC_ORANGE "\x1b[33;40m" // YELLOW BLACK
-#define ANSI_ESC_RED    "\x1b[91;40m" // BRED   BLACK
-#define ANSI_ESC_DRED   "\x1b[37;41m" // WHITE  RED
+#define ANSI_ESC_RESET "\x1b[0m"     // RESET
+#define ANSI_ESC_TRACE "\x1b[90m"    // FG: bright_gray  |
+#define ANSI_ESC_INFO  "\x1b[97m"    // FG: bright_white |
+#define ANSI_ESC_WARN  "\x1b[33m"    // FG: yellow       |
+#define ANSI_ESC_ERROR "\x1b[91m"    // FG: bright_red   |
+#define ANSI_ESC_CRIT  "\x1b[37;41m" // FG: white        | BG: RED
 
 namespace Junia
 {
@@ -88,7 +88,7 @@ namespace Junia
 			for (const auto& streamData : streams)
 			{
 				(*streamData.stream) << "[" << name << "] ";
-				if (streamData.ansi) (*streamData.stream) << ANSI_ESC_WHITE;
+				if (streamData.ansi) (*streamData.stream) << ANSI_ESC_TRACE;
 			}
 			return Logstream(&streams, LogLevel::Trace);
 		}
@@ -99,7 +99,7 @@ namespace Junia
 			for (const auto& streamData : streams)
 			{
 				(*streamData.stream) << "[" << name << "] ";
-				if (streamData.ansi) (*streamData.stream) << ANSI_ESC_GREEN;
+				if (streamData.ansi) (*streamData.stream) << ANSI_ESC_INFO;
 			}
 			return Logstream(&streams, LogLevel::Info);
 		}
@@ -110,7 +110,7 @@ namespace Junia
 			for (const auto& streamData : streams)
 			{
 				(*streamData.stream) << "[" << name << "] ";
-				if (streamData.ansi) (*streamData.stream) << ANSI_ESC_ORANGE;
+				if (streamData.ansi) (*streamData.stream) << ANSI_ESC_WARN;
 			}
 			return Logstream(&streams, LogLevel::Warn);
 		}
@@ -121,7 +121,7 @@ namespace Junia
 			for (const auto& streamData : streams)
 			{
 				(*streamData.stream) << "[" << name << "] ";
-				if (streamData.ansi) (*streamData.stream) << ANSI_ESC_RED;
+				if (streamData.ansi) (*streamData.stream) << ANSI_ESC_ERROR;
 			}
 			return Logstream(&streams, LogLevel::Error);
 		}
@@ -132,7 +132,7 @@ namespace Junia
 			for (const auto& streamData : streams)
 			{
 				(*streamData.stream) << "[" << name << "] ";
-				if (streamData.ansi) (*streamData.stream) << ANSI_ESC_DRED;
+				if (streamData.ansi) (*streamData.stream) << ANSI_ESC_CRIT;
 			}
 			return Logstream(&streams, LogLevel::Critical);
 		}
