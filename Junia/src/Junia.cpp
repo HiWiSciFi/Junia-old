@@ -45,6 +45,10 @@ namespace Junia
 				JELOG_CORE_ERROR << "GLFW Error: (0x" << std::hex << code << ") : " << desc;
 			});
 
+		uint32_t glfwExtensionCount;
+		const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+		for (uint32_t i = 0; i < glfwExtensionCount; i++) Vulkan::RequireExtension(glfwExtensions[i]);
+
 		try
 		{
 			Vulkan::Init("Testapp", Junia::Version(1, 0, 0), "Junia", Junia::Version(1, 0, 0), true);
