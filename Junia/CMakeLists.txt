@@ -73,6 +73,8 @@
 			"${INCLUDE_DIR}/Platform/OpenAL.hpp"
 			"${SRC_DIR}/Platform/OpenAL.cpp"
 			"${INCLUDE_DIR}/Platform/OpenAL/Exception.hpp"
+			"${INCLUDE_DIR}/Platform/OpenAL/OutputDevice.hpp"
+			"${SRC_DIR}/Platform/OpenAL/OutputDevice.cpp"
 	)
 
 	target_include_directories(Junia
