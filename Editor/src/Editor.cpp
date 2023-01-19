@@ -15,10 +15,10 @@ void RunGame()
 			if (e->GetKeyCode() == Junia::KeyCode::ESCAPE) Junia::Window::GetWindow()->Close();
 		});
 
-	Junia::Events::Subscribe([ ] (const Junia::Event* e)
+	/*Junia::Events::Subscribe([ ] (const Junia::Event* e)
 		{
 			JELOG_INFO << "Event Triggered: " << e->ToString();
-		});
+		});*/
 
 	while (mainWindow->IsOpen())
 	{
