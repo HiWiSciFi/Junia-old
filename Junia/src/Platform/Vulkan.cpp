@@ -126,12 +126,6 @@ namespace Vulkan
 		}
 	}
 
-	void Cleanup()
-	{
-		if (debug) vkDestroyDebugUtilsMessengerEXT(GetAs<VkInstance>(instance), debugMessenger, nullptr);
-		vkDestroyInstance(GetAs<VkInstance>(instance), nullptr);
-	}
-
 	void RequireExtension(std::string const& extension)
 	{
 		if (instance != nullptr) throw Exception("cannot require extension after initialization");
@@ -162,5 +156,11 @@ namespace Vulkan
 		str[length] = '\0';
 		vkLog.Info() << "Required Device Extension: " << str;
 		requiredDeviceExtensions.push_back(str);
+	}
+
+	void Cleanup()
+	{
+		if (debug) vkDestroyDebugUtilsMessengerEXT(GetAs<VkInstance>(instance), debugMessenger, nullptr);
+		vkDestroyInstance(GetAs<VkInstance>(instance), nullptr);
 	}
 }

@@ -66,6 +66,7 @@ namespace Junia
 
 	void Terminate()
 	{
+		Vulkan::Cleanup();
 		glfwTerminate();
 	}
 }
