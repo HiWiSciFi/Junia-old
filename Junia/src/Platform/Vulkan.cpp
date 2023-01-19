@@ -8,6 +8,8 @@
 
 namespace Vulkan
 {
+	Junia::Log::Logger vkLog = Junia::Log::Logger("Vulkan", &std::cout);
+
 	void* instance = nullptr;
 	void* physicalDevice = nullptr;
 	void* device = nullptr;
@@ -26,7 +28,7 @@ namespace Vulkan
 	template<typename FUNC>
 	static FUNC vkLoadFunc(const char* funcname)
 	{
-		FUNC func = reinterpret_cast<FUNC>(vkGetInstanceProcAddr(GetVkInstance(instance), funcname));
+		FUNC func = reinterpret_cast<FUNC>(vkGetInstanceProcAddr(GetAs<VkInstance>(instance), funcname));
 		if (func == nullptr) throw Exception("failed to load vulkan function");
 		return func;
 	}
@@ -37,15 +39,12 @@ namespace Vulkan
 		const VkDebugUtilsMessengerCallbackDataEXT* data,
 		void* pUserData)
 	{
-		static Junia::Log::Logger vulkanLogger = Junia::Log::Logger("Vulkan", &std::cout);
 		if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
-			vulkanLogger.Error() << data->pMessage;
+			vkLog.Error() << data->pMessage;
 		else if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
-			vulkanLogger.Warn() << data->pMessage;
-		else if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT)
-			vulkanLogger.Info() << data->pMessage;
-		else if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT)
-			vulkanLogger.Trace() << data->pMessage;
+			vkLog.Warn() << data->pMessage;
+		else if (severity & (VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT))
+			vkLog.Trace() << data->pMessage;
 		return VK_FALSE;
 	}
 
@@ -60,7 +59,6 @@ namespace Vulkan
 		createInfo->messageType |= VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
 		createInfo->messageType |= VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 		createInfo->pfnUserCallback = VulkanDebugCallback;
-		createInfo->pUserData = nullptr;
 	}
 
 	void Init(std::string const& appName, Junia::Version const& appVersion, std::string const& engineName, Junia::Version const& engineVersion, bool debug)
@@ -69,6 +67,7 @@ namespace Vulkan
 
 		Vulkan::debug = debug;
 
+		RequireExtension(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
 		if (debug) RequireExtension(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 		RequireDeviceExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 
@@ -114,7 +113,7 @@ namespace Vulkan
 		instanceCreateInfo.ppEnabledLayerNames = debug ? VALIDATION_LAYERS.data() : nullptr;
 		instanceCreateInfo.pNext = debug ? &debugMessengerCreateInfo : nullptr;
 
-		if (vkCreateInstance(&instanceCreateInfo, nullptr, reinterpret_cast<VkInstance*>(&instance)) != VK_SUCCESS)
+		if (vkCreateInstance(&instanceCreateInfo, nullptr, GetAs<VkInstance*>(&instance)) != VK_SUCCESS)
 			throw Exception("vulkan instance could not be created");
 
 		if (debug)
@@ -145,6 +144,7 @@ namespace Vulkan
 		char* str = new char[length+1];
 		std::strncpy(str, extension.c_str(), length);
 		str[length] = '\0';
+		vkLog.Info() << "Required Extension: " << str;
 		requiredExtensions.push_back(str);
 	}
 
@@ -160,6 +160,7 @@ namespace Vulkan
 		char* str = new char[length + 1];
 		std::strncpy(str, extension.c_str(), length);
 		str[length] = '\0';
+		vkLog.Info() << "Required Device Extension: " << str;
 		requiredDeviceExtensions.push_back(str);
 	}
 }
