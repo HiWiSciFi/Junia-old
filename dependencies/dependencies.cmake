@@ -17,13 +17,13 @@ add_subdirectory("${DEPENDENCY_DIR}/glad")
 set(GLAD_LIB "glad")
 
 # Vulkan
-find_package(Vulkan REQUIRED)
+find_package(Vulkan QUIET)
 if(NOT ${Vulkan_FOUND})
 	message(FATAL_ERROR "Vulkan could not be found! Make sure $VULKAN_SDK environment variable is set if the problem persists.")
 endif()
 
 # OpenAL
-find_package(OpenAL REQUIRED)
+find_package(OpenAL QUIET)
 if(NOT ${OPENAL_FOUND})
 	message(FATAL_ERROR "OpenAL could not be found! Make sure $OPENALDIR environment variable is set if the problem persists.")
 endif()
