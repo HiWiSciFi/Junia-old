@@ -6,6 +6,8 @@
 #include <Junia/Core/Log.hpp>
 #include <iostream>
 
+#include "Vulkan/ExtensionLoader.hpp"
+
 namespace Vulkan
 {
 	Junia::Log::Logger vkLog = Junia::Log::Logger("Vulkan", &std::cout);
@@ -20,18 +22,7 @@ namespace Vulkan
 
 	static VkDebugUtilsMessengerEXT debugMessenger = nullptr;
 
-	PFN_vkCreateDebugUtilsMessengerEXT vkCreateDebugUtilsMessengerEXT = nullptr;
-	PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT = nullptr;
-
 	const std::vector<const char*> VALIDATION_LAYERS{ "VK_LAYER_KHRONOS_validation" };
-
-	template<typename FUNC>
-	static FUNC vkLoadFunc(const char* funcname)
-	{
-		FUNC func = reinterpret_cast<FUNC>(vkGetInstanceProcAddr(GetAs<VkInstance>(instance), funcname));
-		if (func == nullptr) throw Exception("failed to load vulkan function");
-		return func;
-	}
 
 	VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
 		VkDebugUtilsMessageSeverityFlagBitsEXT severity,
@@ -104,9 +95,18 @@ namespace Vulkan
 		VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo{ };
 		if (debug) PopulateDebugMessengerCreateInfo(&debugMessengerCreateInfo);
 
+		// log available extensions
+		/*uint32_t extensionCount;
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+		std::vector<VkExtensionProperties> extensions(extensionCount);
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
+		vkLog.Warn() << "Available instance extensions:";
+		for (const auto& extension : extensions) vkLog.Warn() << "  - " << extension.extensionName;*/
+
 		VkInstanceCreateInfo instanceCreateInfo{ };
 		instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		instanceCreateInfo.pApplicationInfo = &appInfo;
+		instanceCreateInfo.flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 		instanceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(requiredExtensions.size());
 		instanceCreateInfo.ppEnabledExtensionNames = requiredExtensions.data();
 		instanceCreateInfo.enabledLayerCount = debug ? static_cast<uint32_t>(VALIDATION_LAYERS.size()) : 0;
@@ -116,12 +116,11 @@ namespace Vulkan
 		if (vkCreateInstance(&instanceCreateInfo, nullptr, GetAs<VkInstance*>(&instance)) != VK_SUCCESS)
 			throw Exception("vulkan instance could not be created");
 
+		LoadExtensions(debug);
+
 		if (debug)
 		{
-			vkCreateDebugUtilsMessengerEXT = vkLoadFunc<PFN_vkCreateDebugUtilsMessengerEXT>("vkCreateDebugUtilsMessengerEXT");
-			vkDestroyDebugUtilsMessengerEXT = vkLoadFunc<PFN_vkDestroyDebugUtilsMessengerEXT>("vkDestroyDebugUtilsMessengerEXT");
-
-			if (vkCreateDebugUtilsMessengerEXT(GetAs<VkInstance>(instance), &debugMessengerCreateInfo, nullptr, &debugMessenger) != VK_SUCCESS)
+			if (Vulkan::vkCreateDebugUtilsMessengerEXT(GetAs<VkInstance>(instance), &debugMessengerCreateInfo, nullptr, &debugMessenger) != VK_SUCCESS)
 				throw Exception("vulkan debug messenger could not be created");
 		}
 	}
@@ -134,7 +133,7 @@ namespace Vulkan
 		{
 			if (strcmp(e, extension.c_str()) == 0) throw Exception("extension has already been registered");
 		}
-		int length = strlen(extension.c_str());
+		size_t length = strlen(extension.c_str());
 		char* str = new char[length+1];
 		std::strncpy(str, extension.c_str(), length);
 		str[length] = '\0';
@@ -150,7 +149,7 @@ namespace Vulkan
 		{
 			if (strcmp(e, extension.c_str()) == 0) throw Exception("device extension has already been registered");
 		}
-		int length = strlen(extension.c_str());
+		size_t length = strlen(extension.c_str());
 		char* str = new char[length + 1];
 		std::strncpy(str, extension.c_str(), length);
 		str[length] = '\0';
@@ -160,7 +159,7 @@ namespace Vulkan
 
 	void Cleanup()
 	{
-		if (debug) vkDestroyDebugUtilsMessengerEXT(GetAs<VkInstance>(instance), debugMessenger, nullptr);
+		if (debug) Vulkan::vkDestroyDebugUtilsMessengerEXT(GetAs<VkInstance>(instance), debugMessenger, nullptr);
 		vkDestroyInstance(GetAs<VkInstance>(instance), nullptr);
 	}
 }
