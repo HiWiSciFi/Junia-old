@@ -67,6 +67,10 @@
 			"${INCLUDE_DIR}/Platform/Vulkan.hpp"
 			"${SRC_DIR}/Platform/Vulkan.cpp"
 			"${INCLUDE_DIR}/Platform/Vulkan/Exception.hpp"
+			"${SRC_DIR}/Platform/Vulkan/ExtensionLoader.hpp"
+			"${SRC_DIR}/Platform/Vulkan/ExtensionLoader.cpp"
+			"${INCLUDE_DIR}/Platform/Vulkan/PhysicalDevice.hpp"
+			"${SRC_DIR}/Platform/Vulkan/PhysicalDevice.cpp"
 			"${INCLUDE_DIR}/Platform/Vulkan/Surface.hpp"
 			"${SRC_DIR}/Platform/Vulkan/Surface.cpp"
 
