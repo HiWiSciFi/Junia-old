@@ -52,11 +52,16 @@ namespace Junia
 		try
 		{
 			Vulkan::Init("Testapp", Junia::Version(1, 0, 0), "Junia", Junia::Version(1, 0, 0), true);
-			OpenAL::Init();
+			Vulkan::PickPhysicalDevice();
 		}
 		catch (Vulkan::Exception e)
 		{
 			JELOG_ERROR << "Vulkan ERROR: " << e.what();
+		}
+
+		try
+		{
+			OpenAL::Init();
 		}
 		catch (OpenAL::Exception e)
 		{

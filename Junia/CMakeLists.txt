@@ -71,6 +71,8 @@
 			"${SRC_DIR}/Platform/Vulkan/ExtensionLoader.cpp"
 			"${INCLUDE_DIR}/Platform/Vulkan/PhysicalDevice.hpp"
 			"${SRC_DIR}/Platform/Vulkan/PhysicalDevice.cpp"
+			"${INCLUDE_DIR}/Platform/Vulkan/LogicalDevice.hpp"
+			"${SRC_DIR}/Platform/Vulkan/LogicalDevice.cpp"
 			"${INCLUDE_DIR}/Platform/Vulkan/Surface.hpp"
 			"${SRC_DIR}/Platform/Vulkan/Surface.cpp"
 
@@ -84,7 +86,8 @@
 	target_include_directories(Junia
 		PUBLIC
 			"${INCLUDE_DIR}"
-			"${Vulkan_INCLUDE_DIRS}"
+		PRIVATE
+			"${Vulkan_INCLUDE_DIR}"
 			"${OPENAL_INCLUDE_DIR}"
 	)
 
@@ -92,6 +95,6 @@
 		PRIVATE
 			"${GLFW_LIB}"
 			"${GLAD_LIB}"
-			"${Vulkan_LIBRARIES}"
+			"${Vulkan_LIBRARY}"
 			"${OPENAL_LIBRARY}"
 	)

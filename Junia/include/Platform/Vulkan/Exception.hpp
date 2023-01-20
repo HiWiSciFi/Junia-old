@@ -11,6 +11,6 @@ namespace Vulkan
 
 	public:
 		Exception(const char* msg) : msg(msg) { }
-		virtual const char* what() const override { return msg; }
+		virtual const char* what() const noexcept override { return msg; }
 	};
 }

@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <Junia/Core/Log.hpp>
+#include <cstring>
 
 namespace OpenAL
 {

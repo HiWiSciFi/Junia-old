@@ -5,6 +5,7 @@
 #include <vector>
 #include <Junia/Core/Log.hpp>
 #include <iostream>
+#include <cstring>
 
 #include "Vulkan/ExtensionLoader.hpp"
 
@@ -13,9 +14,9 @@ namespace Vulkan
 	Junia::Log::Logger vkLog = Junia::Log::Logger("Vulkan", &std::cout);
 
 	void* instance = nullptr;
-	void* physicalDevice = nullptr;
 	void* device = nullptr;
 	bool debug = false;
+	PhysicalDevice physicalDevice;
 
 	static std::vector<const char*> requiredExtensions{ };
 	static std::vector<const char*> requiredDeviceExtensions{ };
@@ -72,9 +73,9 @@ namespace Vulkan
 			for (const char* layerName : VALIDATION_LAYERS)
 			{
 				bool found = false;
-				for (const auto& [name, specVersion, implementationVersion, description] : availableLayers)
+				for (const auto& layerProperties : availableLayers)
 				{
-					if (strcmp(layerName, name) == 0)
+					if (strcmp(layerName, layerProperties.layerName) == 0)
 					{
 						found = true;
 						break;
@@ -125,6 +126,28 @@ namespace Vulkan
 		}
 	}
 
+	void PickPhysicalDevice()
+	{
+		uint32_t deviceCount;
+		vkEnumeratePhysicalDevices(GetAs<VkInstance>(instance), &deviceCount, nullptr);
+		if (deviceCount == 0)
+		{
+			const char* errStr = "could not find gpu with vulkan support";
+			vkLog.Critical() << errStr;
+			throw Exception(errStr);
+		}
+		std::vector<VkPhysicalDevice> physicalDevices(deviceCount);
+		vkEnumeratePhysicalDevices(GetAs<VkInstance>(instance), &deviceCount, physicalDevices.data());
+
+		vkLog.Info() << "PhysicalDevice count: " << deviceCount;
+		for (const auto& device : physicalDevices)
+		{
+			VkPhysicalDeviceProperties properties{ };
+			vkGetPhysicalDeviceProperties(device, &properties);
+			vkLog.Info() << "  - " << properties.deviceName;
+		}
+	}
+
 	void RequireExtension(std::string const& extension)
 	{
 		if (instance != nullptr) throw Exception("cannot require extension after initialization");
@@ -135,7 +158,7 @@ namespace Vulkan
 		}
 		size_t length = strlen(extension.c_str());
 		char* str = new char[length+1];
-		std::strncpy(str, extension.c_str(), length);
+		strncpy(str, extension.c_str(), length);
 		str[length] = '\0';
 		vkLog.Info() << "Required Extension: " << str;
 		requiredExtensions.push_back(str);
@@ -143,7 +166,7 @@ namespace Vulkan
 
 	void RequireDeviceExtension(std::string const& extension)
 	{
-		if (physicalDevice != nullptr) throw Exception("cannot require device extension after device initialization");
+		if (physicalDevice.Get() != nullptr) throw Exception("cannot require device extension after device initialization");
 
 		for (auto const& e : requiredDeviceExtensions)
 		{
@@ -151,7 +174,7 @@ namespace Vulkan
 		}
 		size_t length = strlen(extension.c_str());
 		char* str = new char[length + 1];
-		std::strncpy(str, extension.c_str(), length);
+		strncpy(str, extension.c_str(), length);
 		str[length] = '\0';
 		vkLog.Info() << "Required Device Extension: " << str;
 		requiredDeviceExtensions.push_back(str);

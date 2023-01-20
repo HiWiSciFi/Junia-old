@@ -2,5 +2,13 @@
 
 namespace Vulkan
 {
+	PhysicalDevice::PhysicalDevice()
+	{
 
+	}
+
+	PhysicalDevice::~PhysicalDevice()
+	{
+
+	}
 }

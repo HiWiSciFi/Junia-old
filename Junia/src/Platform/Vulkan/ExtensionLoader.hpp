@@ -19,7 +19,7 @@ namespace Vulkan
 	 *                   which the created object is returned.
 	 * @return VK_SUCCESS on success and VK_ERROR_OUT_OF_HOST_MEMORY on failure
 	*/
-	constexpr VkResult vkCreateDebugUtilsMessengerEXT(
+	inline VkResult vkCreateDebugUtilsMessengerEXT(
 		VkInstance instance,
 		const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
 		const VkAllocationCallbacks* pAllocator,
@@ -38,7 +38,7 @@ namespace Vulkan
 	 *                  called when a callback is active.
 	 * @param pAllocator controls host memory allocation.
 	*/
-	constexpr void vkDestroyDebugUtilsMessengerEXT(
+	inline void vkDestroyDebugUtilsMessengerEXT(
 		VkInstance instance,
 		VkDebugUtilsMessengerEXT messenger,
 		const VkAllocationCallbacks* pAllocator)

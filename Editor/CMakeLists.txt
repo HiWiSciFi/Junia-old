@@ -1,6 +1,6 @@
 ﻿add_executable(Editor)
 
-	set_property(TARGET Junia PROPERTY CXX_STANDARD 17)
+	set_property(TARGET Editor PROPERTY CXX_STANDARD 17)
 
 	set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
