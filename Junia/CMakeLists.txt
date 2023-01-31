@@ -94,7 +94,6 @@
 	target_link_libraries(Junia
 		PRIVATE
 			"${GLFW_LIB}"
-			"${GLAD_LIB}"
 			"${Vulkan_LIBRARY}"
 			"${OPENAL_LIBRARY}"
 	)
