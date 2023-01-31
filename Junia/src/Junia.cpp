@@ -57,6 +57,7 @@ namespace Junia
 		catch (Vulkan::Exception e)
 		{
 			JELOG_ERROR << "Vulkan ERROR: " << e.what();
+			throw std::runtime_error("");
 		}
 
 		try
