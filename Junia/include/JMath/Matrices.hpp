@@ -1,0 +1,9 @@
+#include <JMath/Matrix2x2.hpp>
+#include <JMath/Matrix2x3.hpp>
+#include <JMath/Matrix2x4.hpp>
+#include <JMath/Matrix3x2.hpp>
+#include <JMath/Matrix3x3.hpp>
+#include <JMath/Matrix3x4.hpp>
+#include <JMath/Matrix4x2.hpp>
+#include <JMath/Matrix4x3.hpp>
+#include <JMath/Matrix4x4.hpp>
