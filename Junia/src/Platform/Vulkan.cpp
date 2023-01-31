@@ -59,7 +59,9 @@ namespace Vulkan
 
 		Vulkan::debug = debug;
 
-		RequireExtension(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+		// For MacOS (currently not supported)
+		//RequireExtension(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+
 		if (debug) RequireExtension(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 		RequireDeviceExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 
@@ -107,7 +109,8 @@ namespace Vulkan
 		VkInstanceCreateInfo instanceCreateInfo{ };
 		instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		instanceCreateInfo.pApplicationInfo = &appInfo;
-		instanceCreateInfo.flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+		// For MacOS (currently not supported)
+		//instanceCreateInfo.flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 		instanceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(requiredExtensions.size());
 		instanceCreateInfo.ppEnabledExtensionNames = requiredExtensions.data();
 		instanceCreateInfo.enabledLayerCount = debug ? static_cast<uint32_t>(VALIDATION_LAYERS.size()) : 0;
