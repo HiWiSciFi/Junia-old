@@ -1,4 +1,6 @@
 #include "Core.hpp"
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 #include <Junia/Core/Window.hpp>
 #include <Junia/Core/Log.hpp>
 #include <Junia/Events/Events.hpp>
@@ -56,7 +58,12 @@ namespace Junia
 		Close();
 	}
 
-	Window::IdType Window::GetID()
+	void* Window::GetNative() const
+	{
+		return nativeWindow;
+	}
+
+	Window::IdType Window::GetID() const
 	{
 		return index;
 	}
@@ -69,61 +76,46 @@ namespace Junia
 	void Window::SetTitle(const std::string& title)
 	{
 		this->title = title;
-		if (open) glfwSetWindowTitle(nativeWindow, title.c_str());
+		if (open) glfwSetWindowTitle(reinterpret_cast<GLFWwindow*>(nativeWindow), title.c_str());
 	}
 
 	JMath::iVec2 Window::GetPosition()
 	{
 		int x, y;
-		glfwGetWindowPos(nativeWindow, &x, &y);
+		glfwGetWindowPos(reinterpret_cast<GLFWwindow*>(nativeWindow), &x, &y);
 		return { x, y };
 	}
 
 	void Window::SetPosition(JMath::iVec2 position)
 	{
-		glfwSetWindowPos(nativeWindow, position.x, position.y);
+		glfwSetWindowPos(reinterpret_cast<GLFWwindow*>(nativeWindow), position.x, position.y);
 	}
 
 	JMath::iVec2 Window::GetSize()
 	{
 		int width, height;
-		glfwGetWindowSize(nativeWindow, &width, &height);
+		glfwGetWindowSize(reinterpret_cast<GLFWwindow*>(nativeWindow), &width, &height);
 		return { width, height };
 	}
 
 	void Window::SetSize(JMath::iVec2 size)
 	{
-		glfwSetWindowSize(nativeWindow, size.x, size.y);
+		glfwSetWindowSize(reinterpret_cast<GLFWwindow*>(nativeWindow), size.x, size.y);
 	}
 
 	float Window::GetOpacity()
 	{
-		return glfwGetWindowOpacity(nativeWindow);
+		return glfwGetWindowOpacity(reinterpret_cast<GLFWwindow*>(nativeWindow));
 	}
 
 	void Window::SetOpacity(float opacity)
 	{
-		glfwSetWindowOpacity(nativeWindow, opacity);
+		glfwSetWindowOpacity(reinterpret_cast<GLFWwindow*>(nativeWindow), opacity);
 	}
 
 	bool Window::IsOpen()
 	{
 		return open;
-	}
-
-	static void WindowFocusCallback(GLFWwindow* nativeWindow, int focused)
-	{
-		for (Window::IdType i = 1; i < Window::GetWindowCount() + 1; i++)
-		{
-			Window* window = Window::GetWindow(i);
-			if (window == nullptr || window->nativeWindow != nativeWindow) continue;
-
-			if (focused) Window::GetWindows()[0] = window;
-			else if (Window::GetWindows()[0] == window) Window::GetWindows()[0] = nullptr;
-
-			window->focused = focused;
-			break;
-		}
 	}
 
 	void Window::Open()
@@ -139,13 +131,30 @@ namespace Junia
 			JELOG_CORE_ERROR << "Window could not be created!\n" << msg;
 			return;
 		}
-		glfwSetWindowUserPointer(nativeWindow, this);
-		glfwSetWindowFocusCallback(nativeWindow, WindowFocusCallback);
+		glfwSetWindowUserPointer(reinterpret_cast<GLFWwindow*>(nativeWindow), this);
+
+		ClikeFunction<0, void, GLFWwindow*, int>::Bind([this] (GLFWwindow* nativeWindow, int focused)
+			{
+				JELOG_CORE_CRITICAL << "Window: " << (void*)nativeWindow << " - " << "Focused: " << focused;
+				for (Window::IdType i = 1; i < Window::GetWindowCount() + 1; i++)
+				{
+					Window* window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(nativeWindow));
+					if (window == nullptr || window->GetNative() != nativeWindow) continue;
+
+					if (focused) Window::GetWindows()[0] = window;
+					else if (Window::GetWindows()[0] == window) Window::GetWindows()[0] = nullptr;
+
+					window->focused = focused;
+					break;
+				}
+			});
+		glfwSetWindowFocusCallback(reinterpret_cast<GLFWwindow*>(nativeWindow), ClikeFunction<0, void, GLFWwindow*, int>::Invoke);
+
 		index = static_cast<int>(windows.size());
 		windows.push_back(this);
 		if (windows[0] == nullptr) windows[0] = this;
 
-		glfwSetKeyCallback(nativeWindow, [ ] (GLFWwindow* _, const int key, int scancode, const int action, int mods)
+		glfwSetKeyCallback(reinterpret_cast<GLFWwindow*>(nativeWindow), [ ] (GLFWwindow* _, const int key, int scancode, const int action, int mods)
 			{
 				switch (action)
 				{
@@ -160,12 +169,12 @@ namespace Junia
 				}
 			});
 
-		glfwSetCharCallback(nativeWindow, [ ] (GLFWwindow* window, unsigned int codepoint)
+		glfwSetCharCallback(reinterpret_cast<GLFWwindow*>(nativeWindow), [ ] (GLFWwindow* window, unsigned int codepoint)
 			{
 				Events::Trigger<KeyCharEvent>(codepoint);
 			});
 
-		glfwSetMouseButtonCallback(nativeWindow, [ ] (GLFWwindow* _, int button, int action, int mods)
+		glfwSetMouseButtonCallback(reinterpret_cast<GLFWwindow*>(nativeWindow), [ ] (GLFWwindow* _, int button, int action, int mods)
 			{
 				switch (action)
 				{
@@ -180,7 +189,7 @@ namespace Junia
 				}
 			});
 
-		glfwSetCursorPosCallback(nativeWindow, [ ] (GLFWwindow* _, double xpos, double ypos)
+		glfwSetCursorPosCallback(reinterpret_cast<GLFWwindow*>(nativeWindow), [ ] (GLFWwindow* _, double xpos, double ypos)
 			{
 				Events::Trigger<MouseMoveEvent>(JMath::iVec2(static_cast<int>(xpos), static_cast<int>(ypos)));
 			});
@@ -203,7 +212,7 @@ namespace Junia
 		}
 		index = -1;
 		windows.pop_back();
-		glfwDestroyWindow(nativeWindow);
+		glfwDestroyWindow(reinterpret_cast<GLFWwindow*>(nativeWindow));
 	}
 
 	bool Window::IsFocused()
@@ -213,13 +222,13 @@ namespace Junia
 
 	void Window::Focus()
 	{
-		glfwFocusWindow(nativeWindow);
+		glfwFocusWindow(reinterpret_cast<GLFWwindow*>(nativeWindow));
 	}
 
 	void Window::Update()
 	{
 		if (!open) return;
-		if (glfwWindowShouldClose(nativeWindow))
+		if (glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(nativeWindow)))
 		{
 			Close();
 			return;

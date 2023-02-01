@@ -1,11 +1,10 @@
 #pragma once
-#ifdef BUILD_JUNIA
-#include <GLFW/glfw3.h>
-#endif
 #include <inttypes.h>
 #include <string>
 #include <vector>
 #include <JMath/Vector2.hpp>
+
+#include <Platform/Vulkan/Surface.hpp>
 
 namespace Junia
 {
@@ -22,6 +21,7 @@ namespace Junia
 		* @return the amount of windows that have been opened but not closed yet
 		*/
 		static int GetWindowCount();
+
 		/**
 		* @brief Get a list of currently opened windows
 		* @return a pointer to an array of Window* with a length of
@@ -30,6 +30,7 @@ namespace Junia
 		*         the currently focused window or nullptr
 		*/
 		static Window** const GetWindows();
+
 		/**
 		* @brief Get a window by its ID
 		* @param id the ID of the window to fetch
@@ -38,12 +39,14 @@ namespace Junia
 		*         ID 0 to get a pointer to the currently focused window
 		*/
 		static Window* GetWindow(IdType id);
+
 		/**
 		 * @brief Get the currently focused window
 		 * @return a pointer to the currently focused window or nullptr if no
 		 *         window is currently focused
 		*/
 		static Window* GetWindow();
+
 		/**
 		* @brief Create a window. The window isn't opened automatically. (see
 		*        Window::Open())
@@ -51,12 +54,14 @@ namespace Junia
 		* @return a pointer to the created window
 		*/
 		static Window* Create(const std::string& title);
+
 		/**
 		* @brief Close a window and free all its assigned memory (All
 		*        pointers to the specified window will be invalidated!)
 		* @param id the ID of the window to destroy
 		*/
 		static void Destroy(IdType id);
+
 		/**
 		* @brief Close a window and free all its assigned memory (All
 		*        pointers to the specified window will be invalidated!)
@@ -64,21 +69,10 @@ namespace Junia
 		*/
 		static void Destroy(const Window* window);
 
-#ifdef BUILD_JUNIA
-	public:
-		/**
-		* @brief The pointer to the underlying glfw window structure (DO NOT
-		*        EDIT THIS VALUE)
-		*/
-		GLFWwindow* nativeWindow;
-#else
 	private:
-		/**
-		* @brief The pointer to the underlying glfw window structure (DO NOT
-		*        EDIT THIS VALUE)
-		*/
 		void* nativeWindow;
-#endif
+		Vulkan::Surface surface;
+
 		IdType index = -1;
 		bool open = false;
 		bool focused = false;
@@ -89,17 +83,25 @@ namespace Junia
 
 	public:
 		/**
+		 * @brief Get the native window
+		 * @return pointer to the native window
+		*/
+		void* GetNative() const;
+
+		/**
 		* @brief Get the window ID
 		* @return the window ID (value &gt; 0) or -1 if the window isn't open
 		*         (see Window::Open()). The window ID may change if another
 		*         window is closed.
 		*/
-		IdType GetID();
+		IdType GetID() const;
+
 		/**
 		* @brief Get the window title
 		* @return the current window title (UTF-8 supported)
 		*/
 		const std::string& GetTitle();
+
 		/**
 		* @brief Set the window title
 		* @param title the new title for the window (UTF-8 supported)
@@ -113,16 +115,19 @@ namespace Junia
 		 * @return a 2D vector containing the window postion
 		*/
 		JMath::iVec2 GetPosition();
+
 		/**
 		 * @brief Set the window position
 		 * @param position the position to move the window to
 		*/
 		void SetPosition(JMath::iVec2 position);
+
 		/**
 		 * @brief Get the window size
 		 * @return a 2D vector containing the window size as { width, height }
 		*/
 		JMath::iVec2 GetSize();
+
 		/**
 		 * @brief Set the window size
 		 * @param size the new size for the window as { width, height }
@@ -137,6 +142,7 @@ namespace Junia
 		 * @return the window opacity (0.0: translucent - 1.0: opaque)
 		*/
 		float GetOpacity();
+
 		/**
 		 * @brief Set the window opacity
 		 * @param opacity the new opacity for the window as a value between 0.0
@@ -160,6 +166,7 @@ namespace Junia
 		*        and -1 otherwise.
 		*/
 		void Open();
+
 		/**
 		* @brief Close the window and hides it from the user. This function
 		*        does nothing if the window has already been closed or if it

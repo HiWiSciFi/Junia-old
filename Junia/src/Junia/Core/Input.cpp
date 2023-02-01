@@ -2,6 +2,7 @@
 #include <Junia/Core/Input.hpp>
 #include <Junia/Core/Window.hpp>
 
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 namespace Junia
@@ -10,7 +11,7 @@ namespace Junia
 	{
 		Window* w = Window::GetWindow(window);
 		if (w == nullptr) return false;
-		const auto state = glfwGetKey(w->nativeWindow, JeToGlfwKey[static_cast<int>(keycode)]);
+		const auto state = glfwGetKey(reinterpret_cast<GLFWwindow*>(w->GetNative()), JeToGlfwKey[static_cast<int>(keycode)]);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
@@ -18,7 +19,7 @@ namespace Junia
 	{
 		Window* w = Window::GetWindow(window);
 		if (w == nullptr) return false;
-		const auto state = glfwGetMouseButton(w->nativeWindow,
+		const auto state = glfwGetMouseButton(reinterpret_cast<GLFWwindow*>(w->GetNative()),
 			JeToGlfwButton[static_cast<int>(button)]);
 		return state == GLFW_PRESS;
 	}
@@ -28,7 +29,7 @@ namespace Junia
 		double x, y;
 		Window* w = Window::GetWindow(window);
 		if (w == nullptr) return { 0, 0 };
-		glfwGetCursorPos(w->nativeWindow, &x, &y);
+		glfwGetCursorPos(reinterpret_cast<GLFWwindow*>(w->GetNative()), &x, &y);
 		return { static_cast<int>(x), static_cast<int>(y) };
 	}
 }
