@@ -1,7 +1,7 @@
 #pragma once
 
-#include <JMath/Vector3.hpp>
-#include <JMath/Vector4.hpp>
+#include "../../../JMath/Vector3.hpp"
+#include "../../../JMath/Vector4.hpp"
 
 namespace Junia
 {

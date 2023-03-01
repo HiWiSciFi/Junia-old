@@ -1,8 +1,9 @@
 #pragma once
 
+#include "../ECS.hpp"
+
 #include <string>
 #include <vector>
-#include <Junia/ECS/ECS.hpp>
 
 namespace Junia
 {

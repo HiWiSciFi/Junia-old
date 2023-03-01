@@ -1,29 +1,27 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#include <Junia/Core/Logger.hpp>
 #include <Platform/Vulkan.hpp>
-#include <Platform/Vulkan/Exception.hpp>
-#include <vector>
-#include <Junia/Core/Log.hpp>
-#include <iostream>
-#include <cstring>
-
+#include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/ExtensionLoader.hpp"
+
+#include <iostream>
+#include <stdexcept>
 
 namespace Vulkan
 {
 	Junia::Log::Logger vkLog = Junia::Log::Logger("Vulkan", &std::cout);
 
-	void* instance = nullptr;
-	void* device = nullptr;
-	bool debug = false;
-	PhysicalDevice physicalDevice;
-
-	static std::vector<const char*> requiredExtensions{ };
-	static std::vector<const char*> requiredDeviceExtensions{ };
-
 	static VkDebugUtilsMessengerEXT debugMessenger = nullptr;
 
-	const std::vector<const char*> VALIDATION_LAYERS{ "VK_LAYER_KHRONOS_validation" };
+	VkInstance vkInstance = nullptr;
+	bool debug = false;
+	std::vector<const char*> requiredExtensions{ };
+	std::vector<const char*> requiredDeviceExtensions{ };
+	std::vector<const char*> VALIDATION_LAYERS{ "VK_LAYER_KHRONOS_validation" };
+	std::vector<Junia::RenderDevice*> renderDevices;
+
+	extern VulkanDevice* vkDevice;
 
 	VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
 		VkDebugUtilsMessageSeverityFlagBitsEXT severity,
@@ -35,38 +33,29 @@ namespace Vulkan
 			vkLog.Error() << data->pMessage;
 		else if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
 			vkLog.Warn() << data->pMessage;
-		else if (severity & (VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT))
+		else if (debug && severity & (VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT))
 			vkLog.Trace() << data->pMessage;
 		return VK_FALSE;
 	}
 
-	static void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT* createInfo)
-	{
-		createInfo->sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-		createInfo->messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
-		createInfo->messageSeverity |= VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT;
-		createInfo->messageSeverity |= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT;
-		createInfo->messageSeverity |= VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-		createInfo->messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT;
-		createInfo->messageType |= VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
-		createInfo->messageType |= VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-		createInfo->pfnUserCallback = VulkanDebugCallback;
-	}
-
 	void Init(std::string const& appName, Junia::Version const& appVersion, std::string const& engineName, Junia::Version const& engineVersion, bool debug)
 	{
-		if (instance != nullptr) throw Exception("vulkan has already been initialized");
+		vkLog.maxLevel = Junia::Log::LogLevel::Info;
+		if (vkInstance != nullptr) throw std::runtime_error("vulkan has already been initialized");
+
+		if (glfwInit() != GLFW_TRUE)
+			throw std::runtime_error("failed to initialize GLFW");
+
+		uint32_t glfwExtensionCount;
+		const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+		for (uint32_t i = 0; i < glfwExtensionCount; i++) Vulkan::RequireExtension(glfwExtensions[i]);
 
 		Vulkan::debug = debug;
-
-		// For MacOS (currently not supported)
-		//RequireExtension(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
-
-		if (debug) RequireExtension(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 		RequireDeviceExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-
+		VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo{ };
 		if (debug)
 		{
+			RequireExtension(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 			uint32_t layerCount;
 			vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 			std::vector<VkLayerProperties> availableLayers(layerCount);
@@ -83,8 +72,18 @@ namespace Vulkan
 						break;
 					}
 				}
-				if (!found) throw Exception("validation layers not supported");
+				if (!found) throw std::runtime_error("validation layer not supported");
 			}
+
+			debugMessengerCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+			debugMessengerCreateInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
+			debugMessengerCreateInfo.messageSeverity |= VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT;
+			debugMessengerCreateInfo.messageSeverity |= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT;
+			debugMessengerCreateInfo.messageSeverity |= VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+			debugMessengerCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT;
+			debugMessengerCreateInfo.messageType |= VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
+			debugMessengerCreateInfo.messageType |= VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+			debugMessengerCreateInfo.pfnUserCallback = VulkanDebugCallback;
 		}
 
 		VkApplicationInfo appInfo{ };
@@ -92,75 +91,46 @@ namespace Vulkan
 		appInfo.apiVersion = VK_API_VERSION_1_3;
 		appInfo.pEngineName = engineName.c_str();
 		appInfo.engineVersion = engineVersion.GetVersionNumber();
-		appInfo.applicationVersion = appVersion.GetVersionNumber();
 		appInfo.pApplicationName = appName.c_str();
-
-		VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo{ };
-		if (debug) PopulateDebugMessengerCreateInfo(&debugMessengerCreateInfo);
-
-		// log available extensions
-		/*uint32_t extensionCount;
-		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
-		std::vector<VkExtensionProperties> extensions(extensionCount);
-		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
-		vkLog.Warn() << "Available instance extensions:";
-		for (const auto& extension : extensions) vkLog.Warn() << "  - " << extension.extensionName;*/
+		appInfo.applicationVersion = appVersion.GetVersionNumber();
 
 		VkInstanceCreateInfo instanceCreateInfo{ };
 		instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		instanceCreateInfo.pApplicationInfo = &appInfo;
-		// For MacOS (currently not supported)
-		//instanceCreateInfo.flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 		instanceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(requiredExtensions.size());
 		instanceCreateInfo.ppEnabledExtensionNames = requiredExtensions.data();
 		instanceCreateInfo.enabledLayerCount = debug ? static_cast<uint32_t>(VALIDATION_LAYERS.size()) : 0;
 		instanceCreateInfo.ppEnabledLayerNames = debug ? VALIDATION_LAYERS.data() : nullptr;
 		instanceCreateInfo.pNext = debug ? &debugMessengerCreateInfo : nullptr;
 
-		if (vkCreateInstance(&instanceCreateInfo, nullptr, GetAs<VkInstance*>(&instance)) != VK_SUCCESS)
-			throw Exception("vulkan instance could not be created");
+		if (vkCreateInstance(&instanceCreateInfo, nullptr, &vkInstance) != VK_SUCCESS)
+			throw std::runtime_error("failed to create vulkan instance");
 
-		LoadExtensions(debug);
+		LoadExtensions(requiredExtensions.size(), requiredExtensions.data());
 
-		if (debug)
-		{
-			if (Vulkan::vkCreateDebugUtilsMessengerEXT(GetAs<VkInstance>(instance), &debugMessengerCreateInfo, nullptr, &debugMessenger) != VK_SUCCESS)
-				throw Exception("vulkan debug messenger could not be created");
-		}
-	}
+		if (debug && vkCreateDebugUtilsMessengerEXT(vkInstance, &debugMessengerCreateInfo, nullptr, &debugMessenger) != VK_SUCCESS)
+			throw std::runtime_error("failed to create vulkan debug messenger");
 
-	void PickPhysicalDevice()
-	{
 		uint32_t deviceCount;
-		vkEnumeratePhysicalDevices(GetAs<VkInstance>(instance), &deviceCount, nullptr);
-		if (deviceCount == 0)
-		{
-			const char* errStr = "could not find gpu with vulkan support";
-			vkLog.Critical() << errStr;
-			throw Exception(errStr);
-		}
+		vkEnumeratePhysicalDevices(vkInstance, &deviceCount, nullptr);
+		if (deviceCount == 0) throw std::runtime_error("failed to find any suitable vulkan render devices");
 		std::vector<VkPhysicalDevice> physicalDevices(deviceCount);
-		vkEnumeratePhysicalDevices(GetAs<VkInstance>(instance), &deviceCount, physicalDevices.data());
-
-		vkLog.Info() << "PhysicalDevice count: " << deviceCount;
-		for (const auto& device : physicalDevices)
+		vkEnumeratePhysicalDevices(vkInstance, &deviceCount, physicalDevices.data());
+		for (const auto& physicalDevice : physicalDevices)
 		{
-			VkPhysicalDeviceProperties properties{ };
-			vkGetPhysicalDeviceProperties(device, &properties);
-			vkLog.Info() << "  - " << properties.deviceName;
+			Junia::RenderDevice* device = new VulkanDevice(physicalDevice);
+			if (device->GetRating() != 0) renderDevices.push_back(device);
 		}
 	}
 
 	void RequireExtension(std::string const& extension)
 	{
-		if (instance != nullptr) throw Exception("cannot require extension after initialization");
+		if (vkInstance != nullptr)
+			throw std::runtime_error("cannot require extension after initialization");
 
-		for (auto const& e : requiredExtensions)
-		{
-			if (strcmp(e, extension.c_str()) == 0) throw Exception("extension has already been registered");
-		}
+		for (auto const& e : requiredExtensions) if (strcmp(e, extension.c_str()) == 0) return;
 		size_t length = strlen(extension.c_str());
-		char* str = new char[length+1];
+		char* str = new char[length + 1];
 		strncpy(str, extension.c_str(), length);
 		str[length] = '\0';
 		vkLog.Info() << "Required Extension: " << str;
@@ -169,12 +139,10 @@ namespace Vulkan
 
 	void RequireDeviceExtension(std::string const& extension)
 	{
-		if (physicalDevice.Get() != nullptr) throw Exception("cannot require device extension after device initialization");
+		if (vkDevice != nullptr)
+			throw std::runtime_error("cannot require device extension after device initialization");
 
-		for (auto const& e : requiredDeviceExtensions)
-		{
-			if (strcmp(e, extension.c_str()) == 0) throw Exception("device extension has already been registered");
-		}
+		for (auto const& e : requiredDeviceExtensions) if (strcmp(e, extension.c_str()) == 0) return;
 		size_t length = strlen(extension.c_str());
 		char* str = new char[length + 1];
 		strncpy(str, extension.c_str(), length);
@@ -183,9 +151,40 @@ namespace Vulkan
 		requiredDeviceExtensions.push_back(str);
 	}
 
+	std::vector<Junia::RenderDevice*>& GetDevices()
+	{
+		return renderDevices;
+	}
+
+	void PickDevice(Junia::RenderDevice* device)
+	{
+		if (device == nullptr)
+		{
+			uint32_t currRating = 0;
+			for (size_t i = 0; i < renderDevices.size(); i++)
+			{
+				if (renderDevices[i]->GetRating() > currRating)
+				{
+					device = renderDevices[i];
+					currRating = device->GetRating();
+				}
+			}
+			if (device == nullptr) throw std::runtime_error("failed to find a suitable device");
+			device->Pick();
+			return;
+		}
+
+		if (device->GetRating() == 0) throw std::runtime_error("device not suitable");
+		for (size_t i = 0; i < renderDevices.size(); i++)
+			if (renderDevices[i] == device) { device->Pick(); return; }
+		throw std::runtime_error("device not in list of available devices");
+	}
+
 	void Cleanup()
 	{
-		if (debug) Vulkan::vkDestroyDebugUtilsMessengerEXT(GetAs<VkInstance>(instance), debugMessenger, nullptr);
-		vkDestroyInstance(GetAs<VkInstance>(instance), nullptr);
+		for (auto renderDevice : renderDevices) delete renderDevice;
+		if (debug) vkDestroyDebugUtilsMessengerEXT(vkInstance, debugMessenger, nullptr);
+		vkDestroyInstance(vkInstance, nullptr);
+		glfwTerminate();
 	}
 }

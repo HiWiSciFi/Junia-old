@@ -7,6 +7,12 @@
 #include <Junia/Events/InputEvents.hpp>
 #include <Junia/Core/Input.hpp>
 #include <iostream>
+#include "../../Platform/Vulkan/VulkanSurface.hpp"
+
+namespace Vulkan
+{
+	extern VkInstance vkInstance;
+}
 
 namespace Junia
 {
@@ -118,6 +124,20 @@ namespace Junia
 		return open;
 	}
 
+	void WindowFocusCallback(GLFWwindow* nativeWindow, int focused)
+	{
+		for (Window::IdType i = 1; i < Window::GetWindowCount() + 1; i++)
+		{
+			Window* window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(nativeWindow));
+
+			if (focused) Window::GetWindows()[0] = window;
+			else if (Window::GetWindows()[0] == window) Window::GetWindows()[0] = nullptr;
+
+			window->focused = focused;
+			break;
+		}
+	}
+
 	void Window::Open()
 	{
 		if (open) return;
@@ -133,22 +153,7 @@ namespace Junia
 		}
 		glfwSetWindowUserPointer(reinterpret_cast<GLFWwindow*>(nativeWindow), this);
 
-		ClikeFunction<0, void, GLFWwindow*, int>::Bind([this] (GLFWwindow* nativeWindow, int focused)
-			{
-				JELOG_CORE_CRITICAL << "Window: " << (void*)nativeWindow << " - " << "Focused: " << focused;
-				for (Window::IdType i = 1; i < Window::GetWindowCount() + 1; i++)
-				{
-					Window* window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(nativeWindow));
-					if (window == nullptr || window->GetNative() != nativeWindow) continue;
-
-					if (focused) Window::GetWindows()[0] = window;
-					else if (Window::GetWindows()[0] == window) Window::GetWindows()[0] = nullptr;
-
-					window->focused = focused;
-					break;
-				}
-			});
-		glfwSetWindowFocusCallback(reinterpret_cast<GLFWwindow*>(nativeWindow), ClikeFunction<0, void, GLFWwindow*, int>::Invoke);
+		glfwSetWindowFocusCallback(reinterpret_cast<GLFWwindow*>(nativeWindow), WindowFocusCallback);
 
 		index = static_cast<int>(windows.size());
 		windows.push_back(this);
@@ -195,6 +200,8 @@ namespace Junia
 			});
 
 		// TODO: create vulkan surface & swapchain
+		surface = new Vulkan::VulkanSurface(reinterpret_cast<GLFWwindow*>(nativeWindow));
+
 		open = true;
 	}
 
@@ -212,6 +219,7 @@ namespace Junia
 		}
 		index = -1;
 		windows.pop_back();
+		delete surface;
 		glfwDestroyWindow(reinterpret_cast<GLFWwindow*>(nativeWindow));
 	}
 

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <Junia/ECS/ComponentContainer.hpp>
-#include <Junia/Core/IdPool.hpp>
+#include "ComponentContainer.hpp"
+#include "../Core/IdPool.hpp"
+
 #include <stdexcept>
 #include <typeindex>
 #include <typeinfo>

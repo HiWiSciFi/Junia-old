@@ -1,10 +1,11 @@
 #pragma once
+
+#include "../../JMath/Vector2.hpp"
+#include "../Renderer/Surface.hpp"
+
 #include <inttypes.h>
 #include <string>
 #include <vector>
-#include <JMath/Vector2.hpp>
-
-#include <Platform/Vulkan/Surface.hpp>
 
 namespace Junia
 {
@@ -71,13 +72,18 @@ namespace Junia
 
 	private:
 		void* nativeWindow;
-		Vulkan::Surface surface;
+		Surface* surface = nullptr;
 
 		IdType index = -1;
 		bool open = false;
-		bool focused = false;
 		std::string title;
 
+	#ifdef BUILD_JUNIA
+	public:
+	#endif
+		bool focused = false;
+
+	private:
 		Window(const std::string& title);
 		~Window();
 

@@ -1,7 +1,8 @@
 #pragma once
 
+#include "Types.hpp"
+
 #include <cmath>
-#include <JMath/Types.hpp>
 
 namespace JMath
 {

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <Junia/Events/Events.hpp>
-#include <Junia/Core/Keycodes.hpp>
-#include <JMath/Vector2.hpp>
+#include "Events.hpp"
+#include "../Core/Keycodes.hpp"
+#include "../../JMath/Vector2.hpp"
+
 #include <string>
 
 namespace Junia

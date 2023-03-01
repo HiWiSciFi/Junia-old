@@ -1,7 +1,7 @@
 #pragma once
 
-#include <JMath/Types.hpp>
-#include <JMath/Mathf.hpp>
+#include "Types.hpp"
+#include "Mathf.hpp"
 
 namespace JMath
 {

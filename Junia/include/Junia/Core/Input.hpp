@@ -1,8 +1,10 @@
 #pragma once
+
+#include "Window.hpp"
+#include "Keycodes.hpp"
+
 #include <utility>
 #include <inttypes.h>
-#include <Junia/Core/Window.hpp>
-#include <Junia/Core/Keycodes.hpp>
 
 namespace Junia
 {

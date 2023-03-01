@@ -1,5 +1,6 @@
 #pragma once
-#include <Junia/Core/Logger.hpp>
+
+#include "Logger.hpp"
 
 namespace Junia
 {

@@ -11,7 +11,7 @@ namespace OpenAL
 {
 	Junia::Log::Logger alLog = Junia::Log::Logger("OpenAL", &std::cout);
 
-	void alEnumerateDevices(size_t* deviceCount, const char** deviceNames)
+	void alEnumerateOutputDevices(size_t* deviceCount, const char** deviceNames)
 	{
 		size_t counter = 0;
 		const char* devices = alcGetString(nullptr, ALC_ALL_DEVICES_SPECIFIER);
@@ -33,19 +33,41 @@ namespace OpenAL
 		if (deviceCount != nullptr) (*deviceCount) = counter;
 	}
 
+	void alEnumerateInputDevices(size_t* deviceCount, const char** deviceNames)
+	{
+		size_t counter = 0;
+		const char* devices = alcGetString(nullptr, ALC_CAPTURE_DEVICE_SPECIFIER);
+		const char* device = devices;
+
+		for (size_t len; (len = strlen(device)), len != 0; device += len + 1)
+		{
+			if (deviceNames != nullptr)
+			{
+				deviceNames[counter] = device;
+			}
+			counter++;
+		}
+		if (deviceCount != nullptr) (*deviceCount) = counter;
+	}
+
 	void Init()
 	{
 		ALboolean enumeration = alcIsExtensionPresent(NULL, "ALC_ENUMERATE_ALL_EXT");
 		if (enumeration == AL_FALSE) alLog.Trace() << "device enumeration not supported";
 
-		size_t deviceCount;
-		alEnumerateDevices(&deviceCount, nullptr);
-		std::vector<const char*> devices(deviceCount);
-		alEnumerateDevices(&deviceCount, devices.data());
+		size_t outputDeviceCount;
+		alEnumerateOutputDevices(&outputDeviceCount, nullptr);
+		std::vector<const char*> outputDevices(outputDeviceCount);
+		alEnumerateOutputDevices(&outputDeviceCount, outputDevices.data());
+		alLog.Info() << "Available output devices:";
+		for (const auto& device : outputDevices) alLog.Info() << "  - " << device;
 
-		alLog.Info() << "Device count:" << deviceCount;
-		alLog.Info() << "Available devies:";
-		for (const auto& device : devices) alLog.Info() << "  - " << device;
+		size_t inputDeviceCount;
+		alEnumerateInputDevices(&inputDeviceCount, nullptr);
+		std::vector<const char*> inputDevices(inputDeviceCount);
+		alEnumerateInputDevices(&inputDeviceCount, inputDevices.data());
+		alLog.Info() << "Available input devices:";
+		for (const auto& device : inputDevices) alLog.Info() << "  - " << device;
 
 		ALCdevice* device = alcOpenDevice(nullptr);
 		if (device == nullptr)

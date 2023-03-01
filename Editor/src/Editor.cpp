@@ -69,12 +69,12 @@ int main(int argc, char** argv)
 	for (int i = 0; i < ENTITY_COUNT; i++) Junia::ECS::Entity::Create();
 	auto endtime = std::chrono::high_resolution_clock::now();
 	float creationtime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
-	JELOG_WARN << "Entities created! Time: " << creationtime << "s";
+	JELOG_TRACE << "Entities created! Time: " << creationtime << "s";
 	starttime = std::chrono::high_resolution_clock::now();
 	for (int i = (ENTITY_COUNT * 2) - 1; i >= 0; i--) Junia::ECS::Entity::Destroy(Junia::ECS::Entity(i));
 	endtime = std::chrono::high_resolution_clock::now();
 	float destructiontime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
-	JELOG_WARN << "Entities destroyed! Time: " << destructiontime << "s";
+	JELOG_TRACE << "Entities destroyed! Time: " << destructiontime << "s";
 
 	JELOG_INFO << "Creating Window...";
 	RunGame();

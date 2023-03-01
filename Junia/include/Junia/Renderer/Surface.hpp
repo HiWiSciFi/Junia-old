@@ -1,10 +1,10 @@
 #pragma once
 
-namespace Vulkan
+namespace Junia
 {
 	class Surface
 	{
 	public:
-		Surface();
+		virtual ~Surface() = 0;
 	};
 }

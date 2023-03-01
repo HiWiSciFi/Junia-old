@@ -9,7 +9,6 @@
 #include <Junia.hpp>
 
 #include <Platform/Vulkan.hpp>
-#include <Platform/Vulkan/Exception.hpp>
 
 #include <Platform/OpenAL.hpp>
 #include <Platform/OpenAL/Exception.hpp>
@@ -33,31 +32,36 @@ namespace Junia
 			SetConsoleMode(hOutput, dwMode);
 #endif
 
-		if (!glfwInit())
-		{
-			const char* msg = nullptr;
-			glfwGetError(&msg);
-			JELOG_CORE_ERROR << "GLFW could not be initialized!\n" << msg;
-			return;
-		}
 		glfwSetErrorCallback([](const int code, const char* desc)
 			{
 				JELOG_CORE_ERROR << "GLFW Error: (0x" << std::hex << code << ") : " << desc;
 			});
 
-		uint32_t glfwExtensionCount;
-		const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-		for (uint32_t i = 0; i < glfwExtensionCount; i++) Vulkan::RequireExtension(glfwExtensions[i]);
-
 		try
 		{
 			Vulkan::Init("Testapp", Junia::Version(1, 0, 0), "Junia", Junia::Version(1, 0, 0), true);
-			Vulkan::PickPhysicalDevice();
+			std::vector<Junia::RenderDevice*>& devices = Vulkan::GetDevices();
+			JELOG_CORE_INFO << "Available Render devices:";
+			for (const auto& d : devices)
+			{
+				Junia::Log::Logstream& logMsg = JELOG_CORE_INFO;
+				logMsg << "  - " << d->GetName() << " | Rating: " << d->GetRating() << " | Type: ";
+				switch (d->GetType())
+				{
+				case Junia::RenderDeviceType::CPU: logMsg << "CPU"; break;
+				case Junia::RenderDeviceType::INTEGRATED_GPU: logMsg << "Integrated GPU"; break;
+				case Junia::RenderDeviceType::VIRTUAL_GPU: logMsg << "Virtual GPU"; break;
+				case Junia::RenderDeviceType::DISCRETE_GPU: logMsg << "Discrete GPU"; break;
+				case Junia::RenderDeviceType::OTHER:
+				default: logMsg << "Other"; break;
+				}
+			}
+			Vulkan::PickDevice(nullptr);
 		}
-		catch (Vulkan::Exception e)
+		catch (std::exception e)
 		{
-			JELOG_ERROR << "Vulkan ERROR: " << e.what();
-			throw std::runtime_error("");
+			JELOG_CORE_ERROR << "Vulkan ERROR: " << e.what();
+			throw std::runtime_error(e.what());
 		}
 
 		try
@@ -66,13 +70,12 @@ namespace Junia
 		}
 		catch (OpenAL::Exception e)
 		{
-			JELOG_ERROR << "OpenAL ERROR: " << e.what();
+			JELOG_CORE_ERROR << "OpenAL ERROR: " << e.what();
 		}
 	}
 
 	void Terminate()
 	{
 		Vulkan::Cleanup();
-		glfwTerminate();
 	}
 }

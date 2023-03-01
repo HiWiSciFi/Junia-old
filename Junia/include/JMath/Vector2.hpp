@@ -1,6 +1,6 @@
 #pragma once
 
-#include <JMath/Types.hpp>
+#include "Types.hpp"
 
 namespace JMath
 {
