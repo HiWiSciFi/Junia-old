@@ -5,9 +5,11 @@
 
 void RunGame()
 {
+	JELOG_INFO << "Creating Windows...";
 	Junia::Window* mainWindow = Junia::Window::Create("First Window");
 	Junia::Window::Create("Second Window");
 	mainWindow->RequestFocus();
+	JELOG_INFO << "Windows Created.";
 
 	Junia::Events::Subscribe<Junia::KeyDownEvent>([ ] (const Junia::KeyDownEvent* e)
 		{
@@ -19,6 +21,7 @@ void RunGame()
 			JELOG_INFO << "Event Triggered: " << e->ToString();
 		});*/
 
+	JELOG_INFO << "Running Game loop...";
 	while (Junia::Window::Exists(mainWindow))
 	{
 		Junia::Events::DispatchQueue();
@@ -27,6 +30,7 @@ void RunGame()
 			Junia::Window::Get(i)->Update();
 	}
 
+	JELOG_INFO << "Destroying Windows...";
 	Junia::Window::DestroyAll();
 }
 
@@ -73,7 +77,6 @@ int main(int argc, char** argv)
 	float destructiontime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
 	JELOG_TRACE << "Entities destroyed! Time: " << destructiontime << "s";
 
-	JELOG_INFO << "Creating Window...";
 	RunGame();
 	JELOG_INFO << "Terminating Junia...";
 	Junia::Terminate();
