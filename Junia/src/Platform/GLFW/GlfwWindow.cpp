@@ -77,7 +77,7 @@ namespace GLFW
 		delete surface;
 		glfwDestroyWindow(window);
 		if (Junia::windows[0] == this) Junia::windows[0] = nullptr;
-		if (Junia::windows.size() > 1) Junia::Window::SwapWindowIds(id, Junia::windows.size() - 1);
+		if (Junia::windows.size() >= 3) Junia::Window::SwapIds(id, Junia::windows.size() - 1);
 		Junia::windows.pop_back();
 	}
 

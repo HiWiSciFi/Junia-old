@@ -14,17 +14,18 @@ namespace Junia
 		using IdType = int32_t;
 		inline IdType GetId() const { return id; }
 
-		static void SwapWindowIds(IdType id1, IdType id2);
+		static void SwapIds(IdType id1, IdType id2);
 		static size_t GetWindowCount();
-		static Window** GetWindows();
-		static Window* GetWindow(IdType id);
-		static bool WindowExists(IdType id);
-		static bool WindowExists(Window* window);
-		inline static Window* GetWindow() { return GetWindow(0); }
+		static Window** GetAll();
+		static bool Exists(IdType id);
+		static bool Exists(Window* window);
+		static Window* Get(IdType id);
+		inline static Window* Get() { return Get(0); }
 
 		static Window* Create(const std::string& title, int width = 800, int height = 600);
 		static void Destroy(Window* window);
 		static void Destroy(IdType id);
+		static void DestroyAll();
 
 	protected:
 		IdType id = 0;

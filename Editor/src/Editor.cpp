@@ -6,11 +6,12 @@
 void RunGame()
 {
 	Junia::Window* mainWindow = Junia::Window::Create("First Window");
-	Junia::Window::Create("Second Window")->RequestFocus();
+	Junia::Window::Create("Second Window");
+	mainWindow->RequestFocus();
 
 	Junia::Events::Subscribe<Junia::KeyDownEvent>([ ] (const Junia::KeyDownEvent* e)
 		{
-			if (e->GetKeyCode() == Junia::KeyCode::ESCAPE) Junia::Window::GetWindow()->Close();
+			if (e->GetKeyCode() == Junia::KeyCode::ESCAPE) Junia::Window::Get()->Close();
 		});
 
 	/*Junia::Events::Subscribe([ ] (const Junia::Event* e)
@@ -18,17 +19,15 @@ void RunGame()
 			JELOG_INFO << "Event Triggered: " << e->ToString();
 		});*/
 
-	while (Junia::Window::WindowExists(mainWindow))
+	while (Junia::Window::Exists(mainWindow))
 	{
 		Junia::Events::DispatchQueue();
 
 		for (Junia::Window::IdType i = 1; i <= Junia::Window::GetWindowCount(); i++)
-			Junia::Window::GetWindow(i)->Update();
+			Junia::Window::Get(i)->Update();
 	}
 
-	Junia::Window** const windows = Junia::Window::GetWindows();
-	for (Junia::Window::IdType i = Junia::Window::GetWindowCount(); i > 0; i--)
-		Junia::Window::Destroy(windows[i]);
+	Junia::Window::DestroyAll();
 }
 
 class GravitySystem : public Junia::ECS::System
@@ -49,7 +48,7 @@ public:
 	}
 };
 
-#define ENTITY_COUNT (100)
+constexpr auto ENTITY_COUNT = 100;
 
 int main(int argc, char** argv)
 {

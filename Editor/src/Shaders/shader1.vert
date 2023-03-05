@@ -1,7 +1,5 @@
 #version 450
 
-#extension GL_KHR_vulkan_glsl : enable
-
 layout(location = 0) out vec3 fragColor;
 
 vec2 positions[3] = vec2[](
