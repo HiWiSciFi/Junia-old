@@ -3,25 +3,13 @@
 
 #include <vector>
 #include <fstream>
+#include <Junia/Core/FileSystem.hpp>
 
 namespace Vulkan
 {
 	extern VulkanDevice* vkDevice;
 
-	static std::vector<char> readFile(const std::string& filename)
-	{
-		std::ifstream file(filename, std::ios::ate | std::ios::binary);
-		if (!file.is_open()) throw std::runtime_error("failed to open file");
-
-		size_t fileSize = static_cast<size_t>(file.tellg());
-		std::vector<char> buffer(fileSize);
-		file.seekg(0);
-		file.read(buffer.data(), fileSize);
-		file.close();
-		return buffer;
-	}
-
-	static VkShaderModule createShaderModule(const std::vector<char>& code)
+	static VkShaderModule createShaderModule(const std::vector<uint8_t>& code)
 	{
 		VkShaderModuleCreateInfo createInfo{ };
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -35,8 +23,8 @@ namespace Vulkan
 
 	VulkanGraphicsPipeline::VulkanGraphicsPipeline(VkExtent2D extent, VulkanRenderPass* renderPass)
 	{
-		vertexShader = createShaderModule(readFile("Shaders/shader1_vert.spv"));
-		fragmentShader = createShaderModule(readFile("Shaders/shader1_frag.spv"));
+		vertexShader = createShaderModule(Junia::ReadFileBinary("Shaders/shader1_vert.spv"));
+		fragmentShader = createShaderModule(Junia::ReadFileBinary("Shaders/shader1_frag.spv"));
 
 		VkPipelineShaderStageCreateInfo vertShaderStageCreateInfo{ };
 		vertShaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
