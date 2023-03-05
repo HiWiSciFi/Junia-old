@@ -81,7 +81,7 @@ namespace Vulkan
 		scCreateInfo.imageArrayLayers = 1;
 		scCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 		uint32_t queueFamilyIndices[] = { vkDevice->GetGraphicsQueueIndex(), vkDevice->GetPresentQueueIndex() };
-		if (queueFamilyIndices[0] == queueFamilyIndices[1])
+		if (queueFamilyIndices[0] != queueFamilyIndices[1])
 		{
 			scCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
 			scCreateInfo.queueFamilyIndexCount = 2;
@@ -132,14 +132,48 @@ namespace Vulkan
 
 		renderPass = new VulkanRenderPass(format);
 		graphicsPipeline = new VulkanGraphicsPipeline(extent, renderPass);
+
+		framebuffers.resize(imageViews.size());
+		for (size_t i = 0; i < imageViews.size(); i++)
+		{
+			VkImageView attachments[] = { imageViews[i] };
+
+			VkFramebufferCreateInfo framebufferInfo{ };
+			framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+			framebufferInfo.renderPass = renderPass->Get();
+			framebufferInfo.attachmentCount = 1;
+			framebufferInfo.pAttachments = attachments;
+			framebufferInfo.width = extent.width;
+			framebufferInfo.height = extent.height;
+			framebufferInfo.layers = 1;
+
+			if (vkCreateFramebuffer(vkDevice->GetLogical(), &framebufferInfo, nullptr, &framebuffers[i]) != VK_SUCCESS)
+				throw std::runtime_error("failed to create framebuffer");
+		}
+
+		commandPool = new VulkanCommandPool();
 	}
 
 	VulkanSwapchain::~VulkanSwapchain()
 	{
+		delete commandPool;
+		for (auto framebuffer : framebuffers)
+			vkDestroyFramebuffer(vkDevice->GetLogical(), framebuffer, nullptr);
 		delete renderPass;
 		delete graphicsPipeline;
 		for (VkImageView imageView : imageViews)
 			vkDestroyImageView(vkDevice->GetLogical(), imageView, nullptr);
 		vkDestroySwapchainKHR(vkDevice->GetLogical(), swapchain, nullptr);
+	}
+
+	void VulkanSwapchain::Draw()
+	{
+		uint32_t imageIndex = 0;
+		commandPool->BeginRecordCommandBuffer();
+		renderPass->Begin(framebuffers[imageIndex], extent, commandPool->GetBuffer());
+		graphicsPipeline->Bind(commandPool->GetBuffer());
+		vkCmdDraw(commandPool->GetBuffer(), 3, 1, 0, 0);
+		renderPass->End(commandPool->GetBuffer());
+		commandPool->EndRecordCommandBuffer();
 	}
 }

@@ -42,4 +42,24 @@ namespace Vulkan
 	{
 		vkDestroyRenderPass(vkDevice->GetLogical(), renderPass, nullptr);
 	}
+
+	void VulkanRenderPass::Begin(VkFramebuffer framebuffer, VkExtent2D extent, VkCommandBuffer buffer)
+	{
+		VkRenderPassBeginInfo renderPassInfo{ };
+		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		renderPassInfo.renderPass = renderPass;
+		renderPassInfo.framebuffer = framebuffer;
+		renderPassInfo.renderArea.offset = { 0, 0 };
+		renderPassInfo.renderArea.extent = extent;
+		VkClearValue clearColor = {{{ 0.0f, 0.0f, 0.0f, 1.0f }}};
+		renderPassInfo.clearValueCount = 1;
+		renderPassInfo.pClearValues = &clearColor;
+
+		vkCmdBeginRenderPass(buffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+	}
+
+	void VulkanRenderPass::End(VkCommandBuffer buffer)
+	{
+		vkCmdEndRenderPass(buffer);
+	}
 }

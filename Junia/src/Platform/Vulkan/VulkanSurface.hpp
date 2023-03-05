@@ -18,5 +18,7 @@ namespace Vulkan
 	public:
 		VulkanSurface(GLFWwindow* window);
 		~VulkanSurface() override;
+
+		void Draw() override;
 	};
 }

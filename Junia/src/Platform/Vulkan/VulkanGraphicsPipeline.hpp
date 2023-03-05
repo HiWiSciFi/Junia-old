@@ -12,9 +12,13 @@ namespace Vulkan
 		VkPipelineLayout layout = nullptr;
 		VkShaderModule vertexShader = nullptr;
 		VkShaderModule fragmentShader = nullptr;
+		VkViewport viewport{ };
+		VkRect2D scissor{ };
 
 	public:
 		VulkanGraphicsPipeline(VkExtent2D extent, VulkanRenderPass* renderPass);
 		~VulkanGraphicsPipeline();
+
+		void Bind(VkCommandBuffer buffer);
 	};
 }

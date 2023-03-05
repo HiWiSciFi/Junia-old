@@ -32,6 +32,8 @@ namespace Junia
 			SetConsoleMode(hOutput, dwMode);
 #endif
 
+		Input::Init(WindowApi::GLFW);
+
 		glfwSetErrorCallback([](const int code, const char* desc)
 			{
 				JELOG_CORE_ERROR << "GLFW Error: (0x" << std::hex << code << ") : " << desc;
@@ -44,7 +46,7 @@ namespace Junia
 			JELOG_CORE_INFO << "Available Render devices:";
 			for (const auto& d : devices)
 			{
-				Junia::Log::Logstream& logMsg = JELOG_CORE_INFO;
+				Junia::Log::Logstream logMsg = JELOG_CORE_INFO;
 				logMsg << "  - " << d->GetName() << " | Rating: " << d->GetRating() << " | Type: ";
 				switch (d->GetType())
 				{

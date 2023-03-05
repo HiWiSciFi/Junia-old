@@ -6,6 +6,7 @@
 #include <vector>
 #include "VulkanRenderPass.hpp"
 #include "VulkanGraphicsPipeline.hpp"
+#include "VulkanCommandPool.hpp"
 
 namespace Vulkan
 {
@@ -14,14 +15,18 @@ namespace Vulkan
 	private:
 		std::vector<VkImage> images{ };
 		std::vector<VkImageView> imageViews{ };
+		std::vector<VkFramebuffer> framebuffers{ };
 		VkSwapchainKHR swapchain = nullptr;
 		VkFormat format;
 		VkExtent2D extent;
 		VulkanRenderPass* renderPass = nullptr;
 		VulkanGraphicsPipeline* graphicsPipeline = nullptr;
+		VulkanCommandPool* commandPool = nullptr;
 
 	public:
 		VulkanSwapchain(GLFWwindow* window, VkSurfaceKHR surface);
 		~VulkanSwapchain();
+
+		void Draw();
 	};
 }

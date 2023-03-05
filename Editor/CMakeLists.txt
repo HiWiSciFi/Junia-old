@@ -12,6 +12,18 @@
 			"${SRC_DIR}/Shaders/shader1.frag"
 	)
 
+	add_custom_command(TARGET Editor POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy
+				"${SRC_DIR}/Shaders/shader1_vert.spv"
+				"${CMAKE_CURRENT_BINARY_DIR}/Shaders/shader1_vert.spv"
+	)
+
+	add_custom_command(TARGET Editor POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy
+				"${SRC_DIR}/Shaders/shader1_frag.spv"
+				"${CMAKE_CURRENT_BINARY_DIR}/Shaders/shader1_frag.spv"
+	)
+
 	target_link_libraries(Editor
 		PUBLIC
 			Junia

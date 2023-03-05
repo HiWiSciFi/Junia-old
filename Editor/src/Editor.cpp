@@ -6,9 +6,7 @@
 void RunGame()
 {
 	Junia::Window* mainWindow = Junia::Window::Create("First Window");
-	mainWindow->Open();
-	Junia::Window::Create("Second Window")->Open();
-	mainWindow->Focus();
+	Junia::Window::Create("Second Window")->RequestFocus();
 
 	Junia::Events::Subscribe<Junia::KeyDownEvent>([ ] (const Junia::KeyDownEvent* e)
 		{
@@ -20,7 +18,7 @@ void RunGame()
 			JELOG_INFO << "Event Triggered: " << e->ToString();
 		});*/
 
-	while (mainWindow->IsOpen())
+	while (Junia::Window::WindowExists(mainWindow))
 	{
 		Junia::Events::DispatchQueue();
 

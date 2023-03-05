@@ -30,6 +30,10 @@
 			"${SRC_DIR}/Junia/Core/Keycodes.cpp"
 			"${INCLUDE_DIR}/Junia/Core/IdPool.hpp"
 
+			"${INCLUDE_DIR}/Junia/Core/FileSystem.hpp"
+			"${SRC_DIR}/Platform/OS/WindowsFileSystem.cpp"
+			"${SRC_DIR}/Platform/OS/LinuxFileSystem.cpp"
+
 			"${INCLUDE_DIR}/Junia/ECS/ECS.hpp"
 			"${SRC_DIR}/Junia/ECS/ECS.cpp"
 
@@ -69,6 +73,11 @@
 			"${INCLUDE_DIR}/Junia/Renderer/RenderDevice.hpp"
 			"${SRC_DIR}/Junia/Renderer/RenderDevice.cpp"
 
+			"${SRC_DIR}/Platform/GLFW/GlfwWindow.hpp"
+			"${SRC_DIR}/Platform/GLFW/GlfwWindow.cpp"
+			"${SRC_DIR}/Platform/GLFW/GlfwInput.hpp"
+			"${SRC_DIR}/Platform/GLFW/GlfwInput.cpp"
+
 			"${INCLUDE_DIR}/Platform/Vulkan.hpp"
 			"${SRC_DIR}/Platform/Vulkan.cpp"
 			"${SRC_DIR}/Platform/Vulkan/ExtensionLoader.hpp"
@@ -83,6 +92,8 @@
 			"${SRC_DIR}/Platform/Vulkan/VulkanRenderPass.cpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanGraphicsPipeline.hpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanGraphicsPipeline.cpp"
+			"${SRC_DIR}/Platform/Vulkan/VulkanCommandPool.hpp"
+			"${SRC_DIR}/Platform/Vulkan/VulkanCommandPool.cpp"
 
 			"${INCLUDE_DIR}/Platform/OpenAL.hpp"
 			"${SRC_DIR}/Platform/OpenAL.cpp"

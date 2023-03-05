@@ -17,4 +17,9 @@ namespace Vulkan
 		delete swapchain;
 		vkDestroySurfaceKHR(vkInstance, surface, nullptr);
 	}
+
+	void VulkanSurface::Draw()
+	{
+		swapchain->Draw();
+	}
 }

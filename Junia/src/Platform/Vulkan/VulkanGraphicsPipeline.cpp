@@ -35,8 +35,8 @@ namespace Vulkan
 
 	VulkanGraphicsPipeline::VulkanGraphicsPipeline(VkExtent2D extent, VulkanRenderPass* renderPass)
 	{
-		vertexShader = createShaderModule(readFile("shader1_vert.spv"));
-		fragmentShader = createShaderModule(readFile("shader1_frag.spv"));
+		vertexShader = createShaderModule(readFile("Shaders/shader1_vert.spv"));
+		fragmentShader = createShaderModule(readFile("Shaders/shader1_frag.spv"));
 
 		VkPipelineShaderStageCreateInfo vertShaderStageCreateInfo{ };
 		vertShaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -62,7 +62,6 @@ namespace Vulkan
 		inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 		inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
 
-		VkViewport viewport{ };
 		viewport.x = 0.0f;
 		viewport.y = 0.0f;
 		viewport.width = static_cast<float>(extent.width);
@@ -70,7 +69,6 @@ namespace Vulkan
 		viewport.minDepth = 0.0f;
 		viewport.maxDepth = 1.0f;
 
-		VkRect2D scissor{ };
 		scissor.offset = { 0, 0 };
 		scissor.extent = extent;
 
@@ -148,5 +146,12 @@ namespace Vulkan
 		vkDestroyShaderModule(vkDevice->GetLogical(), fragmentShader, nullptr);
 		vkDestroyPipelineLayout(vkDevice->GetLogical(), layout, nullptr);
 		vkDestroyPipeline(vkDevice->GetLogical(), graphicsPipeline, nullptr);
+	}
+
+	void VulkanGraphicsPipeline::Bind(VkCommandBuffer buffer)
+	{
+		vkCmdBindPipeline(buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+		vkCmdSetViewport(buffer, 0, 1, &viewport);
+		vkCmdSetScissor(buffer, 0, 1, &scissor);
 	}
 }

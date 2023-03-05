@@ -5,12 +5,25 @@
 
 #include <utility>
 #include <inttypes.h>
+#include "../../JMath/Vector2.hpp"
 
 namespace Junia
 {
 	class Input
 	{
+	private:
+		static Input* instance;
+
+	protected:
+		virtual ~Input() = 0;
+
+		virtual bool IsKeyDown_Impl(KeyCode keycode, Window::IdType window) = 0;
+		virtual bool IsMouseButtonDown_Impl(MouseButton button, Window::IdType window) = 0;
+		virtual JMath::iVec2 GetMousePosition_Impl(Window::IdType window) = 0;
+
 	public:
+		static void Init(WindowApi api);
+
 		/**
 		 * @brief Get if a key is pressed
 		 * @param keycode the KeyCode of the key to check for
@@ -18,7 +31,9 @@ namespace Junia
 		 *               Default: the currently focused window
 		 * @return true if the key is pressed, false otherwise
 		*/
-		static bool IsKeyDown(KeyCode keycode, Window::IdType window = 0);
+		static inline bool IsKeyDown(KeyCode keycode, Window::IdType window = 0)
+			{ return instance->IsKeyDown_Impl(keycode, window); }
+
 		/**
 		 * @brief Get if a mouse button is pressed
 		 * @param button the mouse button to check for
@@ -26,7 +41,9 @@ namespace Junia
 		 *               Default: the currently focused window
 		 * @return true if the button is pressed, false otherwise
 		*/
-		static bool IsMouseButtonDown(MouseButton button, Window::IdType window = 0);
+		static inline bool IsMouseButtonDown(MouseButton button, Window::IdType window = 0)
+			{ return instance->IsMouseButtonDown_Impl(button, window); }
+
 		/**
 		 * @brief Get the position of the mouse in a window
 		 * @param window the ID of the window relative to which to get the mouse
@@ -34,7 +51,8 @@ namespace Junia
 		 * @return a pair of { x, y } containing the x and y position of the
 		 *           mouse or { 0, 0 } if the window doesn't exist
 		*/
-		static std::pair<int, int> GetMousePosition(Window::IdType window = 0);
+		static inline JMath::iVec2 GetMousePosition(Window::IdType window = 0)
+			{ return instance->GetMousePosition_Impl(window); }
 
 		/**
 		 * @brief Get if a key is not pressed
@@ -61,7 +79,7 @@ namespace Junia
 		 * @return the x position of the mouse or 0 if the window doesn't exist
 		*/
 		static inline int GetMouseX(Window::IdType window = 0)
-			{ return GetMousePosition(window).first; }
+			{ return GetMousePosition(window).x; }
 		/**
 		 * @brief Get the y position of the mouse
 		 * @param window the ID of the window relative to which to get the mouse
@@ -69,6 +87,6 @@ namespace Junia
 		 * @return the y position of the mouse or 0 if the window doesn't exist
 		*/
 		static inline int GetMouseY(Window::IdType window = 0)
-			{ return GetMousePosition(window).second; }
+			{ return GetMousePosition(window).y; }
 	};
 }

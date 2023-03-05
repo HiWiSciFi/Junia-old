@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <cstring>
 
 namespace Vulkan
 {
