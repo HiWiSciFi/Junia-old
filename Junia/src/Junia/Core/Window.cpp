@@ -62,8 +62,7 @@ namespace Junia
 
 	void Window::DestroyAll()
 	{
-		for (IdType i = windows.size() - 2; i > 0; i--)
-			Destroy(windows[i]);
+		while (windows.size() > 1) delete windows[windows.size() - 1];
 	}
 
 	Window::~Window()
