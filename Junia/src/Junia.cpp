@@ -5,8 +5,8 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-#include "Junia/Core/Core.hpp"
 #include <Junia.hpp>
+#include "Junia/Core/InternalLoggers.hpp"
 
 #include <Platform/Vulkan.hpp>
 
@@ -36,17 +36,17 @@ namespace Junia
 
 		glfwSetErrorCallback([](const int code, const char* desc)
 			{
-				JELOG_CORE_ERROR << "GLFW Error: (0x" << std::hex << code << ") : " << desc;
+				JECORELOG_ERROR << "GLFW Error: (0x" << std::hex << code << ") : " << desc;
 			});
 
 		try
 		{
 			Vulkan::Init("Testapp", Junia::Version(1, 0, 0), "Junia", Junia::Version(1, 0, 0), true);
 			std::vector<Junia::RenderDevice*>& devices = Vulkan::GetDevices();
-			JELOG_CORE_INFO << "Available Render devices:";
+			JECORELOG_INFO << "Available Render devices:";
 			for (const auto& d : devices)
 			{
-				Junia::Log::Logstream logMsg = JELOG_CORE_INFO;
+				Junia::Log::Logstream logMsg = JECORELOG_INFO;
 				logMsg << "  - " << d->GetName() << " | Rating: " << d->GetRating() << " | Type: ";
 				switch (d->GetType())
 				{
@@ -62,7 +62,7 @@ namespace Junia
 		}
 		catch (std::exception e)
 		{
-			JELOG_CORE_ERROR << "Vulkan ERROR: " << e.what();
+			JECORELOG_ERROR << "Vulkan ERROR: " << e.what();
 			throw std::runtime_error(e.what());
 		}
 
@@ -72,7 +72,7 @@ namespace Junia
 		}
 		catch (OpenAL::Exception e)
 		{
-			JELOG_CORE_ERROR << "OpenAL ERROR: " << e.what();
+			JECORELOG_ERROR << "OpenAL ERROR: " << e.what();
 		}
 	}
 

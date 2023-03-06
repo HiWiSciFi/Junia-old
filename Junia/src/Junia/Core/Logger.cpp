@@ -1,4 +1,3 @@
-#include "Core.hpp"
 #include <Junia/Core/Logger.hpp>
 
 #include <cstdarg>

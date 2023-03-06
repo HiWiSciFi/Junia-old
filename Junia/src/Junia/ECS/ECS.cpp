@@ -1,4 +1,3 @@
-#include "../Core/Core.hpp"
 #include <Junia/ECS/ECS.hpp>
 
 namespace Junia

@@ -1,4 +1,3 @@
-#include "Core.hpp"
 #include <Junia/Core/Version.hpp>
 
 #include <sstream>

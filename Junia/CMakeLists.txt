@@ -15,7 +15,6 @@
 			"${INCLUDE_DIR}/Junia.hpp"
 			"${SRC_DIR}/Junia.cpp"
 
-			"${SRC_DIR}/Junia/Core/Core.hpp"
 			"${INCLUDE_DIR}/Junia/Core/Version.hpp"
 			"${SRC_DIR}/Junia/Core/Version.cpp"
 			"${INCLUDE_DIR}/Junia/Core/Logger.hpp"
@@ -29,6 +28,8 @@
 			"${INCLUDE_DIR}/Junia/Core/Keycodes.hpp"
 			"${SRC_DIR}/Junia/Core/Keycodes.cpp"
 			"${INCLUDE_DIR}/Junia/Core/IdPool.hpp"
+			"${SRC_DIR}/Junia/Core/InternalLoggers.hpp"
+			"${SRC_DIR}/Junia/Core/InternalLoggers.cpp"
 
 			"${INCLUDE_DIR}/Junia/Core/FileSystem.hpp"
 			"${SRC_DIR}/Platform/OS/WindowsFileSystem.cpp"

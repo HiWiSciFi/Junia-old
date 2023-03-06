@@ -1,6 +1,6 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-#include <Junia/Core/Logger.hpp>
+#include "../Junia/Core/InternalLoggers.hpp"
 #include <Platform/Vulkan.hpp>
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/ExtensionLoader.hpp"
@@ -11,8 +11,6 @@
 
 namespace Vulkan
 {
-	Junia::Log::Logger vkLog = Junia::Log::Logger("Vulkan", &std::cout);
-
 	static VkDebugUtilsMessengerEXT debugMessenger = nullptr;
 
 	VkInstance vkInstance = nullptr;
@@ -31,17 +29,17 @@ namespace Vulkan
 		void* pUserData)
 	{
 		if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
-			vkLog.Error() << data->pMessage;
+			VKLOG_ERROR << data->pMessage;
 		else if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
-			vkLog.Warn() << data->pMessage;
+			VKLOG_WARN << data->pMessage;
 		else if (debug && severity & (VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT))
-			vkLog.Trace() << data->pMessage;
+			VKLOG_TRACE << data->pMessage;
 		return VK_FALSE;
 	}
 
 	void Init(std::string const& appName, Junia::Version const& appVersion, std::string const& engineName, Junia::Version const& engineVersion, bool debug)
 	{
-		vkLog.maxLevel = Junia::Log::LogLevel::Info;
+		Vulkan::Log::vkLog.maxLevel = Junia::Log::LogLevel::Info;
 		if (vkInstance != nullptr) throw std::runtime_error("vulkan has already been initialized");
 
 		if (glfwInit() != GLFW_TRUE)
@@ -134,7 +132,7 @@ namespace Vulkan
 		char* str = new char[length + 1];
 		strncpy(str, extension.c_str(), length);
 		str[length] = '\0';
-		vkLog.Info() << "Required Extension: " << str;
+		VKLOG_INFO << "Required Extension: " << str;
 		requiredExtensions.push_back(str);
 	}
 
@@ -148,7 +146,7 @@ namespace Vulkan
 		char* str = new char[length + 1];
 		strncpy(str, extension.c_str(), length);
 		str[length] = '\0';
-		vkLog.Info() << "Required Device Extension: " << str;
+		VKLOG_INFO << "Required Device Extension: " << str;
 		requiredDeviceExtensions.push_back(str);
 	}
 
