@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <vector>
+#include <cstdint>
 #include "VulkanRenderPass.hpp"
 #include "VulkanGraphicsPipeline.hpp"
 #include "VulkanCommandPool.hpp"
@@ -23,12 +24,15 @@ namespace Vulkan
 		VulkanGraphicsPipeline* graphicsPipeline = nullptr;
 		VulkanCommandPool* commandPool = nullptr;
 
-		VkSemaphore imageAvailableSemaphore = nullptr;
-		VkSemaphore renderFinishedSemaphore = nullptr;
-		VkFence inFlightFence = nullptr;
+		std::vector<VkSemaphore> imageAvailableSemaphores{ };
+		std::vector<VkSemaphore> renderFinishedSemaphores{ };
+		std::vector<VkFence> inFlightFences{ };
+		uint8_t maxInFlight;
+
+		uint32_t currentFrame = 0;
 
 	public:
-		VulkanSwapchain(GLFWwindow* window, VkSurfaceKHR surface);
+		VulkanSwapchain(GLFWwindow* window, VkSurfaceKHR surface, uint8_t maxInFlightFrames);
 		~VulkanSwapchain();
 
 		void Draw();

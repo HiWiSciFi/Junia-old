@@ -9,7 +9,7 @@ namespace Vulkan
 	{
 		if (glfwCreateWindowSurface(vkInstance, window, nullptr, &surface) != VK_SUCCESS)
 			throw std::runtime_error("failed to create window surface");
-		swapchain = new VulkanSwapchain(window, surface);
+		swapchain = new VulkanSwapchain(window, surface, 2);
 	}
 
 	VulkanSurface::~VulkanSurface()

@@ -101,7 +101,10 @@ namespace Vulkan
 	VulkanDevice::~VulkanDevice()
 	{
 		if (logicalDevice != nullptr)
+		{
+			vkDeviceWaitIdle(logicalDevice);
 			vkDestroyDevice(logicalDevice, nullptr);
+		}
 	}
 
 	void VulkanDevice::Pick()

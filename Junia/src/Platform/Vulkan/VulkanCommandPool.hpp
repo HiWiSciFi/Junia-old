@@ -10,14 +10,14 @@ namespace Vulkan
 	{
 	private:
 		VkCommandPool commandPool = nullptr;
-		VkCommandBuffer commandBuffer = nullptr;
+		std::vector<VkCommandBuffer> commandBuffers{ };
 
 	public:
-		VulkanCommandPool();
+		VulkanCommandPool(uint8_t maxInFlightFrames);
 		~VulkanCommandPool();
 
-		inline VkCommandBuffer GetBuffer() const { return commandBuffer; }
-		void BeginRecordCommandBuffer();
-		void EndRecordCommandBuffer();
+		inline VkCommandBuffer GetBuffer(uint8_t index) const { return commandBuffers[index]; }
+		void BeginRecordCommandBuffer(uint32_t currentFrame);
+		void EndRecordCommandBuffer(uint32_t currentFrame);
 	};
 }
