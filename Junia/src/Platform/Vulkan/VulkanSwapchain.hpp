@@ -23,6 +23,10 @@ namespace Vulkan
 		VulkanGraphicsPipeline* graphicsPipeline = nullptr;
 		VulkanCommandPool* commandPool = nullptr;
 
+		VkSemaphore imageAvailableSemaphore = nullptr;
+		VkSemaphore renderFinishedSemaphore = nullptr;
+		VkFence inFlightFence = nullptr;
+
 	public:
 		VulkanSwapchain(GLFWwindow* window, VkSurfaceKHR surface);
 		~VulkanSwapchain();

@@ -152,10 +152,30 @@ namespace Vulkan
 		}
 
 		commandPool = new VulkanCommandPool();
+
+		// sync objects
+
+		VkSemaphoreCreateInfo semaphoreInfo{ };
+		semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+		VkFenceCreateInfo fenceInfo{ };
+		fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+		fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+		if (vkCreateSemaphore(vkDevice->GetLogical(), &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
+			vkCreateSemaphore(vkDevice->GetLogical(), &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS ||
+			vkCreateFence(vkDevice->GetLogical(), &fenceInfo, nullptr, &inFlightFence) != VK_SUCCESS)
+				throw std::runtime_error("failed to create semaphores");
 	}
 
 	VulkanSwapchain::~VulkanSwapchain()
 	{
+		vkDeviceWaitIdle(vkDevice->GetLogical());
+
+		vkDestroySemaphore(vkDevice->GetLogical(), imageAvailableSemaphore, nullptr);
+		vkDestroySemaphore(vkDevice->GetLogical(), renderFinishedSemaphore, nullptr);
+		vkDestroyFence(vkDevice->GetLogical(), inFlightFence, nullptr);
+
 		delete commandPool;
 		for (auto framebuffer : framebuffers)
 			vkDestroyFramebuffer(vkDevice->GetLogical(), framebuffer, nullptr);
@@ -168,12 +188,47 @@ namespace Vulkan
 
 	void VulkanSwapchain::Draw()
 	{
-		uint32_t imageIndex = 0;
+		vkWaitForFences(vkDevice->GetLogical(), 1, &inFlightFence, VK_TRUE, UINT64_MAX);
+
+		uint32_t imageIndex;
+		vkAcquireNextImageKHR(vkDevice->GetLogical(), swapchain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+
+		vkResetFences(vkDevice->GetLogical(), 1, &inFlightFence);
+		vkResetCommandBuffer(commandPool->GetBuffer(), 0);
+
 		commandPool->BeginRecordCommandBuffer();
 		renderPass->Begin(framebuffers[imageIndex], extent, commandPool->GetBuffer());
 		graphicsPipeline->Bind(commandPool->GetBuffer());
 		vkCmdDraw(commandPool->GetBuffer(), 3, 1, 0, 0);
 		renderPass->End(commandPool->GetBuffer());
 		commandPool->EndRecordCommandBuffer();
+
+		VkSubmitInfo submitInfo{ };
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		VkSemaphore waitSemaphores[] = { imageAvailableSemaphore };
+		VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+		submitInfo.waitSemaphoreCount = 1;
+		submitInfo.pWaitSemaphores = waitSemaphores;
+		submitInfo.pWaitDstStageMask = waitStages;
+		VkCommandBuffer commandBuffers[] = { commandPool->GetBuffer() };
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = commandBuffers;
+		VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
+		submitInfo.signalSemaphoreCount = 1;
+		submitInfo.pSignalSemaphores = signalSemaphores;
+
+		if (vkQueueSubmit(vkDevice->GetGraphicsQueue(), 1, &submitInfo, inFlightFence) != VK_SUCCESS)
+			throw std::runtime_error("failed to submit draw command buffer");
+
+		VkPresentInfoKHR presentInfo{ };
+		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+		presentInfo.waitSemaphoreCount = 1;
+		presentInfo.pWaitSemaphores = signalSemaphores;
+		VkSwapchainKHR swapchains[] = { swapchain };
+		presentInfo.swapchainCount = 1;
+		presentInfo.pSwapchains = swapchains;
+		presentInfo.pImageIndices = &imageIndex;
+
+		vkQueuePresentKHR(vkDevice->GetPresentQueue(), &presentInfo);
 	}
 }

@@ -47,6 +47,10 @@ namespace Vulkan
 			throw std::runtime_error("failed to find compute queue family index");
 		}
 
+		inline VkQueue GetGraphicsQueue() const { return graphicsQueue; }
+		inline VkQueue GetPresentQueue()  const { return  presentQueue; }
+		inline VkQueue GetComputeQueue()  const { return  computeQueue; }
+
 		const char* GetName() const { return deviceProperties.deviceName; }
 	};
 }
