@@ -29,3 +29,17 @@ namespace Vulkan { namespace Log { extern Junia::Log::Logger vkLog; } }
 #define VKLOG_DBG_WARN     Vulkan::Log::vkLog.Warn()     << "[" << __FILE__ << ":" << __LINE__ << "] "
 #define VKLOG_DBG_ERROR    Vulkan::Log::vkLog.Error()    << "[" << __FILE__ << ":" << __LINE__ << "] "
 #define VKLOG_DBG_CRITICAL Vulkan::Log::vkLog.Critical() << "[" << __FILE__ << ":" << __LINE__ << "] "
+
+namespace GLFW { namespace Log { extern Junia::Log::Logger glfwLog; } }
+
+#define GLFWLOG_TRACE        GLFW::Log::glfwLog.Trace()
+#define GLFWLOG_INFO         GLFW::Log::glfwLog.Info()
+#define GLFWLOG_WARN         GLFW::Log::glfwLog.Warn()
+#define GLFWLOG_ERROR        GLFW::Log::glfwLog.Error()
+#define GLFWLOG_CRITICAL     GLFW::Log::glfwLog.Critical()
+
+#define GLFWLOG_DBG_TRACE    GLFW::Log::glfwLog.Trace()    << "[" << __FILE__ << ":" << __LINE__ << "] "
+#define GLFWLOG_DBG_INFO     GLFW::Log::glfwLog.Info()     << "[" << __FILE__ << ":" << __LINE__ << "] "
+#define GLFWLOG_DBG_WARN     GLFW::Log::glfwLog.Warn()     << "[" << __FILE__ << ":" << __LINE__ << "] "
+#define GLFWLOG_DBG_ERROR    GLFW::Log::glfwLog.Error()    << "[" << __FILE__ << ":" << __LINE__ << "] "
+#define GLFWLOG_DBG_CRITICAL GLFW::Log::glfwLog.Critical() << "[" << __FILE__ << ":" << __LINE__ << "] "

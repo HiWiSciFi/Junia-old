@@ -183,18 +183,47 @@ namespace GLFW
 		glfwRequestWindowAttention(window);
 	}
 
-	void GlfwWindow::Iconify()
+	Junia::WindowSizeMode GlfwWindow::GetSizeMode() const
 	{
-		glfwIconifyWindow(window);
+		if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED) == GLFW_TRUE) return Junia::WindowSizeMode::MAXIMIZED;
+		if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) == GLFW_TRUE) return Junia::WindowSizeMode::ICONIFIED;
+		return Junia::WindowSizeMode::REGULAR;
 	}
 
-	void GlfwWindow::Restore()
+	void GlfwWindow::SetSizeMode(Junia::WindowSizeMode mode)
 	{
-		glfwRestoreWindow(window);
+		if (mode == GetSizeMode()) return;
+
+		switch (mode)
+		{
+		case Junia::WindowSizeMode::REGULAR:    glfwRestoreWindow(window); break;
+		case Junia::WindowSizeMode::ICONIFIED:  glfwIconifyWindow(window); break;
+		case Junia::WindowSizeMode::MAXIMIZED: glfwMaximizeWindow(window); break;
+		default: break;
+		}
 	}
 
-	void GlfwWindow::Maximize()
+	Junia::WindowFullscreenMode GlfwWindow::GetFullscreenMode() const
 	{
-		glfwMaximizeWindow(window);
+		return Junia::WindowFullscreenMode::WINDOWED;
 	}
+
+	void GlfwWindow::SetFullscreenMode(Junia::WindowFullscreenMode mode)
+	{
+		return;
+	}
+
+	/*void GlfwWindow::Fullscreen()
+	{
+		int monitorCount;
+		GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
+		const GLFWvidmode* mode = glfwGetVideoMode(monitors[0]);
+
+		glfwSetWindowMonitor(window, monitors[0], 0, 0, mode->width, mode->height, mode->refreshRate);
+	}
+
+	void GlfwWindow::Windowed()
+	{
+		glfwSetWindowMonitor(window, NULL, 100, 100, 800, 600, 0);
+	}*/
 }

@@ -5,6 +5,8 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
+#include "Platform/GLFW.hpp"
+
 #include <Junia.hpp>
 #include "Junia/Core/InternalLoggers.hpp"
 
@@ -34,12 +36,8 @@ namespace Junia
 		}
 #endif
 
+		GLFW::Init();
 		Input::Init(WindowApi::GLFW);
-
-		glfwSetErrorCallback([](const int code, const char* desc)
-			{
-				JECORELOG_ERROR << "GLFW Error: (0x" << std::hex << code << ") : " << desc;
-			});
 
 		try
 		{

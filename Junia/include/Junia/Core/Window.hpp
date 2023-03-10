@@ -8,6 +8,20 @@
 
 namespace Junia
 {
+	enum class WindowFullscreenMode : uint8_t
+	{
+		WINDOWED = 0,
+		BORDERLESS_FULLSCREEN = 0,
+		FULLSCREEN = 0
+	};
+
+	enum class WindowSizeMode : uint8_t
+	{
+		REGULAR = 0,
+		ICONIFIED = 1,
+		MAXIMIZED = 2
+	};
+
 	class Window
 	{
 	public:
@@ -29,7 +43,7 @@ namespace Junia
 
 	protected:
 		IdType id = 0;
-		Surface* surface;
+		Surface* surface = nullptr;
 
 	public:
 		virtual ~Window() = 0;
@@ -62,8 +76,10 @@ namespace Junia
 
 		virtual void RequestAttention() = 0;
 
-		virtual void Iconify() = 0;
-		virtual void Restore() = 0;
-		virtual void Maximize() = 0;
+		virtual WindowSizeMode GetSizeMode() const = 0;
+		virtual void SetSizeMode(WindowSizeMode mode) = 0;
+
+		virtual WindowFullscreenMode GetFullscreenMode() const = 0;
+		virtual void SetFullscreenMode(WindowFullscreenMode mode) = 0;
 	};
 }

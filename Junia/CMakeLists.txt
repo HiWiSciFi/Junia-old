@@ -95,6 +95,13 @@
 			"${SRC_DIR}/Platform/Vulkan/VulkanGraphicsPipeline.cpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanCommandPool.hpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanCommandPool.cpp"
+			"${SRC_DIR}/Platform/Vulkan/VulkanCommandBuffer.hpp"
+			"${SRC_DIR}/Platform/Vulkan/VulkanCommandBuffer.cpp"
+			"${SRC_DIR}/Platform/Vulkan/VulkanVertexBuffer.hpp"
+			"${SRC_DIR}/Platform/Vulkan/VulkanVertexBuffer.cpp"
+
+			"${SRC_DIR}/Platform/GLFW.hpp"
+			"${SRC_DIR}/Platform/GLFW.cpp"
 
 			"${INCLUDE_DIR}/Platform/OpenAL.hpp"
 			"${SRC_DIR}/Platform/OpenAL.cpp"

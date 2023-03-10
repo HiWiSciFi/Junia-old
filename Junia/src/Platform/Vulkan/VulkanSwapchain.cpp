@@ -3,12 +3,14 @@
 
 #include <algorithm>
 #include <limits>
+#include "../../Junia/Core/InternalLoggers.hpp"
 
 namespace Vulkan
 {
 	extern VulkanDevice* vkDevice;
 
-	VulkanSwapchain::VulkanSwapchain(GLFWwindow* window, VkSurfaceKHR surface, uint8_t maxInFlightFrames) : maxInFlight(maxInFlightFrames)
+	VulkanSwapchain::VulkanSwapchain(GLFWwindow* window, VkSurfaceKHR surface, uint8_t maxInFlightFrames)
+		: maxInFlight(maxInFlightFrames), surface(surface), window(window)
 	{
 		uint32_t surfaceFormatCount;
 		vkGetPhysicalDeviceSurfaceFormatsKHR(vkDevice->GetPhysical(), surface, &surfaceFormatCount, nullptr);
@@ -67,6 +69,127 @@ namespace Vulkan
 			extent.height = std::clamp(extent.height, surfaceCapabilities.minImageExtent.height, surfaceCapabilities.maxImageExtent.height);
 		}
 
+		renderPass = new VulkanRenderPass(format);
+		Recreate();
+
+		commandPool = new VulkanCommandPool(maxInFlight);
+
+		// synchronization objects
+
+		imageAvailableSemaphores.resize(maxInFlight);
+		renderFinishedSemaphores.resize(maxInFlight);
+		inFlightFences.resize(maxInFlight);
+
+		VkSemaphoreCreateInfo semaphoreInfo{ };
+		semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+		VkFenceCreateInfo fenceInfo{ };
+		fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+		fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+		for (size_t i = 0; i < maxInFlight; i++)
+		{
+			if (vkCreateSemaphore(vkDevice->GetLogical(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+				vkCreateSemaphore(vkDevice->GetLogical(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
+				vkCreateFence(vkDevice->GetLogical(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS)
+				throw std::runtime_error("failed to create synchronization objects");
+		}
+	}
+
+	VulkanSwapchain::~VulkanSwapchain()
+	{
+		vkDeviceWaitIdle(vkDevice->GetLogical());
+
+		Cleanup();
+
+		delete renderPass;
+
+		for (size_t i = 0; i < maxInFlight; i++)
+		{
+			vkDestroySemaphore(vkDevice->GetLogical(), imageAvailableSemaphores[i], nullptr);
+			vkDestroySemaphore(vkDevice->GetLogical(), renderFinishedSemaphores[i], nullptr);
+			vkDestroyFence(vkDevice->GetLogical(), inFlightFences[i], nullptr);
+		}
+
+		delete commandPool;
+	}
+
+	void VulkanSwapchain::Cleanup()
+	{
+		for (auto framebuffer : framebuffers)
+			vkDestroyFramebuffer(vkDevice->GetLogical(), framebuffer, nullptr);
+		for (VkImageView imageView : imageViews)
+			vkDestroyImageView(vkDevice->GetLogical(), imageView, nullptr);
+		vkDestroySwapchainKHR(vkDevice->GetLogical(), swapchain, nullptr);
+		delete graphicsPipeline;
+	}
+
+	void VulkanSwapchain::Recreate()
+	{
+		int width = 0, height = 0;
+		glfwGetFramebufferSize(window, &width, &height);
+		if (width == 0 || height == 0) return;
+
+		vkDeviceWaitIdle(vkDevice->GetLogical());
+
+		Cleanup();
+
+		uint32_t surfaceFormatCount;
+		vkGetPhysicalDeviceSurfaceFormatsKHR(vkDevice->GetPhysical(), surface, &surfaceFormatCount, nullptr);
+		std::vector<VkSurfaceFormatKHR> surfaceFormats(surfaceFormatCount);
+		vkGetPhysicalDeviceSurfaceFormatsKHR(vkDevice->GetPhysical(), surface, &surfaceFormatCount, surfaceFormats.data());
+
+		VkSurfaceFormatKHR surfaceFormat;
+		bool formatFound = false;
+		for (const auto& availableFormat : surfaceFormats)
+		{
+			if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
+				availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+			{
+				surfaceFormat = availableFormat;
+				formatFound = true;
+				break;
+			}
+		}
+		if (!formatFound) surfaceFormat = surfaceFormats[0];
+		format = surfaceFormat.format;
+
+		uint32_t surfacePresentModesCount;
+		vkGetPhysicalDeviceSurfacePresentModesKHR(vkDevice->GetPhysical(), surface, &surfacePresentModesCount, nullptr);
+		std::vector<VkPresentModeKHR> surfacePresentModes(surfacePresentModesCount);
+		vkGetPhysicalDeviceSurfacePresentModesKHR(vkDevice->GetPhysical(), surface, &surfacePresentModesCount, surfacePresentModes.data());
+
+		// choose presentation mode
+		// available modes:
+		//   - VK_PRESENT_MODE_IMMEDIATE_KHR               | (V-Sync Off) Immediate push
+		//   - VK_PRESENT_MODE_MAILBOX_KHR                 | (No gpu block and no tearing) Push on v-blank and always newest
+		//   - VK_PRESENT_MODE_FIFO_KHR [always supported] | (V-Sync On) Push on v-blank and append to queue
+		//   - VK_PRESENT_MODE_FIFO_RELAXED_KHR            | Immediate push if v-blank was missed, V-Sync otherwise (tearing when rendering too slowly)
+		VkPresentModeKHR presentMode = VK_PRESENT_MODE_MAX_ENUM_KHR;
+		for (const auto& availablePresentMode : surfacePresentModes)
+		{
+			if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
+			{
+				presentMode = availablePresentMode;
+				break;
+			}
+		}
+		if (presentMode == VK_PRESENT_MODE_MAX_ENUM_KHR) presentMode = VK_PRESENT_MODE_FIFO_KHR;
+
+		VkSurfaceCapabilitiesKHR surfaceCapabilities;
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkDevice->GetPhysical(), surface, &surfaceCapabilities);
+
+		if (surfaceCapabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
+			extent = surfaceCapabilities.currentExtent;
+		else
+		{
+			extent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height) };
+			extent.width = std::clamp(extent.width, surfaceCapabilities.minImageExtent.width, surfaceCapabilities.maxImageExtent.width);
+			extent.height = std::clamp(extent.height, surfaceCapabilities.minImageExtent.height, surfaceCapabilities.maxImageExtent.height);
+		}
+
+		VKLOG_WARN << "width: " << extent.width << " height: " << extent.height;
+
 		uint32_t imageCount = surfaceCapabilities.minImageCount + 1;
 		if (surfaceCapabilities.maxImageCount > 0 && imageCount > surfaceCapabilities.maxImageCount)
 			imageCount = surfaceCapabilities.maxImageCount;
@@ -86,8 +209,7 @@ namespace Vulkan
 			scCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
 			scCreateInfo.queueFamilyIndexCount = 2;
 			scCreateInfo.pQueueFamilyIndices = queueFamilyIndices;
-		}
-		else
+		} else
 		{
 			scCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 			scCreateInfo.queueFamilyIndexCount = 0;
@@ -130,9 +252,6 @@ namespace Vulkan
 				throw std::runtime_error("failed to create image view");
 		}
 
-		renderPass = new VulkanRenderPass(format);
-		graphicsPipeline = new VulkanGraphicsPipeline(extent, renderPass);
-
 		framebuffers.resize(imageViews.size());
 		for (size_t i = 0; i < imageViews.size(); i++)
 		{
@@ -151,58 +270,25 @@ namespace Vulkan
 				throw std::runtime_error("failed to create framebuffer");
 		}
 
-		commandPool = new VulkanCommandPool(maxInFlight);
-
-		// synchronization objects
-
-		imageAvailableSemaphores.resize(maxInFlight);
-		renderFinishedSemaphores.resize(maxInFlight);
-		inFlightFences.resize(maxInFlight);
-
-		VkSemaphoreCreateInfo semaphoreInfo{ };
-		semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-
-		VkFenceCreateInfo fenceInfo{ };
-		fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-		fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-
-		for (size_t i = 0; i < maxInFlight; i++)
-		{
-			if (vkCreateSemaphore(vkDevice->GetLogical(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
-				vkCreateSemaphore(vkDevice->GetLogical(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
-				vkCreateFence(vkDevice->GetLogical(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS)
-				throw std::runtime_error("failed to create synchronization objects");
-		}
-	}
-
-	VulkanSwapchain::~VulkanSwapchain()
-	{
-		vkDeviceWaitIdle(vkDevice->GetLogical());
-
-		for (size_t i = 0; i < maxInFlight; i++)
-		{
-			vkDestroySemaphore(vkDevice->GetLogical(), imageAvailableSemaphores[i], nullptr);
-			vkDestroySemaphore(vkDevice->GetLogical(), renderFinishedSemaphores[i], nullptr);
-			vkDestroyFence(vkDevice->GetLogical(), inFlightFences[i], nullptr);
-		}
-
-		delete commandPool;
-		for (auto framebuffer : framebuffers)
-			vkDestroyFramebuffer(vkDevice->GetLogical(), framebuffer, nullptr);
-		delete renderPass;
-		delete graphicsPipeline;
-		for (VkImageView imageView : imageViews)
-			vkDestroyImageView(vkDevice->GetLogical(), imageView, nullptr);
-		vkDestroySwapchainKHR(vkDevice->GetLogical(), swapchain, nullptr);
+		graphicsPipeline = new VulkanGraphicsPipeline(extent, renderPass);
 	}
 
 	void VulkanSwapchain::Draw()
 	{
 		vkWaitForFences(vkDevice->GetLogical(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
-		vkResetFences(vkDevice->GetLogical(), 1, &inFlightFences[currentFrame]);
 
 		uint32_t imageIndex;
-		vkAcquireNextImageKHR(vkDevice->GetLogical(), swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+		VkResult result = vkAcquireNextImageKHR(vkDevice->GetLogical(), swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+
+		if (result == VK_ERROR_OUT_OF_DATE_KHR)
+		{
+			Recreate();
+			return;
+		}
+		else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+			throw std::runtime_error("failed to aquire swapchain image");
+
+		vkResetFences(vkDevice->GetLogical(), 1, &inFlightFences[currentFrame]);
 
 		VkCommandBuffer currentBuffer = commandPool->GetBuffer(currentFrame);
 		vkResetCommandBuffer(currentBuffer, 0);
@@ -241,7 +327,12 @@ namespace Vulkan
 		presentInfo.pSwapchains = swapchains;
 		presentInfo.pImageIndices = &imageIndex;
 
-		vkQueuePresentKHR(vkDevice->GetPresentQueue(), &presentInfo);
+		result = vkQueuePresentKHR(vkDevice->GetPresentQueue(), &presentInfo);
+
+		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+			Recreate();
+		else if (result != VK_SUCCESS)
+			throw std::runtime_error("failed to present swapchain image");
 
 		currentFrame = (currentFrame + 1) % maxInFlight;
 	}

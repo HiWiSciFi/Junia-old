@@ -44,8 +44,10 @@ namespace GLFW
 
 		void RequestAttention() override;
 
-		void Iconify() override;
-		void Restore() override;
-		void Maximize() override;
+		Junia::WindowSizeMode GetSizeMode() const override;
+		void SetSizeMode(Junia::WindowSizeMode mode) override;
+
+		Junia::WindowFullscreenMode GetFullscreenMode() const override;
+		void SetFullscreenMode(Junia::WindowFullscreenMode mode) override;
 	};
 }
