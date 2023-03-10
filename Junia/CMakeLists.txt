@@ -30,6 +30,8 @@
 			"${INCLUDE_DIR}/Junia/Core/IdPool.hpp"
 			"${SRC_DIR}/Junia/Core/InternalLoggers.hpp"
 			"${SRC_DIR}/Junia/Core/InternalLoggers.cpp"
+			"${INCLUDE_DIR}/Junia/Core/Monitor.hpp"
+			"${SRC_DIR}/Junia/Core/Monitor.cpp"
 
 			"${INCLUDE_DIR}/Junia/Core/FileSystem.hpp"
 			"${SRC_DIR}/Platform/OS/WindowsFileSystem.cpp"
@@ -74,15 +76,19 @@
 			"${INCLUDE_DIR}/Junia/Renderer/RenderDevice.hpp"
 			"${SRC_DIR}/Junia/Renderer/RenderDevice.cpp"
 
+			"${SRC_DIR}/Platform/GLFW.hpp"
+			"${SRC_DIR}/Platform/GLFW.cpp"
 			"${SRC_DIR}/Platform/GLFW/GlfwWindow.hpp"
 			"${SRC_DIR}/Platform/GLFW/GlfwWindow.cpp"
 			"${SRC_DIR}/Platform/GLFW/GlfwInput.hpp"
 			"${SRC_DIR}/Platform/GLFW/GlfwInput.cpp"
+			"${SRC_DIR}/Platform/GLFW/GlfwMonitor.hpp"
+			"${SRC_DIR}/Platform/GLFW/GlfwMonitor.cpp"
 
 			"${INCLUDE_DIR}/Platform/Vulkan.hpp"
 			"${SRC_DIR}/Platform/Vulkan.cpp"
-			"${SRC_DIR}/Platform/Vulkan/ExtensionLoader.hpp"
-			"${SRC_DIR}/Platform/Vulkan/ExtensionLoader.cpp"
+			"${SRC_DIR}/Platform/Vulkan/VulkanExtensionLoader.hpp"
+			"${SRC_DIR}/Platform/Vulkan/VulkanExtensionLoader.cpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanDevice.hpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanDevice.cpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanSurface.hpp"
@@ -99,9 +105,6 @@
 			"${SRC_DIR}/Platform/Vulkan/VulkanCommandBuffer.cpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanVertexBuffer.hpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanVertexBuffer.cpp"
-
-			"${SRC_DIR}/Platform/GLFW.hpp"
-			"${SRC_DIR}/Platform/GLFW.cpp"
 
 			"${INCLUDE_DIR}/Platform/OpenAL.hpp"
 			"${SRC_DIR}/Platform/OpenAL.cpp"

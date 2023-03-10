@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <limits>
-#include "../../Junia/Core/InternalLoggers.hpp"
 
 namespace Vulkan
 {
@@ -187,8 +186,6 @@ namespace Vulkan
 			extent.width = std::clamp(extent.width, surfaceCapabilities.minImageExtent.width, surfaceCapabilities.maxImageExtent.width);
 			extent.height = std::clamp(extent.height, surfaceCapabilities.minImageExtent.height, surfaceCapabilities.maxImageExtent.height);
 		}
-
-		VKLOG_WARN << "width: " << extent.width << " height: " << extent.height;
 
 		uint32_t imageCount = surfaceCapabilities.minImageCount + 1;
 		if (surfaceCapabilities.maxImageCount > 0 && imageCount > surfaceCapabilities.maxImageCount)

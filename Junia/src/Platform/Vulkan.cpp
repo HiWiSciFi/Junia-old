@@ -3,7 +3,7 @@
 #include "../Junia/Core/InternalLoggers.hpp"
 #include <Platform/Vulkan.hpp>
 #include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan/ExtensionLoader.hpp"
+#include "Vulkan/VulkanExtensionLoader.hpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -39,7 +39,6 @@ namespace Vulkan
 
 	void Init(std::string const& appName, Junia::Version const& appVersion, std::string const& engineName, Junia::Version const& engineVersion, bool debug)
 	{
-		Vulkan::Log::vkLog.maxLevel = Junia::Log::LogLevel::Info;
 		if (vkInstance != nullptr) throw std::runtime_error("vulkan has already been initialized");
 
 		if (glfwInit() != GLFW_TRUE)
@@ -75,11 +74,10 @@ namespace Vulkan
 			}
 
 			debugMessengerCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-			debugMessengerCreateInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
+			debugMessengerCreateInfo.messageSeverity |= VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
 			debugMessengerCreateInfo.messageSeverity |= VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT;
 			debugMessengerCreateInfo.messageSeverity |= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT;
 			debugMessengerCreateInfo.messageSeverity |= VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-			debugMessengerCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT;
 			debugMessengerCreateInfo.messageType |= VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
 			debugMessengerCreateInfo.messageType |= VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 			debugMessengerCreateInfo.pfnUserCallback = VulkanDebugCallback;
