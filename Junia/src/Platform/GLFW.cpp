@@ -3,7 +3,7 @@
 #endif
 
 #define GLFW_INCLUDE_VULKAN
-#include <glfw/glfw3.h>
+#include <GLFW/glfw3.h>
 #include <stdexcept>
 #include "../Junia/Core/InternalLoggers.hpp"
 #include "GLFW/GlfwMonitor.hpp"

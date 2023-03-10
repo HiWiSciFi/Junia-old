@@ -1,8 +1,8 @@
 #include <GLFW/glfw3.h>
 #ifdef _WIN32
-#include <Windows.h>
-#define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>
+	#include <Windows.h>
+	#define GLFW_EXPOSE_NATIVE_WIN32
+	#include <GLFW/glfw3native.h>
 #endif
 #include "GlfwMonitor.hpp"
 #include <vector>
@@ -22,12 +22,11 @@ namespace GLFW
 		glfwSetMonitorUserPointer(monitor, this);
 		videoMode = glfwGetVideoMode(monitor);
 
-		#ifdef _WIN32
-
-		const char* displayName = glfwGetWin32Monitor(monitor);
 		std::stringstream nameSs;
 		nameSs << index << ": ";
 
+		#ifdef _WIN32
+		const char* displayName = glfwGetWin32Monitor(monitor);
 		bool found = false;
 		for (size_t i = 0; i < displayDevices.size(); i++)
 		{
