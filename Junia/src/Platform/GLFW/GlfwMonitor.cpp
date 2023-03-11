@@ -1,9 +1,15 @@
 #include <GLFW/glfw3.h>
-#ifdef _WIN32
+#if defined(_WIN32)
 	#include <Windows.h>
 	#define GLFW_EXPOSE_NATIVE_WIN32
-	#include <GLFW/glfw3native.h>
+#elif defined(__linux__)
+	#include <X11/Xlib.h>
+	#include <X11/extensions/Xrandr.h>
+	#undef None
+	#define GLFW_EXPOSE_NATIVE_X11
 #endif
+#define GLFW_NATIVE_INCLUDE_NONE
+#include <GLFW/glfw3native.h>
 #include "GlfwMonitor.hpp"
 #include <vector>
 #include <sstream>
@@ -24,25 +30,40 @@ namespace GLFW
 
 		std::stringstream nameSs;
 		nameSs << index << ": ";
+		bool edidNameFound = false;
 
-		#ifdef _WIN32
-		const char* displayName = glfwGetWin32Monitor(monitor);
-		bool found = false;
-		for (size_t i = 0; i < displayDevices.size(); i++)
+#if defined(_WIN32)
 		{
-			if (strcmp(displayDevices[i].DeviceName, displayName) == 0)
+			const char* displayName = glfwGetWin32Monitor(monitor);
+			for (size_t i = 0; i < displayDevices.size(); i++)
 			{
-				std::wstring wstr(deviceNameTargets[i].monitorFriendlyDeviceName);
-				nameSs << std::string(wstr.begin(), wstr.end())
-					<< " (" << glfwGetMonitorName(monitor) << ")";
-				name = nameSs.str();
-				found = true;
-				break;
+				if (strcmp(displayDevices[i].DeviceName, displayName) == 0)
+				{
+					std::wstring wstr(deviceNameTargets[i].monitorFriendlyDeviceName);
+					nameSs << std::string(wstr.begin(), wstr.end())
+						<< " (" << glfwGetMonitorName(monitor) << ")";
+					name = nameSs.str();
+					edidNameFound = true;
+					break;
+				}
 			}
 		}
+#elif defined(__linux__)
+		{
+			Display* display = glfwGetX11Display();
+			int screen = ((_XPrivDisplay)(display))->default_screen;
+			Window rootWindow = ((&((_XPrivDisplay)(display))->screens[screen])->root);
 
-		if (!found)
-		#endif
+			//RRCrtc adapt = glfwGetX11Adapter(monitor);
+			RROutput mnt = glfwGetX11Monitor(monitor);
+
+			XRRScreenResources* resources = XRRGetScreenResources(display, rootWindow);
+			XRROutputInfo* outInfo = XRRGetOutputInfo(display, resources, mnt);
+			GLFWLOG_CRITICAL << outInfo->name;
+		}
+#endif
+
+		if (!edidNameFound)
 		{
 			nameSs << glfwGetMonitorName(monitor);
 		}

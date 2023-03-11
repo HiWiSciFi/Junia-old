@@ -23,7 +23,7 @@ namespace Junia
 		}
 
 		std::vector<uint8_t> buffer(fileSize.QuadPart);
-		if (ReadFile(hFile, buffer.data(), buffer.size(), NULL, NULL) == FALSE)
+		if (ReadFile(hFile, buffer.data(), static_cast<DWORD>(buffer.size()), NULL, NULL) == FALSE)
 		{
 			CloseHandle(hFile);
 			throw std::runtime_error("failed to read file contents");
@@ -46,7 +46,7 @@ namespace Junia
 		}
 
 		std::string buffer(fileSize.QuadPart, '\0');
-		if (ReadFile(hFile, buffer.data(), buffer.size(), NULL, NULL) == FALSE)
+		if (ReadFile(hFile, buffer.data(), static_cast<DWORD>(buffer.size()), NULL, NULL) == FALSE)
 		{
 			CloseHandle(hFile);
 			throw std::runtime_error("failed to read file contents");

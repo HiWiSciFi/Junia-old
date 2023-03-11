@@ -126,4 +126,6 @@
 			"${GLFW_LIB}"
 			"${Vulkan_LIBRARY}"
 			"${OPENAL_LIBRARY}"
+			"X11"
+			"Xrandr"
 	)

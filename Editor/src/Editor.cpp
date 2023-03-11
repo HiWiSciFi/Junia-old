@@ -56,30 +56,37 @@ constexpr auto ENTITY_COUNT = 100;
 
 int main(int argc, char** argv)
 {
-	JELOG_INFO << "Initializing Junia...";
-	Junia::Init();
-
-	auto starttime = std::chrono::high_resolution_clock::now();
-	Junia::ECS::RegisterComponent<Junia::Transform>();
-	Junia::ECS::RegisterSystem<GravitySystem>();
-	for (Junia::ECS::EntityType i = 0; i < ENTITY_COUNT; i++)
+	try
 	{
-		Junia::ECS::Entity e = Junia::ECS::Entity::Create();
-		e.AddComponent<Junia::Transform>();
-	}
-	for (int i = 0; i < ENTITY_COUNT; i++) Junia::ECS::Entity::Create();
-	auto endtime = std::chrono::high_resolution_clock::now();
-	float creationtime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
-	JELOG_TRACE << "Entities created! Time: " << creationtime << "s";
-	starttime = std::chrono::high_resolution_clock::now();
-	for (int i = (ENTITY_COUNT * 2) - 1; i >= 0; i--) Junia::ECS::Entity::Destroy(Junia::ECS::Entity(i));
-	endtime = std::chrono::high_resolution_clock::now();
-	float destructiontime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
-	JELOG_TRACE << "Entities destroyed! Time: " << destructiontime << "s";
+		JELOG_INFO << "Initializing Junia...";
+		Junia::Init();
 
-	RunGame();
-	JELOG_INFO << "Terminating Junia...";
-	Junia::Terminate();
-	JELOG_INFO << "Done.";
+		auto starttime = std::chrono::high_resolution_clock::now();
+		Junia::ECS::RegisterComponent<Junia::Transform>();
+		Junia::ECS::RegisterSystem<GravitySystem>();
+		for (Junia::ECS::EntityType i = 0; i < ENTITY_COUNT; i++)
+		{
+			Junia::ECS::Entity e = Junia::ECS::Entity::Create();
+			e.AddComponent<Junia::Transform>();
+		}
+		for (int i = 0; i < ENTITY_COUNT; i++) Junia::ECS::Entity::Create();
+		auto endtime = std::chrono::high_resolution_clock::now();
+		float creationtime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
+		JELOG_TRACE << "Entities created! Time: " << creationtime << "s";
+		starttime = std::chrono::high_resolution_clock::now();
+		for (int i = (ENTITY_COUNT * 2) - 1; i >= 0; i--) Junia::ECS::Entity::Destroy(Junia::ECS::Entity(i));
+		endtime = std::chrono::high_resolution_clock::now();
+		float destructiontime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
+		JELOG_TRACE << "Entities destroyed! Time: " << destructiontime << "s";
+
+		RunGame();
+		JELOG_INFO << "Terminating Junia...";
+		Junia::Terminate();
+		JELOG_INFO << "Done.";
+	}
+	catch (std::exception e)
+	{
+		JELOG_CRITICAL << "Exception thrown: " << e.what();
+	}
 	return 0;
 }
