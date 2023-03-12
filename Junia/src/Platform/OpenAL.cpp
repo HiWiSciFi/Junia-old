@@ -9,7 +9,8 @@
 
 namespace OpenAL
 {
-	Junia::Log::Logger alLog = Junia::Log::Logger("OpenAL", &std::cout);
+	ALCdevice* alDevice = nullptr;
+	Junia::Log::Logger alLog = Junia::Log::Logger("OpenAL", &std::cout); // TODO: move to InternalLoggers
 
 	void alEnumerateOutputDevices(size_t* deviceCount, const char** deviceNames)
 	{
@@ -69,10 +70,15 @@ namespace OpenAL
 		alLog.Info() << "Available input devices:";
 		for (const auto& device : inputDevices) alLog.Info() << "  - " << device;
 
-		ALCdevice* device = alcOpenDevice(nullptr);
-		if (device == nullptr)
+		alDevice = alcOpenDevice(nullptr);
+		if (alDevice == nullptr)
 		{
 			std::cout << "Could not open device" << std::endl;
 		}
+	}
+
+	void Cleanup()
+	{
+		alcCloseDevice(alDevice);
 	}
 }

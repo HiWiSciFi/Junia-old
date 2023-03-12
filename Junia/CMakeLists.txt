@@ -34,8 +34,12 @@
 			"${SRC_DIR}/Junia/Core/Monitor.cpp"
 
 			"${INCLUDE_DIR}/Junia/Core/FileSystem.hpp"
-			"${SRC_DIR}/Platform/OS/WindowsFileSystem.cpp"
-			"${SRC_DIR}/Platform/OS/LinuxFileSystem.cpp"
+			"${SRC_DIR}/Platform/OS/Windows/WindowsFileSystem.cpp"
+			"${SRC_DIR}/Platform/OS/Linux/LinuxFileSystem.cpp"
+
+			"${INCLUDE_DIR}/Junia/Core/Time.hpp"
+			"${SRC_DIR}/Platform/OS/Windows/WindowsTime.cpp"
+			"${SRC_DIR}/Platform/OS/Linux/LinuxTime.cpp"
 
 			"${INCLUDE_DIR}/Junia/ECS/ECS.hpp"
 			"${SRC_DIR}/Junia/ECS/ECS.cpp"
@@ -126,6 +130,12 @@
 			"${GLFW_LIB}"
 			"${Vulkan_LIBRARY}"
 			"${OPENAL_LIBRARY}"
+	)
+
+	if (UNIX)
+		target_link_libraries(Junia
+		PRIVATE
 			"X11"
 			"Xrandr"
 	)
+	endif (UNIX)

@@ -3,4 +3,5 @@
 namespace OpenAL
 {
 	void Init();
+	void Cleanup();
 }

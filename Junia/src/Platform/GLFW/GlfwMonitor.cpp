@@ -1,5 +1,6 @@
 #include <GLFW/glfw3.h>
 #if defined(_WIN32)
+	#define WIN32_LEAN_AND_MEAN
 	#include <Windows.h>
 	#define GLFW_EXPOSE_NATIVE_WIN32
 #elif defined(__linux__)
@@ -51,15 +52,13 @@ namespace GLFW
 #elif defined(__linux__)
 		{
 			Display* display = glfwGetX11Display();
-			int screen = ((_XPrivDisplay)(display))->default_screen;
-			Window rootWindow = ((&((_XPrivDisplay)(display))->screens[screen])->root);
+			int defaultScreen = reinterpret_cast<_XPrivDisplay>(display)->default_screen;
+			Window rootWindow = reinterpret_cast<_XPrivDisplay>(display)->screens[defaultScreen].root;
+			XRRScreenResources* screenResources = XRRGetScreenResources(display, rootWindow);
 
-			//RRCrtc adapt = glfwGetX11Adapter(monitor);
 			RROutput mnt = glfwGetX11Monitor(monitor);
-
-			XRRScreenResources* resources = XRRGetScreenResources(display, rootWindow);
-			XRROutputInfo* outInfo = XRRGetOutputInfo(display, resources, mnt);
-			GLFWLOG_CRITICAL << outInfo->name;
+			XRROutputInfo* outputInfo = XRRGetOutputInfo(display, screenResources, mnt);
+			GLFWLOG_CRITICAL << outputInfo->name;
 		}
 #endif
 
