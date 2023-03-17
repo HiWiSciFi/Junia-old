@@ -27,6 +27,7 @@ namespace Vulkan
 		VkSurfaceKHR surface = nullptr;
 		GLFWwindow* window = nullptr;
 
+		bool resized = false;
 		std::vector<VkSemaphore> imageAvailableSemaphores{ };
 		std::vector<VkSemaphore> renderFinishedSemaphores{ };
 		std::vector<VkFence> inFlightFences{ };
@@ -38,6 +39,7 @@ namespace Vulkan
 		VulkanSwapchain(GLFWwindow* window, VkSurfaceKHR surface, uint8_t maxInFlightFrames);
 		~VulkanSwapchain();
 
+		void FramebufferResized();
 		void Cleanup();
 		void Recreate();
 		void Draw();

@@ -3,17 +3,25 @@
 #include <iostream>
 #include <chrono>
 
+#include "Scenes/Scene1.hpp"
+
 void RunGame()
 {
 	JELOG_INFO << "Creating Windows...";
 	Junia::Window* mainWindow = Junia::Window::Create("First Window");
-	Junia::Window::Create("Second Window");
+	Junia::Window* secondWindow = Junia::Window::Create("Second Window");
 	mainWindow->RequestFocus();
-	JELOG_INFO << "Windows Created.";
+	mainWindow->SetFullscreenMode(Junia::WindowFullscreenMode::FULLSCREEN);
+	JELOG_INFO << "Windows created.";
 
 	Junia::Events::Subscribe<Junia::KeyDownEvent>([ ] (const Junia::KeyDownEvent* e)
 		{
 			if (e->GetKeyCode() == Junia::KeyCode::ESCAPE) Junia::Window::Get()->Close();
+			if (e->GetKeyCode() == Junia::KeyCode::W)
+			{
+				JMath::iVec2 windowSize = Junia::Window::Get()->GetSize();
+				JELOG_INFO << "window size: " << windowSize.x << "x" << windowSize.y;
+			}
 		});
 
 	/*Junia::Events::Subscribe([ ] (const Junia::Event* e)
@@ -21,6 +29,13 @@ void RunGame()
 			JELOG_INFO << "Event Triggered: " << e->ToString();
 		});*/
 
+	/*JELOG_INFO << "Loading scenes...";
+	Junia::Scene::IdType scene1 = Junia::RegisterScene<Scene1>();
+	mainWindow->AttachScene(scene1);
+	secondWindow->AttachScene(scene1);
+	JELOG_INFO << "Scenes loaded.";*/
+
+	// TODO: wrap in Junia API
 	JELOG_INFO << "Running Game loop...";
 	while (Junia::Window::Exists(mainWindow))
 	{
@@ -30,6 +45,7 @@ void RunGame()
 			Junia::Window::Get(i)->Update();
 	}
 
+	// TODO: move to Junia API (termination)
 	JELOG_INFO << "Destroying Windows...";
 	Junia::Window::DestroyAll();
 }

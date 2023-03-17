@@ -51,6 +51,7 @@ namespace GLFW
 		}
 #elif defined(__linux__)
 		{
+			// TODO: remove, since this is already covered by GLFW
 			Display* display = glfwGetX11Display();
 			int defaultScreen = reinterpret_cast<_XPrivDisplay>(display)->default_screen;
 			Window rootWindow = reinterpret_cast<_XPrivDisplay>(display)->screens[defaultScreen].root;
@@ -79,33 +80,40 @@ namespace GLFW
 		return name;
 	}
 
-	uint32_t GlfwMonitor::GetWidth() const
+	JMath::uiVec2 GlfwMonitor::GetPosition() const
 	{
-		return static_cast<uint32_t>(videoMode->width);
+		int xpos, ypos;
+		glfwGetMonitorPos(monitor, &xpos, &ypos);
+		return {
+			static_cast<uint32_t>(xpos),
+			static_cast<uint32_t>(ypos)
+		};
 	}
 
-	uint32_t GlfwMonitor::GetHeight() const
+	JMath::uiVec2 GlfwMonitor::GetSize() const
 	{
-		return static_cast<uint32_t>(videoMode->height);
+		return {
+			static_cast<uint32_t>(videoMode->width),
+			static_cast<uint32_t>(videoMode->height)
+		};
 	}
 
-	uint32_t GlfwMonitor::GetRedBits() const
+	JMath::uiVec3 GlfwMonitor::GetColorBits() const
 	{
-		return static_cast<uint8_t>(videoMode->redBits);
-	}
-
-	uint32_t GlfwMonitor::GetGreenBits() const
-	{
-		return static_cast<uint8_t>(videoMode->greenBits);
-	}
-
-	uint32_t GlfwMonitor::GetBlueBits() const
-	{
-		return static_cast<uint8_t>(videoMode->blueBits);
+		return {
+			static_cast<uint32_t>(videoMode->redBits),
+			static_cast<uint32_t>(videoMode->greenBits),
+			static_cast<uint32_t>(videoMode->blueBits)
+		};
 	}
 
 	uint32_t GlfwMonitor::GetRefreshRate() const
 	{
 		return static_cast<uint32_t>(videoMode->refreshRate);
+	}
+
+	void* GlfwMonitor::GetNative() const
+	{
+		return monitor;
 	}
 }

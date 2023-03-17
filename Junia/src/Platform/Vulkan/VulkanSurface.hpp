@@ -19,6 +19,7 @@ namespace Vulkan
 		VulkanSurface(GLFWwindow* window);
 		~VulkanSurface() override;
 
+		void FramebufferResized() override;
 		void Draw() override;
 	};
 }

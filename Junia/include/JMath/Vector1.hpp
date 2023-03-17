@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Types.hpp"
+#include <cstdint>
 
 namespace JMath
 {
@@ -440,17 +441,17 @@ namespace JMath
 	// TYPE DEFINITIONS //
 	//////////////////////
 
-	typedef Vector< 1, float        >     Vec1;
-	typedef Vector< 1, float        >    fVec1;
-	typedef Vector< 1, double       >    dVec1;
-	typedef Vector< 1, int          >    iVec1;
-	typedef Vector< 1, unsigned int >   uiVec1;
-	typedef Vector< 1, bool         >    bVec1;
+	typedef Vector< 1, float    >     Vec1;
+	typedef Vector< 1, float    >    fVec1;
+	typedef Vector< 1, double   >    dVec1;
+	typedef Vector< 1, int32_t  >    iVec1;
+	typedef Vector< 1, uint32_t >   uiVec1;
+	typedef Vector< 1, bool     >    bVec1;
 
-	typedef Vector< 1, float        >   Scalar;
-	typedef Vector< 1, float        >  fScalar;
-	typedef Vector< 1, double       >  dScalar;
-	typedef Vector< 1, int          >  iScalar;
-	typedef Vector< 1, unsigned int > uiScalar;
-	typedef Vector< 1, bool         >  bScalar;
+	typedef Vector< 1, float    >   Scalar;
+	typedef Vector< 1, float    >  fScalar;
+	typedef Vector< 1, double   >  dScalar;
+	typedef Vector< 1, int32_t  >  iScalar;
+	typedef Vector< 1, uint32_t > uiScalar;
+	typedef Vector< 1, bool     >  bScalar;
 }

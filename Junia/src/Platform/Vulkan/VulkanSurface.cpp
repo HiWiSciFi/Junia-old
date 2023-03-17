@@ -18,6 +18,11 @@ namespace Vulkan
 		vkDestroySurfaceKHR(vkInstance, surface, nullptr);
 	}
 
+	void VulkanSurface::FramebufferResized()
+	{
+		swapchain->FramebufferResized();
+	}
+
 	void VulkanSurface::Draw()
 	{
 		swapchain->Draw();

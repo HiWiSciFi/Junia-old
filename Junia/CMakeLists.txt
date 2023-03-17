@@ -32,11 +32,12 @@
 			"${SRC_DIR}/Junia/Core/InternalLoggers.cpp"
 			"${INCLUDE_DIR}/Junia/Core/Monitor.hpp"
 			"${SRC_DIR}/Junia/Core/Monitor.cpp"
+			"${INCLUDE_DIR}/Junia/Core/Scene.hpp"
+			"${SRC_DIR}/Junia/Core/Scene.cpp"
 
 			"${INCLUDE_DIR}/Junia/Core/FileSystem.hpp"
 			"${SRC_DIR}/Platform/OS/Windows/WindowsFileSystem.cpp"
 			"${SRC_DIR}/Platform/OS/Linux/LinuxFileSystem.cpp"
-
 			"${INCLUDE_DIR}/Junia/Core/Time.hpp"
 			"${SRC_DIR}/Platform/OS/Windows/WindowsTime.cpp"
 			"${SRC_DIR}/Platform/OS/Linux/LinuxTime.cpp"

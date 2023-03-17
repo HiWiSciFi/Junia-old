@@ -4,6 +4,8 @@
 #include <Junia/Events/InputEvents.hpp>
 #include "GlfwInput.hpp"
 
+#include "../../Junia/Core/InternalLoggers.hpp"
+
 namespace Junia
 {
 	extern std::vector<Window*> windows;
@@ -205,25 +207,58 @@ namespace GLFW
 
 	Junia::WindowFullscreenMode GlfwWindow::GetFullscreenMode() const
 	{
+		if (glfwGetWindowMonitor(window) != NULL)
+			return Junia::WindowFullscreenMode::FULLSCREEN;
+		if (glfwGetWindowAttrib(window, GLFW_DECORATED) == GLFW_FALSE)
+			return Junia::WindowFullscreenMode::BORDERLESS_FULLSCREEN;
 		return Junia::WindowFullscreenMode::WINDOWED;
 	}
 
-	void GlfwWindow::SetFullscreenMode(Junia::WindowFullscreenMode mode)
+	void GlfwWindow::SetFullscreenMode(Junia::WindowFullscreenMode mode, Junia::Monitor* monitor)
 	{
-		return;
+		Junia::WindowFullscreenMode previousMode = GetFullscreenMode();
+		if (mode == previousMode) return;
+
+		switch (mode)
+		{
+		case Junia::WindowFullscreenMode::WINDOWED:
+			glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
+			glfwSetWindowMonitor(window, NULL, restorePos.x, restorePos.y, restoreSize.x, restoreSize.y, GLFW_DONT_CARE);
+			break;
+		case Junia::WindowFullscreenMode::BORDERLESS_FULLSCREEN:
+			{
+				if (monitor == nullptr) monitor = Junia::Monitor::GetPrimary();
+				if (previousMode == Junia::WindowFullscreenMode::WINDOWED)
+				{
+					restorePos = GetPosition();
+					restoreSize = GetSize();
+				}
+				glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
+				JMath::uiVec2 size = monitor->GetSize();
+				JMath::uiVec2 position = monitor->GetPosition();
+				glfwSetWindowMonitor(window, NULL, position.x, position.y, size.x, size.y, monitor->GetRefreshRate());
+			}
+			break;
+		case Junia::WindowFullscreenMode::FULLSCREEN:
+			{
+				if (monitor == nullptr) monitor = Junia::Monitor::GetPrimary();
+				if (previousMode == Junia::WindowFullscreenMode::WINDOWED)
+				{
+					restorePos = GetPosition();
+					restoreSize = GetSize();
+				}
+				JMath::uiVec2 size = monitor->GetSize();
+				glfwSetWindowMonitor(window, reinterpret_cast<GLFWmonitor*>(monitor->GetNative()), 0, 0, size.x, size.y, monitor->GetRefreshRate());
+			}
+			break;
+		default:
+			throw std::runtime_error("invalid fullscreen mode specified");
+		}
 	}
 
-	/*void GlfwWindow::Fullscreen()
+	void GlfwWindow::FramebufferResizeCallback(GLFWwindow* wnd, int width, int height)
 	{
-		int monitorCount;
-		GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
-		const GLFWvidmode* mode = glfwGetVideoMode(monitors[0]);
-
-		glfwSetWindowMonitor(window, monitors[0], 0, 0, mode->width, mode->height, mode->refreshRate);
+		GlfwWindow* window = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(wnd));
+		window->surface->FramebufferResized();
 	}
-
-	void GlfwWindow::Windowed()
-	{
-		glfwSetWindowMonitor(window, NULL, 100, 100, 800, 600, 0);
-	}*/
 }

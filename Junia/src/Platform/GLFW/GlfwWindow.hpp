@@ -12,6 +12,8 @@ namespace GLFW
 	private:
 		GLFWwindow* window;
 		std::string title;
+		JMath::iVec2 restorePos{ -1, -1 };
+		JMath::iVec2 restoreSize{ -1, -1 };
 
 	public:
 		GlfwWindow(const std::string& title, int width = 800, int height = 600);
@@ -48,6 +50,9 @@ namespace GLFW
 		void SetSizeMode(Junia::WindowSizeMode mode) override;
 
 		Junia::WindowFullscreenMode GetFullscreenMode() const override;
-		void SetFullscreenMode(Junia::WindowFullscreenMode mode) override;
+		void SetFullscreenMode(Junia::WindowFullscreenMode mode, Junia::Monitor* monitor = nullptr) override;
+
+	private:
+		static void FramebufferResizeCallback(GLFWwindow* wnd, int width, int height);
 	};
 }

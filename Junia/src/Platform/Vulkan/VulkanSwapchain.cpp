@@ -113,6 +113,11 @@ namespace Vulkan
 		delete commandPool;
 	}
 
+	void VulkanSwapchain::FramebufferResized()
+	{
+		resized = true;
+	}
+
 	void VulkanSwapchain::Cleanup()
 	{
 		for (auto framebuffer : framebuffers)
@@ -326,8 +331,11 @@ namespace Vulkan
 
 		result = vkQueuePresentKHR(vkDevice->GetPresentQueue(), &presentInfo);
 
-		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || resized)
+		{
+			resized = false;
 			Recreate();
+		}
 		else if (result != VK_SUCCESS)
 			throw std::runtime_error("failed to present swapchain image");
 

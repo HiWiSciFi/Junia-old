@@ -2,6 +2,7 @@
 
 #include "../../JMath/Vector2.hpp"
 #include "../Renderer/Surface.hpp"
+#include "Monitor.hpp"
 #include <cstdint>
 #include <string>
 #include <cstddef>
@@ -10,14 +11,14 @@ namespace Junia
 {
 	enum class WindowFullscreenMode : uint8_t
 	{
-		WINDOWED = 0,
-		BORDERLESS_FULLSCREEN = 0,
-		FULLSCREEN = 0
+		WINDOWED              = 0,
+		BORDERLESS_FULLSCREEN = 1,
+		FULLSCREEN            = 2
 	};
 
 	enum class WindowSizeMode : uint8_t
 	{
-		REGULAR = 0,
+		REGULAR   = 0,
 		ICONIFIED = 1,
 		MAXIMIZED = 2
 	};
@@ -80,6 +81,6 @@ namespace Junia
 		virtual void SetSizeMode(WindowSizeMode mode) = 0;
 
 		virtual WindowFullscreenMode GetFullscreenMode() const = 0;
-		virtual void SetFullscreenMode(WindowFullscreenMode mode) = 0;
+		virtual void SetFullscreenMode(WindowFullscreenMode mode, Monitor* monitor = nullptr) = 0;
 	};
 }

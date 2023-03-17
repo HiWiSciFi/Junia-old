@@ -11,6 +11,7 @@ namespace Junia
 		static Surface* Create(void* window, WindowApi windowApi, RenderApi renderApi);
 
 		virtual ~Surface() = 0;
+		virtual void FramebufferResized() = 0;
 		virtual void Draw() = 0;
 	};
 }

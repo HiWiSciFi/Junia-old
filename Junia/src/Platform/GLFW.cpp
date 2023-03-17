@@ -85,12 +85,14 @@ namespace GLFW
 		{
 			Junia::Monitor* monitor = new GlfwMonitor(glfwMonitors[i], i);
 			Junia::monitors[i] = monitor;
+			JMath::uiVec3 colors = monitor->GetColorBits();
+			JMath::uiVec2 size = monitor->GetSize();
 			GLFWLOG_INFO << "  - " << monitor->GetName() << " |"
-				<< " r:" << monitor->GetRedBits()
-				<< " g:" << monitor->GetGreenBits()
-				<< " b:" << monitor->GetBlueBits()
+				<< " r:" << colors.r
+				<< " g:" << colors.g
+				<< " b:" << colors.b
 				<< " | refresh rate: " << monitor->GetRefreshRate()
-				<< " | " << monitor->GetWidth() << "x" << monitor->GetHeight();
+				<< " | " << size.x << "x" << size.y;
 		}
 	}
 }
