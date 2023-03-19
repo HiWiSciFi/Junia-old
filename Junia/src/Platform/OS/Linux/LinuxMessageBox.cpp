@@ -162,7 +162,7 @@ namespace Junia
 		char** missingCharset_list = NULL;
 		int missingCharset_count = 0;
 		XFontSet fs;
-		fs = XCreateFontSet(dpy, "-*-*-medium-r-normal-*-12-*-*-*-*-*-*-*", &missingCharset_list, &missingCharset_count, NULL);
+		fs = XCreateFontSet(dpy, "-*-*-medium-r-*-*-*-140-75-75-*-*-*-*", &missingCharset_list, &missingCharset_count, NULL);
 		if (missingCharset_count > 0)
 		{
 			std::string errorString("missing charsets: \n");
@@ -179,7 +179,7 @@ namespace Junia
 
 		Colormap cmap = DefaultColormap(dpy, ds);
 
-// -------------------------------------- resite the window according to text size -------------------------------------
+// -------------------------------------- resize the window according to text size -------------------------------------
 		unsigned int winW, winH;
 		unsigned int textW, textH;
 
@@ -199,8 +199,6 @@ namespace Junia
 		hints.min_height = winH;
 		hints.max_height = winH;
 		hints.base_height = winH;
-
-		std::cout << "Size: " << winW << "x" << winH << std::endl;
 
 		XSetWMNormalHints(dpy, win, &hints);
 		XMapRaised(dpy, win);
@@ -242,41 +240,41 @@ namespace Junia
 			break;
 		case Junia::MessageBoxButtons::YES_NO:
 			{
-				btsData[0].button = &YES_BUTTON;
-				btsData[1].button = &NO_BUTTON;
+				btsData[1].button = &YES_BUTTON;
+				btsData[0].button = &NO_BUTTON;
 			}
 			break;
 		case Junia::MessageBoxButtons::OK_CANCEL:
 			{
-				btsData[0].button = &OK_BUTTON;
-				btsData[1].button = &CANCEL_BUTTON;
+				btsData[1].button = &OK_BUTTON;
+				btsData[0].button = &CANCEL_BUTTON;
 			}
 			break;
 		case Junia::MessageBoxButtons::RETRY_CANCEL:
 			{
-				btsData[0].button = &RETRY_BUTTON;
-				btsData[1].button = &CANCEL_BUTTON;
+				btsData[1].button = &RETRY_BUTTON;
+				btsData[0].button = &CANCEL_BUTTON;
 			}
 			break;
 		case Junia::MessageBoxButtons::YES_NO_CANCEL:
 			{
-				btsData[0].button = &YES_BUTTON;
+				btsData[2].button = &YES_BUTTON;
 				btsData[1].button = &NO_BUTTON;
-				btsData[2].button = &CANCEL_BUTTON;
+				btsData[0].button = &CANCEL_BUTTON;
 			}
 			break;
 		case Junia::MessageBoxButtons::ABORT_RETRY_IGNORE:
 			{
-				btsData[0].button = &ABORT_BUTTON;
+				btsData[2].button = &ABORT_BUTTON;
 				btsData[1].button = &RETRY_BUTTON;
-				btsData[2].button = &IGNORE_BUTTON;
+				btsData[0].button = &IGNORE_BUTTON;
 			}
 			break;
 		case Junia::MessageBoxButtons::CANCEL_TRYAGAIN_CONTINUE:
 			{
-				btsData[0].button = &CANCEL_BUTTON;
+				btsData[2].button = &CANCEL_BUTTON;
 				btsData[1].button = &TRYAGAIN_BUTTON;
-				btsData[2].button = &CONTINUE_BUTTON;
+				btsData[0].button = &CONTINUE_BUTTON;
 			}
 			break;
 		default: break;
@@ -321,10 +319,18 @@ namespace Junia
 							btsData[i].gc = &buttonGC_onClick;
 							result = btsData[i].button->result;
 							quit = true;
-							break;
 						}
 					}
 				}
+				
+				{
+					XEvent exp{ };
+					exp.type = Expose;
+					exp.xexpose.window = win;
+					XSendEvent(dpy, win, False, ExposureMask, &exp);
+					XFlush(dpy);
+				}
+				
 				break;
 
 			case Expose:

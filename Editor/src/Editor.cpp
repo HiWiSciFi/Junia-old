@@ -71,9 +71,9 @@ int main(int argc, char** argv)
 	{
 		Junia::MessageBoxResult result = Junia::ShowMessageBox(
 			"Important title",
-			"This is an important message!\nIn another line?",
+			"This is an important message!iakuhfiusaehfiuhesuifhuieshfiiwehfuw\nIn another line?",
 			Junia::MessageBoxIcon::INFORMATION,
-			Junia::MessageBoxButtons::YES_NO
+			Junia::MessageBoxButtons::CANCEL_TRYAGAIN_CONTINUE
 		);
 
 		switch (result)
