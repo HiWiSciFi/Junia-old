@@ -54,6 +54,9 @@
 			"${INCLUDE_DIR}/Junia/Core/Time.hpp"
 			"${SRC_DIR}/Platform/OS/Windows/WindowsTime.cpp"
 			"${SRC_DIR}/Platform/OS/Linux/LinuxTime.cpp"
+			"${INCLUDE_DIR}/Junia/Core/MessageBox.hpp"
+			"${SRC_DIR}/Platform/OS/Windows/WindowsMessageBox.cpp"
+			"${SRC_DIR}/Platform/OS/Linux/LinuxMessageBox.cpp"
 
 			"${INCLUDE_DIR}/Junia/ECS/ECS.hpp"
 			"${SRC_DIR}/Junia/ECS/ECS.cpp"
@@ -138,3 +141,10 @@
 			"${Vulkan_LIBRARY}"
 			"${OPENAL_LIBRARY}"
 	)
+
+	if (UNIX)
+		target_link_libraries(Junia
+		PRIVATE
+			"X11"
+	)
+	endif (UNIX)

@@ -63,8 +63,41 @@ public:
 
 #define ENTITY_COUNT 100
 
+#include <Junia/Core/MessageBox.hpp>
+
 int main(int argc, char** argv)
 {
+	/*try
+	{
+		Junia::MessageBoxResult result = Junia::ShowMessageBox(
+			"Important title",
+			"This is an important message!\nIn another line?",
+			Junia::MessageBoxIcon::INFORMATION,
+			Junia::MessageBoxButtons::YES_NO
+		);
+
+		switch (result)
+		{
+		case Junia::MessageBoxResult::NONE:     std::cout << "NONE"     << std::endl; break;
+		case Junia::MessageBoxResult::ABORT:    std::cout << "ABORT"    << std::endl; break;
+		case Junia::MessageBoxResult::RETRY:    std::cout << "RETRY"    << std::endl; break;
+		case Junia::MessageBoxResult::IGNORE:   std::cout << "IGNORE"   << std::endl; break;
+		case Junia::MessageBoxResult::TRYAGAIN: std::cout << "TRYAGAIN" << std::endl; break;
+		case Junia::MessageBoxResult::CONTINUE: std::cout << "CONTINUE" << std::endl; break;
+		case Junia::MessageBoxResult::OK:       std::cout << "OK"       << std::endl; break;
+		case Junia::MessageBoxResult::CANCEL:   std::cout << "CANCEL"   << std::endl; break;
+		case Junia::MessageBoxResult::YES:      std::cout << "YES"      << std::endl; break;
+		case Junia::MessageBoxResult::NO:       std::cout << "NO"       << std::endl; break;
+		default: break;
+		}
+	}
+	catch (std::exception e)
+	{
+		std::cout << "ERROR: " << e.what() << std::endl;
+	}
+
+	return 0;*/
+
 	try
 	{
 		JELOG_INFO << "Initializing Junia...";
