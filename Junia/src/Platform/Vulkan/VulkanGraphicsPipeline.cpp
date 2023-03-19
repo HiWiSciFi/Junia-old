@@ -1,8 +1,6 @@
 #include "VulkanGraphicsPipeline.hpp"
 #include "VulkanDevice.hpp"
-
 #include <vector>
-#include <fstream>
 #include <Junia/Core/FileSystem.hpp>
 
 namespace Vulkan

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
 
 namespace Junia
@@ -7,7 +8,7 @@ namespace Junia
 	/**
 	 * @brief Codes for mouse buttons
 	*/
-	enum class MouseButton : unsigned char
+	enum class MouseButton : uint8_t
 	{
 		Left = 0,  /** @brief The primary mouse button */
 		Right = 1, /** @brief The secondary mouse button */
@@ -17,7 +18,7 @@ namespace Junia
 	/**
 	 * @brief Codes for keys
 	*/
-	enum class KeyCode : unsigned char
+	enum class KeyCode : uint8_t
 	{
 		HOME           = 2, /** @brief The POS1 or HOME key */
 		END            = 3,

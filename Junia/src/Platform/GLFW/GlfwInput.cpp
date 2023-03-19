@@ -1,13 +1,12 @@
-#include "GlfwInput.hpp"
 #include <GLFW/glfw3.h>
+#include "GlfwInput.hpp"
 #include <stdexcept>
 
 namespace GLFW
 {
 	GlfwInput::GlfwInput()
 	{
-		if (glfwInit() == GLFW_FALSE)
-			throw std::runtime_error("failed to initialize glfw");
+
 	}
 
 	GlfwInput::~GlfwInput()
@@ -38,6 +37,6 @@ namespace GLFW
 		Junia::Window* w = Junia::Window::Get(window);
 		if (w == nullptr) return { 0, 0 };
 		glfwGetCursorPos(reinterpret_cast<GLFWwindow*>(w->GetNative()), &x, &y);
-		return { static_cast<int>(x), static_cast<int>(y) };
+		return { static_cast<int32_t>(x), static_cast<int32_t>(y) };
 	}
 }

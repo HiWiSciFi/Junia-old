@@ -1,6 +1,5 @@
 #include "VulkanSwapchain.hpp"
 #include "VulkanDevice.hpp"
-
 #include <algorithm>
 #include <limits>
 
@@ -8,7 +7,7 @@ namespace Vulkan
 {
 	extern VulkanDevice* vkDevice;
 
-	VulkanSwapchain::VulkanSwapchain(GLFWwindow* window, VkSurfaceKHR surface, uint8_t maxInFlightFrames)
+	VulkanSwapchain::VulkanSwapchain(Junia::Window* window, VkSurfaceKHR surface, uint8_t maxInFlightFrames)
 		: maxInFlight(maxInFlightFrames), surface(surface), window(window)
 	{
 		uint32_t surfaceFormatCount;
@@ -60,10 +59,8 @@ namespace Vulkan
 			extent = surfaceCapabilities.currentExtent;
 		else
 		{
-			int glfwFramebufferWidth;
-			int glfwFramebufferHeight;
-			glfwGetFramebufferSize(window, &glfwFramebufferWidth, &glfwFramebufferHeight);
-			extent = { static_cast<uint32_t>(glfwFramebufferWidth), static_cast<uint32_t>(glfwFramebufferHeight) };
+			JMath::uiVec2 framebufferSize = window->GetFramebufferSize();
+			extent = { framebufferSize.x, framebufferSize.y };
 			extent.width = std::clamp(extent.width, surfaceCapabilities.minImageExtent.width, surfaceCapabilities.maxImageExtent.width);
 			extent.height = std::clamp(extent.height, surfaceCapabilities.minImageExtent.height, surfaceCapabilities.maxImageExtent.height);
 		}
@@ -130,9 +127,8 @@ namespace Vulkan
 
 	void VulkanSwapchain::Recreate()
 	{
-		int width = 0, height = 0;
-		glfwGetFramebufferSize(window, &width, &height);
-		if (width == 0 || height == 0) return;
+		JMath::uiVec2 framebufferSize = window->GetFramebufferSize();
+		if (framebufferSize.x == 0 || framebufferSize.y == 0) return;
 
 		vkDeviceWaitIdle(vkDevice->GetLogical());
 
@@ -187,7 +183,7 @@ namespace Vulkan
 			extent = surfaceCapabilities.currentExtent;
 		else
 		{
-			extent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height) };
+			extent = { framebufferSize.x, framebufferSize.y };
 			extent.width = std::clamp(extent.width, surfaceCapabilities.minImageExtent.width, surfaceCapabilities.maxImageExtent.width);
 			extent.height = std::clamp(extent.height, surfaceCapabilities.minImageExtent.height, surfaceCapabilities.maxImageExtent.height);
 		}

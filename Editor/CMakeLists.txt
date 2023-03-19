@@ -7,7 +7,6 @@
 	target_sources(Editor
 		PRIVATE
 			"${SRC_DIR}/Editor.cpp"
-			"${SRC_DIR}/Editor.hpp"
 			"${SRC_DIR}/Shaders/shader1.vert"
 			"${SRC_DIR}/Shaders/shader1.frag"
 	)

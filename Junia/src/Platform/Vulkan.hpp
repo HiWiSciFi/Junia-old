@@ -1,10 +1,7 @@
 #pragma once
 
-#include "../Junia/Core/Version.hpp"
-#include "../Junia/Core/Logger.hpp"
-#include "../Junia/Renderer/RenderDevice.hpp"
-
-#include <cstdint>
+#include <Junia/Core/Version.hpp>
+#include <Junia/Renderer/RenderDevice.hpp>
 #include <string>
 #include <vector>
 
@@ -42,7 +39,7 @@ namespace Vulkan
 	 * @return a reference to a vector containing a list of pointers to valid
 	 *         render devices
 	*/
-	std::vector<Junia::RenderDevice*>& GetDevices();
+	const std::vector<Junia::RenderDevice*>& GetDevices();
 
 	/**
 	 * @brief Pick a device to render on (only call this once!)

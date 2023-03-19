@@ -1,13 +1,12 @@
 #pragma once
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
+#include <vulkan/vulkan.h>
 #include <vector>
 #include <cstdint>
 #include "VulkanRenderPass.hpp"
 #include "VulkanGraphicsPipeline.hpp"
 #include "VulkanCommandPool.hpp"
+#include <Junia/Core/Window.hpp>
 
 namespace Vulkan
 {
@@ -25,7 +24,7 @@ namespace Vulkan
 		VulkanCommandPool* commandPool = nullptr;
 
 		VkSurfaceKHR surface = nullptr;
-		GLFWwindow* window = nullptr;
+		Junia::Window* window = nullptr;
 
 		bool resized = false;
 		std::vector<VkSemaphore> imageAvailableSemaphores{ };
@@ -36,7 +35,7 @@ namespace Vulkan
 		uint32_t currentFrame = 0;
 
 	public:
-		VulkanSwapchain(GLFWwindow* window, VkSurfaceKHR surface, uint8_t maxInFlightFrames);
+		VulkanSwapchain(Junia::Window* window, VkSurfaceKHR surface, uint8_t maxInFlightFrames);
 		~VulkanSwapchain();
 
 		void FramebufferResized();

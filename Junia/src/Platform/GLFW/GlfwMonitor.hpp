@@ -1,4 +1,5 @@
 #pragma once
+
 #include <GLFW/glfw3.h>
 #include <Junia/Core/Monitor.hpp>
 
@@ -17,7 +18,7 @@ namespace GLFW
 
 		const std::string& GetName() const override;
 		JMath::uiVec2 GetPosition() const override;
-		JMath::uiVec2 GetSize() const override;
+		JMath::uiVec2 GetResolution() const override;
 		JMath::uiVec3 GetColorBits() const override;
 		uint32_t GetRefreshRate() const override;
 		void* GetNative() const override;

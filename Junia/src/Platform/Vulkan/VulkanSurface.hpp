@@ -1,8 +1,6 @@
 #pragma once
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
+#include <vulkan/vulkan.h>
 #include <Junia/Renderer/Surface.hpp>
 #include <Junia/Core/Window.hpp>
 #include "VulkanSwapchain.hpp"
@@ -16,7 +14,7 @@ namespace Vulkan
 		VulkanSwapchain* swapchain = nullptr;
 
 	public:
-		VulkanSurface(GLFWwindow* window);
+		VulkanSurface(Junia::Window* window);
 		~VulkanSurface() override;
 
 		void FramebufferResized() override;

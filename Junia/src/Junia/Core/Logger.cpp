@@ -1,13 +1,5 @@
 #include <Junia/Core/Logger.hpp>
 
-#include <cstdarg>
-#include <cstdio>
-#include <fstream>
-#include <iostream>
-#include <memory>
-#include <ostream>
-#include <utility>
-
 #define ANSI_ESC_RESET "\x1b[0m"     // RESET
 #define ANSI_ESC_TRACE "\x1b[90m"    // FG: bright_gray  |
 #define ANSI_ESC_INFO  "\x1b[37m"    // FG: white        |
@@ -137,3 +129,10 @@ namespace Junia
 		}
 	}
 }
+
+#undef ANSI_ESC_RESET
+#undef ANSI_ESC_TRACE
+#undef ANSI_ESC_INFO
+#undef ANSI_ESC_WARN
+#undef ANSI_ESC_ERROR
+#undef ANSI_ESC_CRIT

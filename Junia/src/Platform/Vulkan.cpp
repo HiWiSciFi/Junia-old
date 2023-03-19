@@ -1,13 +1,12 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#undef GLFW_INCLUDE_VULKAN
 #include "../Junia/Core/InternalLoggers.hpp"
-#include <Platform/Vulkan.hpp>
+#include "Vulkan.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanExtensionLoader.hpp"
-
-#include <iostream>
+#include "../Util/util_cstring.hpp"
 #include <stdexcept>
-#include <cstring>
 
 namespace Vulkan
 {
@@ -17,7 +16,7 @@ namespace Vulkan
 	bool debug = false;
 	std::vector<const char*> requiredExtensions{ };
 	std::vector<const char*> requiredDeviceExtensions{ };
-	std::vector<const char*> VALIDATION_LAYERS{ "VK_LAYER_KHRONOS_validation" };
+	std::vector<const char*> enabledValidationLayers{ };
 	std::vector<Junia::RenderDevice*> renderDevices;
 
 	extern VulkanDevice* vkDevice;
@@ -39,10 +38,11 @@ namespace Vulkan
 
 	void Init(std::string const& appName, Junia::Version const& appVersion, std::string const& engineName, Junia::Version const& engineVersion, bool debug)
 	{
-		if (vkInstance != nullptr) throw std::runtime_error("vulkan has already been initialized");
-
-		if (glfwInit() != GLFW_TRUE)
-			throw std::runtime_error("failed to initialize GLFW");
+		if (vkInstance != nullptr)
+		{
+			JECORELOG_WARN << "Vulkan has already been initialized. This call to Vulkan::Init will be ignored.";
+			return;
+		}
 
 		uint32_t glfwExtensionCount;
 		const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
@@ -59,7 +59,8 @@ namespace Vulkan
 			std::vector<VkLayerProperties> availableLayers(layerCount);
 			vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
-			for (const char* layerName : VALIDATION_LAYERS)
+			std::vector<const char*> validationLayersToEnable{ "VK_LAYER_KHRONOS_validation" };
+			for (const char* layerName : validationLayersToEnable)
 			{
 				bool found = false;
 				for (const auto& layerProperties : availableLayers)
@@ -70,7 +71,12 @@ namespace Vulkan
 						break;
 					}
 				}
-				if (!found) throw std::runtime_error("validation layer not supported");
+				if (!found)
+				{
+					JECORELOG_WARN << "Vulkan validation layer \"" << layerName << "\" not supported on this device. Continuing without it.";
+					continue;
+				}
+				enabledValidationLayers.push_back(layerName);
 			}
 
 			debugMessengerCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -96,8 +102,8 @@ namespace Vulkan
 		instanceCreateInfo.pApplicationInfo = &appInfo;
 		instanceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(requiredExtensions.size());
 		instanceCreateInfo.ppEnabledExtensionNames = requiredExtensions.data();
-		instanceCreateInfo.enabledLayerCount = debug ? static_cast<uint32_t>(VALIDATION_LAYERS.size()) : 0;
-		instanceCreateInfo.ppEnabledLayerNames = debug ? VALIDATION_LAYERS.data() : nullptr;
+		instanceCreateInfo.enabledLayerCount = debug ? static_cast<uint32_t>(enabledValidationLayers.size()) : 0;
+		instanceCreateInfo.ppEnabledLayerNames = debug ? enabledValidationLayers.data() : nullptr;
 		instanceCreateInfo.pNext = debug ? &debugMessengerCreateInfo : nullptr;
 
 		if (vkCreateInstance(&instanceCreateInfo, nullptr, &vkInstance) != VK_SUCCESS)
@@ -126,10 +132,13 @@ namespace Vulkan
 			throw std::runtime_error("cannot require extension after initialization");
 
 		for (auto const& e : requiredExtensions) if (strcmp(e, extension.c_str()) == 0) return;
-		size_t length = strlen(extension.c_str());
-		char* str = new char[length + 1];
-		strncpy(str, extension.c_str(), length);
-		str[length] = '\0';
+		size_t length = strlen(extension.c_str()) + 1;
+		char* str = new char[length];
+		if (util_strcpy_s(str, length, extension.c_str()) != 0)
+		{
+			VKLOG_ERROR << "Failed to copy required extension name. Continuing without.";
+			return;
+		}
 		VKLOG_INFO << "Required Extension: " << str;
 		requiredExtensions.push_back(str);
 	}
@@ -140,15 +149,18 @@ namespace Vulkan
 			throw std::runtime_error("cannot require device extension after device initialization");
 
 		for (auto const& e : requiredDeviceExtensions) if (strcmp(e, extension.c_str()) == 0) return;
-		size_t length = strlen(extension.c_str());
-		char* str = new char[length + 1];
-		strncpy(str, extension.c_str(), length);
-		str[length] = '\0';
+		size_t length = strlen(extension.c_str()) + 1;
+		char* str = new char[length];
+		if (util_strcpy_s(str, length, extension.c_str()) != 0)
+		{
+			VKLOG_ERROR << "Failed to copy required extension name. Continuing without.";
+			return;
+		}
 		VKLOG_INFO << "Required Device Extension: " << str;
 		requiredDeviceExtensions.push_back(str);
 	}
 
-	std::vector<Junia::RenderDevice*>& GetDevices()
+	const std::vector<Junia::RenderDevice*>& GetDevices()
 	{
 		return renderDevices;
 	}
@@ -182,6 +194,5 @@ namespace Vulkan
 		for (auto renderDevice : renderDevices) delete renderDevice;
 		if (debug) vkDestroyDebugUtilsMessengerEXT(vkInstance, debugMessenger, nullptr);
 		vkDestroyInstance(vkInstance, nullptr);
-		glfwTerminate();
 	}
 }

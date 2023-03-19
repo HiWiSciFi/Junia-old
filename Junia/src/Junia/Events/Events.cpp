@@ -1,5 +1,4 @@
 #include <Junia/Events/Events.hpp>
-
 #include <sstream>
 
 namespace Junia

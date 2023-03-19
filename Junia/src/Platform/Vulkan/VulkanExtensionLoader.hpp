@@ -1,4 +1,6 @@
-#include <cstddef>
+#pragma once
+
+#include <cstdint>
 
 namespace Vulkan
 {

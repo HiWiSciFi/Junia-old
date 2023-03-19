@@ -10,6 +10,19 @@
 			JELOG_MAX_TRACE
 	)
 
+	target_include_directories(Junia
+		PUBLIC
+			"${INCLUDE_DIR}"
+		PRIVATE
+			"${Vulkan_INCLUDE_DIR}"
+			"${OPENAL_INCLUDE_DIR}"
+	)
+
+	target_precompile_headers(Junia
+		PRIVATE
+			"src/pch.h"
+	)
+
 	target_sources(Junia
 		PRIVATE
 			"${INCLUDE_DIR}/Junia.hpp"
@@ -53,7 +66,6 @@
 			"${INCLUDE_DIR}/Junia/ECS/Components.hpp"
 			"${INCLUDE_DIR}/Junia/ECS/ComponentContainer.hpp"
 			"${INCLUDE_DIR}/Junia/ECS/Components/Transform.hpp"
-			"${INCLUDE_DIR}/Junia/ECS/Components/EntityInfo.hpp"
 
 			"${INCLUDE_DIR}/JMath.hpp"
 			"${INCLUDE_DIR}/JMath/Types.hpp"
@@ -90,7 +102,7 @@
 			"${SRC_DIR}/Platform/GLFW/GlfwMonitor.hpp"
 			"${SRC_DIR}/Platform/GLFW/GlfwMonitor.cpp"
 
-			"${INCLUDE_DIR}/Platform/Vulkan.hpp"
+			"${SRC_DIR}/Platform/Vulkan.hpp"
 			"${SRC_DIR}/Platform/Vulkan.cpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanExtensionLoader.hpp"
 			"${SRC_DIR}/Platform/Vulkan/VulkanExtensionLoader.cpp"
@@ -116,14 +128,8 @@
 			"${INCLUDE_DIR}/Platform/OpenAL/Exception.hpp"
 			"${INCLUDE_DIR}/Platform/OpenAL/OutputDevice.hpp"
 			"${SRC_DIR}/Platform/OpenAL/OutputDevice.cpp"
-	)
 
-	target_include_directories(Junia
-		PUBLIC
-			"${INCLUDE_DIR}"
-		PRIVATE
-			"${Vulkan_INCLUDE_DIR}"
-			"${OPENAL_INCLUDE_DIR}"
+			"${SRC_DIR}/Util/util_cstring.hpp"
 	)
 
 	target_link_libraries(Junia
@@ -132,11 +138,3 @@
 			"${Vulkan_LIBRARY}"
 			"${OPENAL_LIBRARY}"
 	)
-
-	if (UNIX)
-		target_link_libraries(Junia
-		PRIVATE
-			"X11"
-			"Xrandr"
-	)
-	endif (UNIX)

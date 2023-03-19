@@ -4,18 +4,24 @@
 #undef WIN32_LEAN_AND_MEAN
 #endif
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
-#include "Platform/GLFW.hpp"
-
 #include <Junia.hpp>
 #include "Junia/Core/InternalLoggers.hpp"
-
-#include <Platform/Vulkan.hpp>
-
+#include "Platform/GLFW.hpp"
+#include "Platform/Vulkan.hpp"
 #include <Platform/OpenAL.hpp>
 #include <Platform/OpenAL/Exception.hpp>
+#include <Junia/Core/Input.hpp>
+#include <Junia/Events/Events.hpp>
+#include <Junia/Events/InputEvents.hpp>
+#include <Junia/ECS/ECS.hpp>
+#include <Junia/ECS/Components.hpp>
+#include <Junia/Core/Version.hpp>
+#include <Junia/Core/Time.hpp>
+#include <Junia/Core/Window.hpp>
+#include <Junia/Core/WindowApi.hpp>
+#include <Junia/Renderer/RenderDevice.hpp>
+#include <stdexcept>
+#include <vector>
 
 namespace Junia
 {
@@ -28,7 +34,10 @@ namespace Junia
 		Events::Register<MouseButtonUpEvent>();
 		Events::Register<MouseMoveEvent>();
 
+		ECS::RegisterComponent<Junia::Transform>();
+
 #ifdef _WIN32
+		// Enable ANSI Escape Sequences on Windows
 		{
 			HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 			DWORD dwMode;
@@ -38,13 +47,15 @@ namespace Junia
 		}
 #endif
 
+		// Initialize GLFW
 		GLFW::Init();
 		Input::Init(WindowApi::GLFW);
+		InitTimer();
 
 		try
 		{
 			Vulkan::Init("Testapp", Junia::Version(1, 0, 0), "Junia", Junia::Version(1, 0, 0), true);
-			std::vector<Junia::RenderDevice*>& devices = Vulkan::GetDevices();
+			const std::vector<Junia::RenderDevice*>& devices = Junia::GetDevices();
 			JECORELOG_INFO << "Available Render devices:";
 			for (const auto& d : devices)
 			{
@@ -64,7 +75,7 @@ namespace Junia
 		}
 		catch (std::exception e)
 		{
-			JECORELOG_ERROR << "Vulkan ERROR: " << e.what();
+			VKLOG_CRITICAL << "Vulkan ERROR: " << e.what();
 			throw std::runtime_error(e.what());
 		}
 
@@ -80,7 +91,15 @@ namespace Junia
 
 	void Terminate()
 	{
+		// Cleanup APIs
+		Junia::Window::DestroyAll();
 		Vulkan::Cleanup();
 		OpenAL::Cleanup();
+		GLFW::Cleanup();
+	}
+
+	const std::vector<Junia::RenderDevice*>& GetDevices()
+	{
+		return Vulkan::GetDevices();
 	}
 }

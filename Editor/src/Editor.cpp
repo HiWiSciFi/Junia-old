@@ -1,8 +1,6 @@
-#include "Editor.hpp"
 #include <Junia.hpp>
 #include <iostream>
 #include <chrono>
-
 #include "Scenes/Scene1.hpp"
 
 void RunGame()
@@ -11,7 +9,6 @@ void RunGame()
 	Junia::Window* mainWindow = Junia::Window::Create("First Window");
 	Junia::Window* secondWindow = Junia::Window::Create("Second Window");
 	mainWindow->RequestFocus();
-	mainWindow->SetFullscreenMode(Junia::WindowFullscreenMode::FULLSCREEN);
 	JELOG_INFO << "Windows created.";
 
 	Junia::Events::Subscribe<Junia::KeyDownEvent>([ ] (const Junia::KeyDownEvent* e)
@@ -29,11 +26,11 @@ void RunGame()
 			JELOG_INFO << "Event Triggered: " << e->ToString();
 		});*/
 
-	/*JELOG_INFO << "Loading scenes...";
-	Junia::Scene::IdType scene1 = Junia::RegisterScene<Scene1>();
+	JELOG_INFO << "Loading scenes...";
+	Junia::Scene::IdType scene1 = Junia::RegisterScene<Scene1>("Main Scene");
 	mainWindow->AttachScene(scene1);
 	secondWindow->AttachScene(scene1);
-	JELOG_INFO << "Scenes loaded.";*/
+	JELOG_INFO << "Scenes loaded.";
 
 	// TODO: wrap in Junia API
 	JELOG_INFO << "Running Game loop...";
@@ -44,10 +41,6 @@ void RunGame()
 		for (Junia::Window::IdType i = 1; i <= Junia::Window::GetWindowCount(); i++)
 			Junia::Window::Get(i)->Update();
 	}
-
-	// TODO: move to Junia API (termination)
-	JELOG_INFO << "Destroying Windows...";
-	Junia::Window::DestroyAll();
 }
 
 class GravitySystem : public Junia::ECS::System
@@ -68,7 +61,7 @@ public:
 	}
 };
 
-constexpr auto ENTITY_COUNT = 100;
+#define ENTITY_COUNT 100
 
 int main(int argc, char** argv)
 {
@@ -78,7 +71,6 @@ int main(int argc, char** argv)
 		Junia::Init();
 
 		auto starttime = std::chrono::high_resolution_clock::now();
-		Junia::ECS::RegisterComponent<Junia::Transform>();
 		Junia::ECS::RegisterSystem<GravitySystem>();
 		for (Junia::ECS::EntityType i = 0; i < ENTITY_COUNT; i++)
 		{
@@ -96,6 +88,7 @@ int main(int argc, char** argv)
 		JELOG_TRACE << "Entities destroyed! Time: " << destructiontime << "s";
 
 		RunGame();
+
 		JELOG_INFO << "Terminating Junia...";
 		Junia::Terminate();
 		JELOG_INFO << "Done.";

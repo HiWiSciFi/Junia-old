@@ -4,8 +4,6 @@
 #include "../Core/Keycodes.hpp"
 #include "../../JMath/Vector2.hpp"
 
-#include <string>
-
 namespace Junia
 {
 	class KeyDownEvent : public Event

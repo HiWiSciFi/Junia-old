@@ -6,7 +6,12 @@
 
 namespace Junia
 {
-	static uint64_t frequency = 1000000000;
+	static uint64_t frequency = 0;
+
+	void InitTimer()
+	{
+		frequency = 1000000000;
+	}
 
 	uint64_t GetTimerTime()
 	{

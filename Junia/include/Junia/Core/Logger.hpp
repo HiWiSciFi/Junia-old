@@ -1,9 +1,8 @@
 #pragma once
 
+#include <cstdint>
 #include <fstream>
-#include <cinttypes>
 #include <string>
-#include <sstream>
 #include <vector>
 
 namespace Junia
@@ -11,7 +10,7 @@ namespace Junia
 	namespace Log
 	{
 		/**
-		* @brief The Log level of a message (can be compared with &lt; and &gt;)
+		* @brief The Log level of a message (can be compared with "<", ">" and "=")
 		*/
 		enum class LogLevel : uint8_t
 		{
@@ -118,35 +117,35 @@ namespace Junia
 			void AddStream(const std::string& path, bool ansi = false);
 
 			/**
-			* @brief Write a trace message if the Logger::maxLevel &ge;
+			* @brief Write a trace message if the Logger::maxLevel >=
 			*        LogLevel::Trace
 			* @return a Logstream to write to (linebreak will be added upon
 			*         disposal)
 			*/
 			Logstream Trace();
 			/**
-			* @brief Write an informative message if the Logger::maxLevel &ge;
+			* @brief Write an informative message if the Logger::maxLevel >=
 			*        LogLevel::Info
 			* @return a Logstream to write to (linebreak will be added upon
 			*         disposal)
 			*/
 			Logstream Info();
 			/**
-			* @brief Write a warning message if the Logger::maxLevel &ge;
+			* @brief Write a warning message if the Logger::maxLevel >=
 			*        LogLevel::Warn
 			* @return a Logstream to write to (linebreak will be added upon
 			*         disposal)
 			*/
 			Logstream Warn();
 			/**
-			* @brief Write an error message if the Logger::maxLevel &ge;
+			* @brief Write an error message if the Logger::maxLevel >=
 			*        LogLevel::Error
 			* @return a Logstream to write to (linebreak will be added upon
 			*         disposal)
 			*/
 			Logstream Error();
 			/**
-			* @brief Write a critical message if the Logger::maxLevel &ge;
+			* @brief Write a critical message if the Logger::maxLevel >=
 			*        LogLevel::Critical
 			* @return a Logstream to write to (linebreak will be added upon
 			*         disposal)

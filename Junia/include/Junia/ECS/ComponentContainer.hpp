@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <unordered_map>
 #include <vector>
 
@@ -7,7 +8,7 @@ namespace Junia
 {
 	namespace ECS
 	{
-		using EntityType = std::size_t;
+		using EntityType = size_t;
 
 		namespace Internal
 		{
@@ -42,7 +43,7 @@ namespace Junia
 				 *               NULL or a nullptr nothing will be done.
 				 * @return the amount of entities that have a component stored
 				*/
-				virtual std::size_t GetEntities(EntityType* buffer) = 0;
+				virtual size_t GetEntities(EntityType* buffer) = 0;
 			};
 
 			/**
@@ -54,8 +55,8 @@ namespace Junia
 			{
 			private:
 				std::vector<T> componentArray{ };
-				std::unordered_map<EntityType, std::size_t> entityToIndexMap{ };
-				std::unordered_map<std::size_t, EntityType> indexToEntityMap{ };
+				std::unordered_map<EntityType, size_t> entityToIndexMap{ };
+				std::unordered_map<size_t, EntityType> indexToEntityMap{ };
 
 			public:
 				ComponentStore() = default;
@@ -67,7 +68,7 @@ namespace Junia
 				*/
 				void Insert(EntityType e, T component)
 				{
-					std::size_t index = componentArray.size();
+					size_t index = componentArray.size();
 					componentArray.push_back(component);
 					entityToIndexMap.insert({ e, index });
 					indexToEntityMap.insert({ index, e });
@@ -89,9 +90,9 @@ namespace Junia
 				virtual inline void Erase(EntityType entity) override
 				{
 					if (!HasStored(entity)) return;
-					std::size_t index = entityToIndexMap.at(entity);
+					size_t index = entityToIndexMap.at(entity);
 
-					std::size_t lastIndex = componentArray.size() - 1;
+					size_t lastIndex = componentArray.size() - 1;
 					EntityType lastEntity = indexToEntityMap[lastIndex];
 
 					componentArray[index] = componentArray[lastIndex];
@@ -133,10 +134,10 @@ namespace Junia
 				 *               a nullptr nothing will be done.
 				 * @return the amount of entities that have a component stored
 				*/
-				virtual inline std::size_t GetEntities(EntityType* buffer)
+				virtual inline size_t GetEntities(EntityType* buffer)
 				{
 					if (buffer == nullptr) return entityToIndexMap.size();
-					std::size_t i = 0;
+					size_t i = 0;
 					for (auto const& eipair : entityToIndexMap)
 					{
 						buffer[i] = eipair.first;

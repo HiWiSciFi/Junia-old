@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <stack>
 #include <vector>
 
@@ -43,7 +44,7 @@ namespace Junia
 		 * @param reservedFrees amount of IDs that can be returned to the pool
 		 *                      before a reallocation happens (defaults to 32)
 		*/
-		IdPool(T start = static_cast<T>(0), T step = static_cast<T>(1), std::size_t reservedFrees = 32) :
+		IdPool(T start = static_cast<T>(0), T step = static_cast<T>(1), size_t reservedFrees = 32) :
 			start(start), current(start), step(step)
 		{
 			freeIds.GetContainer().reserve(reservedFrees);

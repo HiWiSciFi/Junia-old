@@ -6,6 +6,7 @@
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#undef GLFW_INCLUDE_VULKAN
 #include <stdexcept>
 #include "../Junia/Core/InternalLoggers.hpp"
 #include "GLFW/GlfwMonitor.hpp"
@@ -18,8 +19,14 @@ namespace Junia
 namespace GLFW
 {
 #ifdef _WIN32
-	extern std::vector<DISPLAY_DEVICE> displayDevices;
-	extern std::vector<DISPLAYCONFIG_TARGET_DEVICE_NAME> deviceNameTargets;
+	namespace Platform
+	{
+		namespace Windows
+		{
+			extern std::vector<DISPLAY_DEVICE> displayDevices;
+			extern std::vector<DISPLAYCONFIG_TARGET_DEVICE_NAME> deviceNameTargets;
+		}
+	}
 #endif
 
 	void Init()
@@ -41,8 +48,8 @@ namespace GLFW
 			QueryDisplayConfig(QDC_ONLY_ACTIVE_PATHS, &pathCount, displayPaths.data(), &modeCount, displayModes.data(), nullptr);
 			displayPaths.resize(pathCount);
 			displayModes.resize(modeCount);
-			displayDevices.resize(pathCount);
-			deviceNameTargets.resize(pathCount);
+			Platform::Windows::displayDevices.resize(pathCount);
+			Platform::Windows::deviceNameTargets.resize(pathCount);
 
 			for (size_t i = 0; i < displayPaths.size(); i++)
 			{
@@ -52,7 +59,7 @@ namespace GLFW
 				nameTarget.header.adapterId = displayPaths[i].targetInfo.adapterId;
 				nameTarget.header.id = displayPaths[i].targetInfo.id;
 				if (DisplayConfigGetDeviceInfo(&nameTarget.header) == ERROR_SUCCESS)
-					deviceNameTargets[i] = nameTarget;
+					Platform::Windows::deviceNameTargets[i] = nameTarget;
 			}
 
 			DISPLAY_DEVICE d1{ };
@@ -64,12 +71,12 @@ namespace GLFW
 				EnumDisplayDevices(d1.DeviceName, 0, &d2, EDD_GET_DEVICE_INTERFACE_NAME);
 				for (size_t i = 0; i < displayPaths.size(); i++)
 				{
-					std::wstring wstr(deviceNameTargets[i].monitorDevicePath);
+					std::wstring wstr(Platform::Windows::deviceNameTargets[i].monitorDevicePath);
 					std::string monitorPath(wstr.begin(), wstr.end());
 
 					if (monitorPath == d2.DeviceID)
 					{
-						displayDevices[i] = d2;
+						Platform::Windows::displayDevices[i] = d2;
 						break;
 					}
 				}
@@ -86,7 +93,7 @@ namespace GLFW
 			Junia::Monitor* monitor = new GlfwMonitor(glfwMonitors[i], i);
 			Junia::monitors[i] = monitor;
 			JMath::uiVec3 colors = monitor->GetColorBits();
-			JMath::uiVec2 size = monitor->GetSize();
+			JMath::uiVec2 size = monitor->GetResolution();
 			GLFWLOG_INFO << "  - " << monitor->GetName() << " |"
 				<< " r:" << colors.r
 				<< " g:" << colors.g
@@ -94,5 +101,10 @@ namespace GLFW
 				<< " | refresh rate: " << monitor->GetRefreshRate()
 				<< " | " << size.x << "x" << size.y;
 		}
+	}
+
+	void Cleanup()
+	{
+		glfwTerminate();
 	}
 }

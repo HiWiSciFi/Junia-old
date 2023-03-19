@@ -1,5 +1,4 @@
 #include <Junia/Core/Input.hpp>
-#include <Junia/Core/Window.hpp>
 #include "../../Platform/GLFW/GlfwInput.hpp"
 #include <stdexcept>
 

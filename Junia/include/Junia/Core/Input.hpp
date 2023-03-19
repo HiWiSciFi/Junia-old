@@ -2,9 +2,6 @@
 
 #include "Window.hpp"
 #include "Keycodes.hpp"
-
-#include <utility>
-#include <inttypes.h>
 #include "../../JMath/Vector2.hpp"
 
 namespace Junia

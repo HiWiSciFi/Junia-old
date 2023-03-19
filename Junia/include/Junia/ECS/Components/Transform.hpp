@@ -5,10 +5,25 @@
 
 namespace Junia
 {
+	/**
+	 * @brief A component holding position, rotation and scale information about
+	 *        an object
+	*/
 	struct Transform
 	{
+		/**
+		 * @brief The position component
+		*/
 		JMath::Vec3 position;
-		JMath::Vec4 rotation;
+
+		/**
+		 * @brief The rotation component
+		*/
+		JMath::Vec4 rotation; // TODO: replace with Quaternion
+
+		/**
+		 * @brief The scale component
+		*/
 		JMath::Vec3 scale;
 	};
 }

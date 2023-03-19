@@ -2,8 +2,8 @@
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#undef GLFW_INCLUDE_VULKAN
 #include <Junia/Core/Window.hpp>
-#include <Junia/Core/WindowApi.hpp>
 
 namespace GLFW
 {
@@ -38,6 +38,8 @@ namespace GLFW
 		JMath::iVec2 GetSize() const override;
 		void SetSize(JMath::iVec2 size) override;
 
+		JMath::uiVec2 GetFramebufferSize() const override;
+
 		float GetOpacity() const override;
 		void SetOpacity(float opacity) override;
 
@@ -51,6 +53,8 @@ namespace GLFW
 
 		Junia::WindowFullscreenMode GetFullscreenMode() const override;
 		void SetFullscreenMode(Junia::WindowFullscreenMode mode, Junia::Monitor* monitor = nullptr) override;
+
+		void AttachScene(Junia::Scene::IdType sceneId) override;
 
 	private:
 		static void FramebufferResizeCallback(GLFWwindow* wnd, int width, int height);

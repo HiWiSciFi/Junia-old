@@ -1,9 +1,11 @@
 #pragma once
 
-#include <Junia/Renderer/RenderDevice.hpp>
 #include <vulkan/vulkan.h>
+#include <Junia/Renderer/RenderDevice.hpp>
+#include <cstdint>
 #include <optional>
 #include <stdexcept>
+#include <string>
 
 namespace Vulkan
 {
@@ -17,8 +19,10 @@ namespace Vulkan
 		std::optional<uint32_t>  presentQueueIndex; VkQueue presentQueue  = nullptr;
 		std::optional<uint32_t>  computeQueueIndex; VkQueue computeQueue  = nullptr;
 
-		VkPhysicalDeviceProperties deviceProperties;
-		VkPhysicalDeviceFeatures deviceFeatures;
+		VkPhysicalDeviceProperties deviceProperties{ };
+		VkPhysicalDeviceFeatures     deviceFeatures{ };
+
+		std::string deviceName{ };
 
 	public:
 		VulkanDevice(VkPhysicalDevice vkDevice);
@@ -51,6 +55,6 @@ namespace Vulkan
 		inline VkQueue GetPresentQueue()  const { return  presentQueue; }
 		inline VkQueue GetComputeQueue()  const { return  computeQueue; }
 
-		const char* GetName() const { return deviceProperties.deviceName; }
+		const std::string& GetName() const { return deviceName; }
 	};
 }

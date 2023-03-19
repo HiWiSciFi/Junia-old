@@ -1,6 +1,6 @@
-#include "VulkanExtensionLoader.hpp"
 #include <vulkan/vulkan.h>
-#include <string.h>
+#include "VulkanExtensionLoader.hpp"
+#include <cstring>
 #include <stdexcept>
 
 static PFN_vkCmdBeginDebugUtilsLabelEXT func_vkCmdBeginDebugUtilsLabelEXT = nullptr;

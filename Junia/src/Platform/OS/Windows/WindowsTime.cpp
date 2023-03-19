@@ -4,21 +4,27 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#undef WIN32_LEAN_AND_MEAN
 
 namespace Junia
 {
-	static uint64_t frequency = 10000; // TODO: QueryPerformanceFrequency(&frequency);
+	static LARGE_INTEGER frequency{ };
+
+	void InitTimer()
+	{
+		QueryPerformanceFrequency(&frequency);
+	}
 
 	uint64_t GetTimerTime()
 	{
-		uint64_t time;
-		QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&time));
-		return time;
+		LARGE_INTEGER time;
+		QueryPerformanceCounter(&time);
+		return static_cast<uint64_t>(time.QuadPart);
 	}
 
 	uint64_t GetTimerFrequency()
 	{
-		return frequency;
+		return static_cast<uint64_t>(frequency.QuadPart);
 	}
 }
 

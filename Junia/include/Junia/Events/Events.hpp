@@ -1,13 +1,14 @@
 #pragma once
 
-#include <deque>         // deque
-#include <functional>    // function
-#include <utility>       // pair
-#include <cstddef>       // size_t
-#include <string>        // string
-#include <typeinfo>      // typeid
-#include <typeindex>     // type_index
-#include <unordered_map> // unordered_map
+#include <cstdint>
+#include <deque>
+#include <functional>
+#include <string>
+#include <typeindex>
+#include <typeinfo>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 namespace Junia
 {
@@ -18,6 +19,12 @@ namespace Junia
 
 	public:
 		virtual ~Event() = default;
+
+		/**
+		 * @brief Get a string representation of the event and its data
+		 * @return A string containing debug information about the event and
+		 *         related data
+		*/
 		virtual std::string ToString() const;
 	};
 
@@ -63,7 +70,7 @@ namespace Junia
 		static void Dispatch(const Event* e);
 
 	public:
-		#define JE_EVENT_SUBSCRIBE_MEMBER(t,f) [this] (const t* e) { this->f(e); }
+		#define JE_EVENT_SUBSCRIBE_MEMBER(EventType, callback) [this] (const EventType* e) { this->callback(e); }
 
 		/**
 		 * @brief Register a function as an event callback to receive all events
@@ -78,7 +85,8 @@ namespace Junia
 
 		/**
 		 * @brief Register a event type
-		 * @tparam ET The type of the event to register
+		 * @tparam ET The type of the event to register (has to publicly
+		 *            inherit from Junia::Event)
 		*/
 		template<typename ET>
 		static void Register();
@@ -86,7 +94,8 @@ namespace Junia
 		/**
 		 * @brief Register a function as an event callback to receive a certain
 		 *        event type
-		 * @tparam ET The type of event to receive
+		 * @tparam ET The type of event to receive (must have been registered
+		 *            beforehand using Junia::Events::Register)
 		 * @param handler The callback function to register
 		*/
 		template<typename ET>

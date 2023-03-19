@@ -1,7 +1,8 @@
+#include <Junia/Core/FileSystem.hpp>
+
 #ifdef __linux__
 
 #include <sys/stat.h>
-#include <Junia/Core/FileSystem.hpp>
 #include <stdexcept>
 #include <fstream>
 

@@ -4,8 +4,6 @@
 #include <Junia/Events/InputEvents.hpp>
 #include "GlfwInput.hpp"
 
-#include "../../Junia/Core/InternalLoggers.hpp"
-
 namespace Junia
 {
 	extern std::vector<Window*> windows;
@@ -71,7 +69,7 @@ namespace GLFW
 				Junia::Events::Trigger<Junia::MouseMoveEvent>(JMath::iVec2(static_cast<int>(xpos), static_cast<int>(ypos)));
 			});
 
-		surface = Junia::Surface::Create(window, Junia::WindowApi::GLFW, Junia::RenderApi::VULKAN);
+		surface = Junia::Surface::Create(this, Junia::WindowApi::GLFW, Junia::RenderApi::VULKAN);
 	}
 
 	GlfwWindow::~GlfwWindow()
@@ -160,6 +158,16 @@ namespace GLFW
 		glfwSetWindowSize(window, size.x, size.y);
 	}
 
+	JMath::uiVec2 GlfwWindow::GetFramebufferSize() const
+	{
+		int framebufferWidth, framebufferHeight;
+		glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
+		return {
+			static_cast<uint32_t>(framebufferWidth),
+			static_cast<uint32_t>(framebufferHeight)
+		};
+	}
+
 	float GlfwWindow::GetOpacity() const
 	{
 		return glfwGetWindowOpacity(window);
@@ -234,7 +242,7 @@ namespace GLFW
 					restoreSize = GetSize();
 				}
 				glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
-				JMath::uiVec2 size = monitor->GetSize();
+				JMath::uiVec2 size = monitor->GetResolution();
 				JMath::uiVec2 position = monitor->GetPosition();
 				glfwSetWindowMonitor(window, NULL, position.x, position.y, size.x, size.y, monitor->GetRefreshRate());
 			}
@@ -247,13 +255,18 @@ namespace GLFW
 					restorePos = GetPosition();
 					restoreSize = GetSize();
 				}
-				JMath::uiVec2 size = monitor->GetSize();
+				JMath::uiVec2 size = monitor->GetResolution();
 				glfwSetWindowMonitor(window, reinterpret_cast<GLFWmonitor*>(monitor->GetNative()), 0, 0, size.x, size.y, monitor->GetRefreshRate());
 			}
 			break;
 		default:
 			throw std::runtime_error("invalid fullscreen mode specified");
 		}
+	}
+
+	void GlfwWindow::AttachScene(Junia::Scene::IdType sceneId)
+	{
+		// TODO: implement
 	}
 
 	void GlfwWindow::FramebufferResizeCallback(GLFWwindow* wnd, int width, int height)

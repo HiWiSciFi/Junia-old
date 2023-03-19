@@ -2,19 +2,18 @@
 
 #include "ComponentContainer.hpp"
 #include "../Core/IdPool.hpp"
-
+#include <functional>
+#include <memory>
 #include <stdexcept>
 #include <typeindex>
 #include <typeinfo>
 #include <unordered_map>
 #include <unordered_set>
-#include <memory>
 
 namespace Junia
 {
 	namespace ECS
 	{
-		using EntityType = std::size_t;
 		class System;
 
 		namespace Internal

@@ -1,8 +1,7 @@
 #include <Junia/Core/Window.hpp>
-#include <Junia/Events/Events.hpp>
-#include <Junia/Events/InputEvents.hpp>
-#include <Junia/Core/Input.hpp>
 #include "../../Platform/GLFW/GlfwWindow.hpp"
+
+#include <vector>
 
 namespace Junia
 {
@@ -30,7 +29,7 @@ namespace Junia
 
 	bool Window::Exists(IdType id)
 	{
-		return windows.size() < id && windows.size() > 1;
+		return windows.size() > id && windows.size() > 1 && id > 0;
 	}
 
 	bool Window::Exists(Window* window)
@@ -42,6 +41,8 @@ namespace Junia
 
 	Window* Window::Get(IdType id)
 	{
+		if (id == 0) return windows[0];
+		if (!Exists(id)) return nullptr;
 		return windows[id];
 	}
 

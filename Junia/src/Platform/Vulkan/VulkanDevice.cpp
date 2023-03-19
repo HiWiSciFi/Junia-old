@@ -1,7 +1,8 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-
+#undef GLFW_INCLUDE_VULKAN
 #include "VulkanDevice.hpp"
+#include <cstdint>
 #include <stdexcept>
 #include <vector>
 #include <set>
@@ -14,7 +15,7 @@ namespace Vulkan
 	extern std::vector<const char*> requiredDeviceExtensions;
 	VulkanDevice* vkDevice = nullptr;
 
-	extern std::vector<const char*> VALIDATION_LAYERS;
+	extern std::vector<const char*> enabledValidationLayers;
 
 	VulkanDevice::VulkanDevice(VkPhysicalDevice phDevice)
 	{
@@ -96,6 +97,8 @@ namespace Vulkan
 		}
 
 		if (graphicsQueueIndex.value() == presentQueueIndex.value()) rating += 100;
+
+		deviceName = std::string(deviceProperties.deviceName);
 	}
 
 	VulkanDevice::~VulkanDevice()
@@ -142,8 +145,8 @@ namespace Vulkan
 		createInfo.pEnabledFeatures = &requiredDeviceFeatures;
 		createInfo.enabledExtensionCount = static_cast<uint32_t>(requiredDeviceExtensions.size());
 		createInfo.ppEnabledExtensionNames = requiredDeviceExtensions.data();
-		createInfo.enabledLayerCount = debug ? static_cast<uint32_t>(VALIDATION_LAYERS.size()) : 0;
-		createInfo.ppEnabledLayerNames = debug ? VALIDATION_LAYERS.data() : nullptr;
+		createInfo.enabledLayerCount = debug ? static_cast<uint32_t>(enabledValidationLayers.size()) : 0;
+		createInfo.ppEnabledLayerNames = debug ? enabledValidationLayers.data() : nullptr;
 
 		if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &logicalDevice) != VK_SUCCESS)
 			throw std::runtime_error("failed to create logical device");
