@@ -25,6 +25,8 @@
 
 namespace Junia
 {
+	bool juniaLoopShouldStop = false;
+
 	void Init()
 	{
 		Events::Register<KeyDownEvent>();
@@ -33,6 +35,8 @@ namespace Junia
 		Events::Register<MouseButtonDownEvent>();
 		Events::Register<MouseButtonUpEvent>();
 		Events::Register<MouseMoveEvent>();
+
+		Events::Register<WindowClosedEvent>();
 
 		ECS::RegisterComponent<Junia::Transform>();
 
@@ -96,6 +100,22 @@ namespace Junia
 		Vulkan::Cleanup();
 		OpenAL::Cleanup();
 		GLFW::Cleanup();
+	}
+
+	void RunLoop()
+	{
+		while (!juniaLoopShouldStop)
+		{
+			Junia::Events::DispatchQueue();
+
+			for (Junia::Window::IdType i = 1; i <= Junia::Window::GetWindowCount(); i++)
+				Junia::Window::Get(i)->Update();
+		}
+	}
+
+	void StopLoop()
+	{
+		juniaLoopShouldStop = true;
 	}
 
 	const std::vector<Junia::RenderDevice*>& GetDevices()

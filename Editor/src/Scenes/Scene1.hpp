@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Junia/Core/Scene.hpp>
+#include <Junia.hpp>
 #include <string>
 
 class Scene1 : public Junia::Scene

@@ -16,6 +16,16 @@ namespace Junia
 	void Terminate();
 
 	/**
+	 * @brief Runs the Junia game loop
+	*/
+	void RunLoop();
+
+	/**
+	 * @brief Stops the Junia game loop
+	*/
+	void StopLoop();
+
+	/**
 	 * @brief Get available render devices
 	 * @return a reference to a vector containing a list of pointers to valid
 	 *         render devices
@@ -25,6 +35,7 @@ namespace Junia
 
 #include "Junia/Core/Input.hpp"
 #include "Junia/Core/Log.hpp"
+#include <Junia/Core/MessageBox.hpp>
 #include "Junia/Core/Window.hpp"
 
 #include "Junia/ECS/ECS.hpp"
@@ -32,3 +43,4 @@ namespace Junia
 
 #include "Junia/Events/Events.hpp"
 #include "Junia/Events/InputEvents.hpp"
+#include "Junia/Events/WindowEvents.hpp"

@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <vector>
 #include <Junia/Events/InputEvents.hpp>
+#include <Junia/Events/WindowEvents.hpp>
 #include "GlfwInput.hpp"
 
 namespace Junia
@@ -74,6 +75,7 @@ namespace GLFW
 
 	GlfwWindow::~GlfwWindow()
 	{
+		Junia::Events::TriggerImmediate<Junia::WindowClosedEvent>(this);
 		delete surface;
 		glfwDestroyWindow(window);
 		if (Junia::windows[0] == this) Junia::windows[0] = nullptr;

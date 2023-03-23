@@ -65,6 +65,8 @@
 			"${SRC_DIR}/Junia/Events/Events.cpp"
 			"${INCLUDE_DIR}/Junia/Events/InputEvents.hpp"
 			"${SRC_DIR}/Junia/Events/InputEvents.cpp"
+			"${INCLUDE_DIR}/Junia/Events/WindowEvents.hpp"
+			"${SRC_DIR}/Junia/Events/WindowEvents.cpp"
 
 			"${INCLUDE_DIR}/Junia/ECS/Components.hpp"
 			"${INCLUDE_DIR}/Junia/ECS/ComponentContainer.hpp"
