@@ -4,7 +4,7 @@ A small game engine
 # Building
 Clone the repository using
 ```bash
-git clone --recursive https:://github.com/HiWiSciFi/Junia.git
+git clone --recursive https://github.com/HiWiSciFi/Junia.git
 ```
 
 ## Unix
