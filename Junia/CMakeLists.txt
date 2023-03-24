@@ -101,6 +101,8 @@ target_sources(Junia
 		"${INCLUDE_DIR}/Junia/Events/WindowEvents.hpp"
 		"${SRC_DIR}/Junia/Events/WindowEvents.cpp"
 
+		"${INCLUDE_DIR}/Junia/Util/Concepts.hpp"
+
 		"${INCLUDE_DIR}/Junia/ECS/Components.hpp"
 		"${INCLUDE_DIR}/Junia/ECS/ComponentContainer.hpp"
 		"${INCLUDE_DIR}/Junia/ECS/Components/Transform.hpp"
