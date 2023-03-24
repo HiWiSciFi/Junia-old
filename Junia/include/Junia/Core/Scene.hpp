@@ -12,8 +12,6 @@ namespace Junia
 
 	public:
 		virtual ~Scene() = 0;
-
-		static std::shared_ptr<Scene> Load(IdType sceneId);
 	};
 
 	template<TypenameDerivedFrom<Scene> T, typename... TArgs>

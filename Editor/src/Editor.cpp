@@ -36,12 +36,12 @@ int main(int argc, char** argv)
 		mainWindow->RequestFocus();
 		JELOG_INFO << "Windows created.";
 
-		JELOG_INFO << "Loading scenes...";
+		/*JELOG_INFO << "Loading scenes...";
 		Junia::Scene::IdType scene1ID = Junia::RegisterScene<Scene1>("Main Scene");
 		std::shared_ptr<Junia::Scene> scene1 = Junia::Scene::Load(scene1ID);
 		mainWindow->AttachScene(scene1);
 		secondWindow->AttachScene(scene1);
-		JELOG_INFO << "Scenes loaded.";
+		JELOG_INFO << "Scenes loaded.";*/
 
 		Junia::Events::Subscribe<Junia::KeyDownEvent>([mainWindow] (const Junia::KeyDownEvent* e)
 			{
