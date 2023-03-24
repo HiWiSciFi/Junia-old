@@ -1,9 +1,9 @@
 @ECHO OFF
-CD ..
+CD ".."
 MKDIR build
-CD build
+CD "build"
 ECHO Building Editor application and dependencies...
 cmake ..
 cmake --build . --config Release
 ECHO Done.
-CD ../scripts
+CD "..\scripts"
