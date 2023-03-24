@@ -1,6 +1,10 @@
 ﻿add_library(Junia STATIC)
 
-set_property(TARGET Junia PROPERTY CXX_STANDARD 17)
+set_target_properties(Junia
+	PROPERTIES
+		CXX_STANDARD 17
+		FOLDER "Junia"
+)
 
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
@@ -18,6 +22,10 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory("dependencies/glfw")
 set(GLFW_LIBRARY "glfw")
+set_property(TARGET glfw PROPERTY FOLDER "Junia/Dependencies/GLFW")
+if (TARGET update_mappings)
+	set_property(TARGET update_mappings PROPERTY FOLDER "Junia/Dependencies/GLFW")
+endif()
 
 # Vulkan
 find_package(Vulkan)
