@@ -30,15 +30,19 @@ namespace GLFW
 		Junia::windows.push_back(this);
 		if (Junia::windows[0] == nullptr) Junia::windows[0] = this;
 
-		glfwSetKeyCallback(window, [ ] (GLFWwindow* _, const int key, int scancode, const int action, int mods)
+		glfwSetKeyCallback(window, [ ] (GLFWwindow* window, const int key, int scancode, const int action, int mods)
 			{
 				switch (action)
 				{
 				case GLFW_PRESS:
-					Junia::Events::Trigger<Junia::KeyDownEvent>(static_cast<Junia::KeyCode>(GlfwToJeKey[key]));
+					Junia::Events::Trigger<Junia::KeyDownEvent>(
+						reinterpret_cast<Window*>(glfwGetWindowUserPointer(window)),
+						static_cast<Junia::KeyCode>(GlfwToJeKey[key]));
 					break;
 				case GLFW_RELEASE:
-					Junia::Events::Trigger<Junia::KeyUpEvent>(static_cast<Junia::KeyCode>(GlfwToJeKey[key]));
+					Junia::Events::Trigger<Junia::KeyUpEvent>(
+						reinterpret_cast<Window*>(glfwGetWindowUserPointer(window)),
+						static_cast<Junia::KeyCode>(GlfwToJeKey[key]));
 					break;
 				default:
 					break;
@@ -47,27 +51,35 @@ namespace GLFW
 
 		glfwSetCharCallback(window, [ ] (GLFWwindow* window, unsigned int codepoint)
 			{
-				Junia::Events::Trigger<Junia::KeyCharEvent>(codepoint);
+				Junia::Events::Trigger<Junia::KeyCharEvent>(
+					reinterpret_cast<Window*>(glfwGetWindowUserPointer(window)),
+					codepoint);
 			});
 
-		glfwSetMouseButtonCallback(window, [ ] (GLFWwindow* _, int button, int action, int mods)
+		glfwSetMouseButtonCallback(window, [ ] (GLFWwindow* window, int button, int action, int mods)
 			{
 				switch (action)
 				{
 				case GLFW_PRESS:
-					Junia::Events::Trigger<Junia::MouseButtonDownEvent>(static_cast<Junia::MouseButton>(GlfwToJeButton[button]));
+					Junia::Events::Trigger<Junia::MouseButtonDownEvent>(
+						reinterpret_cast<Window*>(glfwGetWindowUserPointer(window)),
+						static_cast<Junia::MouseButton>(GlfwToJeButton[button]));
 					break;
 				case GLFW_RELEASE:
-					Junia::Events::Trigger<Junia::MouseButtonUpEvent>(static_cast<Junia::MouseButton>(GlfwToJeButton[button]));
+					Junia::Events::Trigger<Junia::MouseButtonUpEvent>(
+						reinterpret_cast<Window*>(glfwGetWindowUserPointer(window)),
+						static_cast<Junia::MouseButton>(GlfwToJeButton[button]));
 					break;
 				default:
 					break;
 				}
 			});
 
-		glfwSetCursorPosCallback(window, [ ] (GLFWwindow* _, double xpos, double ypos)
+		glfwSetCursorPosCallback(window, [ ] (GLFWwindow* window, double xpos, double ypos)
 			{
-				Junia::Events::Trigger<Junia::MouseMoveEvent>(JMath::iVec2(static_cast<int>(xpos), static_cast<int>(ypos)));
+				Junia::Events::Trigger<Junia::MouseMoveEvent>(
+					reinterpret_cast<Window*>(glfwGetWindowUserPointer(window)),
+					JMath::iVec2(static_cast<int>(xpos), static_cast<int>(ypos)));
 			});
 
 		surface = Junia::Surface::Create(this, Junia::WindowApi::GLFW, Junia::RenderApi::VULKAN);

@@ -8,8 +8,9 @@ namespace Junia
 // ---------------------------------------------------- KeyDownEvent ---------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 
-	KeyDownEvent::KeyDownEvent(KeyCode keyCode) : keyCode(keyCode) { }
+	KeyDownEvent::KeyDownEvent(Window* window, KeyCode keyCode) : window(window), keyCode(keyCode) { }
 	KeyCode KeyDownEvent::GetKeyCode() const { return keyCode; }
+	Window* KeyDownEvent::GetWindow() const { return window; }
 	std::string KeyDownEvent::ToString() const
 	{
 		std::stringstream ss;
@@ -21,8 +22,9 @@ namespace Junia
 // ----------------------------------------------------- KeyUpEvent ----------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 
-	KeyUpEvent::KeyUpEvent(KeyCode keyCode) : keyCode(keyCode) { }
+	KeyUpEvent::KeyUpEvent(Window* window, KeyCode keyCode) : window(window), keyCode(keyCode) { }
 	KeyCode KeyUpEvent::GetKeyCode() const { return keyCode; }
+	Window* KeyUpEvent::GetWindow() const { return window; }
 	std::string KeyUpEvent::ToString() const
 	{
 		std::stringstream ss;
@@ -34,8 +36,9 @@ namespace Junia
 // ---------------------------------------------------- KeyCharEvent ---------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 
-	KeyCharEvent::KeyCharEvent(unsigned int codepoint) : codepoint(codepoint) { }
+	KeyCharEvent::KeyCharEvent(Window* window, unsigned int codepoint) : window(window), codepoint(codepoint) { }
 	unsigned int KeyCharEvent::GetCodepoint() const { return codepoint; }
+	Window* KeyCharEvent::GetWindow() const { return window; }
 	std::string KeyCharEvent::ToString() const
 	{
 		std::stringstream ss;
@@ -47,8 +50,9 @@ namespace Junia
 // ------------------------------------------------ MouseButtonDownEvent -----------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 
-	MouseButtonDownEvent::MouseButtonDownEvent(MouseButton button) : button(button) { }
+	MouseButtonDownEvent::MouseButtonDownEvent(Window* window, MouseButton button) : window(window), button(button) { }
 	MouseButton MouseButtonDownEvent::GetButton() const { return button; }
+	Window* MouseButtonDownEvent::GetWindow() const { return window; }
 	std::string MouseButtonDownEvent::ToString() const
 	{
 		std::stringstream ss;
@@ -60,8 +64,9 @@ namespace Junia
 // ------------------------------------------------- MouseButtonUpEvent ------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 
-	MouseButtonUpEvent::MouseButtonUpEvent(MouseButton button) : button(button) { }
+	MouseButtonUpEvent::MouseButtonUpEvent(Window* window, MouseButton button) : window(window), button(button) { }
 	MouseButton MouseButtonUpEvent::GetButton() const { return button; }
+	Window* MouseButtonUpEvent::GetWindow() const { return window; }
 	std::string MouseButtonUpEvent::ToString() const
 	{
 		std::stringstream ss;
@@ -73,8 +78,9 @@ namespace Junia
 // --------------------------------------------------- MouseMoveEvent --------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 
-	MouseMoveEvent::MouseMoveEvent(JMath::iVec2 position) : position(position) { }
+	MouseMoveEvent::MouseMoveEvent(Window* window, JMath::iVec2 position) : window(window), position(position) { }
 	JMath::iVec2 MouseMoveEvent::GetPosition() const { return position; }
+	Window* MouseMoveEvent::GetWindow() const { return window; }
 	std::string MouseMoveEvent::ToString() const
 	{
 		std::stringstream ss;

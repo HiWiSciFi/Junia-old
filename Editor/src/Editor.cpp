@@ -42,9 +42,15 @@ int main(int argc, char** argv)
 		secondWindow->AttachScene(scene1);
 		JELOG_INFO << "Scenes loaded.";
 
+		Junia::Events::Subscribe<Junia::KeyDownEvent>([mainWindow] (const Junia::KeyDownEvent* e)
+			{
+				if (e->GetKeyCode() == Junia::KeyCode::ESCAPE)
+					e->GetWindow()->Close();
+			});
+
 		Junia::Events::Subscribe<Junia::WindowClosedEvent>([mainWindow] (const Junia::WindowClosedEvent* e)
 			{
-				if (e->GetWindow()->GetId() == mainWindow->GetId()) Junia::StopLoop();
+				if (e->GetWindow() == mainWindow) Junia::StopLoop();
 			});
 
 		JELOG_INFO << "Running Game loop...";
