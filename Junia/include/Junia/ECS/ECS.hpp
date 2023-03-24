@@ -2,6 +2,7 @@
 
 #include "ComponentContainer.hpp"
 #include "../Core/IdPool.hpp"
+#include "../Util/Concepts.hpp"
 #include <functional>
 #include <memory>
 #include <stdexcept>
@@ -273,7 +274,7 @@ namespace Junia
 		 * @tparam T the system type to register
 		 * @return a pointer containing the system instance used
 		*/
-		template<typename T>
+		template<TypenameDerivedFrom<System> T>
 		inline std::shared_ptr<T> RegisterSystem()
 		{
 			std::shared_ptr<System> system = std::make_shared<T>();
@@ -287,7 +288,7 @@ namespace Junia
 		 *        ECS::RegisterSystem()) this will do nothing
 		 * @tparam T the system type to unregister
 		*/
-		template<typename T>
+		template<TypenameDerivedFrom<System> T>
 		inline void UnregisterSystem()
 		{
 			Internal::systems.erase(typeid(T));

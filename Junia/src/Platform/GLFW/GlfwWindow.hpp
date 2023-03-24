@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #undef GLFW_INCLUDE_VULKAN
 #include <Junia/Core/Window.hpp>
+#include <memory>
 
 namespace GLFW
 {
@@ -14,6 +15,7 @@ namespace GLFW
 		std::string title;
 		JMath::iVec2 restorePos{ -1, -1 };
 		JMath::iVec2 restoreSize{ -1, -1 };
+		std::shared_ptr<Junia::Scene> scene;
 
 	public:
 		GlfwWindow(const std::string& title, int width = 800, int height = 600);

@@ -37,7 +37,8 @@ int main(int argc, char** argv)
 		JELOG_INFO << "Windows created.";
 
 		JELOG_INFO << "Loading scenes...";
-		Junia::Scene::IdType scene1 = Junia::RegisterScene<Scene1>("Main Scene");
+		Junia::Scene::IdType scene1ID = Junia::RegisterScene<Scene1>("Main Scene");
+		std::shared_ptr<Junia::Scene> scene1 = Junia::Scene::Load(scene1ID);
 		mainWindow->AttachScene(scene1);
 		secondWindow->AttachScene(scene1);
 		JELOG_INFO << "Scenes loaded.";
@@ -63,7 +64,7 @@ int main(int argc, char** argv)
 	catch (std::exception e)
 	{
 		JELOG_CRITICAL << "Exception thrown: " << e.what();
-		Junia::MessageBoxResult promptResult = Junia::ShowBlockingMessageBox(
+		Junia::ShowBlockingMessageBox(
 			"Junia Editor",
 			e.what(),
 			Junia::MessageBoxIcon::ERROR,

@@ -42,7 +42,7 @@ namespace Junia
 	std::string KeyCharEvent::ToString() const
 	{
 		std::stringstream ss;
-		ss << "KeyCharEvent(" << static_cast<wchar_t>(codepoint) << ")";
+		ss << "KeyCharEvent(" << static_cast<char>(codepoint) << ")";
 		return ss.str();
 	}
 
