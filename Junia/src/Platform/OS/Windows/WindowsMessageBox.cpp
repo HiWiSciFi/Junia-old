@@ -10,7 +10,7 @@
 
 namespace Junia
 {
-	MessageBoxResult ShowMessageBox(const std::string& title, const std::string& msg, MessageBoxIcon icon, MessageBoxButtons buttons, uint8_t defaultBtn, bool topmost)
+	MessageBoxResult ShowBlockingMessageBox(const std::string& title, const std::string& msg, MessageBoxIcon icon, MessageBoxButtons buttons, uint8_t defaultBtn, bool topmost)
 	{
 		UINT flags = MB_SETFOREGROUND;
 

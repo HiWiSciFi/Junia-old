@@ -1,6 +1,6 @@
 #include "GravitySystem.hpp"
 
-float GravitySystem::downForce = -1.0f;
+const float GravitySystem::downForce = -1.0f;
 
 void GravitySystem::Init()
 {

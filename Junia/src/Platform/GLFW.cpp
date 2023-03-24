@@ -2,6 +2,8 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #undef WIN32_LEAN_AND_MEAN
+#undef ERROR
+#undef IGNORE
 #endif
 
 #define GLFW_INCLUDE_VULKAN
@@ -72,7 +74,8 @@ namespace GLFW
 				for (size_t i = 0; i < displayPaths.size(); i++)
 				{
 					std::wstring wstr(Platform::Windows::deviceNameTargets[i].monitorDevicePath);
-					std::string monitorPath(wstr.begin(), wstr.end());
+					std::string monitorPath(wstr.length(), 0);
+					std::transform(wstr.begin(), wstr.end(), monitorPath.begin(), [] (wchar_t c){ return static_cast<char>(c); });
 
 					if (monitorPath == d2.DeviceID)
 					{

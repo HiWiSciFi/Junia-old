@@ -40,5 +40,5 @@ namespace Junia
 		ABORT    = 9
 	};
 
-	MessageBoxResult ShowMessageBox(const std::string& title, const std::string& msg, MessageBoxIcon icon, MessageBoxButtons buttons, uint8_t defaultBtn = 1, bool topmost = false);
+	MessageBoxResult ShowBlockingMessageBox(const std::string& title, const std::string& msg, MessageBoxIcon icon, MessageBoxButtons buttons, uint8_t defaultBtn = 1, bool topmost = false);
 }

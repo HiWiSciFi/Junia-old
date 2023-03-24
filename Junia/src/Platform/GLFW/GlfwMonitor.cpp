@@ -1,10 +1,13 @@
 #include <GLFW/glfw3.h>
+#undef APIENTRY
 
 #ifdef _WIN32
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #undef WIN32_LEAN_AND_MEAN
+#undef ERROR
+#undef IGNORE
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_NATIVE_INCLUDE_NONE
@@ -49,8 +52,9 @@ namespace GLFW
 				if (strcmp(Platform::Windows::displayDevices[i].DeviceName, displayName) == 0)
 				{
 					std::wstring wstr(Platform::Windows::deviceNameTargets[i].monitorFriendlyDeviceName);
-					nameSs << std::string(wstr.begin(), wstr.end())
-						<< " (" << glfwGetMonitorName(monitor) << ")";
+					std::string str(wstr.length(), 0);
+					std::transform(wstr.begin(), wstr.end(), str.begin(), [ ] (wchar_t c) { return static_cast<char>(c); });
+					nameSs << str.c_str() << " (" << glfwGetMonitorName(monitor) << ")";
 					name = nameSs.str();
 					edidNameFound = true;
 					break;

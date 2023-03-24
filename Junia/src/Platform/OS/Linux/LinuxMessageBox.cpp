@@ -125,7 +125,7 @@ namespace Junia
 		return true;
 	}
 
-	MessageBoxResult ShowMessageBox(const std::string& title, const std::string& msg, MessageBoxIcon icon, MessageBoxButtons buttons, uint8_t defaultBtn, bool topmost)
+	MessageBoxResult ShowBlockingMessageBox(const std::string& title, const std::string& msg, MessageBoxIcon icon, MessageBoxButtons buttons, uint8_t defaultBtn, bool topmost)
 	{
 		setlocale(LC_ALL, "");
 
@@ -322,7 +322,7 @@ namespace Junia
 						}
 					}
 				}
-				
+
 				{
 					XEvent exp{ };
 					exp.type = Expose;
@@ -330,7 +330,7 @@ namespace Junia
 					XSendEvent(dpy, win, False, ExposureMask, &exp);
 					XFlush(dpy);
 				}
-				
+
 				break;
 
 			case Expose:
