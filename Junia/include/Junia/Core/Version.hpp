@@ -34,19 +34,19 @@ namespace Junia
 		 * @brief Get the major version number
 		 * @return 8-Bit major version number
 		*/
-		inline uint8_t GetMajor() const { return (version >> 22) & 0x7FU; }
+		inline uint8_t GetMajor() const { return static_cast<uint8_t>((version >> 22) & static_cast<uint32_t>(0x7FU)); }
 
 		/**
 		 * @brief Get the minor version number
 		 * @return 16-Bit minor version number
 		*/
-		inline uint16_t GetMinor() const { return (version >> 12) & 0x3FFU; }
+		inline uint16_t GetMinor() const { return static_cast<uint16_t>((version >> 12) & static_cast<uint32_t>(0x3FFU)); }
 
 		/**
 		 * @brief Get the patch version number
 		 * @return 16-Bit patch version number
 		*/
-		inline uint16_t GetPatch() const { return version & 0xFFFU; }
+		inline uint16_t GetPatch() const { return static_cast<uint16_t>(version & static_cast<uint32_t>(0xFFFU)); }
 
 		/**
 		 * @brief Alias for Version::GetPatch

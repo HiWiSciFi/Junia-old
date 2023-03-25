@@ -17,7 +17,6 @@
 #include <Junia/Events/InputEvents.hpp>
 #include <Junia/ECS/ECS.hpp>
 #include <Junia/ECS/Components.hpp>
-#include <Junia/Core/Version.hpp>
 #include <Junia/Core/Time.hpp>
 #include <Junia/Core/Window.hpp>
 #include <Junia/Core/WindowApi.hpp>
@@ -27,6 +26,7 @@
 
 namespace Junia
 {
+	const Version ENGINE_VERSION(0, 0, 0);
 	bool juniaLoopShouldStop = false;
 
 	void Init()
@@ -68,7 +68,7 @@ namespace Junia
 
 		try
 		{
-			Vulkan::Init("Testapp", Junia::Version(1, 0, 0), "Junia", Junia::Version(1, 0, 0), true);
+			Vulkan::Init("Testapp", Version(1, 0, 0), "Junia", GetVersion(), true);
 		}
 		catch (std::exception e)
 		{
@@ -110,5 +110,10 @@ namespace Junia
 	void StopLoop()
 	{
 		juniaLoopShouldStop = true;
+	}
+
+	const Version& GetEngineVersion()
+	{
+		return ENGINE_VERSION;
 	}
 }

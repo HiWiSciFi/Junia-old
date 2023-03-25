@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <Junia/Core/Version.hpp>
 
 namespace Junia
 {
@@ -23,6 +24,12 @@ namespace Junia
 	 * @brief Stops the Junia game loop
 	*/
 	void StopLoop();
+
+	/**
+	 * @brief Get the current version of the Junia engine
+	 * @return A Version struct containing the engine version
+	*/
+	const Version& GetEngineVersion();
 }
 
 #include "Junia/Core/Input.hpp"
