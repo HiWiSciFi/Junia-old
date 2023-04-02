@@ -68,7 +68,7 @@ namespace Junia
 
 		try
 		{
-			Vulkan::Init("Testapp", Version(1, 0, 0), "Junia", GetVersion(), true);
+			Vulkan::Init("Testapp", Version(1, 0, 0), "Junia", GetEngineVersion(), true);
 		}
 		catch (std::exception e)
 		{
