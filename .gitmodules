@@ -1,3 +1,6 @@
 [submodule "dependencies/glfw"]
 	path = Junia/dependencies/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "wiki"]
+	path = wiki
+	url = https://github.com/HiWiSciFi/Junia.wiki.git
