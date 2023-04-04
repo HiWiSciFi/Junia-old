@@ -30,7 +30,7 @@ To download and install the Vulkan-SDK on Unix Systems follow the instructions o
 Once you have installed all dependencies you can open up a terminal in the cloned repository and execute the following commands:
 ```bash
 cd scripts
-./run.sh
+./linux_run.sh
 ```
 
 ## Windows
@@ -66,5 +66,5 @@ Download and install the dependencies from the following sources by following th
 Once you have installed all dependencies you can open up a powershell window in the cloned repository and execute the following commands:
 ```powershell
 cd scripts
-./run.bat
+./windows_run.bat
 ```
