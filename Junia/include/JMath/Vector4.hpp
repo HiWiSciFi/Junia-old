@@ -24,9 +24,9 @@ namespace JMath
 		#pragma region AccessFuncs
 		static constexpr unsigned char length() { return 4; }
 
-		constexpr T& operator[](unsigned char i)
+		constexpr T& operator[](unsigned char index)
 		{
-			switch (i)
+			switch (index)
 			{
 			default:
 			case 0:
@@ -40,9 +40,9 @@ namespace JMath
 			}
 		}
 
-		constexpr T const& operator[](unsigned char i) const
+		constexpr T const& operator[](unsigned char index) const
 		{
-			switch (i)
+			switch (index)
 			{
 			default:
 			case 0:
@@ -631,13 +631,13 @@ namespace JMath
 			--this->w;
 			return *this;
 		}
-		constexpr Vector<4, T> operator++(int)
+		constexpr const Vector<4, T> operator++(int)
 		{
 			Vector<4, T> result(*this);
 			++(*this);
 			return result;
 		}
-		constexpr Vector<4, T> operator--(int)
+		constexpr const Vector<4, T> operator--(int)
 		{
 			Vector<4, T> result(*this);
 			--(*this);
@@ -928,4 +928,4 @@ namespace JMath
 	typedef Vector< 4, int32_t  >  iVec4;
 	typedef Vector< 4, uint32_t > uiVec4;
 	typedef Vector< 4, bool     >  bVec4;
-}
+} // namespace JMath

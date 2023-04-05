@@ -12,4 +12,4 @@ namespace Junia
 		NONE = 0,
 		VULKAN = 1
 	};
-}
+} // namespace Junia

@@ -20,4 +20,4 @@ namespace JMath
 	 * @tparam T the datatype for the quaternion components to use
 	*/
 	template<typename T> struct Quat;
-}
+} // namespace JMath

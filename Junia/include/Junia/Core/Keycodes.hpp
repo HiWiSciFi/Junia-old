@@ -164,4 +164,4 @@ namespace Junia
 	 * @return a human readable string representing the KeyCode
 	*/
 	std::string KeyToString(KeyCode code);
-}
+} // namespace Junia

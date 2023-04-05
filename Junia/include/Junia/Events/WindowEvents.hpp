@@ -15,14 +15,14 @@ namespace Junia
 		 * @brief Create a window closed event
 		 * @param windowId A pointer to the window the close was triggered for
 		*/
-		WindowClosedEvent(Window* window);
+		explicit WindowClosedEvent(Window* window);
 
 		/**
 		 * @brief Get the window the close was triggered for
 		 * @return A pointer to the closed window
 		*/
-		Window* GetWindow() const;
+		[[nodiscard]] Window* GetWindow() const;
 
-		virtual std::string ToString() const override;
+		[[nodiscard]] std::string ToString() const override;
 	};
-}
+} // namespace Junia

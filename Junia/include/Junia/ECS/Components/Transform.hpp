@@ -16,14 +16,15 @@ namespace Junia
 		*/
 		JMath::Vec3 position;
 
+		// TODO(HiWiSciFi): Replace with Quaternion [05-Apr-23]
 		/**
 		 * @brief The rotation component
 		*/
-		JMath::Vec4 rotation; // TODO: replace with Quaternion
+		JMath::Vec4 rotation;
 
 		/**
 		 * @brief The scale component
 		*/
 		JMath::Vec3 scale;
 	};
-}
+} // namespace Junia

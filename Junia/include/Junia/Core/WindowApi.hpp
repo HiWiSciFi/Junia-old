@@ -13,4 +13,4 @@ namespace Junia
 		NONE = 0,
 		GLFW = 1
 	};
-}
+} // namespace Junia

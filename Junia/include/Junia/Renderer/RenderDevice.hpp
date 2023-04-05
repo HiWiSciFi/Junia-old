@@ -24,7 +24,9 @@ namespace Junia
 	class RenderDevice
 	{
 	protected:
+		// TODO(HiWiSciFi): move to getter / setter [05-Apr-23]
 		RenderDeviceType type = RenderDeviceType::OTHER;
+		// TODO(HiWiSciFi): move to getter / setter [05-Apr-23]
 		uint32_t rating = 0;
 
 	public:
@@ -40,19 +42,19 @@ namespace Junia
 		 * @return A RenderDeviceType representing the type of hardware this
 		 *         device is implemented on
 		*/
-		inline RenderDeviceType GetType() const { return type; }
+		[[nodiscard]] inline RenderDeviceType GetType() const { return type; }
 
 		/**
 		 * @brief Get the rating of this device
 		 * @return A value representing how "good" this device is (0 if the
 		 *         device is not suitable for rendering)
 		*/
-		inline uint32_t GetRating() const { return rating; }
+		[[nodiscard]] inline uint32_t GetRating() const { return rating; }
 
 		/**
 		 * @brief Get the identifier of the device
 		 * @return A string containing the name of this device
 		*/
-		virtual const std::string& GetName() const = 0;
+		[[nodiscard]] virtual const std::string& GetName() const = 0;
 	};
-}
+} // namespace Junia

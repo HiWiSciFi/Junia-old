@@ -32,15 +32,15 @@ namespace Junia
 		 * @brief Get the key that has been pressed
 		 * @return The KeyCode of the key
 		*/
-		KeyCode GetKeyCode() const;
+		[[nodiscard]] KeyCode GetKeyCode() const;
 
 		/**
 		 * @brief Get the window the key was pressed on
 		 * @return A pointer to the window
 		*/
-		Window* GetWindow() const;
+		[[nodiscard]] Window* GetWindow() const;
 
-		virtual std::string ToString() const override;
+		[[nodiscard]] std::string ToString() const override;
 	};
 
 	class KeyUpEvent : public Event
@@ -68,15 +68,15 @@ namespace Junia
 		 * @brief Get the key that has been released
 		 * @return The KeyCode of the key
 		*/
-		KeyCode GetKeyCode() const;
+		[[nodiscard]] KeyCode GetKeyCode() const;
 
 		/**
 		 * @brief Get the window the key was released on
 		 * @return A pointer to the window
 		*/
-		Window* GetWindow() const;
+		[[nodiscard]] Window* GetWindow() const;
 
-		virtual std::string ToString() const override;
+		[[nodiscard]] std::string ToString() const override;
 	};
 
 	class KeyCharEvent : public Event
@@ -106,15 +106,15 @@ namespace Junia
 		 * @brief Get the character that has been input
 		 * @return The unicode codepoint of the character
 		*/
-		unsigned int GetCodepoint() const;
+		[[nodiscard]] unsigned int GetCodepoint() const;
 
 		/**
 		 * @brief Get the window the character was sent to
 		 * @return A pointer to the window
 		*/
-		Window* GetWindow() const;
+		[[nodiscard]] Window* GetWindow() const;
 
-		virtual std::string ToString() const override;
+		[[nodiscard]] std::string ToString() const override;
 	};
 
 	class MouseButtonDownEvent : public Event
@@ -142,15 +142,15 @@ namespace Junia
 		 * @brief Get the mouse button that has been pressed
 		 * @return The MouseButton that has been pressed
 		*/
-		MouseButton GetButton() const;
+		[[nodiscard]] MouseButton GetButton() const;
 
 		/**
 		 * @brief Get the window the button was pressed in
 		 * @return A pointer to the window
 		*/
-		Window* GetWindow() const;
+		[[nodiscard]] Window* GetWindow() const;
 
-		virtual std::string ToString() const override;
+		[[nodiscard]] std::string ToString() const override;
 	};
 
 	class MouseButtonUpEvent : public Event
@@ -178,15 +178,15 @@ namespace Junia
 		 * @brief Get the mouse button that has been released
 		 * @return The MouseButton that has been released
 		*/
-		MouseButton GetButton() const;
+		[[nodiscard]] MouseButton GetButton() const;
 
 		/**
 		 * @brief Get the window the button was released in
 		 * @return A pointer to the window
 		*/
-		Window* GetWindow() const;
+		[[nodiscard]] Window* GetWindow() const;
 
-		virtual std::string ToString() const override;
+		[[nodiscard]] std::string ToString() const override;
 	};
 
 	class MouseMoveEvent : public Event
@@ -214,14 +214,14 @@ namespace Junia
 		 * @brief Get the new position of the mouse
 		 * @return The position of the mouse cursor
 		*/
-		JMath::iVec2 GetPosition() const;
+		[[nodiscard]] JMath::iVec2 GetPosition() const;
 
 		/**
 		 * @brief Get the window the mouse was moved in
 		 * @return A pointer to the window
 		*/
-		Window* GetWindow() const;
+		[[nodiscard]] Window* GetWindow() const;
 
-		virtual std::string ToString() const override;
+		[[nodiscard]] std::string ToString() const override;
 	};
-}
+} // namespace Junia

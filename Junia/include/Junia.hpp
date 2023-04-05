@@ -30,7 +30,7 @@ namespace Junia
 	 * @return A Version struct containing the engine version
 	*/
 	const Version& GetEngineVersion();
-}
+} // namespace Junia
 
 #include "Junia/Core/Input.hpp"
 #include "Junia/Core/Log.hpp"

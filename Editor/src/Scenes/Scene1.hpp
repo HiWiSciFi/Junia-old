@@ -9,6 +9,6 @@ class Scene1 : public Junia::Scene
 		std::string name;
 
 	public:
-		Scene1(const std::string& name);
-		~Scene1();
+		explicit Scene1(const std::string& name);
+		~Scene1() override;
 };

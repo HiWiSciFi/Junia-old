@@ -86,4 +86,4 @@ namespace Junia
 		static inline int GetMouseY(Window::IdType window = 0)
 			{ return GetMousePosition(window).y; }
 	};
-}
+} // namespace Junia

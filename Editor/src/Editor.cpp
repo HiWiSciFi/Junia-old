@@ -3,9 +3,9 @@
 #include "Scenes/Scene1.hpp"
 #include "Systems/GravitySystem.hpp"
 
-#define ENTITY_COUNT 100
+constexpr size_t ENTITY_COUNT = 100;
 
-int main(int argc, char** argv)
+int main()
 {
 	try
 	{
@@ -17,17 +17,17 @@ int main(int argc, char** argv)
 		Junia::ECS::RegisterSystem<GravitySystem>();
 		for (Junia::ECS::EntityType i = 0; i < ENTITY_COUNT; i++)
 		{
-			Junia::ECS::Entity e = Junia::ECS::Entity::Create();
-			e.AddComponent<Junia::Transform>();
+			const Junia::ECS::Entity entity = Junia::ECS::Entity::Create();
+			entity.AddComponent<Junia::Transform>();
 		}
 		for (int i = 0; i < ENTITY_COUNT; i++) Junia::ECS::Entity::Create();
 		auto endtime = std::chrono::high_resolution_clock::now();
-		float creationtime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
+		const float creationtime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
 		JELOG_TRACE << "Entities created! Time: " << creationtime << "s";
 		starttime = std::chrono::high_resolution_clock::now();
 		for (int i = (ENTITY_COUNT * 2) - 1; i >= 0; i--) Junia::ECS::Entity::Destroy(Junia::ECS::Entity(i));
 		endtime = std::chrono::high_resolution_clock::now();
-		float destructiontime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
+		const float destructiontime = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
 		JELOG_TRACE << "Entities destroyed! Time: " << destructiontime << "s";
 
 		JELOG_INFO << "Creating Windows...";
@@ -43,15 +43,15 @@ int main(int argc, char** argv)
 		secondWindow->AttachScene(scene1);
 		JELOG_INFO << "Scenes loaded.";*/
 
-		Junia::Events::Subscribe<Junia::KeyDownEvent>([mainWindow] (const Junia::KeyDownEvent* e)
+		Junia::Events::Subscribe<Junia::KeyDownEvent>([mainWindow] (const Junia::KeyDownEvent* event)
 			{
-				if (e->GetKeyCode() == Junia::KeyCode::ESCAPE)
-					e->GetWindow()->Close();
+				if (event->GetKeyCode() == Junia::KeyCode::ESCAPE)
+					event->GetWindow()->Close();
 			});
 
-		Junia::Events::Subscribe<Junia::WindowClosedEvent>([mainWindow] (const Junia::WindowClosedEvent* e)
+		Junia::Events::Subscribe<Junia::WindowClosedEvent>([mainWindow] (const Junia::WindowClosedEvent* event)
 			{
-				if (e->GetWindow() == mainWindow) Junia::StopLoop();
+				if (event->GetWindow() == mainWindow) Junia::StopLoop();
 			});
 
 		JELOG_INFO << "Running Game loop...";
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 		Junia::Terminate();
 		JELOG_INFO << "Done.";
 	}
-	catch (std::exception e)
+	catch (std::exception& e)
 	{
 		JELOG_CRITICAL << "Exception thrown: " << e.what();
 		Junia::ShowBlockingMessageBox(

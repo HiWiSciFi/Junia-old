@@ -10,7 +10,6 @@ namespace Junia
 	public:
 		using IdType = uint32_t;
 
-	public:
 		virtual ~Scene() = 0;
 	};
 
@@ -25,4 +24,4 @@ namespace Junia
 	{
 		return;
 	}
-}
+} // namespace Junia

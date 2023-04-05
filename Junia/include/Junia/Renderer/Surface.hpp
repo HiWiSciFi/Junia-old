@@ -37,4 +37,4 @@ namespace Junia
 		*/
 		virtual void Draw() = 0;
 	};
-}
+} // namespace Junia

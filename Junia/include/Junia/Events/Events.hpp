@@ -25,7 +25,7 @@ namespace Junia
 		 * @return A string containing debug information about the event and
 		 *         related data
 		*/
-		virtual std::string ToString() const;
+		[[nodiscard]] virtual std::string ToString() const;
 	};
 
 	namespace Internal
@@ -33,7 +33,7 @@ namespace Junia
 		class EventSubscriberListContainer
 		{
 		public:
-			virtual void Dispatch(const Event* e) = 0;
+			virtual void Dispatch(const Event* event) = 0;
 		};
 
 		template<typename ET>
@@ -42,9 +42,9 @@ namespace Junia
 		private:
 			std::vector<std::function<void(const ET*)>> subscribers;
 
-			void DispatchType(const ET* e)
+			void DispatchType(const ET* event)
 			{
-				for (size_t i = 0; i < subscribers.size(); i++) subscribers[i](e);
+				for (size_t i = 0; i < subscribers.size(); i++) subscribers[i](event);
 			}
 
 		public:
@@ -53,12 +53,12 @@ namespace Junia
 				subscribers.push_back(handler);
 			}
 
-			virtual void Dispatch(const Event* e) override
+			void Dispatch(const Event* event) override
 			{
-				DispatchType(static_cast<const ET*>(e));
+				DispatchType(static_cast<const ET*>(event));
 			}
 		};
-	}
+	} // namespace Internal
 
 	class Events
 	{
@@ -67,10 +67,10 @@ namespace Junia
 		static std::unordered_map<std::type_index, Internal::EventSubscriberListContainer*> eventSubscribers;
 		static std::vector<std::function<void(const Event*)>> subscribers;
 
-		static void Dispatch(const Event* e);
+		static void Dispatch(const Event* event);
 
 	public:
-		#define JE_EVENT_SUBSCRIBE_MEMBER(EventType, callback) [this] (const EventType* e) { this->callback(e); }
+		#define JE_EVENT_SUBSCRIBE_MEMBER(EventType, callback) [this] (const EventType* event) { this->callback(event); }
 
 		/**
 		 * @brief Register a function as an event callback to receive all events
@@ -153,4 +153,4 @@ namespace Junia
 		for (auto const& callback : subscribers)
 			callback(e);
 	}
-}
+} // namespace Junia
