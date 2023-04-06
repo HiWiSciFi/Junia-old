@@ -6,8 +6,6 @@
 
 namespace Junia {
 
-constexpr size_t IDPOOL_DEFAULT_RESERVED_FREES = 32;
-
 // -----------------------------------------------------------------------------
 // -------------------------------- Declarations -------------------------------
 // -----------------------------------------------------------------------------
@@ -40,6 +38,8 @@ private:
 	T step;
 
 public:
+	static const size_t DEFAULT_FREES = 32;
+
 	/**
 	 * @brief Create a new ID pool
 	 * @param start the minimum value at which the pool starts handing out
@@ -48,8 +48,7 @@ public:
 	 * @param reservedFrees amount of IDs that can be returned to the pool
 	 *                      before a reallocation happens (defaults to 32)
 	*/
-	explicit IdPool(T start = static_cast<T>(0), T step = static_cast<T>(1),
-		size_t reservedFrees = IDPOOL_DEFAULT_RESERVED_FREES);
+	explicit IdPool(T start = static_cast<T>(0), T step = static_cast<T>(1), size_t reservedFrees = DEFAULT_FREES);
 
 	/**
 	 * @brief Get an unused ID from the pool

@@ -59,7 +59,7 @@ namespace Vulkan
 			extent = surfaceCapabilities.currentExtent;
 		else
 		{
-			JMath::uiVec2 framebufferSize = window->GetFramebufferSize();
+			JMath::Vec2ui framebufferSize = window->GetFramebufferSize();
 			extent = { framebufferSize.x, framebufferSize.y };
 			extent.width = std::clamp(extent.width, surfaceCapabilities.minImageExtent.width, surfaceCapabilities.maxImageExtent.width);
 			extent.height = std::clamp(extent.height, surfaceCapabilities.minImageExtent.height, surfaceCapabilities.maxImageExtent.height);
@@ -127,7 +127,7 @@ namespace Vulkan
 
 	void VulkanSwapchain::Recreate()
 	{
-		JMath::uiVec2 framebufferSize = window->GetFramebufferSize();
+		JMath::Vec2ui framebufferSize = window->GetFramebufferSize();
 		if (framebufferSize.x == 0 || framebufferSize.y == 0) return;
 
 		vkDeviceWaitIdle(vkDevice->GetLogical());

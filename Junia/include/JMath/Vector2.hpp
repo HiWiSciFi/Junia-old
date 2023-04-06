@@ -1,647 +1,217 @@
 #pragma once
 
 #include "Types.hpp"
+#include <cmath>
 #include <cstdint>
 
-namespace JMath
-{
-	template<typename T>
-	struct Vector<2, T>
-	{
-		//////////
-		// DATA //
-		//////////
+namespace JMath {
 
-		union { T x, r; };
-		union { T y, g; };
+// -----------------------------------------------------------------------------
+// -------------------------------- Declarations -------------------------------
+// -----------------------------------------------------------------------------
 
-		////////////
-		// ACCESS //
-		////////////
+// ------------------------------ Type Definitions -----------------------------
 
-		#pragma region AccessFuncs
-		static constexpr unsigned char length() { return 2; }
+using Vec2   = Vector< 2,    float >;
+using Vec2f  = Vector< 2,    float >;
+using Vec2d  = Vector< 2,   double >;
+using Vec2i  = Vector< 2,  int32_t >;
+using Vec2ui = Vector< 2, uint32_t >;
 
-		constexpr T& operator[](unsigned char index)
-		{
-			switch (index)
-			{
-			default:
-			case 0:
-				return x;
-			case 1:
-				return y;
-			}
-		}
+template<typename T>
+struct Vector<2, T> {
+public:
 
-		constexpr T const& operator[](unsigned char index) const
-		{
-			switch (index)
-			{
-			default:
-			case 0:
-				return x;
-			case 1:
-				return y;
-			}
-		}
-		#pragma endregion
+// ------------------------------------ Data -----------------------------------
 
-		//////////////////
-		// CONSTRUCTORS //
-		//////////////////
+	union { T x, r; };
+	union { T y, g; };
 
-		#pragma region ConstructorsBase
-		constexpr Vector() = default;
-		constexpr Vector(Vector const& v) = default;
+// -------------------------------- Constructors -------------------------------
 
-		constexpr explicit Vector(T s) : x(s), y(s) { }
-		constexpr Vector(T _x, T _y) : x(_x), y(_y) { }
+	inline Vector();
+	inline Vector(T x, T y);
 
-		template<typename U> constexpr explicit Vector(Vector<1, U> const& v) :
-			x(static_cast<T>(v.x)),
-			y(static_cast<T>(v.x))
-		{
-		}
-		#pragma endregion
+	template<typename U>
+	inline explicit Vector<2, T>(const Vector<2, U>& other);
 
-		#pragma region ConstructorsScalar
-		template<typename X, typename Y> constexpr Vector(X _x, Y _y) :
-			x(static_cast<T>(_x)),
-			y(static_cast<T>(_y))
-		{
-		}
-		template<typename X, typename Y> constexpr Vector(Vector<1, X> const& _x, Y _y) :
-			x(static_cast<T>(_x.x)),
-			y(static_cast<T>(_y))
-		{
-		}
-		template<typename X, typename Y> constexpr Vector(X _x, Vector<1, Y> const& _y) :
-			x(static_cast<T>(_x)),
-			y(static_cast<T>(_y.x))
-		{
-		}
-		template<typename X, typename Y> constexpr Vector(Vector<1, X> const& _x, Vector<1, Y> const& _y) :
-			x(static_cast<T>(_x.x)),
-			y(static_cast<T>(_y.x))
-		{
-		}
-		#pragma endregion
+// ----------------------------------- Access ----------------------------------
 
-		#pragma region ConstructorsSize
-		template<typename U> constexpr explicit Vector(Vector<2, U> const& v) :
-			x(static_cast<T>(v.x)),
-			y(static_cast<T>(v.y))
-		{
-		}
-		template<typename U> constexpr explicit Vector(Vector<3, U> const& v) :
-			x(static_cast<T>(v.x)),
-			y(static_cast<T>(v.y))
-		{
-		}
-		template<typename U> constexpr explicit Vector(Vector<4, U> const& v) :
-			x(static_cast<T>(v.x)),
-			y(static_cast<T>(v.y))
-		{
-		}
-		#pragma endregion
+	inline T& operator[](int index);
+	inline const T& operator[](int index) const;
 
-		//////////////////////////
-		// ASSIGNMENT OPERATORS //
-		//////////////////////////
+// --------------------------------- Operators ---------------------------------
 
-		#pragma region AOperators=
-		constexpr Vector<2, T>& operator=(Vector<2, T> const& v) = default;
-		template<typename U> constexpr Vector<2, T>& operator=(Vector<2, U> const& v)
-		{
-			this->x = static_cast<T>(v.x);
-			this->y = static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+	inline Vector<2, T>& operator*=(T scalar);
+	inline Vector<2, T>& operator/=(T scalar);
+	inline Vector<2, T>& operator+=(const Vector<2, T>& other);
+	inline Vector<2, T>& operator-=(const Vector<2, T>& other);
 
-		#pragma region AOperators+=
-		template<typename U> constexpr Vector<2, T>& operator+=(U s)
-		{
-			this->x += static_cast<T>(s);
-			this->y += static_cast<T>(s);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator+=(Vector<1, U> const& v)
-		{
-			this->x += static_cast<T>(v.x);
-			this->y += static_cast<T>(v.x);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator+=(Vector<2, U> const& v)
-		{
-			this->x += static_cast<T>(v.x);
-			this->y += static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+};
 
-		#pragma region AOperators-=
-		template<typename U> constexpr Vector<2, T>& operator-=(U s)
-		{
-			this->x -= static_cast<T>(s);
-			this->y -= static_cast<T>(s);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator-=(Vector<1, U> const& v)
-		{
-			this->x -= static_cast<T>(v.x);
-			this->y -= static_cast<T>(v.x);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator-=(Vector<2, U> const& v)
-		{
-			this->x -= static_cast<T>(v.x);
-			this->y -= static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+// ----------------------------- External Operators ----------------------------
 
-		#pragma region AOperators*=
-		template<typename U> constexpr Vector<2, T>& operator*=(U s)
-		{
-			this->x *= static_cast<T>(s);
-			this->y *= static_cast<T>(s);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator*=(Vector<1, U> const& v)
-		{
-			this->x *= static_cast<T>(v.x);
-			this->y *= static_cast<T>(v.x);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator*=(Vector<2, U> const& v)
-		{
-			this->x *= static_cast<T>(v.x);
-			this->y *= static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+template<typename T>
+inline Vector<2, T> operator*(const Vector<2, T>& vector, T scalar);
 
-		#pragma region AOperators/=
-		template<typename U> constexpr Vector<2, T>& operator/=(U s)
-		{
-			this->x /= static_cast<T>(s);
-			this->y /= static_cast<T>(s);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator/=(Vector<1, U> const& v)
-		{
-			this->x /= static_cast<T>(v.x);
-			this->y /= static_cast<T>(v.x);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator/=(Vector<2, U> const& v)
-		{
-			this->x /= static_cast<T>(v.x);
-			this->y /= static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+template<typename T>
+inline Vector<2, T> operator/(const Vector<2, T>& vector, T scalar);
 
-		#pragma region AOperators%=
-		template<typename U> constexpr Vector<2, T>& operator%=(U s)
-		{
-			this->x %= static_cast<T>(s);
-			this->y %= static_cast<T>(s);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator%=(Vector<1, U> v)
-		{
-			this->x %= static_cast<T>(v.x);
-			this->y %= static_cast<T>(v.x);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator%=(Vector<2, U> v)
-		{
-			this->x %= static_cast<T>(v.x);
-			this->y %= static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+template<typename T>
+inline Vector<2, T> operator-(const Vector<2, T>& vector);
 
-		#pragma region AOperators&=
-		template<typename U> constexpr Vector<2, T>& operator&=(U s)
-		{
-			this->x &= static_cast<T>(s);
-			this->y &= static_cast<T>(s);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator&=(Vector<1, U> v)
-		{
-			this->x &= static_cast<T>(v.x);
-			this->y &= static_cast<T>(v.x);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator&=(Vector<2, U> v)
-		{
-			this->x &= static_cast<T>(v.x);
-			this->y &= static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+template<typename T>
+inline Vector<2, T> operator+(const Vector<2, T>& first, const Vector<2, T>& second);
 
-		#pragma region AOperators|=
-		template<typename U> constexpr Vector<2, T>& operator|=(U s)
-		{
-			this->x |= static_cast<T>(s);
-			this->y |= static_cast<T>(s);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator|=(Vector<1, U> v)
-		{
-			this->x |= static_cast<T>(v.x);
-			this->y |= static_cast<T>(v.x);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator|=(Vector<2, U> v)
-		{
-			this->x |= static_cast<T>(v.x);
-			this->y |= static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+template<typename T>
+inline Vector<2, T> operator-(const Vector<2, T>& first, const Vector<2, T>& second);
 
-		#pragma region AOperators^=
-		template<typename U> constexpr Vector<2, T>& operator^=(U s)
-		{
-			this->x ^= static_cast<T>(s);
-			this->y ^= static_cast<T>(s);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator^=(Vector<1, U> v)
-		{
-			this->x ^= static_cast<T>(v.x);
-			this->y ^= static_cast<T>(v.x);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator^=(Vector<2, U> v)
-		{
-			this->x ^= static_cast<T>(v.x);
-			this->y ^= static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+// ----------------------------- External Functions ----------------------------
 
-		#pragma region AOperators<<=
-		template<typename U> constexpr Vector<2, T>& operator<<=(U s)
-		{
-			this->x <<= static_cast<T>(s);
-			this->y <<= static_cast<T>(s);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator<<=(Vector<1, U> v)
-		{
-			this->x <<= static_cast<T>(v.x);
-			this->y <<= static_cast<T>(v.x);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator<<=(Vector<2, U> v)
-		{
-			this->x <<= static_cast<T>(v.x);
-			this->y <<= static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+template<typename T>
+inline float Magnitude(const Vector<2, T>& vector);
 
-		#pragma region AOperators>>=
-		template<typename U> constexpr Vector<2, T>& operator>>=(U s)
-		{
-			this->x >>= static_cast<T>(s);
-			this->y >>= static_cast<T>(s);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator>>=(Vector<1, U> v)
-		{
-			this->x >>= static_cast<T>(v.x);
-			this->y >>= static_cast<T>(v.x);
-			return *this;
-		}
-		template<typename U> constexpr Vector<2, T>& operator>>=(Vector<2, U> v)
-		{
-			this->x >>= static_cast<T>(v.x);
-			this->y >>= static_cast<T>(v.y);
-			return *this;
-		}
-		#pragma endregion
+template<typename T>
+inline Vector<2, T> Normalize(const Vector<2, T>& vector);
 
-		/////////////////////////
-		// INCREMENT OPERATORS //
-		/////////////////////////
+template<typename T>
+inline T Dot(const Vector<2, T>& first, const Vector<2, T>& second);
 
-		#pragma region IOperators
-		constexpr Vector<2, T>& operator++()
-		{
-			++this->x;
-			++this->y;
-			return *this;
-		}
-		constexpr Vector<2, T>& operator--()
-		{
-			--this->x;
-			--this->y;
-			return *this;
-		}
-		constexpr const Vector<2, T> operator++(int)
-		{
-			Vector<2, T> result(*this);
-			++(*this);
-			return result;
-		}
-		constexpr const Vector<2, T> operator--(int)
-		{
-			Vector<2, T> result(*this);
-			--(*this);
-			return result;
-		}
-		#pragma endregion
-	};
+template<typename T>
+inline Vector<2, T> Project(const Vector<2, T>& first, const Vector<2, T>& second);
 
-	////////////////////
-	// CALC OPERATORS //
-	////////////////////
+template<typename T>
+inline Vector<2, T> Reject(const Vector<2, T>& first, const Vector<2, T>& second);
 
-	#pragma region COperators+
-	template<typename T> constexpr Vector<2, T> operator+(Vector<2, T> const& v)
-	{
-		return v;
-	}
-	template<typename T> constexpr Vector<2, T> operator+(Vector<2, T> const& v, T s)
-	{
-		return Vector<2, T>(v.x + s, v.y + s);
-	}
-	template<typename T> constexpr Vector<2, T> operator+(Vector<2, T> const& v, Vector<1, T> const& s)
-	{
-		return Vector<2, T>(v.x + s.x, v.y + s.x);
-	}
-	template<typename T> constexpr Vector<2, T> operator+(T s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s + v.x, s + v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator+(Vector<1, T> const& s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s.x + v.x, s.x + v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator+(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, T>(v1.x + v2.x, v1.y + v2.y);
-	}
-	#pragma endregion
+// -----------------------------------------------------------------------------
+// ------------------------------ Implementations ------------------------------
+// -----------------------------------------------------------------------------
 
-	#pragma region COperators-
-	template<typename T> constexpr Vector<2, T> operator-(Vector<2, T> const& v)
-	{
-		return Vector<2, T>(-v.x, -v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator-(Vector<2, T> const& v, T s)
-	{
-		return Vector<2, T>(v.x - s, v.y - s);
-	}
-	template<typename T> constexpr Vector<2, T> operator-(Vector<2, T> const& v, Vector<1, T> const& s)
-	{
-		return Vector<2, T>(v.x - s.x, v.y - s.x);
-	}
-	template<typename T> constexpr Vector<2, T> operator-(T s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s - v.x, s - v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator-(Vector<1, T> const& s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s.x - v.x, s.x - v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator-(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, T>(v1.x - v2.x, v1.y - v2.y);
-	}
-	#pragma endregion
+// -------------------------------- Constructors -------------------------------
 
-	#pragma region COperators*
-	template<typename T> constexpr Vector<2, T> operator*(Vector<2, T> const& v, T s)
-	{
-		return Vector<2, T>(v.x * s, v.y * s);
-	}
-	template<typename T> constexpr Vector<2, T> operator*(Vector<2, T> const& v, Vector<1, T> const& s)
-	{
-		return Vector<2, T>(v.x * s.x, v.y * s.x);
-	}
-	template<typename T> constexpr Vector<2, T> operator*(T s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s * v.x, s * v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator*(Vector<1, T> const& s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s.x * v.x, s.x * v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator*(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, T>(v1.x * v2.x, v1.y * v2.y);
-	}
-	#pragma endregion
+template<typename T>
+inline Vector<2, T>::Vector() = default;
 
-	#pragma region COperators/
-	template<typename T> constexpr Vector<2, T> operator/(Vector<2, T> const& v, T s)
-	{
-		return Vector<2, T>(v.x / s, v.y / s);
-	}
-	template<typename T> constexpr Vector<2, T> operator/(Vector<2, T> const& v, Vector<1, T> const& s)
-	{
-		return Vector<2, T>(v.x / s.x, v.y / s.x);
-	}
-	template<typename T> constexpr Vector<2, T> operator/(T s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s / v.x, s / v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator/(Vector<1, T> const& s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s.x / v.x, s.x / v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator/(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, T>(v1.x / v2.x, v1.y / v2.y);
-	}
-	#pragma endregion
+template<typename T>
+inline Vector<2, T>::Vector(T x, T y)
+	: x(x), y(y) { }
 
-	#pragma region COperators%
-	template<typename T> constexpr Vector<2, T> operator%(Vector<2, T> const& v, T s)
-	{
-		return Vector<2, T>(v.x % s, v.y % s);
-	}
-	template<typename T> constexpr Vector<2, T> operator%(Vector<2, T> const& v, Vector<1, T> const& s)
-	{
-		return Vector<2, T>(v.x % s.x, v.y % s.x);
-	}
-	template<typename T> constexpr Vector<2, T> operator%(T s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s % v.x, s % v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator%(Vector<1, T> const& s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s.x % v.x, s.x % v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator%(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, T>(v1.x % v2.x, v1.y % v2.y);
-	}
-	#pragma endregion
+template<typename T>
+template<typename U>
+inline Vector<2, T>::Vector(const Vector<2, U>& other)
+	: x(static_cast<T>(other.x)),
+	y(static_cast<T>(other.y)) { }
 
-	#pragma region COperators&
-	template<typename T> constexpr Vector<2, T> operator&(Vector<2, T> const& v, T s)
-	{
-		return Vector<2, T>(v.x & s, v.y & s);
-	}
-	template<typename T> constexpr Vector<2, T> operator&(Vector<2, T> const& v, Vector<1, T> const& s)
-	{
-		return Vector<2, T>(v.x & s.x, v.y & s.x);
-	}
-	template<typename T> constexpr Vector<2, T> operator&(T s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s & v.x, s & v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator&(Vector<1, T> const& s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s.x & v.x, s.x & v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator&(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, T>(v1.x & v2.x, v1.y & v2.y);
-	}
-	#pragma endregion
+// ----------------------------------- Access ----------------------------------
 
-	#pragma region COperators|
-	template<typename T> constexpr Vector<2, T> operator|(Vector<2, T> const& v, T s)
-	{
-		return Vector<2, T>(v.x | s, v.y | s);
-	}
-	template<typename T> constexpr Vector<2, T> operator|(Vector<2, T> const& v, Vector<1, T> const& s)
-	{
-		return Vector<2, T>(v.x | s.x, v.y | s.x);
-	}
-	template<typename T> constexpr Vector<2, T> operator|(T s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s | v.x, s | v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator|(Vector<1, T> const& s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s.x | v.x, s.x | v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator|(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, T>(v1.x | v2.x, v1.y | v2.y);
-	}
-	#pragma endregion
+template<typename T>
+inline T& Vector<2, T>::operator[](int index) {
+	return ((&x)[index]);
+}
 
-	#pragma region COperators^
-	template<typename T> constexpr Vector<2, T> operator^(Vector<2, T> const& v, T s)
-	{
-		return Vector<2, T>(v.x ^ s, v.y ^ s);
-	}
-	template<typename T> constexpr Vector<2, T> operator^(Vector<2, T> const& v, Vector<1, T> const& s)
-	{
-		return Vector<2, T>(v.x ^ s.x, v.y ^ s.x);
-	}
-	template<typename T> constexpr Vector<2, T> operator^(T s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s ^ v.x, s ^ v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator^(Vector<1, T> const& s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s.x ^ v.x, s.x ^ v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator^(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, T>(v1.x ^ v2.x, v1.y ^ v2.y);
-	}
-	#pragma endregion
+template<typename T>
+inline const T& Vector<2, T>::operator[](int index) const {
+	return ((&x)[index]);
+}
 
-	#pragma region COperators<<
-	template<typename T> constexpr Vector<2, T> operator<<(Vector<2, T> const& v, T s)
-	{
-		return Vector<2, T>(v.x << s, v.y << s);
-	}
-	template<typename T> constexpr Vector<2, T> operator<<(Vector<2, T> const& v, Vector<1, T> const& s)
-	{
-		return Vector<2, T>(v.x << s.x, v.y << s.x);
-	}
-	template<typename T> constexpr Vector<2, T> operator<<(T s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s << v.x, s << v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator<<(Vector<1, T> const& s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s.x << v.x, s.x << v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator<<(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, T>(v1.x << v2.x, v1.y << v2.y);
-	}
-	#pragma endregion
+// --------------------------------- Operators ---------------------------------
 
-	#pragma region COperators>>
-	template<typename T> constexpr Vector<2, T> operator>>(Vector<2, T> const& v, T s)
-	{
-		return Vector<2, T>(v.x >> s, v.y >> s);
-	}
-	template<typename T> constexpr Vector<2, T> operator>>(Vector<2, T> const& v, Vector<1, T> const& s)
-	{
-		return Vector<2, T>(v.x >> s.x, v.y >> s.x);
-	}
-	template<typename T> constexpr Vector<2, T> operator>>(T s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s >> v.x, s >> v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator>>(Vector<1, T> const& s, Vector<2, T> const& v)
-	{
-		return Vector<2, T>(s.x >> v.x, s.x >> v.y);
-	}
-	template<typename T> constexpr Vector<2, T> operator>>(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, T>(v1.x >> v2.x, v1.y >> v2.y);
-	}
-	#pragma endregion
+template<typename T>
+inline Vector<2, T>& Vector<2, T>::operator*=(T scalar) {
+	x *= scalar;
+	y *= scalar;
+	return *this;
+}
 
-	#pragma region COperators~
-	template<typename T> constexpr Vector<2, T> operator~(Vector<2, T> const& v)
-	{
-		return Vector<2, T>(~v.x, ~v.y);
-	}
-	#pragma endregion
+template<typename T>
+inline Vector<2, T>& Vector<2, T>::operator/=(T scalar) {
+	scalar = 1.0f / scalar;
+	x *= scalar;
+	y *= scalar;
+	return *this;
+}
 
-	///////////////////////
-	// BOOLEAN OPERATORS //
-	///////////////////////
+template<typename T>
+inline Vector<2, T>& Vector<2, T>::operator+=(const Vector<2, T>& other) {
+	x += other.x;
+	y += other.y;
+	return *this;
+}
 
-	#pragma region BOperators
-	template<typename T> constexpr bool operator==(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return (v1.x == v2.x) && (v1.y == v2.y);
-	}
-	template<typename T> constexpr bool operator!=(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return (v1.x != v2.x) || (v1.y != v2.y);
-	}
-	template<typename T> constexpr Vector<2, bool> operator&&(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, bool>(v1.x && v2.x, v1.y && v2.y);
-	}
-	template<typename T> constexpr Vector<2, bool> operator||(Vector<2, T> const& v1, Vector<2, T> const& v2)
-	{
-		return Vector<2, bool>(v1.x || v2.x, v1.y || v2.y);
-	}
-	#pragma endregion
+template<typename T>
+inline Vector<2, T>& Vector<2, T>::operator-=(const Vector<2, T>& other) {
+	x -= other.x;
+	y -= other.y;
+	return *this;
+}
 
-	//////////////////////
-	// TYPE DEFINITIONS //
-	//////////////////////
+// ----------------------------- External Operators ----------------------------
 
-	typedef Vector< 2, float    >   Vec2;
-	typedef Vector< 2, float    >  fVec2;
-	typedef Vector< 2, double   >  dVec2;
-	typedef Vector< 2, int32_t  >  iVec2;
-	typedef Vector< 2, uint32_t > uiVec2;
-	typedef Vector< 2, bool     >  bVec2;
+template<typename T>
+inline Vector<2, T> operator*(const Vector<2, T>& vector, T scalar) {
+	return Vector<2, T>(
+		vector.x * scalar,
+		vector.y * scalar);
+}
+
+template<typename T>
+inline Vector<2, T> operator/(const Vector<2, T>& vector, T scalar) {
+	scalar = 1.0f / scalar;
+	return Vector<2, T>(
+		vector.x * scalar,
+		vector.y * scalar);
+}
+
+template<typename T>
+inline Vector<2, T> operator-(const Vector<2, T>& vector) {
+	return Vector<2, T>(-vector.x, -vector.y);
+}
+
+template<typename T>
+inline Vector<2, T> operator+(const Vector<2, T>& first,
+	const Vector<2, T>& second) {
+	return Vector<2, T>(
+		first.x + second.x,
+		first.y + second.y);
+}
+
+template<typename T>
+inline Vector<2, T> operator-(const Vector<2, T>& first,
+	const Vector<2, T>& second) {
+	return Vector<2, T>(
+		first.x - second.x,
+		first.y - second.y);
+}
+
+// ----------------------------- External Functions ----------------------------
+
+template<typename T>
+inline float Magnitude(const Vector<2, T>& vector) {
+	return std::sqrt(
+		(vector.x * vector.x) +
+		(vector.y * vector.y));
+}
+
+template<typename T>
+inline Vector<2, T> Normalize(const Vector<2, T>& vector) {
+	return vector / Magnitude(vector);
+}
+
+template<typename T>
+inline T Dot(const Vector<2, T>& first, const Vector<2, T>& second) {
+	return (first.x * second.x) + (first.y * second.y);
+}
+
+template<typename T>
+inline Vector<2, T> Project(const Vector<2, T>& first,
+	const Vector<2, T>& second) {
+	return second * (Dot(first, second) / Dot(second, second));
+}
+
+template<typename T>
+inline Vector<2, T> Reject(const Vector<2, T>& first,
+	const Vector<2, T>& second) {
+	return first - (second * (Dot(first, second) / Dot(second, second)));
+}
+
 } // namespace JMath

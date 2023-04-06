@@ -196,32 +196,32 @@ namespace Junia
 		 * @brief Get the position of the window on the screen
 		 * @return A Vector containing the window position
 		*/
-		[[nodiscard]] virtual JMath::iVec2 GetPosition() const = 0;
+		[[nodiscard]] virtual JMath::Vec2i GetPosition() const = 0;
 
 		/**
 		 * @brief Set the position of the window on the screen
 		 * @param position The position to move the window to
 		*/
-		virtual void SetPosition(JMath::iVec2 position) = 0;
+		virtual void SetPosition(JMath::Vec2i position) = 0;
 
 		/**
 		 * @brief Get the size of the window (excluding window decorations)
 		 * @return A Vector containing the size along the x and y axes of the
 		 *         window
 		*/
-		[[nodiscard]] virtual JMath::iVec2 GetSize() const = 0;
+		[[nodiscard]] virtual JMath::Vec2i GetSize() const = 0;
 
 		/**
 		 * @brief Set the size of the window (anchor: top left window corner)
 		 * @param size The size to scale the window to
 		*/
-		virtual void SetSize(JMath::iVec2 size) = 0;
+		virtual void SetSize(JMath::Vec2i size) = 0;
 
 		/**
 		 * @brief Get the size of the framebuffer in pixels
 		 * @return A Vector containing the size of the framebuffer
 		*/
-		[[nodiscard]] virtual JMath::uiVec2 GetFramebufferSize() const = 0;
+		[[nodiscard]] virtual JMath::Vec2ui GetFramebufferSize() const = 0;
 
 		/**
 		 * @brief Get the opacity of the window

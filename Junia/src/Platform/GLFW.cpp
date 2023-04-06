@@ -95,8 +95,8 @@ namespace GLFW
 		{
 			Junia::Monitor* monitor = new GlfwMonitor(glfwMonitors[i], i);
 			Junia::monitors[i] = monitor;
-			JMath::uiVec3 colors = monitor->GetColorBits();
-			JMath::uiVec2 size = monitor->GetResolution();
+			JMath::Vec3ui colors = monitor->GetColorBits();
+			JMath::Vec2ui size = monitor->GetResolution();
 			GLFWLOG_INFO << "  - " << monitor->GetName() << " |"
 				<< " r:" << colors.r
 				<< " g:" << colors.g

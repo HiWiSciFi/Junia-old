@@ -17,9 +17,9 @@ namespace GLFW
 		~GlfwMonitor();
 
 		const std::string& GetName() const override;
-		JMath::uiVec2 GetPosition() const override;
-		JMath::uiVec2 GetResolution() const override;
-		JMath::uiVec3 GetColorBits() const override;
+		JMath::Vec2ui GetPosition() const override;
+		JMath::Vec2ui GetResolution() const override;
+		JMath::Vec3ui GetColorBits() const override;
 		uint32_t GetRefreshRate() const override;
 		void* GetNative() const override;
 	};

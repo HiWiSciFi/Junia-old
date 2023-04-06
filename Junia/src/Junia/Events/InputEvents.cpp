@@ -78,8 +78,8 @@ namespace Junia
 // --------------------------------------------------- MouseMoveEvent --------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 
-	MouseMoveEvent::MouseMoveEvent(Window* window, JMath::iVec2 position) : window(window), position(position) { }
-	JMath::iVec2 MouseMoveEvent::GetPosition() const { return position; }
+	MouseMoveEvent::MouseMoveEvent(Window* window, JMath::Vec2i position) : window(window), position(position) { }
+	JMath::Vec2i MouseMoveEvent::GetPosition() const { return position; }
 	Window* MouseMoveEvent::GetWindow() const { return window; }
 	std::string MouseMoveEvent::ToString() const
 	{

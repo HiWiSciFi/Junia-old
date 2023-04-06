@@ -27,19 +27,19 @@ namespace Junia
 		 *        monitor is at (0,0))
 		 * @return A Vector containing the coordinates of the monitor
 		*/
-		[[nodiscard]] virtual JMath::uiVec2 GetPosition() const = 0;
+		[[nodiscard]] virtual JMath::Vec2ui GetPosition() const = 0;
 
 		/**
 		 * @brief Get the resolution of the monitor
 		 * @return A Vector containing the resolution of the monitor
 		*/
-		[[nodiscard]] virtual JMath::uiVec2 GetResolution() const = 0;
+		[[nodiscard]] virtual JMath::Vec2ui GetResolution() const = 0;
 
 		/**
 		 * @brief Get the colordepth of the red green and blue channels
 		 * @return A Vector containing the bitdepths of the color channels
 		*/
-		[[nodiscard]] virtual JMath::uiVec3 GetColorBits() const = 0;
+		[[nodiscard]] virtual JMath::Vec3ui GetColorBits() const = 0;
 
 		/**
 		 * @brief Get the refresh rate of the monitor

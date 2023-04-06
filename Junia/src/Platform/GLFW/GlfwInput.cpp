@@ -31,7 +31,7 @@ namespace GLFW
 		return state == GLFW_PRESS;
 	}
 
-	JMath::iVec2 GlfwInput::GetMousePosition_Impl(Junia::Window::IdType window)
+	JMath::Vec2i GlfwInput::GetMousePosition_Impl(Junia::Window::IdType window)
 	{
 		double x, y;
 		Junia::Window* w = Junia::Window::Get(window);

@@ -79,7 +79,7 @@ namespace GLFW
 			{
 				Junia::Events::Trigger<Junia::MouseMoveEvent>(
 					reinterpret_cast<Window*>(glfwGetWindowUserPointer(window)),
-					JMath::iVec2(static_cast<int>(xpos), static_cast<int>(ypos)));
+					JMath::Vec2i(static_cast<int>(xpos), static_cast<int>(ypos)));
 			});
 
 		surface = Junia::Surface::Create(this, Junia::WindowApi::GLFW, Junia::RenderApi::VULKAN);
@@ -148,31 +148,31 @@ namespace GLFW
 		glfwSetWindowTitle(window, title.c_str());
 	}
 
-	JMath::iVec2 GlfwWindow::GetPosition() const
+	JMath::Vec2i GlfwWindow::GetPosition() const
 	{
 		int x, y;
 		glfwGetWindowPos(window, &x, &y);
 		return { x, y };
 	}
 
-	void GlfwWindow::SetPosition(JMath::iVec2 position)
+	void GlfwWindow::SetPosition(JMath::Vec2i position)
 	{
 		glfwSetWindowPos(window, position.x, position.y);
 	}
 
-	JMath::iVec2 GlfwWindow::GetSize() const
+	JMath::Vec2i GlfwWindow::GetSize() const
 	{
-		JMath::iVec2 size{ };
+		JMath::Vec2i size{ };
 		glfwGetWindowSize(window, &size.x, &size.y);
 		return size;
 	}
 
-	void GlfwWindow::SetSize(JMath::iVec2 size)
+	void GlfwWindow::SetSize(JMath::Vec2i size)
 	{
 		glfwSetWindowSize(window, size.x, size.y);
 	}
 
-	JMath::uiVec2 GlfwWindow::GetFramebufferSize() const
+	JMath::Vec2ui GlfwWindow::GetFramebufferSize() const
 	{
 		int framebufferWidth, framebufferHeight;
 		glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
@@ -256,8 +256,8 @@ namespace GLFW
 					restoreSize = GetSize();
 				}
 				glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
-				JMath::uiVec2 size = monitor->GetResolution();
-				JMath::uiVec2 position = monitor->GetPosition();
+				JMath::Vec2ui size = monitor->GetResolution();
+				JMath::Vec2ui position = monitor->GetPosition();
 				glfwSetWindowMonitor(window, NULL, position.x, position.y, size.x, size.y, monitor->GetRefreshRate());
 			}
 			break;
@@ -269,7 +269,7 @@ namespace GLFW
 					restorePos = GetPosition();
 					restoreSize = GetSize();
 				}
-				JMath::uiVec2 size = monitor->GetResolution();
+				JMath::Vec2ui size = monitor->GetResolution();
 				glfwSetWindowMonitor(window, reinterpret_cast<GLFWmonitor*>(monitor->GetNative()), 0, 0, size.x, size.y, monitor->GetRefreshRate());
 			}
 			break;

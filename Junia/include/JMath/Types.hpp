@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace JMath
 {
 	/**
@@ -7,14 +9,14 @@ namespace JMath
 	 * @tparam T the datatype for the vector components to use
 	 * @tparam S the amount of components
 	*/
-	template<unsigned char S, typename T> struct Vector;
+	template<uint8_t S, typename T> struct Vector;
 	/**
 	 * @brief A Matrix with C columns and R rows
 	 * @tparam T the datatype for the matrix components to use
 	 * @tparam C the amount of columns
 	 * @tparam R the amount of rows
 	*/
-	template<unsigned char C, unsigned char R, typename T> struct Matrix;
+	template<uint8_t C, uint8_t R, typename T> struct Matrix;
 	/**
 	 * @brief A Quaternion
 	 * @tparam T the datatype for the quaternion components to use

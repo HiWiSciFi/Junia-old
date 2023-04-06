@@ -12,7 +12,7 @@ namespace GLFW
 
 		bool IsKeyDown_Impl(Junia::KeyCode keycode, Junia::Window::IdType window) override;
 		bool IsMouseButtonDown_Impl(Junia::MouseButton button, Junia::Window::IdType window) override;
-		JMath::iVec2 GetMousePosition_Impl(Junia::Window::IdType window) override;
+		JMath::Vec2i GetMousePosition_Impl(Junia::Window::IdType window) override;
 	};
 
 	static constexpr unsigned char JeToGlfwButton[3] = {

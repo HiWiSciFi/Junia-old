@@ -16,7 +16,7 @@ namespace Junia
 
 		virtual bool IsKeyDown_Impl(KeyCode keycode, Window::IdType window) = 0;
 		virtual bool IsMouseButtonDown_Impl(MouseButton button, Window::IdType window) = 0;
-		virtual JMath::iVec2 GetMousePosition_Impl(Window::IdType window) = 0;
+		virtual JMath::Vec2i GetMousePosition_Impl(Window::IdType window) = 0;
 
 	public:
 		static void Init(WindowApi api);
@@ -48,7 +48,7 @@ namespace Junia
 		 * @return a pair of { x, y } containing the x and y position of the
 		 *           mouse or { 0, 0 } if the window doesn't exist
 		*/
-		static inline JMath::iVec2 GetMousePosition(Window::IdType window = 0)
+		static inline JMath::Vec2i GetMousePosition(Window::IdType window = 0)
 			{ return instance->GetMousePosition_Impl(window); }
 
 		/**

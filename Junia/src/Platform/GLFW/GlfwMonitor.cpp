@@ -77,7 +77,7 @@ namespace GLFW
 		return name;
 	}
 
-	JMath::uiVec2 GlfwMonitor::GetPosition() const
+	JMath::Vec2ui GlfwMonitor::GetPosition() const
 	{
 		int xpos, ypos;
 		glfwGetMonitorPos(monitor, &xpos, &ypos);
@@ -87,7 +87,7 @@ namespace GLFW
 		};
 	}
 
-	JMath::uiVec2 GlfwMonitor::GetResolution() const
+	JMath::Vec2ui GlfwMonitor::GetResolution() const
 	{
 		return {
 			static_cast<uint32_t>(videoMode->width),
@@ -95,7 +95,7 @@ namespace GLFW
 		};
 	}
 
-	JMath::uiVec3 GlfwMonitor::GetColorBits() const
+	JMath::Vec3ui GlfwMonitor::GetColorBits() const
 	{
 		return {
 			static_cast<uint32_t>(videoMode->redBits),

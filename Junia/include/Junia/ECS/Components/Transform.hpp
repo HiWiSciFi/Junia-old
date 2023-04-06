@@ -1,16 +1,13 @@
 #pragma once
 
 #include "../../../JMath/Vector3.hpp"
-#include "../../../JMath/Vector4.hpp"
 
-namespace Junia
-{
+namespace Junia {
 	/**
 	 * @brief A component holding position, rotation and scale information about
 	 *        an object
 	*/
-	struct Transform
-	{
+	struct Transform {
 		/**
 		 * @brief The position component
 		*/
@@ -20,7 +17,7 @@ namespace Junia
 		/**
 		 * @brief The rotation component
 		*/
-		JMath::Vec4 rotation;
+		JMath::Vec3 rotation;
 
 		/**
 		 * @brief The scale component

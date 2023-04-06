@@ -13,8 +13,8 @@ namespace GLFW
 	private:
 		GLFWwindow* window;
 		std::string title;
-		JMath::iVec2 restorePos{ -1, -1 };
-		JMath::iVec2 restoreSize{ -1, -1 };
+		JMath::Vec2i restorePos{ -1, -1 };
+		JMath::Vec2i restoreSize{ -1, -1 };
 		std::shared_ptr<Junia::Scene> scene;
 
 	public:
@@ -34,13 +34,13 @@ namespace GLFW
 		const std::string& GetTitle() const override;
 		void SetTitle(const std::string& title) override;
 
-		JMath::iVec2 GetPosition() const override;
-		void SetPosition(JMath::iVec2 position);
+		JMath::Vec2i GetPosition() const override;
+		void SetPosition(JMath::Vec2i position);
 
-		JMath::iVec2 GetSize() const override;
-		void SetSize(JMath::iVec2 size) override;
+		JMath::Vec2i GetSize() const override;
+		void SetSize(JMath::Vec2i size) override;
 
-		JMath::uiVec2 GetFramebufferSize() const override;
+		JMath::Vec2ui GetFramebufferSize() const override;
 
 		float GetOpacity() const override;
 		void SetOpacity(float opacity) override;

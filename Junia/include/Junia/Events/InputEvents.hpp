@@ -195,7 +195,7 @@ namespace Junia
 		/**
 		 * @brief The new position of the mouse
 		*/
-		JMath::iVec2 position;
+		JMath::Vec2i position;
 
 		/**
 		 * @brief The window the mouse was moved in
@@ -208,13 +208,13 @@ namespace Junia
 		 * @param position The new position of the mouse cursor
 		 * @param window The window the mouse was moved in
 		*/
-		MouseMoveEvent(Window* window, JMath::iVec2 position);
+		MouseMoveEvent(Window* window, JMath::Vec2i position);
 
 		/**
 		 * @brief Get the new position of the mouse
 		 * @return The position of the mouse cursor
 		*/
-		[[nodiscard]] JMath::iVec2 GetPosition() const;
+		[[nodiscard]] JMath::Vec2i GetPosition() const;
 
 		/**
 		 * @brief Get the window the mouse was moved in
