@@ -4,9 +4,8 @@ pipeline {
 		stage('Build') {
 			steps {
 				sh 'echo "Building..."'
-				sh 'pwd && ls -a'
-				sh 'chmod +x scripts/linux-build.sh'
-				sh 'cd scripts && linux-build.sh'
+				sh 'chmod +x scripts/linux_build.sh'
+				sh 'cd scripts && linux_build.sh'
 				archiveArtifacts artifacts: 'build/*', fingerprint: true
 			}
 		}
