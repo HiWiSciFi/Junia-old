@@ -46,7 +46,16 @@ public:
 
 // ----------------------------- External Operators ----------------------------
 
+template<typename T>
+inline Matrix<3, 3, T> operator*(const Matrix<3, 3, T>& mat1, const Matrix<3, 3, T>& mat2);
+
+template<typename T>
+inline Vector<3, T> operator*(const Matrix<3, 3, T>& mat, const Vector<3, T>& vec);
+
 // ----------------------------- External Functions ----------------------------
+
+template<typename T>
+inline float Determinant(const Matrix<3, 3, T>& mat);
 
 // -----------------------------------------------------------------------------
 // ------------------------------ Implementations ------------------------------
@@ -86,12 +95,12 @@ inline const T& Matrix<3, 3, T>::operator()(int i, int j) const {
 }
 
 template<typename T>
-inline Vector<3, T>& JMath::Matrix<3, 3, T>::operator[](int j) {
+inline Vector<3, T>& Matrix<3, 3, T>::operator[](int j) {
 	return *reinterpret_cast<Vector<3, T>*>(data[j]);
 }
 
 template<typename T>
-inline const Vector<3, T>& JMath::Matrix<3, 3, T>::operator[](int j) const {
+inline const Vector<3, T>& Matrix<3, 3, T>::operator[](int j) const {
 	return *reinterpret_cast<const Vector<3, T>*>(data[j]);
 }
 
@@ -99,6 +108,38 @@ inline const Vector<3, T>& JMath::Matrix<3, 3, T>::operator[](int j) const {
 
 // ----------------------------- External Operators ----------------------------
 
+template<typename T>
+inline Matrix<3, 3, T> operator*(const Matrix<3, 3, T>& mat1,
+	const Matrix<3, 3, T>& mat2) {
+	return Matrix<3, 3, T>(
+	mat1(0, 0) * mat2(0, 0) + mat1(0, 1) * mat2(1, 0) + mat1(0, 2) * mat2(2, 0),
+	mat1(0, 0) * mat2(0, 1) + mat1(0, 1) * mat2(1, 1) + mat1(0, 2) * mat2(2, 1),
+	mat1(0, 0) * mat2(0, 2) + mat1(0, 1) * mat2(1, 2) + mat1(0, 2) * mat2(2, 2),
+	mat1(1, 0) * mat2(0, 0) + mat1(1, 1) * mat2(1, 0) + mat1(1, 2) * mat2(2, 0),
+	mat1(1, 0) * mat2(0, 1) + mat1(1, 1) * mat2(1, 1) + mat1(1, 2) * mat2(2, 1),
+	mat1(1, 0) * mat2(0, 2) + mat1(1, 1) * mat2(1, 2) + mat1(1, 2) * mat2(2, 2),
+	mat1(2, 0) * mat2(0, 0) + mat1(2, 1) * mat2(1, 0) + mat1(2, 2) * mat2(2, 0),
+	mat1(2, 0) * mat2(0, 1) + mat1(2, 1) * mat2(1, 1) + mat1(2, 2) * mat2(2, 1),
+	mat1(2, 0) * mat2(0, 2) + mat1(2, 1) * mat2(1, 2) + mat1(2, 2) * mat2(2, 2)
+	);
+}
+
+template<typename T>
+inline Vector<3, T> operator*(const Matrix<3, 3, T>& mat,
+	const Vector<3, T>& vec) {
+	return Vector<3, T>(
+		mat(0, 0) * vec.x + mat(0, 1) * vec.y + mat(0, 2) * vec.z,
+		mat(1, 0) * vec.x + mat(1, 1) * vec.y + mat(1, 2) * vec.z,
+		mat(2, 0) * vec.x + mat(2, 1) * vec.y + mat(2, 2) * vec.z);
+}
+
 // ----------------------------- External Functions ----------------------------
+
+template<typename T>
+inline float Determinant(const Matrix<3, 3, T>& mat) {
+	return mat(0, 0) * (mat(1, 1) * mat(2, 2) - mat(1, 2) * mat(2, 1)) +
+		mat(0, 1) * (mat(1, 2) * mat(2, 0) - mat(1, 0) * mat(2, 2)) +
+		mat(0, 2) * (mat(1, 0) * mat(2, 1) - mat(1, 1) * mat(2, 0));
+}
 
 } // namespace JMath
