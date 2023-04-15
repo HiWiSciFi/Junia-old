@@ -9,12 +9,7 @@ git clone --recursive https://github.com/HiWiSciFi/Junia.git
 
 ## Unix
 Required Ubuntu packages:
-- `libxrandr-dev`
-- `libxinerma-dev`
-- `libx11-dev`
-- `libxcursor-dev`
-- `libxi-dev`
-- `libxext-dev`
+- `xorg-dev`
 - `libopenal-dev`
 - `build-essential` (compiler etc.)
 - `cmake`
@@ -22,7 +17,7 @@ Required Ubuntu packages:
 
 To install all these dependencies on ubuntu in one go use
 ```bash
-sudo apt install libxrandr-dev libxinerma-dev libx11-dev libxcursor-dev libxi-dev libxext-dev libopenal-dev cmake build-essential make
+sudo apt install xorg-dev libopenal-dev cmake build-essential make
 ```
 
 To download and install the Vulkan-SDK on Unix Systems follow the instructions on https://vulkan.lunarg.com/sdk/home<br>
