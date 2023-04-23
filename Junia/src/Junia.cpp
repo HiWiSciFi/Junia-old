@@ -6,6 +6,10 @@
 #undef IGNORE
 #endif
 
+#include <mono/jit/jit.h>
+#include <mono/metadata/assembly.h>
+#include <JuniaScripting/Bindings_JMath.hpp>
+
 #include <Junia.hpp>
 #include "Junia/Core/InternalLoggers.hpp"
 #include "Platform/GLFW.hpp"
@@ -52,6 +56,28 @@ namespace Junia
 			SetConsoleMode(hOutput, dwMode);
 		}
 #endif
+
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
+		JELOG_CRITICAL << "Loading mono assembly...";
+
+		MonoDomain* domain = mono_jit_init("Junia");
+		MonoAssembly* assembly = mono_domain_assembly_open(domain, "monoprogram.exe");
+		if (!assembly) throw std::runtime_error("failed to open assembly");
+
+		std::string argstr("monoprogram.exe");
+		char* argv = argstr.data();
+		int retval = mono_jit_exec(domain, assembly, 1, &argv);
+		mono_jit_cleanup(domain);
+		//Junia_Export_PrintHello();
+
+		JELOG_CRITICAL << "Quit mono assembly";
+
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 		InitTimer();
 

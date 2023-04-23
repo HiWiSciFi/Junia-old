@@ -24,7 +24,7 @@ set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory("dependencies/glfw")
 set(GLFW_LIBRARY "glfw")
 set_property(TARGET glfw PROPERTY FOLDER "Junia/Dependencies/GLFW")
-if (TARGET update_mappings)
+if(TARGET update_mappings)
 	set_property(TARGET update_mappings PROPERTY FOLDER "Junia/Dependencies/GLFW")
 endif()
 
@@ -40,9 +40,19 @@ if(NOT ${OPENAL_FOUND})
 	message(FATAL_ERROR "OpenAL could not be found! Make sure $OPENALDIR environment variable is set if the problem persists.")
 endif()
 
+# TODO(HiWiSciFi): Make work universally [16-Apr-23]
+# Mono
+if(WIN32)
+	set(MONO_INCLUDE_DIR "C:/Program Files/Mono/include/mono-2.0")
+	set(MONO_LIBRARY "C:/Program Files/Mono/lib/mono-2.0-sgen.lib")
+endif(WIN32)
+
 ## ---------------------------------------------------------------------------------------------------------------------
 ## ------------------------------------------------------- Files -------------------------------------------------------
 ## ---------------------------------------------------------------------------------------------------------------------
+
+include(GenerateExportHeader)
+generate_export_header(Junia)
 
 target_include_directories(Junia
 	PUBLIC
@@ -50,6 +60,8 @@ target_include_directories(Junia
 	PRIVATE
 		"${Vulkan_INCLUDE_DIR}"
 		"${OPENAL_INCLUDE_DIR}"
+		"${MONO_INCLUDE_DIR}"
+		"${BINARY_DIR}/junia_export.h"
 )
 
 target_precompile_headers(Junia
@@ -161,6 +173,10 @@ target_sources(Junia
 		"${SRC_DIR}/Platform/OpenAL/OutputDevice.cpp"
 
 		"${SRC_DIR}/Util/util_cstring.hpp"
+
+		"${INCLUDE_DIR}/JuniaScripting/Exports.hpp"
+		"${INCLUDE_DIR}/JuniaScripting/Bindings_JMath.hpp"
+		"${SRC_DIR}/JuniaScripting/Bindings_JMath.cpp"
 )
 
 ## ---------------------------------------------------------------------------------------------------------------------
@@ -172,11 +188,12 @@ target_link_libraries(Junia
 		"${GLFW_LIBRARY}"
 		"${Vulkan_LIBRARY}"
 		"${OPENAL_LIBRARY}"
+		"${MONO_LIBRARY}"
 )
 
-if (UNIX)
+if(UNIX)
 	target_link_libraries(Junia
 		PRIVATE
 			"X11"
 	)
-endif (UNIX)
+endif(UNIX)
