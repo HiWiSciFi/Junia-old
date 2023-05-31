@@ -61,46 +61,38 @@ inline errno_t __cdecl util_wcscpy_s(wchar_t* dest, rsize_t dest_size, const wch
 // ---------------------------------------------------- Definitions ----------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 
-inline errno_t __cdecl util_strcpy_s(char* dest, rsize_t dest_size, char const* src)
-{
+inline errno_t __cdecl util_strcpy_s(char* dest, rsize_t dest_size, char const* src) {
 	if (dest_size == 0) return ERANGE;
 	if (dest == nullptr) return EINVAL;
-	if (src == nullptr)
-	{
+	if (src == nullptr) {
 		dest[0] = '\0';
 		return EINVAL;
 	}
 	size_t i;
-	for (i = 0; i < dest_size; i++)
-	{
+	for (i = 0; i < dest_size; i++) {
 		dest[i] = src[i];
 		if (src[i] == '\0') break;
 	}
-	if (dest[i] != '\0')
-	{
+	if (dest[i] != '\0') {
 		dest[0] = '\0';
 		return ERANGE;
 	}
 	return 0;
 }
 
-inline errno_t __cdecl util_wcscpy_s(wchar_t* dest, rsize_t dest_size, const wchar_t* src)
-{
+inline errno_t __cdecl util_wcscpy_s(wchar_t* dest, rsize_t dest_size, const wchar_t* src) {
 	if (dest_size == 0) return ERANGE;
 	if (dest == nullptr) return EINVAL;
-	if (src == nullptr)
-	{
+	if (src == nullptr) {
 		dest[0] = '\0';
 		return EINVAL;
 	}
 	size_t i;
-	for (i = 0; i < dest_size; i++)
-	{
+	for (i = 0; i < dest_size; i++) {
 		dest[i] = src[i];
 		if (src[i] == '\0') break;
 	}
-	if (dest[i] != '\0')
-	{
+	if (dest[i] != '\0') {
 		dest[0] = '\0';
 		return ERANGE;
 	}

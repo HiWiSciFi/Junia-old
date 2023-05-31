@@ -154,10 +154,9 @@ target_sources(Junia
 		"${SRC_DIR}/Platform/Vulkan/VulkanVertexBuffer.hpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanVertexBuffer.cpp"
 
-		"${INCLUDE_DIR}/Platform/OpenAL.hpp"
+		"${SRC_DIR}/Platform/OpenAL.hpp"
 		"${SRC_DIR}/Platform/OpenAL.cpp"
-		"${INCLUDE_DIR}/Platform/OpenAL/Exception.hpp"
-		"${INCLUDE_DIR}/Platform/OpenAL/OutputDevice.hpp"
+		"${SRC_DIR}/Platform/OpenAL/OutputDevice.hpp"
 		"${SRC_DIR}/Platform/OpenAL/OutputDevice.cpp"
 
 		"${SRC_DIR}/Util/util_cstring.hpp"

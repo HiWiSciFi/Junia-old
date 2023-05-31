@@ -43,3 +43,17 @@ namespace GLFW { namespace Log { extern Junia::Log::Logger glfwLog; } }
 #define GLFWLOG_DBG_WARN     GLFW::Log::glfwLog.Warn()     << "[" << __FILE__ << ":" << __LINE__ << "] "
 #define GLFWLOG_DBG_ERROR    GLFW::Log::glfwLog.Error()    << "[" << __FILE__ << ":" << __LINE__ << "] "
 #define GLFWLOG_DBG_CRITICAL GLFW::Log::glfwLog.Critical() << "[" << __FILE__ << ":" << __LINE__ << "] "
+
+namespace OpenAL { namespace Log { extern Junia::Log::Logger alLog; } }
+
+#define ALLOG_TRACE        OpenAL::Log::alLog.Trace()
+#define ALLOG_INFO         OpenAL::Log::alLog.Info()
+#define ALLOG_WARN         OpenAL::Log::alLog.Warn()
+#define ALLOG_ERROR        OpenAL::Log::alLog.Error()
+#define ALLOG_CRITICAL     OpenAL::Log::alLog.Critical()
+
+#define ALLOG_DBG_TRACE    OpenAL::Log::alLog.Trace()    << "[" << __FILE__ << ":" << __LINE__ << "] "
+#define ALLOG_DBG_INFO     OpenAL::Log::alLog.Info()     << "[" << __FILE__ << ":" << __LINE__ << "] "
+#define ALLOG_DBG_WARN     OpenAL::Log::alLog.Warn()     << "[" << __FILE__ << ":" << __LINE__ << "] "
+#define ALLOG_DBG_ERROR    OpenAL::Log::alLog.Error()    << "[" << __FILE__ << ":" << __LINE__ << "] "
+#define ALLOG_DBG_CRITICAL OpenAL::Log::alLog.Critical() << "[" << __FILE__ << ":" << __LINE__ << "] "

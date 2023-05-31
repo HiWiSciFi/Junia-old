@@ -3,33 +3,34 @@
 #include <vector>
 #include <Junia/Core/Version.hpp>
 
-namespace Junia
-{
-	/**
-	 * @brief Initialize Junia
-	*/
-	void Init();
+namespace Junia {
 
-	/**
-	 * @brief Terminate Junia
-	*/
-	void Terminate();
+/**
+ * @brief Initialize Junia
+*/
+void Init();
 
-	/**
-	 * @brief Runs the Junia game loop
-	*/
-	void RunLoop();
+/**
+ * @brief Terminate Junia
+*/
+void Terminate();
 
-	/**
-	 * @brief Stops the Junia game loop
-	*/
-	void StopLoop();
+/**
+ * @brief Runs the Junia game loop
+*/
+void RunLoop();
 
-	/**
-	 * @brief Get the current version of the Junia engine
-	 * @return A Version struct containing the engine version
-	*/
-	const Version& GetEngineVersion();
+/**
+ * @brief Stops the Junia game loop
+*/
+void StopLoop();
+
+/**
+ * @brief Get the current version of the Junia engine
+ * @return A Version struct containing the engine version
+*/
+const Version& GetEngineVersion();
+
 } // namespace Junia
 
 #include "Junia/Core/Input.hpp"

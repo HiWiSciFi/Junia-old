@@ -5,18 +5,15 @@
 
 constexpr size_t ENTITY_COUNT = 100;
 
-int main()
-{
-	try
-	{
+int main() {
+	try {
 		JELOG_INFO << "Initializing Junia...";
 		Junia::Init();
 		Junia::Renderer::PickDevice(nullptr);
 
 		auto starttime = std::chrono::high_resolution_clock::now();
 		Junia::ECS::RegisterSystem<GravitySystem>();
-		for (Junia::ECS::EntityType i = 0; i < ENTITY_COUNT; i++)
-		{
+		for (Junia::ECS::EntityType i = 0; i < ENTITY_COUNT; i++) {
 			const Junia::ECS::Entity entity = Junia::ECS::Entity::Create();
 			entity.AddComponent<Junia::Transform>();
 		}
@@ -43,14 +40,12 @@ int main()
 		secondWindow->AttachScene(scene1);
 		JELOG_INFO << "Scenes loaded.";*/
 
-		Junia::Events::Subscribe<Junia::KeyDownEvent>([mainWindow] (const Junia::KeyDownEvent* event)
-			{
+		Junia::Events::Subscribe<Junia::KeyDownEvent>([mainWindow] (const Junia::KeyDownEvent* event) {
 				if (event->GetKeyCode() == Junia::KeyCode::ESCAPE)
 					event->GetWindow()->Close();
 			});
 
-		Junia::Events::Subscribe<Junia::WindowClosedEvent>([mainWindow] (const Junia::WindowClosedEvent* event)
-			{
+		Junia::Events::Subscribe<Junia::WindowClosedEvent>([mainWindow] (const Junia::WindowClosedEvent* event) {
 				if (event->GetWindow() == mainWindow) Junia::StopLoop();
 			});
 
@@ -60,9 +55,8 @@ int main()
 		JELOG_INFO << "Terminating Junia...";
 		Junia::Terminate();
 		JELOG_INFO << "Done.";
-	}
-	catch (std::exception& e)
-	{
+
+	} catch (std::exception& e) {
 		JELOG_CRITICAL << "Exception thrown: " << e.what();
 		Junia::ShowBlockingMessageBox(
 			"Junia Editor",

@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-namespace Junia
-{
+namespace Junia {
+
 	/**
 	 * @brief Read a binary file
 	 * @param path The path to the file
@@ -19,4 +19,5 @@ namespace Junia
 	 * @return A string containing the text that has been read
 	*/
 	std::string ReadFileText(const std::string& path);
-}
+
+} // namespace Junia

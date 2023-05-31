@@ -5,223 +5,218 @@
 #include "../Core/Keycodes.hpp"
 #include "../../JMath/Vector2.hpp"
 
-namespace Junia
-{
-	class KeyDownEvent : public Event
-	{
-	private:
-		/**
-		 * @brief The key that has been pressed
-		*/
-		KeyCode keyCode;
+namespace Junia {
 
-		/**
-		 * @brief The window the key was pressed in
-		*/
-		Window* window;
+class KeyDownEvent : public Event {
+private:
+	/**
+	 * @brief The key that has been pressed
+	*/
+	KeyCode keyCode;
 
-	public:
-		/**
-		 * @brief Create a KeyDownEvent
-		 * @param keyCode The KeyCode of the key that has been pressed
-		 * @param window The window the key was pressed in
-		*/
-		KeyDownEvent(Window* window, KeyCode keyCode);
+	/**
+	 * @brief The window the key was pressed in
+	*/
+	Window* window;
 
-		/**
-		 * @brief Get the key that has been pressed
-		 * @return The KeyCode of the key
-		*/
-		[[nodiscard]] KeyCode GetKeyCode() const;
+public:
+	/**
+	 * @brief Create a KeyDownEvent
+	 * @param keyCode The KeyCode of the key that has been pressed
+	 * @param window The window the key was pressed in
+	*/
+	KeyDownEvent(Window* window, KeyCode keyCode);
 
-		/**
-		 * @brief Get the window the key was pressed on
-		 * @return A pointer to the window
-		*/
-		[[nodiscard]] Window* GetWindow() const;
+	/**
+	 * @brief Get the key that has been pressed
+	 * @return The KeyCode of the key
+	*/
+	[[nodiscard]] KeyCode GetKeyCode() const;
 
-		[[nodiscard]] std::string ToString() const override;
-	};
+	/**
+	 * @brief Get the window the key was pressed on
+	 * @return A pointer to the window
+	*/
+	[[nodiscard]] Window* GetWindow() const;
 
-	class KeyUpEvent : public Event
-	{
-	private:
-		/**
-		 * @brief The key that has been released
-		*/
-		KeyCode keyCode;
+	[[nodiscard]] std::string ToString() const override;
+};
 
-		/**
-		 * @brief The window the key was released in
-		*/
-		Window* window;
+class KeyUpEvent : public Event {
+private:
+	/**
+	 * @brief The key that has been released
+	*/
+	KeyCode keyCode;
 
-	public:
-		/**
-		 * @brief Create a KeyUpEvent
-		 * @param keyCode The KeyCode of the key that has been released
-		 * @param window The window the key was released in
-		*/
-		KeyUpEvent(Window* window, KeyCode keyCode);
+	/**
+	 * @brief The window the key was released in
+	*/
+	Window* window;
 
-		/**
-		 * @brief Get the key that has been released
-		 * @return The KeyCode of the key
-		*/
-		[[nodiscard]] KeyCode GetKeyCode() const;
+public:
+	/**
+	 * @brief Create a KeyUpEvent
+	 * @param keyCode The KeyCode of the key that has been released
+	 * @param window The window the key was released in
+	*/
+	KeyUpEvent(Window* window, KeyCode keyCode);
 
-		/**
-		 * @brief Get the window the key was released on
-		 * @return A pointer to the window
-		*/
-		[[nodiscard]] Window* GetWindow() const;
+	/**
+	 * @brief Get the key that has been released
+	 * @return The KeyCode of the key
+	*/
+	[[nodiscard]] KeyCode GetKeyCode() const;
 
-		[[nodiscard]] std::string ToString() const override;
-	};
+	/**
+	 * @brief Get the window the key was released on
+	 * @return A pointer to the window
+	*/
+	[[nodiscard]] Window* GetWindow() const;
 
-	class KeyCharEvent : public Event
-	{
-	private:
-		/**
-		 * @brief The unicode codepoint that represents the character that has
-		 *        been input
-		*/
-		unsigned int codepoint;
+	[[nodiscard]] std::string ToString() const override;
+};
 
-		/**
-		 * @brief The window the character was sent to
-		*/
-		Window* window;
+class KeyCharEvent : public Event {
+private:
+	/**
+	 * @brief The unicode codepoint that represents the character that has
+	 *        been input
+	*/
+	unsigned int codepoint;
 
-	public:
-		/**
-		 * @brief Create a KeyCharEvent
-		 * @param codepoint The unicode codepoint of the character that has been
-		 *                  input
-		 * @param window The window the character was sent to
-		*/
-		KeyCharEvent(Window* window, unsigned int codepoint);
+	/**
+	 * @brief The window the character was sent to
+	*/
+	Window* window;
 
-		/**
-		 * @brief Get the character that has been input
-		 * @return The unicode codepoint of the character
-		*/
-		[[nodiscard]] unsigned int GetCodepoint() const;
+public:
+	/**
+	 * @brief Create a KeyCharEvent
+	 * @param codepoint The unicode codepoint of the character that has been
+	 *                  input
+	 * @param window The window the character was sent to
+	*/
+	KeyCharEvent(Window* window, unsigned int codepoint);
 
-		/**
-		 * @brief Get the window the character was sent to
-		 * @return A pointer to the window
-		*/
-		[[nodiscard]] Window* GetWindow() const;
+	/**
+	 * @brief Get the character that has been input
+	 * @return The unicode codepoint of the character
+	*/
+	[[nodiscard]] unsigned int GetCodepoint() const;
 
-		[[nodiscard]] std::string ToString() const override;
-	};
+	/**
+	 * @brief Get the window the character was sent to
+	 * @return A pointer to the window
+	*/
+	[[nodiscard]] Window* GetWindow() const;
 
-	class MouseButtonDownEvent : public Event
-	{
-	private:
-		/**
-		 * @brief The button that has been pressed
-		*/
-		MouseButton button;
+	[[nodiscard]] std::string ToString() const override;
+};
 
-		/**
-		 * @brief The window the button was pressed in
-		*/
-		Window* window;
+class MouseButtonDownEvent : public Event {
+private:
+	/**
+	 * @brief The button that has been pressed
+	*/
+	MouseButton button;
 
-	public:
-		/**
-		 * @brief Create a MouseButtonDownEvent
-		 * @param button The button that has been pressed
-		 * @param window The window the button was pressed in
-		*/
-		MouseButtonDownEvent(Window* window, MouseButton button);
+	/**
+	 * @brief The window the button was pressed in
+	*/
+	Window* window;
 
-		/**
-		 * @brief Get the mouse button that has been pressed
-		 * @return The MouseButton that has been pressed
-		*/
-		[[nodiscard]] MouseButton GetButton() const;
+public:
+	/**
+	 * @brief Create a MouseButtonDownEvent
+	 * @param button The button that has been pressed
+	 * @param window The window the button was pressed in
+	*/
+	MouseButtonDownEvent(Window* window, MouseButton button);
 
-		/**
-		 * @brief Get the window the button was pressed in
-		 * @return A pointer to the window
-		*/
-		[[nodiscard]] Window* GetWindow() const;
+	/**
+	 * @brief Get the mouse button that has been pressed
+	 * @return The MouseButton that has been pressed
+	*/
+	[[nodiscard]] MouseButton GetButton() const;
 
-		[[nodiscard]] std::string ToString() const override;
-	};
+	/**
+	 * @brief Get the window the button was pressed in
+	 * @return A pointer to the window
+	*/
+	[[nodiscard]] Window* GetWindow() const;
 
-	class MouseButtonUpEvent : public Event
-	{
-	private:
-		/**
-		 * @brief The button that has been released
-		*/
-		MouseButton button;
+	[[nodiscard]] std::string ToString() const override;
+};
 
-		/**
-		 * @brief The window the button was released in
-		*/
-		Window* window;
+class MouseButtonUpEvent : public Event {
+private:
+	/**
+	 * @brief The button that has been released
+	*/
+	MouseButton button;
 
-	public:
-		/**
-		 * @brief Create a MouseButtonUpEvent
-		 * @param button The mouse button that has been released
-		 * @param window The window the button was released in
-		*/
-		MouseButtonUpEvent(Window* window, MouseButton button);
+	/**
+	 * @brief The window the button was released in
+	*/
+	Window* window;
 
-		/**
-		 * @brief Get the mouse button that has been released
-		 * @return The MouseButton that has been released
-		*/
-		[[nodiscard]] MouseButton GetButton() const;
+public:
+	/**
+	 * @brief Create a MouseButtonUpEvent
+	 * @param button The mouse button that has been released
+	 * @param window The window the button was released in
+	*/
+	MouseButtonUpEvent(Window* window, MouseButton button);
 
-		/**
-		 * @brief Get the window the button was released in
-		 * @return A pointer to the window
-		*/
-		[[nodiscard]] Window* GetWindow() const;
+	/**
+	 * @brief Get the mouse button that has been released
+	 * @return The MouseButton that has been released
+	*/
+	[[nodiscard]] MouseButton GetButton() const;
 
-		[[nodiscard]] std::string ToString() const override;
-	};
+	/**
+	 * @brief Get the window the button was released in
+	 * @return A pointer to the window
+	*/
+	[[nodiscard]] Window* GetWindow() const;
 
-	class MouseMoveEvent : public Event
-	{
-	private:
-		/**
-		 * @brief The new position of the mouse
-		*/
-		JMath::Vec2i position;
+	[[nodiscard]] std::string ToString() const override;
+};
 
-		/**
-		 * @brief The window the mouse was moved in
-		*/
-		Window* window;
+class MouseMoveEvent : public Event {
+private:
+	/**
+	 * @brief The new position of the mouse
+	*/
+	JMath::Vec2i position;
 
-	public:
-		/**
-		 * @brief Create a MouseMoveEvent
-		 * @param position The new position of the mouse cursor
-		 * @param window The window the mouse was moved in
-		*/
-		MouseMoveEvent(Window* window, JMath::Vec2i position);
+	/**
+	 * @brief The window the mouse was moved in
+	*/
+	Window* window;
 
-		/**
-		 * @brief Get the new position of the mouse
-		 * @return The position of the mouse cursor
-		*/
-		[[nodiscard]] JMath::Vec2i GetPosition() const;
+public:
+	/**
+	 * @brief Create a MouseMoveEvent
+	 * @param position The new position of the mouse cursor
+	 * @param window The window the mouse was moved in
+	*/
+	MouseMoveEvent(Window* window, JMath::Vec2i position);
 
-		/**
-		 * @brief Get the window the mouse was moved in
-		 * @return A pointer to the window
-		*/
-		[[nodiscard]] Window* GetWindow() const;
+	/**
+	 * @brief Get the new position of the mouse
+	 * @return The position of the mouse cursor
+	*/
+	[[nodiscard]] JMath::Vec2i GetPosition() const;
 
-		[[nodiscard]] std::string ToString() const override;
-	};
+	/**
+	 * @brief Get the window the mouse was moved in
+	 * @return A pointer to the window
+	*/
+	[[nodiscard]] Window* GetWindow() const;
+
+	[[nodiscard]] std::string ToString() const override;
+};
+
 } // namespace Junia

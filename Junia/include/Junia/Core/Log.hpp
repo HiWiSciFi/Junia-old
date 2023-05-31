@@ -2,8 +2,7 @@
 
 #include "Logger.hpp"
 
-namespace Junia::Log
-{
+namespace Junia::Log {
 	extern Logger log;
 } // namespace Junia::Log
 

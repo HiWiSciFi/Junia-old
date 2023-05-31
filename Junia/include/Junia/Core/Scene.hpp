@@ -3,25 +3,23 @@
 #include <cstdint>
 #include "../Util/Concepts.hpp"
 
-namespace Junia
-{
-	class Scene
-	{
-	public:
-		using IdType = uint32_t;
+namespace Junia {
 
-		virtual ~Scene() = 0;
-	};
+class Scene {
+public:
+	using IdType = uint32_t;
 
-	template<TypenameDerivedFrom<Scene> T, typename... TArgs>
-	Scene::IdType RegisterScene(TArgs... args)
-	{
-		return 0;
-	}
+	virtual ~Scene() = 0;
+};
 
-	template<TypenameDerivedFrom<Scene> T>
-	void UnregisterScene()
-	{
-		return;
-	}
+template<TypenameDerivedFrom<Scene> T, typename... TArgs>
+Scene::IdType RegisterScene(TArgs... args) {
+	return 0;
+}
+
+template<TypenameDerivedFrom<Scene> T>
+void UnregisterScene() {
+	return;
+}
+
 } // namespace Junia

@@ -3,8 +3,8 @@
 #include "RenderDevice.hpp"
 #include <vector>
 
-namespace Junia::Renderer
-{
+namespace Junia::Renderer {
+
 	/**
 	 * @brief Get available render devices
 	 * @return a reference to a vector containing a list of pointers to valid
@@ -19,4 +19,5 @@ namespace Junia::Renderer
 	 *               Junia::RenderDevice::Pick())
 	*/
 	void PickDevice(Junia::RenderDevice* device);
+
 } // namespace Junia::Renderer

@@ -1,4 +1,4 @@
-#include <Platform/OpenAL/OutputDevice.hpp>
+#include "OutputDevice.hpp"
 #include <al.h>
 #include <alc.h>
 
