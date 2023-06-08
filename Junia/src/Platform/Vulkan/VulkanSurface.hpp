@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
+#include <vulkan/vulkan.hpp>
 #include <Junia/Renderer/Surface.hpp>
 #include <Junia/Core/Window.hpp>
 #include "VulkanSwapchain.hpp"
