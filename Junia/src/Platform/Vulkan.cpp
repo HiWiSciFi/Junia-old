@@ -8,6 +8,10 @@
 #include "../Util/util_cstring.hpp"
 #include <stdexcept>
 
+#if !defined(VK_VERSION_1_3)
+#error At least Vulkan Version 1.3 required!
+#endif
+
 namespace Vulkan
 {
 	static VkDebugUtilsMessengerEXT debugMessenger = nullptr;
