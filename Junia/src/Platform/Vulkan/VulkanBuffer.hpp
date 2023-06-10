@@ -12,6 +12,7 @@ public:
 
 	size_t GetSize() const;
 	virtual void SetData(void* data);
+	VkBuffer GetBuffer();
 
 protected:
 	size_t size;

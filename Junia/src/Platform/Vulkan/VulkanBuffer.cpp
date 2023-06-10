@@ -57,4 +57,8 @@ void VulkanBuffer::SetData(void* data) {
 	vkUnmapMemory(vkDevice->GetLogical(), bufferMemory);
 }
 
+VkBuffer VulkanBuffer::GetBuffer() {
+	return buffer;
+}
+
 } // namespace Vulkan

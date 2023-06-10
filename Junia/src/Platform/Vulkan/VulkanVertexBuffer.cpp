@@ -39,7 +39,7 @@ void VulkanVertexBuffer::SetData(void* data) {
 	copyRegion.srcOffset = 0;
 	copyRegion.dstOffset = 0;
 	copyRegion.size = size;
-	vkCmdCopyBuffer(commandBuffer, stagingBuffer.buffer, buffer, 1, &copyRegion);
+	vkCmdCopyBuffer(commandBuffer, stagingBuffer.GetBuffer(), buffer, 1, &copyRegion);
 
 	vkEndCommandBuffer(commandBuffer);
 
