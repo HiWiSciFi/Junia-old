@@ -9,6 +9,9 @@ public:
 	VulkanCommandBuffer(VkCommandPool pool);
 	~VulkanCommandBuffer();
 
+	void BeginRecord();
+	void EndRecord();
+
 private:
 	VkCommandPool pool = nullptr;
 	VkCommandBuffer buffer = nullptr;

@@ -15,6 +15,8 @@ public:
 	VulkanCommandPool(uint8_t maxInFlightFrames);
 	~VulkanCommandPool();
 
+	void AddBuffer(uint32_t count = 1);
+
 	inline VkCommandBuffer GetBuffer(uint8_t index) const { return commandBuffers[index]; }
 	void BeginRecordCommandBuffer(uint32_t currentFrame);
 	void EndRecordCommandBuffer(uint32_t currentFrame);

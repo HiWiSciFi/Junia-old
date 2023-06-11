@@ -31,6 +31,16 @@ VulkanCommandPool::~VulkanCommandPool() {
 	vkDestroyCommandPool(vkDevice->GetLogical(), commandPool, nullptr);
 }
 
+void VulkanCommandPool::AddBuffer(uint32_t count) {
+	VkCommandBufferAllocateInfo allocInfo{ };
+	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	allocInfo.commandPool = commandPool;
+	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	allocInfo.commandBufferCount = count;
+	if (vkAllocateCommandBuffers(vkDevice->GetLogical(), &allocInfo, commandBuffers.data()) != VK_SUCCESS)
+		throw std::runtime_error("failed to create command buffer");
+}
+
 void VulkanCommandPool::BeginRecordCommandBuffer(uint32_t currentFrame) {
 	VkCommandBufferBeginInfo beginInfo{ };
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
