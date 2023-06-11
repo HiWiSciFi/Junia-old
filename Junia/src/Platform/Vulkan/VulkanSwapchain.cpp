@@ -68,7 +68,7 @@ namespace Vulkan
 		renderPass = new VulkanRenderPass(format);
 		Recreate();
 
-		commandPool = new VulkanCommandPool(maxInFlight);
+		commandPool = new VulkanCommandPool(vkDevice->GetGraphicsQueueIndex(), maxInFlight);
 
 		// synchronization objects
 
@@ -288,17 +288,20 @@ namespace Vulkan
 
 		vkResetFences(vkDevice->GetLogical(), 1, &inFlightFences[currentFrame]);
 
-		VkCommandBuffer currentBuffer = commandPool->GetBuffer(currentFrame);
-		vkResetCommandBuffer(currentBuffer, 0);
+		// TODO: remove
+		VkCommandBuffer currBuffer = commandPool->GetBuffer(currentFrame);
 
-		commandPool->BeginRecordCommandBuffer(currentFrame);
-		renderPass->Begin(framebuffers[imageIndex], extent, currentBuffer);
+		commandPool->ResetBuffer(currentFrame);
 
-		graphicsPipeline->Bind(currentBuffer);
-		vkCmdDraw(currentBuffer, 3, 1, 0, 0);
+		commandPool->BeginRecordBuffer(currentFrame);
+		renderPass->Begin(framebuffers[imageIndex], extent, currBuffer);
 
-		renderPass->End(currentBuffer);
-		commandPool->EndRecordCommandBuffer(currentFrame);
+		graphicsPipeline->Bind(currBuffer);
+		commandPool->CmdDraw(currentFrame, 3, 1, 0, 0);
+
+		renderPass->End(currBuffer);
+		commandPool->EndRecordBuffer(currentFrame);
+
 
 		VkSubmitInfo submitInfo{ };
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -308,7 +311,7 @@ namespace Vulkan
 		submitInfo.pWaitSemaphores = waitSemaphores;
 		submitInfo.pWaitDstStageMask = waitStages;
 		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &currentBuffer;
+		submitInfo.pCommandBuffers = &currBuffer;
 		VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
 		submitInfo.signalSemaphoreCount = 1;
 		submitInfo.pSignalSemaphores = signalSemaphores;

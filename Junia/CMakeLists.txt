@@ -139,8 +139,6 @@ target_sources(Junia
 		"${SRC_DIR}/Platform/Vulkan/VulkanBuffer.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanCommandPool.hpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanCommandPool.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanCommandBuffer.hpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanCommandBuffer.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanDevice.hpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanDevice.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanExtensionLoader.hpp"

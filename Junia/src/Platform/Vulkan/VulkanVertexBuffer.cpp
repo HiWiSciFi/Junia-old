@@ -1,6 +1,7 @@
 #include "VulkanVertexBuffer.hpp"
 #include "VulkanDevice.hpp"
 #include <stdexcept>
+#include "VulkanCommandPool.hpp"
 
 namespace Vulkan {
 
@@ -20,38 +21,15 @@ VulkanVertexBuffer::~VulkanVertexBuffer() {
 void VulkanVertexBuffer::SetData(void* data) {
 	stagingBuffer.SetData(data);
 
-	VkCommandBufferAllocateInfo allocInfo{ };
-	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	allocInfo.commandPool = commandPool;
-	allocInfo.commandBufferCount = 1;
+	static VulkanCommandPool vertexBufferAllocationPool(vkDevice->GetGraphicsQueueIndex(), 1);
 
-	VkCommandBuffer commandBuffer;
-	vkAllocateCommandBuffers(vkDevice->GetLogical(), &allocInfo, &commandBuffer);
-
-	VkCommandBufferBeginInfo beginInfo{ };
-	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-	vkBeginCommandBuffer(commandBuffer, &beginInfo);
-
-	VkBufferCopy copyRegion{ };
-	copyRegion.srcOffset = 0;
-	copyRegion.dstOffset = 0;
-	copyRegion.size = size;
-	vkCmdCopyBuffer(commandBuffer, stagingBuffer.GetBuffer(), buffer, 1, &copyRegion);
-
-	vkEndCommandBuffer(commandBuffer);
-
-	VkSubmitInfo submitInfo{ };
-	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	submitInfo.commandBufferCount = 1;
-	submitInfo.pCommandBuffers = &commandBuffer;
-
-	vkQueueSubmit(vkDevice->GetGraphicsQueue(), 1, &submitInfo, nullptr);
+	vertexBufferAllocationPool.BeginRecordBuffer(0);
+	vertexBufferAllocationPool.CmdCopyBuffer(0, stagingBuffer, 0, *this, 0, size);
+	vertexBufferAllocationPool.EndRecordBuffer(0);
+	vertexBufferAllocationPool.SubmitBuffer(0, vkDevice->GetGraphicsQueue());
 	vkQueueWaitIdle(vkDevice->GetGraphicsQueue());
 
-	vkFreeCommandBuffers(vkDevice->GetLogical(), commandPool, 1, &commandBuffer);
+	vertexBufferAllocationPool.ResetBuffer(0);
 }
 
 } // namespace Vulkan
