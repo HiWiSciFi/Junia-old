@@ -2,23 +2,22 @@
 
 #include <vulkan/vulkan.hpp>
 #include "VulkanRenderPass.hpp"
+#include <Junia/Renderer/Material.hpp>
 
-namespace Vulkan
-{
-	class VulkanGraphicsPipeline
-	{
-	private:
-		VkPipeline graphicsPipeline = nullptr;
-		VkPipelineLayout layout = nullptr;
-		VkShaderModule vertexShader = nullptr;
-		VkShaderModule fragmentShader = nullptr;
-		VkViewport viewport{ };
-		VkRect2D scissor{ };
+namespace Vulkan {
 
-	public:
-		VulkanGraphicsPipeline(VkExtent2D extent, VulkanRenderPass* renderPass);
-		~VulkanGraphicsPipeline();
+class VulkanGraphicsPipeline {
+private:
+	VkPipeline graphicsPipeline = nullptr;
+	VkPipelineLayout layout = nullptr;
+	std::shared_ptr<Junia::Material> material = nullptr;
 
-		void Bind(VkCommandBuffer buffer);
-	};
-}
+public:
+	VulkanGraphicsPipeline() = default;
+	VulkanGraphicsPipeline(VkRenderPass renderPass, std::shared_ptr<Junia::Material> material);
+	~VulkanGraphicsPipeline();
+
+	void Bind(VkCommandBuffer buffer);
+};
+
+} // namespace Vulkan

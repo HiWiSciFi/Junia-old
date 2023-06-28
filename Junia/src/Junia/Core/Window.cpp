@@ -46,9 +46,9 @@ namespace Junia
 		return windows[id];
 	}
 
-	Window* Window::Create(const std::string& title, int width, int height)
+	std::shared_ptr<Window> Window::Create(const std::string& title, int width, int height)
 	{
-		return new GLFW::GlfwWindow(title, width, height);
+		return std::make_shared<GLFW::GlfwWindow>(title, width, height);
 	}
 
 	void Window::Destroy(Window* window)

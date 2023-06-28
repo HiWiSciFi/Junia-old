@@ -40,7 +40,11 @@ public:
 	void BeginRecordBuffer(uint32_t index) const;
 	void EndRecordBuffer(uint32_t index) const;
 	void ResetBuffer(uint32_t index) const;
-	void SubmitBuffer(uint32_t index, VkQueue queue, VkFence fence = nullptr) const;
+	void SubmitBuffer(uint32_t index, VkQueue queue,
+		VkSemaphore* waitSemaphores = nullptr, uint32_t waitSemaphoreCount = 0,
+		VkPipelineStageFlags* waitStages = nullptr,
+		VkSemaphore* signalSemaphores = nullptr, uint32_t signalSemaphoreCount = 0,
+		VkFence fence = nullptr) const;
 
 	void CmdCopyBuffer(uint32_t index,
 		const VulkanBuffer& src, uint32_t srcOffset,

@@ -56,7 +56,7 @@ namespace GLFW
 		Junia::WindowFullscreenMode GetFullscreenMode() const override;
 		void SetFullscreenMode(Junia::WindowFullscreenMode mode, Junia::Monitor* monitor = nullptr) override;
 
-		void AttachScene(Junia::Scene::IdType sceneId) override;
+		void AttachScene(std::shared_ptr<Junia::Scene> scene) override;
 
 	private:
 		static void FramebufferResizeCallback(GLFWwindow* wnd, int width, int height);

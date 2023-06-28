@@ -24,6 +24,11 @@ struct Transform {
 	 * @brief The scale component
 	*/
 	JMath::Vec3 scale;
+
+	Transform() = default;
+
+	Transform(const JMath::Vec3& position, const JMath::Vec3& rotation, const JMath::Vec3& scale)
+		: position(position), rotation(rotation), scale(scale) { }
 };
 
 } // namespace Junia

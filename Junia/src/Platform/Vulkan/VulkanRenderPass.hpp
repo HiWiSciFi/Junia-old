@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vulkan/vulkan.hpp>
+#include <JMath/Vector4.hpp>
 
 namespace Vulkan
 {
@@ -8,14 +9,18 @@ namespace Vulkan
 	{
 	private:
 		VkRenderPass renderPass = nullptr;
+		VkClearValue clearValue{ };
 
 	public:
-		VulkanRenderPass(VkFormat format);
+		VulkanRenderPass() = default;
+		VulkanRenderPass(VkFormat format, JMath::Vec4f clearColor);
 		~VulkanRenderPass();
 
 		inline VkRenderPass Get() const { return renderPass; }
 
-		void Begin(VkFramebuffer framebuffer, VkExtent2D extent, VkCommandBuffer buffer);
-		void End(VkCommandBuffer buffer);
+		void SetClearColor(JMath::Vec4f clearColor);
+
+		void Begin(VkCommandBuffer commandBuffer, VkFramebuffer framebuffer, VkExtent2D extent) const;
+		void End(VkCommandBuffer commandBuffer) const;
 	};
 }

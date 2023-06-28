@@ -19,6 +19,10 @@ using Vec2d  = Vector< 2,   double >;
 using Vec2i  = Vector< 2,  int32_t >;
 using Vec2ui = Vector< 2, uint32_t >;
 
+#ifdef _MSC_VER
+#pragma pack(push, 1)
+#endif
+
 template<typename T>
 struct Vector<2, T> {
 public:
@@ -48,7 +52,15 @@ public:
 	inline Vector<2, T>& operator+=(const Vector<2, T>& other);
 	inline Vector<2, T>& operator-=(const Vector<2, T>& other);
 
-};
+}
+#if defined(__GNUC__) || defined(__clang__)
+__attribute__((__packed__))
+#endif
+;
+
+#ifdef _MSC_VER
+#pragma pack(pop)
+#endif
 
 // ----------------------------- External Operators ----------------------------
 

@@ -18,6 +18,10 @@ namespace JMath {
 
 using Mat3 = Matrix<3, 3, float>;
 
+#ifdef _MSC_VER
+#pragma pack(push, 1)
+#endif
+
 template<typename T>
 struct Matrix<3, 3, T> {
 
@@ -42,7 +46,15 @@ public:
 
 // --------------------------------- Operators ---------------------------------
 
-};
+}
+#if defined(__GNUC__) || defined(__clang__)
+__attribute__((__packed__))
+#endif
+;
+
+#ifdef _MSC_VER
+#pragma pack(pop)
+#endif
 
 // ----------------------------- External Operators ----------------------------
 

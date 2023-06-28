@@ -19,6 +19,10 @@ using Vec3d  = Vector< 3,   double >;
 using Vec3i  = Vector< 3,  int32_t >;
 using Vec3ui = Vector< 3, uint32_t >;
 
+#ifdef _MSC_VER
+#pragma pack(push, 1)
+#endif
+
 template<typename T>
 struct Vector<3, T> {
 public:
@@ -49,7 +53,15 @@ public:
 	inline Vector<3, T>& operator+=(const Vector<3, T>& other);
 	inline Vector<3, T>& operator-=(const Vector<3, T>& other);
 
-};
+}
+#if defined(__GNUC__) || defined(__clang__)
+__attribute__((__packed__))
+#endif
+;
+
+#ifdef _MSC_VER
+#pragma pack(pop)
+#endif
 
 // ----------------------------- External Operators ----------------------------
 
@@ -95,7 +107,11 @@ inline Vector<3, T> Reject(const Vector<3, T>& first, const Vector<3, T>& second
 // -------------------------------- Constructors -------------------------------
 
 template<typename T>
-inline Vector<3, T>::Vector() = default;
+inline Vector<3, T>::Vector() {
+	x = static_cast<T>(0);
+	y = static_cast<T>(0);
+	z = static_cast<T>(0);
+}
 
 template<typename T>
 inline Vector<3, T>::Vector(T x, T y, T z)

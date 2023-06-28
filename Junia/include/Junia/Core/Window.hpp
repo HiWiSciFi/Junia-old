@@ -6,6 +6,7 @@
 #include "Scene.hpp"
 #include <cstdint>
 #include <string>
+#include <memory>
 
 namespace Junia {
 
@@ -57,28 +58,28 @@ public:
 	 * @brief Get the overall amount of windows that have been created
 	 * @return The amount of windows that have been created
 	*/
-	static size_t GetWindowCount();
+	[[nodiscard]] static size_t GetWindowCount();
 
 	/**
 	 * @brief Get a pointer to an array of all windows that have been
 	 *        created (see GetWindowCount() for the length of the array)
 	 * @return A pointer to the start of an array of window pointers
 	*/
-	static Window** GetAll();
+	[[nodiscard]] static Window** GetAll();
 
 	/**
 	 * @brief Get if a window with a specific ID exists
 	 * @param id The ID of the window to check for
 	 * @return True if it does exist, false otherwise
 	*/
-	static bool Exists(IdType windowId);
+	[[nodiscard]] static bool Exists(IdType windowId);
 
 	/**
 	 * @brief Get if a window exists (if the passed pointer is valid)
 	 * @param window a pointer to the window
 	 * @return True if it is a valid pointer, false otherwise
 	*/
-	static bool Exists(Window* window);
+	[[nodiscard]] static bool Exists(Window* window);
 
 	/**
 	 * @brief Get a window by its ID
@@ -86,14 +87,14 @@ public:
 	 * @return A pointer to a Window with the ID or nullptr if it doesn't
 	 *         exist
 	*/
-	static Window* Get(IdType windowId);
+	[[nodiscard]] static Window* Get(IdType windowId);
 
 	/**
 	 * @brief Get the currently focused window
 	 * @return A pointer to the window or a nullptr if no windows of this
 	 *         application currently have input focus
 	*/
-	inline static Window* Get() { return Get(0); }
+	[[nodiscard]] inline static Window* Get() { return Get(0); }
 
 	/**
 	 * @brief Create a window
@@ -102,7 +103,7 @@ public:
 	 * @param height The initial height of the window
 	 * @return A pointer to the newly created window
 	*/
-	static Window* Create(const std::string& title, int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
+	static std::shared_ptr<Window> Create(const std::string& title, int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
 
 	/**
 	 * @brief Destroy a window (WARNING: THIS IS VERY UNSAFE -
@@ -134,7 +135,9 @@ protected:
 	/**
 	 * @brief A pointer to the render API Surface of this window
 	*/
-	Surface* surface = nullptr;
+	std::shared_ptr<Surface> surface = nullptr;
+
+	std::shared_ptr<Scene> scene = nullptr;
 
 public:
 	virtual ~Window() = 0;
@@ -148,6 +151,8 @@ public:
 	 * @brief Close the window gracefully
 	*/
 	virtual void Close() = 0;
+
+	[[nodiscard]] std::shared_ptr<Surface> GetSurface() { return surface; }
 
 	/**
 	 * @brief Get the WindowAPI native handle to the window
@@ -285,7 +290,7 @@ public:
 	 * @param sceneId The ID of the scene to attach (see
 	 *                Junia::RegisterScene())
 	*/
-	virtual void AttachScene(Scene::IdType sceneId) = 0;
+	virtual void AttachScene(std::shared_ptr<Scene> scene) = 0;
 };
 
 } // namespace Junia

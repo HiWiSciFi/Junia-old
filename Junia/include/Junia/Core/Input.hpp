@@ -18,7 +18,7 @@ protected:
 	virtual JMath::Vec2i GetMousePosition_Impl(Window::IdType window) = 0;
 
 public:
-	static void Init(WindowApi api);
+	static void Init();
 
 	/**
 	 * @brief Get if a key is pressed

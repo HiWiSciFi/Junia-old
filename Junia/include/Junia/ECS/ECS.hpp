@@ -56,6 +56,10 @@ public:
 	*/
 	static void Destroy(Entity e);
 
+	static void DestroyAll();
+
+	Entity() : id(0) { }
+
 	/**
 	 * @brief Create an Entity by ID
 	 * @param id the id for the entity

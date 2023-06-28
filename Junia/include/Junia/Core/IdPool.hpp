@@ -63,6 +63,11 @@ public:
 	 *           the IdPool::Next() function of this IdPool
 	*/
 	void Free(T poolId);
+
+	T GetStart() const;
+	T GetCurrent() const;
+	T GetStep() const;
+	IdPoolStackAdapter<T>& GetFreeIds();
 };
 
 // -----------------------------------------------------------------------------
@@ -98,6 +103,26 @@ inline void IdPool<T>::Free(T poolId) {
 	if (poolId == current - step)
 		current = current - step;
 	else freeIds.push(poolId);
+}
+
+template<typename T>
+inline T IdPool<T>::GetStart() const {
+	return start;
+}
+
+template<typename T>
+inline T IdPool<T>::GetCurrent() const {
+	return current;
+}
+
+template<typename T>
+inline T IdPool<T>::GetStep() const {
+	return step;
+}
+
+template<typename T>
+inline IdPoolStackAdapter<T>& IdPool<T>::GetFreeIds() {
+	return freeIds;
 }
 
 } // namespace Junia

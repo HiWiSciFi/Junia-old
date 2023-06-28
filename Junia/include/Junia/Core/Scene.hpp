@@ -1,25 +1,33 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
+#include "IdPool.hpp"
 #include "../Util/Concepts.hpp"
 
 namespace Junia {
 
 class Scene {
-public:
-	using IdType = uint32_t;
+protected:
+	explicit Scene();
 
+public:
 	virtual ~Scene() = 0;
 };
 
-template<TypenameDerivedFrom<Scene> T, typename... TArgs>
-Scene::IdType RegisterScene(TArgs... args) {
-	return 0;
-}
+namespace Scenes {
 
 template<TypenameDerivedFrom<Scene> T>
-void UnregisterScene() {
-	return;
+std::shared_ptr<Scene> Load();
+
+void Unload(Scene* scene);
+
+// Implementation
+
+template<TypenameDerivedFrom<Scene> T>
+std::shared_ptr<Scene> Load() {
+	return std::make_shared<T>();
 }
 
+} // namespace Scenes
 } // namespace Junia

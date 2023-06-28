@@ -16,9 +16,9 @@
 #include <Junia/Events/InputEvents.hpp>
 #include <Junia/ECS/ECS.hpp>
 #include <Junia/ECS/Components.hpp>
+#include <Junia/ECS/Systems.hpp>
 #include <Junia/Core/Time.hpp>
 #include <Junia/Core/Window.hpp>
-#include <Junia/Core/WindowApi.hpp>
 #include <Junia/Renderer/RenderDevice.hpp>
 #include <stdexcept>
 #include <vector>
@@ -27,6 +27,8 @@ namespace Junia {
 
 const Version ENGINE_VERSION(0, 0, 0);
 bool juniaLoopShouldStop = false;
+
+static std::shared_ptr<RendererSystem> renderer = nullptr;
 
 void Init() {
 	Events::Register<KeyDownEvent>();
@@ -38,7 +40,10 @@ void Init() {
 
 	Events::Register<WindowClosedEvent>();
 
-	ECS::RegisterComponent<Junia::Transform>();
+	ECS::RegisterComponent<Transform>();
+	ECS::RegisterComponent<MeshRenderer>();
+
+	renderer = ECS::RegisterSystem<RendererSystem>();
 
 #ifdef _WIN32
 	// Enable ANSI Escape Sequences on Windows
@@ -55,7 +60,7 @@ void Init() {
 
 	try {
 		GLFW::Init();
-		Input::Init(WindowApi::GLFW);
+		Input::Init();
 	} catch (std::exception e) {
 		GLFWLOG_CRITICAL << "GLFW ERROR: " << e.what();
 		throw e;
@@ -82,6 +87,7 @@ void Init() {
 
 void Terminate() {
 	// Cleanup APIs
+	Junia::ECS::Entity::DestroyAll();
 	Junia::Window::DestroyAll();
 	Vulkan::Cleanup();
 	OpenAL::Cleanup();
@@ -90,10 +96,17 @@ void Terminate() {
 
 void RunLoop() {
 	while (!juniaLoopShouldStop) {
-		Junia::Events::DispatchQueue();
+		try {
+			Junia::Events::DispatchQueue();
 
-		for (Junia::Window::IdType i = 1; i <= Junia::Window::GetWindowCount(); i++)
-			Junia::Window::Get(i)->Update();
+			renderer->Update(0);
+
+			for (Junia::Window::IdType i = 1; i <= Junia::Window::GetWindowCount(); i++)
+				Junia::Window::Get(i)->Update();
+		} catch (std::exception e) {
+			JECORELOG_CRITICAL << "Exception thrown: " << e.what();
+			throw e;
+		}
 	}
 }
 

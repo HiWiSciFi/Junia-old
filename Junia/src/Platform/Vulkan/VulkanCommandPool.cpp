@@ -65,11 +65,17 @@ void VulkanCommandPool::ResetBuffer(uint32_t index) const {
 	vkResetCommandBuffer(commandBuffers[index], 0);
 }
 
-void VulkanCommandPool::SubmitBuffer(uint32_t index, VkQueue queue, VkFence fence) const {
+void VulkanCommandPool::SubmitBuffer(uint32_t index, VkQueue queue, VkSemaphore* waitSemaphores, uint32_t waitSemaphoreCount, VkPipelineStageFlags* waitStages,
+	VkSemaphore* signalSemaphores, uint32_t signalSemaphoreCount, VkFence fence) const {
 	VkSubmitInfo submitInfo{ };
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submitInfo.commandBufferCount = 1;
 	submitInfo.pCommandBuffers = &commandBuffers[index];
+	submitInfo.pWaitDstStageMask = waitStages;
+	submitInfo.pWaitSemaphores = waitSemaphores;
+	submitInfo.waitSemaphoreCount = waitSemaphoreCount;
+	submitInfo.pSignalSemaphores = signalSemaphores;
+	submitInfo.signalSemaphoreCount = signalSemaphoreCount;
 	if (vkQueueSubmit(queue, 1, &submitInfo, fence) != VK_SUCCESS)
 		throw std::runtime_error("failed to submit command buffer");
 }

@@ -35,9 +35,11 @@ const Version& GetEngineVersion();
 
 #include "Junia/Core/Input.hpp"
 #include "Junia/Core/Log.hpp"
-#include <Junia/Core/MessageBox.hpp>
+#include "Junia/Core/MessageBox.hpp"
 #include "Junia/Core/Window.hpp"
+#include "Junia/Core/FileSystem.hpp"
 
+#include "Junia/Renderer/Mesh.hpp"
 #include "Junia/Renderer/RenderDevice.hpp"
 #include "Junia/Renderer/Renderer.hpp"
 
