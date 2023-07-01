@@ -2,15 +2,15 @@
 #include <Junia/Core/FileSystem.hpp>
 #include <stdexcept>
 #include <vulkan/vulkan.hpp>
-#include "../../Platform/Vulkan/VulkanVertexBuffer.hpp"
 
 #include <iostream>
 #include <fstream>
 #include <string_view>
+#include "../../Platform/Vulkan/VulkanMesh.hpp"
 
 namespace Junia {
 
-Mesh::Mesh(const std::string& path, FileType type) {
+void Mesh::LoadModel(const std::string& path, FileType type) {
 	if (type == FileType::OBJ) {
 		std::ifstream objFile(path);
 		if (!objFile.is_open()) throw std::runtime_error("failed to open file");
@@ -83,25 +83,10 @@ Mesh::Mesh(const std::string& path, FileType type) {
 }
 
 std::shared_ptr<Mesh> Mesh::Create(const std::string& path, FileType type) {
-	return std::shared_ptr<Mesh>(new Mesh(path, type));
+	return std::make_shared<Vulkan::VulkanMesh>(path, type);
 }
 
 Mesh::~Mesh() {
-}
-
-void Mesh::MoveToGPU(uint32_t vertexBinding, uint32_t vertexLocation) {
-	VkVertexInputBindingDescription bindingDescription{ };
-	bindingDescription.binding = vertexBinding;
-	bindingDescription.stride = 3 * sizeof(float);
-	bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-	VkVertexInputAttributeDescription attributeDescription;
-	attributeDescription.binding = vertexBinding;
-	attributeDescription.location = vertexLocation;
-	attributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-	attributeDescription.offset = 0;
-
-	Vulkan::VulkanVertexBuffer vertexBuffer(vertices.size(), vertices.data());
 }
 
 bool Mesh::HasUVs() const {

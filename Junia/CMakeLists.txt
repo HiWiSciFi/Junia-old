@@ -89,7 +89,6 @@ target_sources(Junia
 		"${SRC_DIR}/Junia/Renderer/Mesh.cpp"
 		"${SRC_DIR}/Junia/Renderer/RenderDevice.cpp"
 		"${SRC_DIR}/Junia/Renderer/Renderer.cpp"
-		"${SRC_DIR}/Junia/Renderer/RenderPackage.cpp"
 		"${SRC_DIR}/Junia/Renderer/Shader.cpp"
 		"${SRC_DIR}/Junia/Renderer/Surface.cpp"
 
@@ -100,16 +99,13 @@ target_sources(Junia
 
 		"${SRC_DIR}/Platform/Vulkan.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanBuffer.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanCommandPool.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanDevice.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanExtensionLoader.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanGraphicsPipeline.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanRenderPackage.cpp"
+		"${SRC_DIR}/Platform/Vulkan/VulkanMaterial.cpp"
+		"${SRC_DIR}/Platform/Vulkan/VulkanMesh.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanRenderPass.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanShader.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanSurface.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanSwapchain.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanVertexBuffer.cpp"
 
 		"${SRC_DIR}/Platform/OpenAL.cpp"
 		"${SRC_DIR}/Platform/OpenAL/OutputDevice.cpp"

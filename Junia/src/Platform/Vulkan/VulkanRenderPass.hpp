@@ -13,7 +13,7 @@ namespace Vulkan
 
 	public:
 		VulkanRenderPass() = default;
-		VulkanRenderPass(VkFormat format, JMath::Vec4f clearColor);
+		VulkanRenderPass(JMath::Vec4f clearColor);
 		~VulkanRenderPass();
 
 		inline VkRenderPass Get() const { return renderPass; }

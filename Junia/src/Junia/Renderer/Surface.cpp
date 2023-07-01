@@ -5,7 +5,7 @@
 namespace Junia {
 
 std::shared_ptr<Surface> Surface::Create(Junia::Window* window, JMath::Vec2ui resolution, VSyncMode vsync) {
-	return std::make_shared<Vulkan::VulkanSurface>(window, resolution, vsync);
+	return std::make_shared<Vulkan::VulkanSurface>(window, vsync);
 }
 
 Surface::~Surface() {

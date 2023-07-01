@@ -2,7 +2,7 @@
 
 #include "Mesh.hpp"
 #include "Material.hpp"
-#include "RenderPackage.hpp"
+#include "../ECS/Components/MeshRenderer.hpp"
 #include <memory>
 
 namespace Junia {
@@ -59,7 +59,7 @@ public:
 	/**
 	 * @brief Draw a test triangle TODO: replace with proper API
 	*/
-	virtual void Draw(std::shared_ptr<Junia::RenderPackage> package) = 0;
+	virtual void Draw(MeshRenderer& package) = 0;
 };
 
 } // namespace Junia

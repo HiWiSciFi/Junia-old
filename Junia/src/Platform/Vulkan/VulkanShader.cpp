@@ -1,4 +1,5 @@
 #include "VulkanShader.hpp"
+
 #include "VulkanDevice.hpp"
 
 namespace Vulkan {
@@ -25,9 +26,12 @@ VkPipelineShaderStageCreateInfo VulkanShader::GetStageCreateInfo() const {
 	shaderStageCreateInfo.module = shader;
 	shaderStageCreateInfo.pName = "main";
 	switch (GetType()) {
-	case Type::VERTEX:   shaderStageCreateInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;   break;
-	case Type::FRAGMENT: shaderStageCreateInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT; break;
-	//case Type::COMPUTE:  shaderStageCreateInfo.stage = VK_SHADER_STAGE_COMPUTE_BIT;  break;
+	case Type::VERTEX:                 shaderStageCreateInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;                  break;
+	case Type::FRAGMENT:               shaderStageCreateInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;                break;
+	case Type::TESSELATION_CONTROL:    shaderStageCreateInfo.stage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;    break;
+	case Type::TESSELATION_EVALUATION: shaderStageCreateInfo.stage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT; break;
+	case Type::GEOMETRY:               shaderStageCreateInfo.stage = VK_SHADER_STAGE_GEOMETRY_BIT;                break;
+	//case Type::COMPUTE:                shaderStageCreateInfo.stage = VK_SHADER_STAGE_COMPUTE_BIT;                 break;
 	}
 	return shaderStageCreateInfo;
 }

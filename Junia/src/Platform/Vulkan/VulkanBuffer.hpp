@@ -1,23 +1,25 @@
 #pragma once
 
 #include <vulkan/vulkan.hpp>
-#include <cstdint>
 
 namespace Vulkan {
 
 class VulkanBuffer {
+private:
+	VkBuffer buffer;
+	VkDeviceMemory bufferMemory;
+	VkDeviceSize bufferSize;
+
 public:
-	VulkanBuffer(size_t size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
+	VulkanBuffer() = default;
+	VulkanBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
 	~VulkanBuffer();
 
-	size_t GetSize() const;
-	virtual void SetData(void* data);
-	VkBuffer GetBuffer() const;
+	inline VkDeviceSize GetSize() const { return bufferSize; }
+	inline VkBuffer Get() const { return buffer; }
 
-protected:
-	size_t size;
-	VkBuffer buffer = nullptr;
-	VkDeviceMemory bufferMemory = nullptr;
+	void FillData(void* data);
+	void FillData(VulkanBuffer& other);
 };
 
 } // namespace Vulkan

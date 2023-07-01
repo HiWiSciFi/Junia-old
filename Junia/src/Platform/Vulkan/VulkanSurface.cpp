@@ -3,30 +3,31 @@
 #include "VulkanSurface.hpp"
 #include <stdexcept>
 #include "VulkanDevice.hpp"
-#include "VulkanGraphicsPipeline.hpp"
+#include "VulkanMesh.hpp"
+#include "VulkanMaterial.hpp"
 
 namespace Vulkan {
-
-VulkanRenderPass* renderPass = nullptr;
 
 extern VkInstance vkInstance;
 extern VulkanDevice* vkDevice;
 
 static const uint32_t MAX_FRAMES_IN_FLIGHT = 2;
 
-VulkanSurface::VulkanSurface(Junia::Window* window, JMath::Vec2ui preferredResolution, VSyncMode vsync) {
+void VulkanSurface::CleanupSwapchain() {
+	vkDevice->WaitIdle();
+
+	// cleanup swapchain
+	for (size_t i = 0; i < swapchainFramebuffers.size(); i++) {
+		vkDestroyFramebuffer(vkDevice->GetLogical(), swapchainFramebuffers[i], nullptr);
+		vkDestroyImageView(vkDevice->GetLogical(), swapchainImageViews[i], nullptr);
+	}
+	vkDestroySwapchainKHR(vkDevice->GetLogical(), swapchain, nullptr);
+}
+
+VulkanSurface::VulkanSurface(Junia::Window* window, VSyncMode vsync) : window(window) {
 	// create window surface
 	if (glfwCreateWindowSurface(vkInstance, static_cast<GLFWwindow*>(window->GetNative()), nullptr, &surface) != VK_SUCCESS)
 		throw std::runtime_error("failed to create window surface");
-
-	// get surface formats
-	uint32_t formatCount;
-	if (vkGetPhysicalDeviceSurfaceFormatsKHR(vkDevice->GetPhysical(), surface, &formatCount, nullptr) != VK_SUCCESS)
-		throw std::runtime_error("failed to get surface formats");
-	if (formatCount == 0) throw std::runtime_error("no surface formats available");
-	std::vector<VkSurfaceFormatKHR> formats(formatCount);
-	if (vkGetPhysicalDeviceSurfaceFormatsKHR(vkDevice->GetPhysical(), surface, &formatCount, formats.data()) != VK_SUCCESS)
-		throw std::runtime_error("failed to get surface formats");
 
 	// get present modes
 	uint32_t presentModeCount;
@@ -36,18 +37,6 @@ VulkanSurface::VulkanSurface(Junia::Window* window, JMath::Vec2ui preferredResol
 	std::vector<VkPresentModeKHR> presentModes(presentModeCount);
 	if (vkGetPhysicalDeviceSurfacePresentModesKHR(vkDevice->GetPhysical(), surface, &presentModeCount, presentModes.data()) != VK_SUCCESS)
 		throw std::runtime_error("failed to get surface presentation modes");
-
-	// TODO: support multiple color spaces and surface formats
-	// choose surface format
-	bool formatChosen = false;
-	for (const VkSurfaceFormatKHR& aFormat : formats) {
-		if (aFormat.format == VK_FORMAT_B8G8R8A8_SRGB && aFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-			surfaceFormat = aFormat;
-			formatChosen = true;
-			break;
-		}
-	}
-	if (!formatChosen) surfaceFormat = formats[0];
 
 	// choose present mode
 	VkPresentModeKHR preferredPresentMode = VK_PRESENT_MODE_FIFO_KHR;
@@ -68,7 +57,6 @@ VulkanSurface::VulkanSurface(Junia::Window* window, JMath::Vec2ui preferredResol
 	if (presentMode = VK_PRESENT_MODE_MAX_ENUM_KHR) presentMode = VK_PRESENT_MODE_FIFO_KHR;
 
 	// get surface capabilities
-	VkSurfaceCapabilitiesKHR capabilities;
 	if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkDevice->GetPhysical(), surface, &capabilities) != VK_SUCCESS)
 		throw std::runtime_error("failed to get surface capabilities");
 
@@ -77,8 +65,8 @@ VulkanSurface::VulkanSurface(Junia::Window* window, JMath::Vec2ui preferredResol
 		resolution = capabilities.currentExtent;
 	} else {
 		resolution = {
-			std::clamp(preferredResolution.x, capabilities.minImageExtent.width, capabilities.maxImageExtent.width),
-			std::clamp(preferredResolution.y, capabilities.minImageExtent.height, capabilities.maxImageExtent.height)
+			std::clamp(window->GetFramebufferSize().x, capabilities.minImageExtent.width, capabilities.maxImageExtent.width),
+			std::clamp(window->GetFramebufferSize().y, capabilities.minImageExtent.height, capabilities.maxImageExtent.height)
 		};
 	}
 
@@ -92,76 +80,15 @@ VulkanSurface::VulkanSurface(Junia::Window* window, JMath::Vec2ui preferredResol
 	scissor.offset = { 0, 0 };
 	scissor.extent = resolution;
 
+	// create render pass
+	renderPass = new VulkanRenderPass(JMath::Vec4f(0.0f, 0.0f, 0.0f, 1.0f));
+
 	// select swapchain image count
-	uint32_t imageCount = capabilities.minImageCount + 1;
+	imageCount = capabilities.minImageCount + 1;
 	if (capabilities.maxImageCount != 0)
 		imageCount = std::clamp(imageCount, capabilities.minImageCount, capabilities.maxImageCount);
 
-	// create swapchain
-	VkSwapchainCreateInfoKHR swapchainCreateInfo{ };
-	swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	swapchainCreateInfo.surface = surface;
-	swapchainCreateInfo.minImageCount = imageCount;
-	swapchainCreateInfo.imageFormat = surfaceFormat.format;
-	swapchainCreateInfo.imageColorSpace = surfaceFormat.colorSpace;
-	swapchainCreateInfo.imageExtent = resolution;
-	swapchainCreateInfo.imageArrayLayers = 1;
-	swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-	uint32_t queueFamilyIndices[] = { vkDevice->GetGraphicsQueueIndex(), vkDevice->GetPresentQueueIndex() };
-	if (queueFamilyIndices[0] != queueFamilyIndices[1]) {
-		swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-		swapchainCreateInfo.queueFamilyIndexCount = 2;
-		swapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices;
-	} else swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	swapchainCreateInfo.preTransform = capabilities.currentTransform;
-	swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-	swapchainCreateInfo.presentMode = presentMode;
-	swapchainCreateInfo.clipped = VK_TRUE;
-	swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
-	if (vkCreateSwapchainKHR(vkDevice->GetLogical(), &swapchainCreateInfo, nullptr, &swapchain) != VK_SUCCESS)
-		throw std::runtime_error("failed to create swapchain");
-
-	// retrieve swapchain images
-	if (vkGetSwapchainImagesKHR(vkDevice->GetLogical(), swapchain, &imageCount, nullptr) != VK_SUCCESS)
-		throw std::runtime_error("failed to retrieve swapchain images");
-	swapchainImages.resize(imageCount);
-	if (vkGetSwapchainImagesKHR(vkDevice->GetLogical(), swapchain, &imageCount, swapchainImages.data()) != VK_SUCCESS)
-		throw std::runtime_error("failed to retrieve swapchain images");
-
-	// create render pass
-	if (renderPass == nullptr) renderPass = new VulkanRenderPass(surfaceFormat.format, JMath::Vec4f(0.0f, 0.0f, 0.0f, 1.0f));
-
-	// create swapchain image views and framebuffers
-	swapchainImageViews.resize(swapchainImages.size());
-	swapchainFramebuffers.resize(swapchainImages.size());
-	VkImageViewCreateInfo imageViewCreateInfo{ };
-	imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-	imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-	imageViewCreateInfo.format = surfaceFormat.format;
-	imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-	imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-	imageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-	imageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-	imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
-	imageViewCreateInfo.subresourceRange.levelCount = 1;
-	imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
-	imageViewCreateInfo.subresourceRange.layerCount = 1;
-	VkFramebufferCreateInfo framebufferCreateInfo{ };
-	framebufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-	framebufferCreateInfo.renderPass = renderPass->Get();
-	framebufferCreateInfo.attachmentCount = 1;
-	framebufferCreateInfo.width = resolution.width;
-	framebufferCreateInfo.height = resolution.height;
-	framebufferCreateInfo.layers = 1;
-	for (size_t i = 0; i < swapchainImages.size(); i++) {
-		imageViewCreateInfo.image = swapchainImages[i];
-		if (vkCreateImageView(vkDevice->GetLogical(), &imageViewCreateInfo, nullptr, &swapchainImageViews[i]) != VK_SUCCESS)
-			throw std::runtime_error("failed to create swapchain image view");
-		framebufferCreateInfo.pAttachments = &swapchainImageViews[i];
-		if (vkCreateFramebuffer(vkDevice->GetLogical(), &framebufferCreateInfo, nullptr, &swapchainFramebuffers[i]) != VK_SUCCESS)
-			throw std::runtime_error("failed to create framebuffer");
-	}
+	CreateSwapchain();
 
 	// create command pool
 	VkCommandPoolCreateInfo poolCreateInfo{ };
@@ -201,18 +128,87 @@ VulkanSurface::VulkanSurface(Junia::Window* window, JMath::Vec2ui preferredResol
 }
 
 VulkanSurface::~VulkanSurface() {
-	vkDeviceWaitIdle(vkDevice->GetLogical());
+	vkDevice->WaitIdle();
+	CleanupSwapchain();
 	for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
 		vkDestroySemaphore(vkDevice->GetLogical(), imageAvailableSemaphores[i], nullptr);
 		vkDestroySemaphore(vkDevice->GetLogical(), renderFinishedSemaphores[i], nullptr);
 		vkDestroyFence(vkDevice->GetLogical(), inFlightFences[i], nullptr);
 	}
 	vkDestroyCommandPool(vkDevice->GetLogical(), renderingCommandPool, nullptr);
-	for (auto framebuffer : swapchainFramebuffers) vkDestroyFramebuffer(vkDevice->GetLogical(), framebuffer, nullptr);
-	for (auto imageView : swapchainImageViews) vkDestroyImageView(vkDevice->GetLogical(), imageView, nullptr);
 	delete renderPass;
-	vkDestroySwapchainKHR(vkDevice->GetLogical(), swapchain, nullptr);
 	vkDestroySurfaceKHR(vkInstance, surface, nullptr);
+}
+
+void VulkanSurface::CreateSwapchain() {
+	resolution.width = window->GetFramebufferSize().x;
+	resolution.height = window->GetFramebufferSize().y;
+	viewport.width = static_cast<float>(resolution.width);
+	viewport.height = static_cast<float>(resolution.height);
+	scissor.extent = resolution;
+
+	// create swapchain
+	VkSwapchainCreateInfoKHR swapchainCreateInfo{ };
+	swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+	swapchainCreateInfo.surface = surface;
+	swapchainCreateInfo.minImageCount = imageCount;
+	swapchainCreateInfo.imageFormat = vkDevice->GetSurfaceFormat().format;
+	swapchainCreateInfo.imageColorSpace = vkDevice->GetSurfaceFormat().colorSpace;
+	swapchainCreateInfo.imageExtent = resolution;
+	swapchainCreateInfo.imageArrayLayers = 1;
+	swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+	uint32_t queueFamilyIndices[] = { vkDevice->GetGraphicsQueueIndex(), vkDevice->GetPresentQueueIndex() };
+	if (queueFamilyIndices[0] != queueFamilyIndices[1]) {
+		swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+		swapchainCreateInfo.queueFamilyIndexCount = 2;
+		swapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices;
+	} else swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	swapchainCreateInfo.preTransform = capabilities.currentTransform;
+	swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+	swapchainCreateInfo.presentMode = presentMode;
+	swapchainCreateInfo.clipped = VK_TRUE;
+	swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
+	if (vkCreateSwapchainKHR(vkDevice->GetLogical(), &swapchainCreateInfo, nullptr, &swapchain) != VK_SUCCESS)
+		throw std::runtime_error("failed to create swapchain");
+
+	// retrieve swapchain images
+	if (vkGetSwapchainImagesKHR(vkDevice->GetLogical(), swapchain, &imageCount, nullptr) != VK_SUCCESS)
+		throw std::runtime_error("failed to retrieve swapchain images");
+	swapchainImages.resize(imageCount);
+	if (vkGetSwapchainImagesKHR(vkDevice->GetLogical(), swapchain, &imageCount, swapchainImages.data()) != VK_SUCCESS)
+		throw std::runtime_error("failed to retrieve swapchain images");
+
+	// create swapchain image views and framebuffers
+	swapchainImageViews.resize(swapchainImages.size());
+	swapchainFramebuffers.resize(swapchainImages.size());
+	VkImageViewCreateInfo imageViewCreateInfo{ };
+	imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+	imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	imageViewCreateInfo.format = vkDevice->GetSurfaceFormat().format;
+	imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+	imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+	imageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+	imageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+	imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+	imageViewCreateInfo.subresourceRange.levelCount = 1;
+	imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+	imageViewCreateInfo.subresourceRange.layerCount = 1;
+	VkFramebufferCreateInfo framebufferCreateInfo{ };
+	framebufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+	framebufferCreateInfo.renderPass = renderPass->Get();
+	framebufferCreateInfo.attachmentCount = 1;
+	framebufferCreateInfo.width = resolution.width;
+	framebufferCreateInfo.height = resolution.height;
+	framebufferCreateInfo.layers = 1;
+	for (size_t i = 0; i < swapchainImages.size(); i++) {
+		imageViewCreateInfo.image = swapchainImages[i];
+		if (vkCreateImageView(vkDevice->GetLogical(), &imageViewCreateInfo, nullptr, &swapchainImageViews[i]) != VK_SUCCESS)
+			throw std::runtime_error("failed to create swapchain image view");
+		framebufferCreateInfo.pAttachments = &swapchainImageViews[i];
+		if (vkCreateFramebuffer(vkDevice->GetLogical(), &framebufferCreateInfo, nullptr, &swapchainFramebuffers[i]) != VK_SUCCESS)
+			throw std::runtime_error("failed to create framebuffer");
+	}
 }
 
 JMath::Vec2ui VulkanSurface::GetResolution() {
@@ -230,20 +226,26 @@ Junia::Surface::VSyncMode VulkanSurface::GetVSyncMode() {
 }
 
 void VulkanSurface::FramebufferResized(JMath::Vec2ui newSize) {
-	viewport.width = static_cast<float>(newSize.x);
-	viewport.height = static_cast<float>(newSize.y);
-	scissor.extent.width = newSize.x;
-	scissor.extent.height = newSize.y;
+	framebufferResized = true;
 }
 
 void VulkanSurface::BeginDraw() {
 	if (vkWaitForFences(vkDevice->GetLogical(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX) != VK_SUCCESS)
 		throw std::runtime_error("failed to wait for flight fence");
+
+	VkResult result;
+	do {
+		result = vkAcquireNextImageKHR(vkDevice->GetLogical(), swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &currentImageIndex);
+		if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+			CleanupSwapchain();
+			CreateSwapchain();
+		} else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+			throw std::runtime_error("failed to acquire image from the swapchain");
+		}
+	} while(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR);
+
 	if (vkResetFences(vkDevice->GetLogical(), 1, &inFlightFences[currentFrame]) != VK_SUCCESS)
 		throw std::runtime_error("failed to reset in flight fence");
-
-	if (vkAcquireNextImageKHR(vkDevice->GetLogical(), swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &currentImageIndex) != VK_SUCCESS)
-		throw std::runtime_error("failed to acquire image from the swapchain");
 
 	if (vkResetCommandBuffer(renderingCommandBuffers[currentFrame], 0) != VK_SUCCESS)
 		throw std::runtime_error("faied to reset rendering command buffer");
@@ -258,10 +260,14 @@ void VulkanSurface::BeginDraw() {
 	vkCmdSetScissor(renderingCommandBuffers[currentFrame], 0, 1, &scissor);
 }
 
-void VulkanSurface::Draw(std::shared_ptr<Junia::RenderPackage> package) {
-	std::shared_ptr<VulkanRenderPackage> vkPackage = std::dynamic_pointer_cast<VulkanRenderPackage>(package);
-	vkPackage->GetPipeline().Bind(renderingCommandBuffers[currentFrame]);
-	vkCmdDraw(renderingCommandBuffers[currentFrame], 3, 1, 0, 0);
+void VulkanSurface::Draw(Junia::MeshRenderer& package) {
+	std::shared_ptr<VulkanMesh> mesh = std::dynamic_pointer_cast<VulkanMesh>(package.mesh);
+	std::shared_ptr<VulkanMaterial> material = std::dynamic_pointer_cast<VulkanMaterial>(package.material);
+	material->BindPipeline(renderingCommandBuffers[currentFrame]);
+	mesh->BindVertexBuffer(renderingCommandBuffers[currentFrame]);
+	mesh->BindIndexBuffer(renderingCommandBuffers[currentFrame]);
+	vkCmdDrawIndexed(renderingCommandBuffers[currentFrame], mesh->GetIndices().size() * 3, 1, 0, 0, 0);
+	//vkCmdDraw(renderingCommandBuffers[currentFrame], mesh->GetVertices().size(), 1, 0, 0);
 }
 
 void VulkanSurface::EndDraw() {
@@ -290,9 +296,14 @@ void VulkanSurface::EndDraw() {
 	presentInfo.swapchainCount = 1;
 	presentInfo.pSwapchains = &swapchain;
 	presentInfo.pImageIndices = &currentImageIndex;
-	presentInfo.pResults = nullptr; // check results for multiple swapchains
-	if (vkQueuePresentKHR(vkDevice->GetPresentQueue(), &presentInfo) != VK_SUCCESS)
+	VkResult result = vkQueuePresentKHR(vkDevice->GetPresentQueue(), &presentInfo);
+	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
+		framebufferResized = false;
+		CleanupSwapchain();
+		CreateSwapchain();
+	} else if (result != VK_SUCCESS) {
 		throw std::runtime_error("failed to present swapchain to screen");
+	}
 
 	currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }

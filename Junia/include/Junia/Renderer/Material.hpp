@@ -1,26 +1,31 @@
 #pragma once
 
 #include "Shader.hpp"
+
 #include <cstdint>
-#include <vector>
 #include <memory>
+#include <optional>
+#include <vector>
 
 namespace Junia {
 
 class Material {
-private:
-	std::shared_ptr<Shader> vertexShader;
-	std::shared_ptr<Shader> fragmentShader;
-
-	Material(std::shared_ptr<Shader> vertexShader, std::shared_ptr<Shader> fragmentShader);
-
 public:
-	~Material();
+	virtual ~Material() = 0;
 
 	static std::shared_ptr<Material> Create(std::shared_ptr<Shader> vertexShader, std::shared_ptr<Shader> fragmentShader);
 
-	inline std::shared_ptr<Shader> GetVertexShader() const { return vertexShader; }
-	inline std::shared_ptr<Shader> GetFragmentShader() const { return fragmentShader; }
+	virtual void SetVertexShader(std::shared_ptr<Shader> shader) = 0;
+	virtual void SetFragmentShader(std::shared_ptr<Shader> shader) = 0;
+	virtual void SetTessellationControlShader(std::shared_ptr<Shader> shader) = 0;
+	virtual void SetTessellationEvaluationShader(std::shared_ptr<Shader> shader) = 0;
+	virtual void SetGeometryShader(std::shared_ptr<Shader> shader) = 0;
+
+	virtual std::shared_ptr<Shader> GetVertexShader() const = 0;
+	virtual std::shared_ptr<Shader> GetFragmentShader() const = 0;
+	virtual std::shared_ptr<Shader> GetTessellationControlShader() const = 0;
+	virtual std::shared_ptr<Shader> GetTessellationEvaluationShader() const = 0;
+	virtual std::shared_ptr<Shader> GetGeometryShader() const = 0;
 };
 
-} // namespace Junia
+} // namespace Juniat

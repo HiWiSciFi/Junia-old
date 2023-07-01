@@ -74,6 +74,19 @@ namespace Vulkan
 			uint32_t formatCount;
 			vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, dummySurface, &formatCount, nullptr);
 			if (formatCount == 0) failed = true;
+			std::vector<VkSurfaceFormatKHR> formats(formatCount);
+			vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, dummySurface, &formatCount, formats.data());
+
+			// choose surface format
+			bool formatChosen = false;
+			for (const VkSurfaceFormatKHR& aFormat : formats) {
+				if (aFormat.format == VK_FORMAT_B8G8R8A8_SRGB && aFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+					surfaceFormat = aFormat;
+					formatChosen = true;
+					break;
+				}
+			}
+			if (!formatChosen) surfaceFormat = formats[0];
 
 			uint32_t presentModeCount;
 			vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, dummySurface, &presentModeCount, nullptr);
@@ -154,5 +167,9 @@ namespace Vulkan
 		vkGetDeviceQueue(logicalDevice, graphicsQueueIndex.value(), 0, &graphicsQueue);
 		vkGetDeviceQueue(logicalDevice,  presentQueueIndex.value(), 0, &presentQueue );
 		vkGetDeviceQueue(logicalDevice,  computeQueueIndex.value(), 0, &computeQueue );
+	}
+
+	void VulkanDevice::WaitIdle() {
+		vkDeviceWaitIdle(logicalDevice);
 	}
 }

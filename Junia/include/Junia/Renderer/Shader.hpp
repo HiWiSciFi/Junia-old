@@ -8,9 +8,12 @@ namespace Junia {
 class Shader {
 public:
 	enum class Type : uint8_t {
-		VERTEX,
-		FRAGMENT,
-		//COMPUTE
+		VERTEX                 = 0,
+		FRAGMENT               = 1,
+		TESSELATION_CONTROL    = 2,
+		TESSELATION_EVALUATION = 3,
+		GEOMETRY               = 4,
+		//COMPUTE                = 5
 	};
 
 private:

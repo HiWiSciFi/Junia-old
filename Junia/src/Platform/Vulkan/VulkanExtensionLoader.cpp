@@ -72,36 +72,33 @@ VKAPI_ATTR void VKAPI_CALL vkSubmitDebugUtilsMessageEXT(
 	const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData)
 	{ return func_vkSubmitDebugUtilsMessageEXT(instance, messageSeverity, messageTypes, pCallbackData); }
 
-namespace Vulkan
-{
-	extern VkInstance vkInstance;
+namespace Vulkan {
 
-	template<typename FUNC>
-	static FUNC vkLoadFunc(const char* funcname)
-	{
-		FUNC func = reinterpret_cast<FUNC>(vkGetInstanceProcAddr(vkInstance, funcname));
-		if (func == nullptr) throw std::runtime_error("failed to load vulkan function");
-		return func;
-	}
+extern VkInstance vkInstance;
 
-	void LoadExtensions(size_t extensionCount, const char** extensionNames)
-	{
-		for (size_t i = 0; i < extensionCount; i++)
-		{
-			if (strcmp(extensionNames[i], VK_EXT_DEBUG_UTILS_EXTENSION_NAME) == 0)
-			{
-				func_vkCmdBeginDebugUtilsLabelEXT    = vkLoadFunc<PFN_vkCmdBeginDebugUtilsLabelEXT>    ("vkCmdBeginDebugUtilsLabelEXT"   );
-				func_vkCmdEndDebugUtilsLabelEXT      = vkLoadFunc<PFN_vkCmdEndDebugUtilsLabelEXT>      ("vkCmdEndDebugUtilsLabelEXT"     );
-				func_vkCmdInsertDebugUtilsLabelEXT   = vkLoadFunc<PFN_vkCmdInsertDebugUtilsLabelEXT>   ("vkCmdInsertDebugUtilsLabelEXT"  );
-				func_vkCreateDebugUtilsMessengerEXT  = vkLoadFunc<PFN_vkCreateDebugUtilsMessengerEXT>  ("vkCreateDebugUtilsMessengerEXT" );
-				func_vkDestroyDebugUtilsMessengerEXT = vkLoadFunc<PFN_vkDestroyDebugUtilsMessengerEXT> ("vkDestroyDebugUtilsMessengerEXT");
-				func_vkQueueBeginDebugUtilsLabelEXT  = vkLoadFunc<PFN_vkQueueBeginDebugUtilsLabelEXT>  ("vkQueueBeginDebugUtilsLabelEXT" );
-				func_vkQueueEndDebugUtilsLabelEXT    = vkLoadFunc<PFN_vkQueueEndDebugUtilsLabelEXT>    ("vkQueueEndDebugUtilsLabelEXT"   );
-				func_vkQueueInsertDebugUtilsLabelEXT = vkLoadFunc<PFN_vkQueueInsertDebugUtilsLabelEXT> ("vkQueueInsertDebugUtilsLabelEXT");
-				func_vkSetDebugUtilsObjectNameEXT    = vkLoadFunc<PFN_vkSetDebugUtilsObjectNameEXT>    ("vkSetDebugUtilsObjectNameEXT"   );
-				func_vkSetDebugUtilsObjectTagEXT     = vkLoadFunc<PFN_vkSetDebugUtilsObjectTagEXT>     ("vkSetDebugUtilsObjectTagEXT"    );
-				func_vkSubmitDebugUtilsMessageEXT    = vkLoadFunc<PFN_vkSubmitDebugUtilsMessageEXT>    ("vkSubmitDebugUtilsMessageEXT"   );
-			}
+template<typename FUNC>
+static FUNC vkLoadFunc(const char* funcname) {
+	FUNC func = reinterpret_cast<FUNC>(vkGetInstanceProcAddr(vkInstance, funcname));
+	if (func == nullptr) throw std::runtime_error("failed to load vulkan function");
+	return func;
+}
+
+void LoadExtensions(size_t extensionCount, const char** extensionNames) {
+	for (size_t i = 0; i < extensionCount; i++) {
+		if (strcmp(extensionNames[i], VK_EXT_DEBUG_UTILS_EXTENSION_NAME) == 0) {
+			func_vkCmdBeginDebugUtilsLabelEXT    = vkLoadFunc<PFN_vkCmdBeginDebugUtilsLabelEXT>    ("vkCmdBeginDebugUtilsLabelEXT"   );
+			func_vkCmdEndDebugUtilsLabelEXT      = vkLoadFunc<PFN_vkCmdEndDebugUtilsLabelEXT>      ("vkCmdEndDebugUtilsLabelEXT"     );
+			func_vkCmdInsertDebugUtilsLabelEXT   = vkLoadFunc<PFN_vkCmdInsertDebugUtilsLabelEXT>   ("vkCmdInsertDebugUtilsLabelEXT"  );
+			func_vkCreateDebugUtilsMessengerEXT  = vkLoadFunc<PFN_vkCreateDebugUtilsMessengerEXT>  ("vkCreateDebugUtilsMessengerEXT" );
+			func_vkDestroyDebugUtilsMessengerEXT = vkLoadFunc<PFN_vkDestroyDebugUtilsMessengerEXT> ("vkDestroyDebugUtilsMessengerEXT");
+			func_vkQueueBeginDebugUtilsLabelEXT  = vkLoadFunc<PFN_vkQueueBeginDebugUtilsLabelEXT>  ("vkQueueBeginDebugUtilsLabelEXT" );
+			func_vkQueueEndDebugUtilsLabelEXT    = vkLoadFunc<PFN_vkQueueEndDebugUtilsLabelEXT>    ("vkQueueEndDebugUtilsLabelEXT"   );
+			func_vkQueueInsertDebugUtilsLabelEXT = vkLoadFunc<PFN_vkQueueInsertDebugUtilsLabelEXT> ("vkQueueInsertDebugUtilsLabelEXT");
+			func_vkSetDebugUtilsObjectNameEXT    = vkLoadFunc<PFN_vkSetDebugUtilsObjectNameEXT>    ("vkSetDebugUtilsObjectNameEXT"   );
+			func_vkSetDebugUtilsObjectTagEXT     = vkLoadFunc<PFN_vkSetDebugUtilsObjectTagEXT>     ("vkSetDebugUtilsObjectTagEXT"    );
+			func_vkSubmitDebugUtilsMessageEXT    = vkLoadFunc<PFN_vkSubmitDebugUtilsMessageEXT>    ("vkSubmitDebugUtilsMessageEXT"   );
 		}
 	}
 }
+
+} // namespace Vulkan

@@ -3,8 +3,8 @@
 
 Scene1::Scene1() {
 	squareMesh = Junia::Mesh::Create("Assets/Models/Square.obj", Junia::Mesh::FileType::OBJ);
-	std::shared_ptr<Junia::Shader> vertShader = Junia::Shader::Create("Assets/Shaders/shader1_vert.spv", Junia::Shader::Type::VERTEX);
-	std::shared_ptr<Junia::Shader> fragShader = Junia::Shader::Create("Assets/Shaders/shader1_frag.spv", Junia::Shader::Type::FRAGMENT);
+	std::shared_ptr<Junia::Shader> vertShader = Junia::Shader::Create("Assets/Shaders/shader2_vert.spv", Junia::Shader::Type::VERTEX);
+	std::shared_ptr<Junia::Shader> fragShader = Junia::Shader::Create("Assets/Shaders/shader2_frag.spv", Junia::Shader::Type::FRAGMENT);
 	squareMaterial = Junia::Material::Create(vertShader, fragShader);
 
 	Junia::ECS::Entity square = Junia::ECS::Entity::Create();

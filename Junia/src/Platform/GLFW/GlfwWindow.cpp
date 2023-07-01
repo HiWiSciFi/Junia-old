@@ -6,7 +6,7 @@
 #include "GlfwInput.hpp"
 
 namespace Junia {
-	extern std::vector<Window*> windows;
+extern std::vector<Window*> windows;
 }
 
 namespace GLFW {
@@ -27,7 +27,7 @@ GlfwWindow::GlfwWindow(const std::string& title, int width, int height) : title(
 	Junia::windows.push_back(this);
 	if (Junia::windows[0] == nullptr) Junia::windows[0] = this;
 
-	glfwSetKeyCallback(window, [ ] (GLFWwindow* window, const int key, int scancode, const int action, int mods) {
+	glfwSetKeyCallback(window, [] (GLFWwindow* window, const int key, int scancode, const int action, int mods) {
 		switch (action) {
 		case GLFW_PRESS:
 			Junia::Events::Trigger<Junia::KeyDownEvent>(
@@ -44,13 +44,13 @@ GlfwWindow::GlfwWindow(const std::string& title, int width, int height) : title(
 		}
 	});
 
-	glfwSetCharCallback(window, [ ] (GLFWwindow* window, unsigned int codepoint) {
+	glfwSetCharCallback(window, [] (GLFWwindow* window, unsigned int codepoint) {
 		Junia::Events::Trigger<Junia::KeyCharEvent>(
 			reinterpret_cast<Window*>(glfwGetWindowUserPointer(window)),
 			codepoint);
 	});
 
-	glfwSetMouseButtonCallback(window, [ ] (GLFWwindow* window, int button, int action, int mods) {
+	glfwSetMouseButtonCallback(window, [] (GLFWwindow* window, int button, int action, int mods) {
 		switch (action) {
 		case GLFW_PRESS:
 			Junia::Events::Trigger<Junia::MouseButtonDownEvent>(
@@ -67,10 +67,15 @@ GlfwWindow::GlfwWindow(const std::string& title, int width, int height) : title(
 		}
 	});
 
-	glfwSetCursorPosCallback(window, [ ] (GLFWwindow* window, double xpos, double ypos) {
+	glfwSetCursorPosCallback(window, [] (GLFWwindow* window, double xpos, double ypos) {
 		Junia::Events::Trigger<Junia::MouseMoveEvent>(
 			reinterpret_cast<Window*>(glfwGetWindowUserPointer(window)),
 			JMath::Vec2i(static_cast<int>(xpos), static_cast<int>(ypos)));
+	});
+
+	glfwSetFramebufferSizeCallback(window, [] (GLFWwindow* wnd, int width, int height) {
+		GlfwWindow* window = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(wnd));
+		window->surface->FramebufferResized(JMath::Vec2ui(width, height));
 	});
 
 	int framebufferWidth, framebufferHeight;
@@ -247,11 +252,6 @@ void GlfwWindow::SetFullscreenMode(Junia::WindowFullscreenMode mode, Junia::Moni
 
 void GlfwWindow::AttachScene(std::shared_ptr<Junia::Scene> scene) {
 	this->scene = scene;
-}
-
-void GlfwWindow::FramebufferResizeCallback(GLFWwindow* wnd, int width, int height) {
-	GlfwWindow* window = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(wnd));
-	window->surface->FramebufferResized(JMath::Vec2ui(width, height));
 }
 
 } // namespace GLFW

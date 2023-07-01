@@ -30,6 +30,16 @@ bool juniaLoopShouldStop = false;
 
 static std::shared_ptr<RendererSystem> renderer = nullptr;
 
+static void WindowsEnableANSI() {
+#ifdef _WIN32
+	HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	DWORD mode;
+	GetConsoleMode(hOutput, &mode);
+	mode |= ENABLE_PROCESSED_OUTPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+	SetConsoleMode(hOutput, mode);
+#endif
+}
+
 void Init() {
 	Events::Register<KeyDownEvent>();
 	Events::Register<KeyUpEvent>();
@@ -45,16 +55,8 @@ void Init() {
 
 	renderer = ECS::RegisterSystem<RendererSystem>();
 
-#ifdef _WIN32
 	// Enable ANSI Escape Sequences on Windows
-	{
-		HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-		DWORD dwMode;
-		GetConsoleMode(hOutput, &dwMode);
-		dwMode |= ENABLE_PROCESSED_OUTPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-		SetConsoleMode(hOutput, dwMode);
-	}
-#endif
+	WindowsEnableANSI();
 
 	InitTimer();
 

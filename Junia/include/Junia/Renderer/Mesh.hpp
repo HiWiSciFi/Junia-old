@@ -19,18 +19,16 @@ public:
 		OBJ
 	};
 
-private:
+protected:
 	std::vector<JMath::Vec3f> vertices{ };
 	std::vector<JMath::Vec3ui> indices{ };
 	std::optional<std::vector<JMath::Vec2f>> uvs{ };
 
-	Mesh(const std::string& path, FileType type);
+	void LoadModel(const std::string& path, FileType type);
 
 public:
 	static std::shared_ptr<Mesh> Create(const std::string& path, FileType type);
-	~Mesh();
-
-	void MoveToGPU(uint32_t vertexBinding, uint32_t vertexLocation);
+	virtual ~Mesh();
 
 	[[nodiscard]] bool HasUVs() const;
 	[[nodiscard]] const std::vector<JMath::Vec3f>& GetVertices() const;

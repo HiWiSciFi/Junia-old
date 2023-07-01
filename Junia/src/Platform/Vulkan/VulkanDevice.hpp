@@ -20,6 +20,7 @@ private:
 
 	VkPhysicalDeviceProperties deviceProperties{ };
 	VkPhysicalDeviceFeatures     deviceFeatures{ };
+	VkSurfaceFormatKHR surfaceFormat;
 
 	std::string deviceName{ };
 
@@ -28,6 +29,8 @@ public:
 	~VulkanDevice();
 
 	void Pick() override;
+
+	void WaitIdle();
 
 	inline VkPhysicalDevice GetPhysical() const { return physicalDevice; }
 	inline VkDevice GetLogical() const { return logicalDevice; }
@@ -49,6 +52,8 @@ public:
 		if (computeQueueIndex.has_value()) return computeQueueIndex.value();
 		throw std::runtime_error("failed to find compute queue family index");
 	}
+
+	inline VkSurfaceFormatKHR GetSurfaceFormat() const { return surfaceFormat; }
 
 	inline VkQueue GetGraphicsQueue() const { return graphicsQueue; }
 	inline VkQueue GetPresentQueue()  const { return  presentQueue; }

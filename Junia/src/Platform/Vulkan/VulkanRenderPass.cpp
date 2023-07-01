@@ -6,9 +6,9 @@ namespace Vulkan {
 
 extern VulkanDevice* vkDevice;
 
-VulkanRenderPass::VulkanRenderPass(VkFormat format, JMath::Vec4f clearColor) {
+VulkanRenderPass::VulkanRenderPass(JMath::Vec4f clearColor) {
 	VkAttachmentDescription colorAttachment{ };
-	colorAttachment.format = format;
+	colorAttachment.format = vkDevice->GetSurfaceFormat().format;
 	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
 	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
