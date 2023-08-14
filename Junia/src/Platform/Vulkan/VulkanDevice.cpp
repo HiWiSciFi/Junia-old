@@ -65,10 +65,10 @@ namespace Vulkan
 			for (uint32_t i = 0; i < queueFamilyCount; i++)
 			{
 				if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) graphicsQueueIndex = i;
-				if (queueFamilies[i].queueFlags & VK_QUEUE_COMPUTE_BIT) computeQueueIndex = i;
+				if (queueFamilies[i].queueFlags &  VK_QUEUE_COMPUTE_BIT)  computeQueueIndex = i;
+				if (queueFamilies[i].queueFlags & VK_QUEUE_TRANSFER_BIT) transferQueueIndex = i;
 				VkBool32 presentSupport = false;
-				vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, dummySurface, &presentSupport);
-				if (presentSupport) presentQueueIndex = i;
+				if (vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, dummySurface, &presentSupport), presentSupport) presentQueueIndex = i;
 			}
 
 			uint32_t formatCount;
@@ -102,7 +102,8 @@ namespace Vulkan
 
 		if (failed ||
 			!graphicsQueueIndex.has_value() ||
-			!presentQueueIndex.has_value() ||
+			!presentQueueIndex.has_value()  ||
+			!transferQueueIndex.has_value() ||
 			!computeQueueIndex.has_value())
 		{
 			rating = 0;
@@ -134,6 +135,7 @@ namespace Vulkan
 		std::set<uint32_t> uniqueQueueFamilies = {
 			graphicsQueueIndex.value(),
 			presentQueueIndex.value(),
+			transferQueueIndex.value(),
 			computeQueueIndex.value()
 		};
 
@@ -166,10 +168,27 @@ namespace Vulkan
 
 		vkGetDeviceQueue(logicalDevice, graphicsQueueIndex.value(), 0, &graphicsQueue);
 		vkGetDeviceQueue(logicalDevice,  presentQueueIndex.value(), 0, &presentQueue );
+		vkGetDeviceQueue(logicalDevice, transferQueueIndex.value(), 0, &transferQueue);
 		vkGetDeviceQueue(logicalDevice,  computeQueueIndex.value(), 0, &computeQueue );
 	}
 
 	void VulkanDevice::WaitIdle() {
 		vkDeviceWaitIdle(logicalDevice);
+	}
+
+	void VulkanDevice::GraphicsQueueWaitIdle() {
+		vkQueueWaitIdle(graphicsQueue);
+	}
+
+	void VulkanDevice::PresentQueueWaitIdle() {
+		vkQueueWaitIdle(presentQueue);
+	}
+
+	void VulkanDevice::TransferQueueWaitIdle() {
+		vkQueueWaitIdle(transferQueue);
+	}
+
+	void VulkanDevice::ComputeQueueWaitIdle() {
+		vkQueueWaitIdle(computeQueue);
 	}
 }

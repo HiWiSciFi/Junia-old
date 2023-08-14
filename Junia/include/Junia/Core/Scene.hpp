@@ -13,21 +13,20 @@ protected:
 
 public:
 	virtual ~Scene() = 0;
+
+	template<TypenameDerivedFrom<Scene> T>
+	static std::shared_ptr<Scene> Load();
+
+	static void Unload(std::shared_ptr<Scene> scene);
 };
 
-namespace Scenes {
+// -----------------------------------------------------------------------------
+// ------------------------------- Implementation ------------------------------
+// -----------------------------------------------------------------------------
 
 template<TypenameDerivedFrom<Scene> T>
-std::shared_ptr<Scene> Load();
-
-void Unload(Scene* scene);
-
-// Implementation
-
-template<TypenameDerivedFrom<Scene> T>
-std::shared_ptr<Scene> Load() {
+std::shared_ptr<Scene> Scene::Load() {
 	return std::make_shared<T>();
 }
 
-} // namespace Scenes
 } // namespace Junia

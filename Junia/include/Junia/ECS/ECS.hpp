@@ -1,278 +1,270 @@
 #pragma once
 
-#include "ComponentContainer.hpp"
-#include "../Core/IdPool.hpp"
-#include "../Util/Concepts.hpp"
+#include <Junia/Util/Concepts.hpp>
+
+#include <cstdint>
 #include <functional>
 #include <memory>
-#include <stdexcept>
-#include <typeindex>
 #include <typeinfo>
-#include <unordered_map>
+#include <typeindex>
 #include <unordered_set>
 
-namespace Junia::ECS {
+namespace Junia {
 
+// -----------------------------------------------------------------------------
+// ---------------------------- forward declarations ---------------------------
+// -----------------------------------------------------------------------------
+
+class Entity;
+class Component;
 class System;
 
-namespace Internal {
+namespace ECS {
 
-	extern std::unordered_map<std::type_index, std::shared_ptr<ComponentContainer>> componentStores;
-	extern std::unordered_map<std::type_index, std::shared_ptr<System>> systems;
-	extern IdPool<EntityType> entityIdPool;
+// -----------------------------------------------------------------------------
+// ----------------------------- Using declarations ----------------------------
+// -----------------------------------------------------------------------------
 
-	/**
-	 * @brief Get the ECS::Internal::ComponentStore for a specific
-	 *        component
-	 * @tparam T the component to get the store for
-	 * @return a shared pointer to the ECS::Internal::ComponentStore or
-	 *         a nullptr if the component has not been registered
-	*/
-	template<typename T>
-	inline std::shared_ptr<ComponentStore<T>> GetComponentStore() {
-		try {
-			return std::static_pointer_cast<ComponentStore<T>>(componentStores[typeid(T)]);
-		} catch (std::out_of_range) {
-			return std::shared_ptr<ComponentStore<T>>(nullptr);
-		}
-	}
+using EntityIdType = uint32_t;
+using ComponentIdType = size_t;
+using DestructorFunc = std::function<void(void*)>;
+using CopyConstructorFunc = std::function<void(void*, void*)>;
 
-} // namespace Internal
+// -----------------------------------------------------------------------------
+// --------------------------------- Functions ---------------------------------
+// -----------------------------------------------------------------------------
+
+size_t GetComponentOffset(std::type_index type, EntityIdType entity);
+void* GetComponentByOffset(std::type_index type, size_t offset);
+
+void RegisterComponent(std::type_index type, size_t size, size_t preallocCount, DestructorFunc destructor, CopyConstructorFunc copyConstructor);
+void UnregisterComponent(std::type_index type);
+
+void* AddComponent(std::type_index type, EntityIdType entity);
+void* GetComponent(std::type_index type, EntityIdType entity);
+void RemoveComponent(std::type_index type, EntityIdType entity);
+
+void RegisterSystem(std::type_index type, System* system);
+void UpdateSystems(float delta);
+void UnregisterSystem(std::type_index type);
+
+void UpdateSystemsEntity(EntityIdType entity);
+
+} // namespace ECS
+
+// -----------------------------------------------------------------------------
+// ---------------------------------- Classes ----------------------------------
+// -----------------------------------------------------------------------------
+
+// ----------------------------------- Entity ----------------------------------
 
 class Entity {
 private:
-	EntityType id;
+	ECS::EntityIdType id = 0;
+	explicit Entity(ECS::EntityIdType entityId);
 
 public:
-	/**
-	 * @brief Create an entity
-	 * @return a valid new entity
-	*/
+	Entity();
+
+	[[nodiscard]] inline ECS::EntityIdType GetId() const { return id; }
+
 	static Entity Create();
-
-	/**
-	 * @brief Destroy an entity that has been created using ECS::CreateEntity()
-	 * @param e the entity to destroy
-	*/
-	static void Destroy(Entity e);
-
+	static Entity Get(ECS::EntityIdType id);
+	static void Destroy(Entity entity);
 	static void DestroyAll();
 
-	Entity() : id(0) { }
+	template<TypenameDerivedFrom<Component> T, typename... TArgs>
+	T& AddComponent(TArgs... args);
 
-	/**
-	 * @brief Create an Entity by ID
-	 * @param id the id for the entity
-	*/
-	Entity(EntityType id) : id(id) { }
-
-	/**
-	 * @brief Get the entity ID
-	 * @return the ID of the entity
-	*/
-	EntityType GetId() const { return id; }
-
-	/**
-	 * @brief Add a component
-	 * @tparam T the component type to add
-	 * @param component the component to add
-	*/
-	template<typename T>
-	inline void AddComponent(T component) const;
-
-	/**
-	 * @brief Add a component
-	 * @tparam T the component type to add
-	*/
-	template<typename T>
-	inline void AddComponent() const;
-
-	/**
-	 * @brief Remove a component
-	 * @tparam T the component type to remove
-	*/
-	template<typename T>
-	inline void RemoveComponent() const;
-
-	/**
-	 * @brief Get if the entity has a component
-	 * @tparam T the type of component to check for
-	 * @return true if it has the component, false otherwise
-	*/
-	template<typename T>
-	inline bool HasComponent() const;
-
-	/**
-	 * @brief Get a component. This function will throw an
-	 *        std::invalid_argument exception if the entity does not
-	 *        have a component of this type
-	 * @tparam T the type of the component to get
-	 * @return a reference to the component
-	*/
-	template<typename T>
+	template<TypenameDerivedFrom<Component> T>
 	T& GetComponent() const;
 
-	operator EntityType() const { return id; }
+	template<TypenameDerivedFrom<Component> T>
+	void RemoveComponent();
+
+	operator ECS::EntityIdType() const { return id; }
 	bool operator==(const Entity& other) const { return id == other.id; }
 	bool operator>(const Entity& other) const { return id > other.id; }
 	bool operator<(const Entity& other) const { return id < other.id; }
-	void operator++() { ++id; }
-	void operator++(int) { ++id; }
-	void operator--() { --id; }
-	void operator--(int) { --id; }
+	void operator++()    { id++; }
+	void operator++(int) { id++; }
+	void operator--()    { id--; }
+	void operator--(int) { id--; }
 };
 
-} // namespace Junia::ECS
+// ------------------------------------ hash -----------------------------------
 
-// template specification for Hashing entities
+} // namespace Junia
+
 template<>
-struct std::hash<Junia::ECS::Entity> {
+struct std::hash<Junia::Entity> {
 public:
-	auto operator()(const Junia::ECS::Entity& entity) const -> size_t {
-		return hash<Junia::ECS::EntityType>()(entity.GetId());
-	}
+	size_t operator()(const Junia::Entity& entity) const;
 };
 
-namespace Junia::ECS {
+namespace Junia {
 
-/**
- * @brief A representation of a System. All Systems should be derived
- *        publicly from this class
-*/
+// --------------------------------- Component ---------------------------------
+
+class Component {
+friend Entity;
+private:
+	Entity entity{ };
+
+	void SetEntity(ECS::EntityIdType id);
+
+public:
+	Component();
+	Component(const Component& other);
+	Component(Component&& other) noexcept;
+	virtual ~Component() = 0;
+
+	Component& operator=(const Component& other);
+	Component& operator=(Component&& other) noexcept;
+
+	Entity GetEntity();
+
+	template<TypenameDerivedFrom<Component> T>
+	static inline void Register(size_t preallocCount = 1);
+
+	template<TypenameDerivedFrom<Component> T>
+	static inline void Unregister();
+};
+
+// ------------------------------ ComponentRef<T> ------------------------------
+
+template<TypenameDerivedFrom<Component> T>
+struct ComponentRef {
+private:
+	size_t offset;
+
+public:
+	ComponentRef();
+	explicit ComponentRef(Entity entity);
+	explicit ComponentRef(T& component);
+
+	T* operator->();
+	T& operator*();
+};
+
+// ----------------------------------- System ----------------------------------
+
 class System {
+friend Entity;
 private:
 	std::unordered_set<std::type_index> requirements{ };
+	std::unordered_set<Entity> entities{ };
 
 protected:
-	/**
-	 * @brief Register a component requirement for entities that should
-	 *        be handled by this system
-	 * @tparam T the component type to require
-	*/
-	template<typename T>
+	template<TypenameDerivedFrom<Component> T>
 	inline void RequireComponent();
 
+	const std::unordered_set<Entity> GetEntities() const;
+
 public:
-	/**
-	 * @brief A set of entities that are relevant to this system
-	*/
-	std::unordered_set<Entity> entities;
+	System();
+	virtual ~System() = 0;
 
-	/**
-	 * @brief Get a set of components that are required for the system
-	 *        to apply to an entity
-	 * @return a reference to a set containing type indices for each
-	 *         component that is required by the system
-	*/
-	inline const std::unordered_set<std::type_index>& GetRequirements() const;
+	const std::unordered_set<std::type_index>& GetRequirements() const;
 
-	/**
-	 * @brief Initializes the system (set component requirements here)
-	*/
-	virtual void Init() { }
+	virtual void Init() = 0;
+	virtual void Update(float delta) = 0;
 
-	/**
-	 * @brief Called each frame (handle entities here)
-	 * @param dt the delta time
-	*/
-	virtual void Update(float dt) { }
+	template<TypenameDerivedFrom<System> T, typename... TArgs>
+	static inline void Register(TArgs ...args);
+
+	template<TypenameDerivedFrom<System> T>
+	static inline void Unregister();
+
+	static void UnregisterAll();
 };
 
-// ---------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------- Entity ------------------------------------------------------
-// ---------------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// ------------------------------- Implementation ------------------------------
+// -----------------------------------------------------------------------------
 
-template<typename T>
-inline void Entity::AddComponent(T component) const {
-	for (auto const& spair : Internal::systems) {
-		std::shared_ptr<System> system = spair.second;
-		if (system->GetRequirements().find(typeid(T)) != system->GetRequirements().end())
-			system->entities.insert(*this);
-	}
-	Internal::GetComponentStore<T>()->Insert(id, component);
+
+// ----------------------------------- Entity ----------------------------------
+
+template<TypenameDerivedFrom<Component> T, typename... TArgs>
+inline T& Entity::AddComponent(TArgs ...args) {
+	T* componentAddress = static_cast<T*>(ECS::AddComponent(typeid(T), id));
+	std::construct_at<T>(componentAddress, args...);
+	componentAddress->SetEntity(id);
+	ECS::UpdateSystemsEntity(id);
+	return *componentAddress;
 }
 
-template<typename T>
-inline void Entity::AddComponent() const {
-	AddComponent<T>(T{ });
+template<TypenameDerivedFrom<Component> T>
+inline T& Entity::GetComponent() const {
+	return *static_cast<T*>(ECS::GetComponent(typeid(T), id));
 }
 
-template<typename T>
-inline void Entity::RemoveComponent() const {
-	for (auto const& spair : Internal::systems) spair.second->entities.erase(*this);
-	Internal::GetComponentStore<T>()->Erase(id);
+template<TypenameDerivedFrom<Component> T>
+inline void Entity::RemoveComponent() {
+	ECS::RemoveComponent(typeid(T), id);
+	ECS::UpdateSystemsEntity(id);
 }
 
-template<typename T>
-inline bool Entity::HasComponent() const {
-	std::shared_ptr<Internal::ComponentStore<T>> store = Internal::GetComponentStore<T>();
-	if (store == nullptr) return false;
-	return store->HasStored(id);
+// --------------------------------- Component ---------------------------------
+
+template<TypenameDerivedFrom<Component> T>
+inline void Component::Register(size_t preallocCount) {
+	ECS::RegisterComponent(typeid(T), sizeof(T), preallocCount,
+		[] (void* ptr) -> void {
+			std::destroy_at<T>(static_cast<T*>(ptr));
+		},
+		[] (void* dest, void* src) -> void {
+			std::construct_at<T>(
+				static_cast<T*>(dest),
+				*static_cast<T*>(src));
+		});
 }
 
-template<typename T>
-T& Entity::GetComponent() const {
-	if (!HasComponent<T>())
-		throw std::invalid_argument("There is no component of that type for this entity");
-	return Internal::GetComponentStore<T>()->Get(id);
+template<TypenameDerivedFrom<Component> T>
+inline void Component::Unregister() {
+	ECS::UnregisterComponent(typeid(T));
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------- System ------------------------------------------------------
-// ---------------------------------------------------------------------------------------------------------------------
+// ------------------------------ ComponentRef<T> ------------------------------
 
-template<typename T>
-inline void System::RequireComponent() {
+template<TypenameDerivedFrom<Component> T>
+inline ComponentRef<T>::ComponentRef()
+	: offset(0) { }
+
+template<TypenameDerivedFrom<Component> T>
+inline ComponentRef<T>::ComponentRef(Entity entity)
+	: offset(ECS::GetComponentOffset(typeid(T), entity.GetId())) { }
+
+template<TypenameDerivedFrom<Component> T>
+inline ComponentRef<T>::ComponentRef(T& component)
+	: offset(ECS::GetComponentOffset(typeid(T), component.GetEntity().GetId())) { }
+
+template<TypenameDerivedFrom<Component> T>
+inline T* ComponentRef<T>::operator->() {
+	return static_cast<T*>(ECS::GetComponentByOffset(typeid(T), offset));
+}
+
+template<TypenameDerivedFrom<Component> T>
+inline T& ComponentRef<T>::operator*() {
+	return *static_cast<T*>(ECS::GetComponentByOffset(typeid(T), offset));
+}
+
+// ----------------------------------- System ----------------------------------
+
+template<TypenameDerivedFrom<Component> T>
+void System::RequireComponent() {
 	requirements.insert(typeid(T));
 }
 
-inline const std::unordered_set<std::type_index>& System::GetRequirements() const {
-	return requirements;
+template<TypenameDerivedFrom<System> T, typename... TArgs>
+inline void System::Register(TArgs ...args) {
+	ECS::RegisterSystem(typeid(T), new T(args...));
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------- Global functions -------------------------------------------------
-// ---------------------------------------------------------------------------------------------------------------------
-
-/**
- * @brief Register a component type
- * @tparam T the component type to register
-*/
-template<typename T>
-inline void RegisterComponent() {
-	Internal::componentStores.insert({ typeid(T), std::make_shared<Internal::ComponentStore<T>>() });
-}
-
-/**
- * @brief [WIP:NYI] Unregister a component type
- * @tparam T the component type to unregister
-*/
-template<typename T>
-inline void UnregisterComponent() {
-	// TODO: implement
-}
-
-/**
- * @brief Register a system
- * @tparam T the system type to register
- * @return a pointer containing the system instance used
-*/
 template<TypenameDerivedFrom<System> T>
-inline std::shared_ptr<T> RegisterSystem() {
-	std::shared_ptr<System> system = std::make_shared<T>();
-	Internal::systems.insert({ typeid(T), system });
-	system->Init();
-	return std::static_pointer_cast<T>(system);
+inline void System::Unregister() {
+	ECS::UnregisterSystem(typeid(T));
 }
 
-/**
- * @brief Unregister a system. If the system hasn't been registered (see
- *        ECS::RegisterSystem()) this will do nothing
- * @tparam T the system type to unregister
-*/
-template<TypenameDerivedFrom<System> T>
-inline void UnregisterSystem() {
-	Internal::systems.erase(typeid(T));
-}
-
-} // namespace Junia::ECS
+} // namespace Junia

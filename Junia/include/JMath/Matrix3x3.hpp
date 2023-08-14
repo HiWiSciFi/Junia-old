@@ -6,8 +6,6 @@
 #include <cmath>
 #include <cstdint>
 
-// TODO(HiWiSciFi): Finish implementation. [07-Apr-23]
-
 namespace JMath {
 
 // -----------------------------------------------------------------------------
@@ -46,6 +44,12 @@ public:
 
 // --------------------------------- Operators ---------------------------------
 
+
+// --------------------------------- Functions ---------------------------------
+
+	inline float Determinant() const;
+	inline Matrix<3, 3, T> Inverse() const;
+
 }
 #if defined(__GNUC__) || defined(__clang__)
 __attribute__((__packed__))
@@ -63,11 +67,6 @@ inline Matrix<3, 3, T> operator*(const Matrix<3, 3, T>& mat1, const Matrix<3, 3,
 
 template<typename T>
 inline Vector<3, T> operator*(const Matrix<3, 3, T>& mat, const Vector<3, T>& vec);
-
-// ----------------------------- External Functions ----------------------------
-
-template<typename T>
-inline float Determinant(const Matrix<3, 3, T>& mat);
 
 // -----------------------------------------------------------------------------
 // ------------------------------ Implementations ------------------------------
@@ -89,9 +88,9 @@ inline Matrix<3, 3, T>::Matrix(T n00, T n01, T n02, T n10, T n11, T n12, T n20,
 template<typename T>
 inline Matrix<3, 3, T>::Matrix(const Vector<3, T>& vec1,
 	const Vector<3, T>& vec2, const Vector<3, T>& vec3) {
-	data[0][0] = vec1.x; data[0][1] = vec1.x; data[0][2] = vec1.x;
-	data[1][0] = vec2.y; data[1][1] = vec2.y; data[1][2] = vec2.y;
-	data[2][0] = vec3.z; data[2][1] = vec3.z; data[2][2] = vec3.z;
+	data[0][0] = vec1.x; data[0][1] = vec1.y; data[0][2] = vec1.z;
+	data[1][0] = vec2.x; data[1][1] = vec2.y; data[1][2] = vec2.z;
+	data[2][0] = vec3.x; data[2][1] = vec3.y; data[2][2] = vec3.z;
 }
 
 // ----------------------------------- Access ----------------------------------
@@ -118,6 +117,33 @@ inline const Vector<3, T>& Matrix<3, 3, T>::operator[](int j) const {
 
 // --------------------------------- Operators ---------------------------------
 
+
+// --------------------------------- Functions ---------------------------------
+
+template<typename T>
+inline float JMath::Matrix<3, 3, T>::Determinant() const {
+	return data[0, 0] * (data[1, 1] * data[2, 2] - data[2, 1] * data[1, 2]) +
+	       data[1, 0] * (data[2, 1] * data[0, 2] - data[0, 1] * data[2, 2]) +
+	       data[2, 0] * (data[0, 1] * data[1, 2] - data[1, 1] * data[0, 2]);
+}
+
+template<typename T>
+inline Matrix<3, 3, T> JMath::Matrix<3, 3, T>::Inverse() const {
+	const Vector<3, T>& a = this->operator[](0);
+	const Vector<3, T>& b = this->operator[](1);
+	const Vector<3, T>& c = this->operator[](2);
+
+	Vector<3, T> r0 = Dot(b, c);
+	Vector<3, T> r1 = Dot(c, a);
+	Vector<3, T> r2 = Dot(a, b);
+
+	float invDet = 1.0f / Dot(r2, c);
+
+	return Matrix<3, 3, T>(r0.x * invDet, r0.y * invDet, r0.z * invDet,
+	                       r1.x * invDet, r1.y * invDet, r1.z * invDet,
+	                       r2.x * invDet, r2.y * invDet, r2.z * invDet);
+}
+
 // ----------------------------- External Operators ----------------------------
 
 template<typename T>
@@ -143,15 +169,6 @@ inline Vector<3, T> operator*(const Matrix<3, 3, T>& mat,
 		mat(0, 0) * vec.x + mat(0, 1) * vec.y + mat(0, 2) * vec.z,
 		mat(1, 0) * vec.x + mat(1, 1) * vec.y + mat(1, 2) * vec.z,
 		mat(2, 0) * vec.x + mat(2, 1) * vec.y + mat(2, 2) * vec.z);
-}
-
-// ----------------------------- External Functions ----------------------------
-
-template<typename T>
-inline float Determinant(const Matrix<3, 3, T>& mat) {
-	return mat(0, 0) * (mat(1, 1) * mat(2, 2) - mat(1, 2) * mat(2, 1)) +
-		mat(0, 1) * (mat(1, 2) * mat(2, 0) - mat(1, 0) * mat(2, 2)) +
-		mat(0, 2) * (mat(1, 0) * mat(2, 1) - mat(1, 1) * mat(2, 0));
 }
 
 } // namespace JMath

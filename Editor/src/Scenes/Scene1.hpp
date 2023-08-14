@@ -6,8 +6,8 @@
 class Scene1 : public Junia::Scene {
 private:
 	std::shared_ptr<Junia::Mesh> squareMesh;
+	std::shared_ptr<Junia::Mesh> triangleMesh;
 	std::shared_ptr<Junia::Material> squareMaterial;
-	Junia::ECS::Entity square;
 
 public:
 	explicit Scene1();

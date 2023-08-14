@@ -14,8 +14,7 @@ void RendererSystem::Init() {
 void RendererSystem::Update(float delta) {
 	std::shared_ptr<Surface> surface = Window::Get(1)->GetSurface();
 	surface->BeginDraw();
-	for (auto const& e : entities) {
-		//Transform& transform = e.GetComponent<Transform>();
+	for (auto const& e : GetEntities()) {
 		MeshRenderer& meshRenderer = e.GetComponent<MeshRenderer>();
 		surface->Draw(meshRenderer);
 	}

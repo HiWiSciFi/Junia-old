@@ -6,4 +6,6 @@ Scene::Scene() { }
 
 Scene::~Scene() { }
 
+void Scene::Unload(std::shared_ptr<Scene> scene) { }
+
 } // namespace Junia

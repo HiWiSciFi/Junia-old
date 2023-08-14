@@ -4,7 +4,7 @@
 
 namespace Junia {
 
-class RendererSystem : public ECS::System {
+class RendererSystem : public System {
 public:
 	void Init() override;
 	void Update(float delta) override;

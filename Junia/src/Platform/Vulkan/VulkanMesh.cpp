@@ -8,16 +8,6 @@ extern VulkanDevice* vkDevice;
 VulkanMesh::VulkanMesh(const std::string& path, FileType type) {
 	LoadModel(path, type);
 
-	/*VkVertexInputBindingDescription bindingDescription{ };
-	bindingDescription.binding = 0;
-	bindingDescription.stride = sizeof(JMath::Vec3f);
-	bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-	VkVertexInputAttributeDescription attributeDescription{ };
-	attributeDescription.binding = 0;
-	attributeDescription.location = 0;
-	attributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-	attributeDescription.offset = 0;*/
-
 	{
 		VkDeviceSize vertexBufferSize = sizeof(JMath::Vec3f) * vertices.size();
 		VulkanBuffer stagingBuffer(vertexBufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);

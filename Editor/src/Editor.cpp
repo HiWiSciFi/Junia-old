@@ -7,7 +7,7 @@ int main() {
 	try {
 		Junia::Init();
 		Junia::Renderer::PickDevice(nullptr);
-		Junia::ECS::RegisterSystem<GravitySystem>();
+		Junia::System::Register<GravitySystem>();
 
 		std::shared_ptr<Junia::Window> window = Junia::Window::Create("Junia Editor");
 		Junia::Events::Subscribe<Junia::KeyDownEvent>([ ] (const Junia::KeyDownEvent* event) {
@@ -16,7 +16,7 @@ int main() {
 		Junia::Events::Subscribe<Junia::WindowClosedEvent>([window] (const Junia::WindowClosedEvent* event) {
 			if (event->GetWindow() == window.get()) Junia::StopLoop();
 		});
-		window->AttachScene(Junia::Scenes::Load<Scene1>());
+		window->AttachScene(Junia::Scene::Load<Scene1>());
 
 		Junia::RunLoop();
 		Junia::Terminate();

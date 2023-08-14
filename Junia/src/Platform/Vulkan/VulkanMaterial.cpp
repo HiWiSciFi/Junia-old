@@ -90,11 +90,26 @@ void VulkanMaterial::CreatePipeline() {
 	colorBlendingInfo.attachmentCount = 1;
 	colorBlendingInfo.pAttachments = &colorBlendAttachment;
 
+	// descriptor set layout
+	// TODO: move
+	VkDescriptorSetLayoutBinding uboLayoutBinding{ };
+	uboLayoutBinding.binding = 0;
+	uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	uboLayoutBinding.descriptorCount = 1;
+	uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+	VkDescriptorSetLayout descriptorSetLayout;
+	VkDescriptorSetLayoutCreateInfo descriptorCreateInfo{ };
+	descriptorCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	descriptorCreateInfo.bindingCount = 1;
+	descriptorCreateInfo.pBindings = &uboLayoutBinding;
+	if (vkCreateDescriptorSetLayout(vkDevice->GetLogical(), &descriptorCreateInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS)
+		throw std::runtime_error("failed to create descriptor set layout");
+
 	// pipeline layout
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo{ };
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 0;
-	pipelineLayoutInfo.pSetLayouts = nullptr;
+	pipelineLayoutInfo.setLayoutCount = 1;
+	pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
 	pipelineLayoutInfo.pushConstantRangeCount = 0;
 	pipelineLayoutInfo.pPushConstantRanges = nullptr;
 	if (vkCreatePipelineLayout(vkDevice->GetLogical(), &pipelineLayoutInfo, nullptr, &layout) != VK_SUCCESS)
@@ -118,6 +133,8 @@ void VulkanMaterial::CreatePipeline() {
 	pipelineInfo.subpass = 0;
 	if (vkCreateGraphicsPipelines(vkDevice->GetLogical(), nullptr, 1, &pipelineInfo, nullptr, &pipeline) != VK_SUCCESS)
 		throw std::runtime_error("failed to create graphics pipeline");
+
+	vkDestroyDescriptorSetLayout(vkDevice->GetLogical(), descriptorSetLayout, nullptr);
 }
 
 void VulkanMaterial::CleanupPipeline() {

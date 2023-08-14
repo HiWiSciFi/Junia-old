@@ -60,7 +60,7 @@ void VulkanBuffer::FillData(VulkanBuffer& other) {
 	VkCommandPoolCreateInfo poolCreateInfo{ };
 	poolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	poolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-	poolCreateInfo.queueFamilyIndex = vkDevice->GetGraphicsQueueIndex();
+	poolCreateInfo.queueFamilyIndex = vkDevice->GetTransferQueueIndex();
 	if (vkCreateCommandPool(vkDevice->GetLogical(), &poolCreateInfo, nullptr, &transferCommandPool) != VK_SUCCESS)
 		throw std::runtime_error("failed to create transfer command pool");
 
@@ -94,8 +94,8 @@ void VulkanBuffer::FillData(VulkanBuffer& other) {
 	submitInfo.pCommandBuffers = &commandBuffer;
 
 	// TODO: use transfer queue
-	vkQueueSubmit(vkDevice->GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
-	vkQueueWaitIdle(vkDevice->GetGraphicsQueue());
+	vkQueueSubmit(vkDevice->GetTransferQueue(), 1, &submitInfo, VK_NULL_HANDLE);
+	vkDevice->TransferQueueWaitIdle();
 
 	vkFreeCommandBuffers(vkDevice->GetLogical(), transferCommandPool, 1, &commandBuffer);
 	vkDestroyCommandPool(vkDevice->GetLogical(), transferCommandPool, nullptr);

@@ -28,8 +28,6 @@ namespace Junia {
 const Version ENGINE_VERSION(0, 0, 0);
 bool juniaLoopShouldStop = false;
 
-static std::shared_ptr<RendererSystem> renderer = nullptr;
-
 static void WindowsEnableANSI() {
 #ifdef _WIN32
 	HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -50,10 +48,10 @@ void Init() {
 
 	Events::Register<WindowClosedEvent>();
 
-	ECS::RegisterComponent<Transform>();
-	ECS::RegisterComponent<MeshRenderer>();
+	Component::Register<Transform>();
+	Component::Register<MeshRenderer>();
 
-	renderer = ECS::RegisterSystem<RendererSystem>();
+	System::Register<RendererSystem>();
 
 	// Enable ANSI Escape Sequences on Windows
 	WindowsEnableANSI();
@@ -89,8 +87,8 @@ void Init() {
 
 void Terminate() {
 	// Cleanup APIs
-	Junia::ECS::Entity::DestroyAll();
-	Junia::Window::DestroyAll();
+	Entity::DestroyAll();
+	Window::DestroyAll();
 	Vulkan::Cleanup();
 	OpenAL::Cleanup();
 	GLFW::Cleanup();
@@ -99,12 +97,12 @@ void Terminate() {
 void RunLoop() {
 	while (!juniaLoopShouldStop) {
 		try {
-			Junia::Events::DispatchQueue();
+			Events::DispatchQueue();
 
-			renderer->Update(0);
+			ECS::UpdateSystems(0);
 
-			for (Junia::Window::IdType i = 1; i <= Junia::Window::GetWindowCount(); i++)
-				Junia::Window::Get(i)->Update();
+			for (Window::IdType i = 1; i <= Window::GetWindowCount(); i++)
+				Window::Get(i)->Update();
 		} catch (std::exception e) {
 			JECORELOG_CRITICAL << "Exception thrown: " << e.what();
 			throw e;

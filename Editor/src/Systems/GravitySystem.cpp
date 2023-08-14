@@ -9,7 +9,7 @@ void GravitySystem::Init()
 
 void GravitySystem::Update(float dt)
 {
-	for (auto const& e : entities)
+	for (auto const& e : GetEntities())
 	{
 		Junia::Transform& transform = e.GetComponent<Junia::Transform>();
 		transform.position.z -= downForce * dt;

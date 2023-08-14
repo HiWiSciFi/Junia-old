@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Junia/ECS/ECS.hpp>
 #include "../../../JMath/Vector3.hpp"
 
 namespace Junia {
@@ -8,7 +9,7 @@ namespace Junia {
  * @brief A component holding position, rotation and scale information about
  *        an object
 */
-struct Transform {
+struct Transform : public Component {
 	/**
 	 * @brief The position component
 	*/
