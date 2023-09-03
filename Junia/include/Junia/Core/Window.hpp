@@ -144,8 +144,9 @@ public:
 
 	/**
 	 * @brief Update the window
+	 * @param delta the time passed since the last call in seconds
 	*/
-	virtual void Update() = 0;
+	virtual void Update(float delta) = 0;
 
 	/**
 	 * @brief Close the window gracefully

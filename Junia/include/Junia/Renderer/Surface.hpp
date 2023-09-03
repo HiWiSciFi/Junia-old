@@ -59,7 +59,7 @@ public:
 	/**
 	 * @brief Draw a test triangle TODO: replace with proper API
 	*/
-	virtual void Draw(MeshRenderer& package) = 0;
+	virtual void Draw(ComponentRef<MeshRenderer> package) = 0;
 };
 
 } // namespace Junia

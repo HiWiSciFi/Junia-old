@@ -78,7 +78,6 @@ target_sources(Junia
 		"${SRC_DIR}/Platform/OS/Windows/WindowsMessageBox.cpp"
 		"${SRC_DIR}/Platform/OS/Linux/LinuxMessageBox.cpp"
 
-		"${SRC_DIR}/Junia/ECS/ComponentStore.cpp"
 		"${SRC_DIR}/Junia/ECS/ECS.cpp"
 		"${SRC_DIR}/Junia/ECS/Systems/RendererSystem.cpp"
 

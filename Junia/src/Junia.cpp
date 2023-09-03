@@ -20,6 +20,7 @@
 #include <Junia/Core/Time.hpp>
 #include <Junia/Core/Window.hpp>
 #include <Junia/Renderer/RenderDevice.hpp>
+#include <chrono>
 #include <stdexcept>
 #include <vector>
 
@@ -48,12 +49,6 @@ void Init() {
 
 	Events::Register<WindowClosedEvent>();
 
-	Component::Register<Transform>();
-	Component::Register<MeshRenderer>();
-
-	System::Register<RendererSystem>();
-
-	// Enable ANSI Escape Sequences on Windows
 	WindowsEnableANSI();
 
 	InitTimer();
@@ -86,8 +81,6 @@ void Init() {
 }
 
 void Terminate() {
-	// Cleanup APIs
-	Entity::DestroyAll();
 	Window::DestroyAll();
 	Vulkan::Cleanup();
 	OpenAL::Cleanup();
@@ -95,14 +88,17 @@ void Terminate() {
 }
 
 void RunLoop() {
+	float delta = std::numeric_limits<float>::epsilon();
+	std::chrono::high_resolution_clock::time_point endtime, starttime = std::chrono::high_resolution_clock::now();
 	while (!juniaLoopShouldStop) {
 		try {
 			Events::DispatchQueue();
+			for (Window::IdType i = 1; i <= Window::GetWindowCount(); i++) Window::Get(i)->Update(delta);
 
-			ECS::UpdateSystems(0);
-
-			for (Window::IdType i = 1; i <= Window::GetWindowCount(); i++)
-				Window::Get(i)->Update();
+			endtime = std::chrono::high_resolution_clock::now();
+			delta = std::chrono::duration<float, std::chrono::seconds::period>(endtime - starttime).count();
+			if (delta <= 0.0f) delta = std::numeric_limits<float>::epsilon();
+			starttime = endtime;
 		} catch (std::exception e) {
 			JECORELOG_CRITICAL << "Exception thrown: " << e.what();
 			throw e;

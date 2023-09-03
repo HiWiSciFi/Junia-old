@@ -1,165 +1,285 @@
 #include <Junia/ECS/ECS.hpp>
 
-#include <Junia/Core/IdPool.hpp>
-#include "ComponentStore.hpp"
-
-#include <algorithm>
-#include <unordered_map>
-#include <vector>
-
 namespace Junia {
 
-static IdPool<ECS::EntityIdType>& GetEntityIdPool() {
-	static IdPool<ECS::EntityIdType> pool = IdPool<ECS::EntityIdType>();
-	return pool;
-}
-
-static std::unordered_map<std::type_index, System*>& GetSystems() {
-	static std::unordered_map<std::type_index, System*> systems{ };
-	return systems;
-}
-
-namespace ECS {
-
 // -----------------------------------------------------------------------------
-// --------------------------------- Functions ---------------------------------
-// -----------------------------------------------------------------------------
-
-size_t GetComponentOffset(std::type_index type, EntityIdType entity) {
-	return ComponentStore::Get(type)->GetComponentOffset(entity);
-}
-
-void* GetComponentByOffset(std::type_index type, size_t offset) {
-	return ComponentStore::Get(type)->GetComponentByOffset(offset);
-}
-
-void RegisterComponent(std::type_index type, size_t size, size_t preallocCount, DestructorFunc destructor, CopyConstructorFunc copyConstructor) {
-	ComponentStore::Create(type, size, preallocCount, std::move(destructor), std::move(copyConstructor));
-}
-
-void UnregisterComponent(std::type_index type) {
-	ComponentStore::Destroy(type);
-}
-
-void* AddComponent(std::type_index type, EntityIdType entity) {
-	return ComponentStore::Get(type)->AllocateComponent(entity);
-}
-
-void* GetComponent(std::type_index type, EntityIdType entity) {
-	return ComponentStore::Get(type)->GetComponent(entity);
-}
-
-void RemoveComponent(std::type_index type, EntityIdType entity) {
-	return ComponentStore::Get(type)->RemoveComponent(entity);
-}
-
-void RegisterSystem(std::type_index type, System* system) {
-	GetSystems().insert({ type, system });
-}
-
-void UpdateSystems(float delta) {
-	for (const auto& sp : GetSystems()) {
-		sp.second->Update(delta);
-	}
-}
-
-void UnregisterSystem(std::type_index type) {
-	System* system = GetSystems().at(type);
-	delete system;
-	GetSystems().erase(type);
-}
-
-} // namespace ECS
-
-// -----------------------------------------------------------------------------
-// ---------------------------------- Classes ----------------------------------
-// -----------------------------------------------------------------------------
-
 // ----------------------------------- Entity ----------------------------------
+// -----------------------------------------------------------------------------
 
-Entity Entity::Create() {
-	return Entity(GetEntityIdPool().Next());
+Entity::Entity()
+	: id(0), ecs(nullptr) { }
+
+Entity::Entity(IdType id, ECS* ecs)
+	: id(id), ecs(ecs) { }
+
+Entity::IdType Entity::GetId() const {
+	return id;
 }
 
-Entity Entity::Get(ECS::EntityIdType id) {
-	return Entity(id);
+Entity::Entity(const Entity& other)
+	: id(other.id), ecs(other.ecs) { }
+
+Entity& Entity::operator=(const Entity& other) {
+	if (&other != this) {
+		ecs = other.ecs;
+		id = other.id;
+	}
+	return *this;
 }
 
-void Entity::Destroy(Entity entity) {
-	ComponentStore::RemoveAllComponents(entity.id);
-	GetEntityIdPool().Free(entity.id);
+bool Entity::operator==(const Entity& other) const {
+	return id == other.id && ecs == other.ecs;
 }
 
-void Entity::DestroyAll() {
-	IdPool<ECS::EntityIdType>& idPool = GetEntityIdPool();
-	std::vector<ECS::EntityIdType>& freeIds = idPool.GetFreeIds().GetContainer();
-	do {
-		ECS::EntityIdType id = idPool.GetCurrent() - idPool.GetStep();
-		if (std::find(freeIds.begin(), freeIds.end(), id) != std::end(freeIds)) continue;
-		Destroy(Entity(id));
-	} while(idPool.GetCurrent() != idPool.GetStart());
+bool Entity::operator!=(const Entity& other) const {
+	return id != other.id || ecs != other.ecs;
 }
 
-Entity::Entity() = default;
-
-Entity::Entity(ECS::EntityIdType id) : id(id) { }
-
-// ------------------------------------ hash -----------------------------------
-
-} // namespace Junia
-
-size_t std::hash<Junia::Entity>::operator()(const Junia::Entity& entity) const {
-	return hash<Junia::ECS::EntityIdType>()(entity.GetId());
+bool Entity::operator<(const Entity& other) const {
+	return id < other.id;
 }
 
-namespace Junia {
+bool Entity::operator>(const Entity& other) const {
+	return id > other.id;
+}
 
+bool Entity::operator<=(const Entity& other) const {
+	return id <= other.id;
+}
+
+bool Entity::operator>=(const Entity& other) const {
+	return id >= other.id;
+}
+
+// -----------------------------------------------------------------------------
 // --------------------------------- Component ---------------------------------
+// -----------------------------------------------------------------------------
 
-Component::Component() = default;
+Component::~Component() { }
 
-Component::Component(const Component& other) = default;
-
-Component::Component(Component&& other) noexcept : entity(other.entity) { }
-
-Component::~Component() = default;
-
-Component& Component::operator=(const Component& other) {
-	if (&other != this) entity = other.entity;
-	return *this;
-}
-
-Component& Component::operator=(Component&& other) noexcept {
-	if (&other != this) entity = other.entity;
-	return *this;
-}
-
-Entity Component::GetEntity() {
+Entity Component::GetEntity() const {
 	return entity;
 }
 
-void Component::SetEntity(ECS::EntityIdType id) {
-	entity = Entity::Get(id);
+// -----------------------------------------------------------------------------
+// ------------------------------- ComponentStore ------------------------------
+// -----------------------------------------------------------------------------
+
+ComponentStore::ComponentStore(size_t elementSize, MoveFunc moveFunc, DestFunc destFunc)
+	: componentArray(elementSize), entityToComponentMap(), componentToEntityMap(),
+	elementSize(elementSize), elementCount(0), moveFunc(moveFunc), destFunc(destFunc) { }
+
+ComponentStore::~ComponentStore() {
+	for (size_t i = 0; i < elementCount; i++) {
+		destFunc(&componentArray[i * elementSize]);
+	}
 }
 
+ComponentStore::ComponentStore(const ComponentStore& other) {
+	*this = other;
+}
+
+ComponentStore::ComponentStore(ComponentStore&& other) noexcept {
+	*this = std::move(other);
+}
+
+ComponentStore& ComponentStore::operator=(const ComponentStore& other) {
+	if (&other != this) {
+		componentArray = other.componentArray;
+		entityToComponentMap = other.entityToComponentMap;
+		componentToEntityMap = other.componentToEntityMap;
+		elementSize = other.elementSize;
+		elementCount = other.elementCount;
+		moveFunc = other.moveFunc;
+		destFunc = other.destFunc;
+	}
+	return *this;
+}
+
+ComponentStore& ComponentStore::operator=(ComponentStore&& other) noexcept {
+	if (&other != this) {
+		componentArray = std::move(other.componentArray);
+		entityToComponentMap = std::move(other.entityToComponentMap);
+		componentToEntityMap = std::move(other.componentToEntityMap);
+		elementSize = other.elementSize;
+		elementCount = other.elementCount;
+		moveFunc = other.moveFunc;
+		destFunc = other.destFunc;
+	}
+	return *this;
+}
+
+void* ComponentStore::AllocateComponent(Entity::IdType entity) {
+	if ((elementCount + 1) * elementSize > componentArray.size()) {
+		std::vector<uint8_t> newComponentArray(componentArray.size() * 2);
+		for (size_t i = 0; i < elementCount; i++) {
+			size_t offset = i * elementSize;
+			moveFunc(&componentArray[offset], &newComponentArray[offset]);
+			destFunc(&componentArray[offset]);
+		}
+		componentArray = std::move(newComponentArray);
+	}
+	entityToComponentMap.insert({ entity, elementCount * elementSize });
+	componentToEntityMap.insert({ elementCount * elementSize, entity });
+	void* componentPtr = &componentArray[entityToComponentMap.at(entity)];
+	elementCount++;
+	return componentPtr;
+}
+
+bool ComponentStore::HasComponent(Entity::IdType entity) {
+	return entityToComponentMap.contains(entity);
+}
+
+void* ComponentStore::GetComponent(Entity::IdType entity) {
+	return &componentArray.at(entityToComponentMap.at(entity));
+}
+
+void ComponentStore::RemoveComponent(Entity::IdType entity) {
+	if (!HasComponent(entity)) throw std::runtime_error("Entity does not have component");
+	size_t componentOffset = entityToComponentMap.at(entity);
+	size_t lastComponentOffset = (elementCount - 1) * elementSize;
+	if (componentOffset != lastComponentOffset) {
+		destFunc(&componentArray[componentOffset]);
+		moveFunc(&componentArray[lastComponentOffset], &componentArray[componentOffset]);
+		Entity::IdType lastEntity = componentToEntityMap.at(lastComponentOffset);
+		componentToEntityMap.at(componentOffset) = lastEntity;
+		entityToComponentMap.at(lastEntity) = componentOffset;
+	}
+	entityToComponentMap.erase(entity);
+	componentToEntityMap.erase(lastComponentOffset);
+	elementCount--;
+}
+
+// -----------------------------------------------------------------------------
 // ----------------------------------- System ----------------------------------
+// -----------------------------------------------------------------------------
 
-System::System() = default;
+System::~System() { }
 
-System::~System() = default;
+void System::Init() { }
 
-const std::unordered_set<Entity> System::GetEntities() const {
-	return entities;
-}
+void System::Update(float delta) { }
 
-const std::unordered_set<std::type_index>& System::GetRequirements() const {
+void System::Terminate() { }
+
+const std::set<std::type_index>& System::GetRequirements() {
 	return requirements;
 }
 
-void System::UnregisterAll() {
-	for (const auto& sp : GetSystems()) {
-		ECS::UnregisterSystem(sp.first);
+std::vector<Entity>& System::GetEntities() {
+	return entities;
+}
+
+void System::RequireComponent(const std::type_index type) {
+	requirements.insert(type);
+}
+
+// -----------------------------------------------------------------------------
+// ------------------------------------ ECS ------------------------------------
+// -----------------------------------------------------------------------------
+
+ECS::ECS()
+	: entities(), componentStores(), systems(), entityIdPool() { }
+
+Entity ECS::CreateEntity() {
+	Entity entity(entityIdPool.Next(), this);
+	entities.push_back(entity);
+	for (auto& sp : systems) {
+		if (sp.second->GetRequirements().empty()) sp.second->entities.push_back(entity);
 	}
+	return entity;
+}
+
+std::vector<Entity>& ECS::GetEntities() {
+	return entities;
+}
+
+void ECS::DestroyEntity(const Entity& entity) {
+	for (auto& csp : componentStores) {
+		if (csp.second.HasComponent(entity.GetId())) csp.second.RemoveComponent(entity.GetId());
+	}
+	for (auto& syp : systems) {
+		for (size_t i = 0; i < syp.second->entities.size(); i++) {
+			if (syp.second->entities[i] == entity) {
+				if (i != syp.second->entities.size() - 1) syp.second->entities[i] = syp.second->entities[syp.second->entities.size() - 1];
+				syp.second->entities.pop_back();
+			}
+		}
+	}
+	entityIdPool.Free(entity.id);
+}
+
+void ECS::UpdateSystems(float delta) {
+	for (auto& syp : systems) syp.second->Update(delta);
+}
+
+void ECS::RegisterComponent(const std::type_index type, size_t size, ComponentStore::MoveFunc move, ComponentStore::DestFunc dest) {
+	if (componentStores.contains(type)) throw std::runtime_error("component already registered");
+	componentStores.emplace(type, ComponentStore(size, move, dest));
+}
+
+void ECS::UnregisterComponent(const std::type_index type) {
+	// TODO: Implement
+	componentStores.erase(type);
+}
+
+void ECS::AddComponent(const std::type_index type, Entity::IdType entity, Component* component) {
+	component->entity = Entity(entity, this);
+	for (auto& syp : systems) {
+		if (!syp.second->GetRequirements().contains(type)) continue;
+		bool eligable = true;
+		for (auto& c : syp.second->GetRequirements()) {
+			if (!HasComponent(c, entity)) {
+				eligable = false;
+				break;
+			}
+		}
+		if (eligable) syp.second->entities.emplace_back(entity, this);
+	}
+}
+
+bool ECS::HasComponent(const std::type_index type, Entity::IdType entity) {
+	return componentStores.at(type).HasComponent(entity);
+}
+
+void ECS::RemoveComponent(const std::type_index type, Entity::IdType entity) {
+	componentStores.at(type).RemoveComponent(entity);
+	for (auto& syp : systems) {
+		if (!syp.second->GetRequirements().contains(type)) continue;
+		for (size_t i = 0; i < syp.second->entities.size(); i++) {
+			if (syp.second->entities[i].GetId() == entity) {
+				if (i != syp.second->entities.size() - 1) {
+					syp.second->entities[i] = syp.second->entities.back();
+				}
+				syp.second->entities.pop_back();
+				break;
+			}
+		}
+	}
+}
+
+void ECS::InitSystem(const std::type_index type) {
+	std::unique_ptr<System>& system = systems.at(type);
+	system->Init();
+	for (auto& entity : entities) {
+		bool eligable = true;
+		for (auto& r : system->GetRequirements()) {
+			if (!HasComponent(r, entity.GetId())) {
+				eligable = false;
+				break;
+			}
+		}
+		if (eligable) system->entities.push_back(entity);
+	}
+}
+
+System& ECS::GetSystem(const std::type_index type) {
+	return *systems.at(type);
+}
+
+void ECS::TerminateSystem(const std::type_index type) {
+	systems.at(type)->Terminate();
+	systems.erase(type);
 }
 
 } // namespace Junia

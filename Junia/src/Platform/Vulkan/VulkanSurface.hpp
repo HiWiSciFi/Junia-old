@@ -48,7 +48,7 @@ public:
 	void FramebufferResized(JMath::Vec2ui newSize) override;
 
 	void BeginDraw() override;
-	void Draw(Junia::MeshRenderer& package) override;
+	void Draw(Junia::ComponentRef<Junia::MeshRenderer> package) override;
 	void EndDraw() override;
 };
 

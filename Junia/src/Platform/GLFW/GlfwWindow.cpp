@@ -93,7 +93,7 @@ GlfwWindow::~GlfwWindow() {
 	Junia::windows.pop_back();
 }
 
-void GlfwWindow::Update() {
+void GlfwWindow::Update(float delta) {
 	if (!IsShown()) return;
 	if (glfwWindowShouldClose(window)) {
 		Junia::Events::TriggerImmediate<Junia::WindowClosedEvent>(this);
@@ -107,6 +107,7 @@ void GlfwWindow::Update() {
 	}
 
 	glfwPollEvents();
+	scene->Update(delta);
 }
 
 void GlfwWindow::Close() {

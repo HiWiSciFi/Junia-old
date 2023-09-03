@@ -20,7 +20,7 @@ public:
 	GlfwWindow(const std::string& title, int width = 800, int height = 600);
 	~GlfwWindow();
 
-	void Update() override;
+	void Update(float delta) override;
 	void Close() override;
 
 	void* GetNative() const override;

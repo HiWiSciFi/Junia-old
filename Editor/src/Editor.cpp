@@ -7,7 +7,6 @@ int main() {
 	try {
 		Junia::Init();
 		Junia::Renderer::PickDevice(nullptr);
-		Junia::System::Register<GravitySystem>();
 
 		std::shared_ptr<Junia::Window> window = Junia::Window::Create("Junia Editor");
 		Junia::Events::Subscribe<Junia::KeyDownEvent>([ ] (const Junia::KeyDownEvent* event) {

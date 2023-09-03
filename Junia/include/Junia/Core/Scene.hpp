@@ -2,17 +2,22 @@
 
 #include <cstdint>
 #include <memory>
-#include "IdPool.hpp"
+
 #include "../Util/Concepts.hpp"
+#include "../ECS/ECS.hpp"
+#include "IdPool.hpp"
 
 namespace Junia {
 
 class Scene {
 protected:
+	ECS ecs;
 	explicit Scene();
 
 public:
 	virtual ~Scene() = 0;
+
+	void Update(float delta);
 
 	template<TypenameDerivedFrom<Scene> T>
 	static std::shared_ptr<Scene> Load();

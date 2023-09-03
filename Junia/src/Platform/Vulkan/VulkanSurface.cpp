@@ -260,9 +260,9 @@ void VulkanSurface::BeginDraw() {
 	vkCmdSetScissor(renderingCommandBuffers[currentFrame], 0, 1, &scissor);
 }
 
-void VulkanSurface::Draw(Junia::MeshRenderer& package) {
-	std::shared_ptr<VulkanMesh> mesh = std::dynamic_pointer_cast<VulkanMesh>(package.mesh);
-	std::shared_ptr<VulkanMaterial> material = std::dynamic_pointer_cast<VulkanMaterial>(package.material);
+void VulkanSurface::Draw(Junia::ComponentRef<Junia::MeshRenderer> package) {
+	std::shared_ptr<VulkanMesh> mesh = std::dynamic_pointer_cast<VulkanMesh>(package->mesh);
+	std::shared_ptr<VulkanMaterial> material = std::dynamic_pointer_cast<VulkanMaterial>(package->material);
 	material->BindPipeline(renderingCommandBuffers[currentFrame]);
 	mesh->BindVertexBuffer(renderingCommandBuffers[currentFrame]);
 	mesh->BindIndexBuffer(renderingCommandBuffers[currentFrame]);
