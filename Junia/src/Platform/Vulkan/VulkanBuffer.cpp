@@ -40,6 +40,7 @@ VulkanBuffer::VulkanBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemory
 }
 
 VulkanBuffer::~VulkanBuffer() {
+	vkDeviceWaitIdle(vkDevice->GetLogical());
 	vkDestroyBuffer(vkDevice->GetLogical(), buffer, nullptr);
 	vkFreeMemory(vkDevice->GetLogical(), bufferMemory, nullptr);
 }
