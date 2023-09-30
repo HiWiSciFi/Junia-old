@@ -4,3 +4,6 @@
 [submodule "wiki"]
 	path = wiki
 	url = https://github.com/HiWiSciFi/Junia.wiki.git
+[submodule "Junia/dependencies/VulkanMemoryAllocator"]
+	path = Junia/dependencies/VulkanMemoryAllocator
+	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator

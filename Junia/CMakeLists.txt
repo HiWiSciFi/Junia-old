@@ -97,8 +97,12 @@ target_sources(Junia
 		"${SRC_DIR}/Platform/GLFW/GlfwMonitor.cpp"
 		"${SRC_DIR}/Platform/GLFW/GlfwWindow.cpp"
 
+		"${SRC_DIR}/Platform/Vulkan/Buffer.cpp"
+		"${SRC_DIR}/Platform/Vulkan/CommandBuffer.cpp"
+		"${SRC_DIR}/Platform/Vulkan/CommandPool.cpp"
+		"${SRC_DIR}/Platform/Vulkan/Instance.cpp"
+
 		"${SRC_DIR}/Platform/Vulkan.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanBuffer.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanDevice.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanExtensionLoader.cpp"
 		"${SRC_DIR}/Platform/Vulkan/VulkanMaterial.cpp"
