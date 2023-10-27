@@ -1,12 +1,12 @@
 #pragma once
 
+#include <string>
+#include <memory>
+
 #include "../../JMath/Vector2.hpp"
 #include "../Renderer/Surface.hpp"
 #include "Monitor.hpp"
 #include "Scene.hpp"
-#include <cstdint>
-#include <string>
-#include <memory>
 
 namespace Junia {
 
@@ -16,7 +16,7 @@ constexpr int DEFAULT_HEIGHT = 600;
 /**
  * @brief The Fullscreen states a window can go into
 */
-enum class WindowFullscreenMode : uint8_t {
+enum class WindowFullscreenMode : std::uint8_t {
 	WINDOWED              = 0,
 	BORDERLESS_FULLSCREEN = 1,
 	FULLSCREEN            = 2
@@ -25,7 +25,7 @@ enum class WindowFullscreenMode : uint8_t {
 /**
  * @brief The size states a window can go into
 */
-enum class WindowSizeMode : uint8_t {
+enum class WindowSizeMode : std::uint8_t {
 	REGULAR   = 0,
 	ICONIFIED = 1,
 	MAXIMIZED = 2
@@ -39,7 +39,7 @@ public:
 	/**
 	 * @brief The type to use for IDs for windows
 	*/
-	using IdType = int32_t;
+	using IdType = std::int32_t;
 
 	/**
 	 * @brief Get the id of the window
@@ -58,7 +58,7 @@ public:
 	 * @brief Get the overall amount of windows that have been created
 	 * @return The amount of windows that have been created
 	*/
-	[[nodiscard]] static size_t GetWindowCount();
+	[[nodiscard]] static std::size_t GetWindowCount();
 
 	/**
 	 * @brief Get a pointer to an array of all windows that have been

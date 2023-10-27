@@ -8,26 +8,24 @@
 #undef ERROR
 #undef IGNORE
 
-namespace Junia
-{
-	static LARGE_INTEGER frequency{ };
+namespace Junia {
 
-	void InitTimer()
-	{
-		QueryPerformanceFrequency(&frequency);
-	}
+static LARGE_INTEGER frequency{ };
 
-	uint64_t GetTimerTime()
-	{
-		LARGE_INTEGER time;
-		QueryPerformanceCounter(&time);
-		return static_cast<uint64_t>(time.QuadPart);
-	}
-
-	uint64_t GetTimerFrequency()
-	{
-		return static_cast<uint64_t>(frequency.QuadPart);
-	}
+void InitTimer() {
+	QueryPerformanceFrequency(&frequency);
 }
+
+std::uint64_t GetTimerTime() {
+	LARGE_INTEGER time;
+	QueryPerformanceCounter(&time);
+	return static_cast<std::uint64_t>(time.QuadPart);
+}
+
+std::uint64_t GetTimerFrequency() {
+	return static_cast<std::uint64_t>(frequency.QuadPart);
+}
+
+} // namespace Junia
 
 #endif

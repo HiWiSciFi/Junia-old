@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cerrno>
-#include <cstdint>
 #include <cstring>
 
 #ifndef _WIN32
@@ -16,7 +15,7 @@ typedef int errno_t;
 #endif
 
 #ifndef rsize_t
-typedef size_t rsize_t;
+typedef std::size_t rsize_t;
 #endif
 
 #endif
@@ -68,7 +67,7 @@ inline errno_t __cdecl util_strcpy_s(char* dest, rsize_t dest_size, char const* 
 		dest[0] = '\0';
 		return EINVAL;
 	}
-	size_t i;
+	std::size_t i;
 	for (i = 0; i < dest_size; i++) {
 		dest[i] = src[i];
 		if (src[i] == '\0') break;
@@ -87,7 +86,7 @@ inline errno_t __cdecl util_wcscpy_s(wchar_t* dest, rsize_t dest_size, const wch
 		dest[0] = '\0';
 		return EINVAL;
 	}
-	size_t i;
+	std::size_t i;
 	for (i = 0; i < dest_size; i++) {
 		dest[i] = src[i];
 		if (src[i] == '\0') break;

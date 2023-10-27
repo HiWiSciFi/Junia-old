@@ -1,8 +1,7 @@
 #pragma once
 
-#define GLFW_INCLUDE_VULKAN
+#include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
-#undef GLFW_INCLUDE_VULKAN
 #include <Junia/Core/Window.hpp>
 #include <memory>
 

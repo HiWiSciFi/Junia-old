@@ -1,11 +1,10 @@
 #pragma once
 
-#include <cstdint>
 #include <string>
 
 namespace Junia {
 
-enum class MessageBoxButtons : uint8_t {
+enum class MessageBoxButtons : std::uint8_t {
 	NONE,
 	ABORT_RETRY_IGNORE,
 	CANCEL_TRYAGAIN_CONTINUE,
@@ -16,7 +15,7 @@ enum class MessageBoxButtons : uint8_t {
 	YES_NO_CANCEL
 };
 
-enum class MessageBoxIcon : uint8_t {
+enum class MessageBoxIcon : std::uint8_t {
 	NONE        = 0,
 	INFORMATION = 1,
 	QUESTION    = 2,
@@ -24,7 +23,7 @@ enum class MessageBoxIcon : uint8_t {
 	ERROR       = 4
 };
 
-enum class MessageBoxResult : uint8_t {
+enum class MessageBoxResult : std::uint8_t {
 	NONE     = 0,
 	YES      = 1,
 	OK       = 2,
@@ -37,6 +36,6 @@ enum class MessageBoxResult : uint8_t {
 	ABORT    = 9
 };
 
-MessageBoxResult ShowBlockingMessageBox(const std::string& title, const std::string& msg, MessageBoxIcon icon, MessageBoxButtons buttons, uint8_t defaultBtn = 1, bool topmost = false);
+MessageBoxResult ShowBlockingMessageBox(const std::string& title, const std::string& msg, MessageBoxIcon icon, MessageBoxButtons buttons, std::uint8_t defaultBtn = 1, bool topmost = false);
 
 } // namespace Junia

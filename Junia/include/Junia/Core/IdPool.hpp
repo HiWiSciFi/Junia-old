@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <stack>
 #include <vector>
 
@@ -38,7 +37,7 @@ private:
 	T step;
 
 public:
-	static const size_t DEFAULT_FREES = 32;
+	static const std::size_t DEFAULT_FREES = 32;
 
 	/**
 	 * @brief Create a new ID pool
@@ -48,7 +47,7 @@ public:
 	 * @param reservedFrees amount of IDs that can be returned to the pool
 	 *                      before a reallocation happens (defaults to 32)
 	*/
-	explicit IdPool(T start = static_cast<T>(0), T step = static_cast<T>(1), size_t reservedFrees = DEFAULT_FREES);
+	explicit IdPool(T start = static_cast<T>(0), T step = static_cast<T>(1), std::size_t reservedFrees = DEFAULT_FREES);
 
 	/**
 	 * @brief Get an unused ID from the pool
@@ -80,7 +79,7 @@ inline std::vector<T>& Junia::IdPoolStackAdapter<T>::GetContainer() {
 }
 
 template<typename T>
-inline Junia::IdPool<T>::IdPool(T start, T step, size_t reservedFrees)
+inline Junia::IdPool<T>::IdPool(T start, T step, std::size_t reservedFrees)
 	: start(start), current(start), step(step) {
 	freeIds.GetContainer().reserve(reservedFrees);
 }

@@ -8,7 +8,7 @@ namespace Junia {
 /**
  * @brief Initialize Junia
 */
-void Init();
+void Init(const std::string& appName, Version appVersion);
 
 /**
  * @brief Terminate Junia

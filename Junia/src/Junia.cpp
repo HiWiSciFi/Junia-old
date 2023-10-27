@@ -7,10 +7,6 @@
 #endif
 
 #include <Junia.hpp>
-#include "Junia/Core/InternalLoggers.hpp"
-#include "Platform/GLFW.hpp"
-#include "Platform/Vulkan.hpp"
-#include "Platform/OpenAL.hpp"
 #include <Junia/Core/Input.hpp>
 #include <Junia/Events/Events.hpp>
 #include <Junia/Events/InputEvents.hpp>
@@ -23,6 +19,13 @@
 #include <chrono>
 #include <stdexcept>
 #include <vector>
+
+#include "Junia/Core/InternalLoggers.hpp"
+#include "Platform/GLFW.hpp"
+#include "Platform/Vulkan/Instance.hpp"
+
+// TODO: remove
+#include <spirv_reflect.h>
 
 namespace Junia {
 
@@ -39,7 +42,7 @@ static void WindowsEnableANSI() {
 #endif
 }
 
-void Init() {
+void Init(const std::string& appName, Version appVersion) {
 	Events::Register<KeyDownEvent>();
 	Events::Register<KeyUpEvent>();
 	Events::Register<KeyCharEvent>();
@@ -53,6 +56,33 @@ void Init() {
 
 	InitTimer();
 
+	// TODO: remove
+	{
+		std::vector<std::uint8_t> spv = ReadFileBinary("res/Shaders/shader2.vert.spv");
+		SpvReflectShaderModule module;
+		SpvReflectResult result = spvReflectCreateShaderModule(spv.size(), spv.data(), &module);
+		if (result != SPV_REFLECT_RESULT_SUCCESS) throw std::runtime_error("failed to load spv");
+
+		std::uint32_t var_count = 0;
+		result = spvReflectEnumerateInputVariables(&module, &var_count, NULL);
+		if (result != SPV_REFLECT_RESULT_SUCCESS) throw std::runtime_error("failed to enumerate variables");
+		std::vector<SpvReflectInterfaceVariable*> input_vars(var_count);
+		result = spvReflectEnumerateInputVariables(&module, &var_count, input_vars.data());
+		if (result != SPV_REFLECT_RESULT_SUCCESS) throw std::runtime_error("failed to enumerate variables");
+
+		__debugbreak();
+
+		for (const auto& var : input_vars) {
+			auto logger = JELOG_WARN;
+			logger << var->name;
+			logger << " : " << var->type_description->type_name;
+		}
+
+		spvReflectDestroyShaderModule(&module);
+	}
+
+	__debugbreak();
+
 	try {
 		GLFW::Init();
 		Input::Init();
@@ -62,28 +92,16 @@ void Init() {
 	}
 
 	try {
-#ifndef NDEBUG
-		Vulkan::Init("Testapp", Version(1, 0, 0), "Junia", GetEngineVersion(), true);
-#else
-		Vulkan::Init("Testapp", Version(1, 0, 0), "Junia", GetEngineVersion(), false);
-#endif
+		Vulkan::Instance::Init(appName, appVersion, "Junia", GetEngineVersion());
 	} catch (std::exception e) {
 		VKLOG_CRITICAL << "Vulkan ERROR: " << e.what();
-		throw e;
-	}
-
-	try {
-		OpenAL::Init();
-	} catch (std::exception e) {
-		JECORELOG_ERROR << "OpenAL ERROR: " << e.what();
 		throw e;
 	}
 }
 
 void Terminate() {
 	Window::DestroyAll();
-	Vulkan::Cleanup();
-	OpenAL::Cleanup();
+	Vulkan::Instance::Terminate();
 	GLFW::Cleanup();
 }
 

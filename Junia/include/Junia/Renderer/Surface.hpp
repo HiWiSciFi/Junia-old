@@ -1,9 +1,10 @@
 #pragma once
 
+#include <memory>
+
 #include "Mesh.hpp"
 #include "Material.hpp"
 #include "../ECS/Components/MeshRenderer.hpp"
-#include <memory>
 
 namespace Junia {
 
@@ -14,7 +15,7 @@ class Window;
 */
 class Surface {
 public:
-	enum class VSyncMode : uint8_t {
+	enum class VSyncMode : std::uint8_t {
 		/**
 		 * @brief Immediate presentation after rendering
 		*/

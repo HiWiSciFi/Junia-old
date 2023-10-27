@@ -1,14 +1,15 @@
 #pragma once
 
-namespace GLFW
-{
-	/**
-	 * @brief Initialize GLFW
-	*/
-	void Init();
+namespace GLFW {
 
-	/**
-	 * @brief Cleanup GLFW
-	*/
-	void Cleanup();
-}
+/**
+ * @brief Initialize GLFW
+*/
+void Init();
+
+/**
+ * @brief Cleanup GLFW
+*/
+void Cleanup();
+
+} // namespace GLFW

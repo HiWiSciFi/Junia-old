@@ -3,7 +3,9 @@
 #include "Logger.hpp"
 
 namespace Junia::Log {
-	extern Logger log;
+
+extern Logger log;
+
 } // namespace Junia::Log
 
 #define JELOG_TRACE        Junia::Log::log.Trace()

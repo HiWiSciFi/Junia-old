@@ -21,7 +21,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
-add_subdirectory("dependencies/glfw")
+add_subdirectory("${JUNIA_DEPENDENCY_DIR}/glfw")
 set(GLFW_LIBRARY "glfw")
 set_property(TARGET glfw PROPERTY FOLDER "Junia/Dependencies/GLFW")
 if (TARGET update_mappings)
@@ -34,11 +34,17 @@ if(NOT ${Vulkan_FOUND})
 	message(FATAL_ERROR "Vulkan could not be found! Make sure $VULKAN_SDK environment variable is set if the problem persists.")
 endif()
 
-# OpenAL
-find_package(OpenAL)
-if(NOT ${OPENAL_FOUND})
-	message(FATAL_ERROR "OpenAL could not be found! Make sure $OPENALDIR environment variable is set if the problem persists.")
-endif()
+# SPIRV-Reflect
+set(SPIRV_REFLECT_EXECUTABLE OFF CACHE BOOL "" FORCE)
+set(SPIRV_REFLECT_STATIC_LIB ON CACHE BOOL "" FORCE)
+set(SPIRV_REFLECT_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(SPIRV_REFLECT_ENABLE_ASSERTS OFF CACHE BOOL "" FORCE)
+set(SPIRV_REFLECT_ASAN OFF CACHE BOOL "" FORCE)
+add_subdirectory("${JUNIA_DEPENDENCY_DIR}/SPIRV-Reflect")
+set(SPIRV_REFLECT_LIBRARY "spirv-reflect-static")
+
+# VMA
+add_subdirectory("dependencies/VulkanMemoryAllocator")
 
 ## ---------------------------------------------------------------------------------------------------------------------
 ## ------------------------------------------------------- Files -------------------------------------------------------
@@ -47,14 +53,7 @@ endif()
 target_include_directories(Junia
 	PUBLIC
 		"${INCLUDE_DIR}"
-	PRIVATE
 		"${Vulkan_INCLUDE_DIR}"
-		"${OPENAL_INCLUDE_DIR}"
-)
-
-target_precompile_headers(Junia
-	PRIVATE
-		"src/pch.h"
 )
 
 target_sources(Junia
@@ -100,19 +99,15 @@ target_sources(Junia
 		"${SRC_DIR}/Platform/Vulkan/Buffer.cpp"
 		"${SRC_DIR}/Platform/Vulkan/CommandBuffer.cpp"
 		"${SRC_DIR}/Platform/Vulkan/CommandPool.cpp"
+		"${SRC_DIR}/Platform/Vulkan/DescriptorSet.cpp"
+		"${SRC_DIR}/Platform/Vulkan/ExtensionLoader.cpp"
+		"${SRC_DIR}/Platform/Vulkan/Image.cpp"
 		"${SRC_DIR}/Platform/Vulkan/Instance.cpp"
-
-		"${SRC_DIR}/Platform/Vulkan.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanDevice.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanExtensionLoader.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanMaterial.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanMesh.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanRenderPass.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanShader.cpp"
-		"${SRC_DIR}/Platform/Vulkan/VulkanSurface.cpp"
-
-		"${SRC_DIR}/Platform/OpenAL.cpp"
-		"${SRC_DIR}/Platform/OpenAL/OutputDevice.cpp"
+		"${SRC_DIR}/Platform/Vulkan/Pipeline.cpp"
+		"${SRC_DIR}/Platform/Vulkan/Queue.cpp"
+		"${SRC_DIR}/Platform/Vulkan/RenderDevice.cpp"
+		"${SRC_DIR}/Platform/Vulkan/RenderPass.cpp"
+		"${SRC_DIR}/Platform/Vulkan/Swapchain.cpp"
 )
 
 ## ---------------------------------------------------------------------------------------------------------------------
@@ -123,7 +118,8 @@ target_link_libraries(Junia
 	PRIVATE
 		"${GLFW_LIBRARY}"
 		"${Vulkan_LIBRARY}"
-		"${OPENAL_LIBRARY}"
+		"${SPIRV_REFLECT_LIBRARY}"
+		GPUOpen::VulkanMemoryAllocator
 )
 
 if (UNIX)

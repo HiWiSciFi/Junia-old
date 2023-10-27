@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Types.hpp"
-
 #include <cmath>
-#include <cstdint>
+
+#include "Types.hpp"
 
 namespace JMath {
 
@@ -13,11 +12,11 @@ namespace JMath {
 
 // ------------------------------ Type Definitions -----------------------------
 
-using Vec4   = Vector< 4,    float >;
-using Vec4f  = Vector< 4,    float >;
-using Vec4d  = Vector< 4,   double >;
-using Vec4i  = Vector< 4,  int32_t >;
-using Vec4ui = Vector< 4, uint32_t >;
+using Vec4   = Vector< 4,         float >;
+using Vec4f  = Vector< 4,         float >;
+using Vec4d  = Vector< 4,        double >;
+using Vec4i  = Vector< 4,  std::int32_t >;
+using Vec4ui = Vector< 4, std::uint32_t >;
 
 #ifdef _MSC_VER
 #pragma pack(push, 1)

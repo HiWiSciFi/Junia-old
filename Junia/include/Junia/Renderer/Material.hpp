@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Shader.hpp"
-
-#include <cstdint>
 #include <memory>
 #include <optional>
 #include <vector>
+
+#include "Shader.hpp"
 
 namespace Junia {
 

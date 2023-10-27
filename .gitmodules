@@ -7,3 +7,6 @@
 [submodule "Junia/dependencies/VulkanMemoryAllocator"]
 	path = Junia/dependencies/VulkanMemoryAllocator
 	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator
+[submodule "Junia/dependencies/SPIRV-Reflect"]
+	path = Junia/dependencies/SPIRV-Reflect
+	url = https://github.com/KhronosGroup/SPIRV-Reflect

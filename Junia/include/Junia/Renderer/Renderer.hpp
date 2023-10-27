@@ -1,23 +1,27 @@
 #pragma once
 
-#include "RenderDevice.hpp"
 #include <vector>
+#include <memory>
 
-namespace Junia::Renderer {
+#include "RenderDevice.hpp"
 
-/**
- * @brief Get available render devices
- * @return a reference to a vector containing a list of pointers to valid
- *         render devices
-*/
-const std::vector<Junia::RenderDevice*>& GetDevices();
+namespace Junia {
 
-/**
- * @brief Pick a device to render on
- * @param device The device to select or nullptr to select the one with the
- *               highest rating (see GetDevices() and
- *               Junia::RenderDevice::Pick())
-*/
-void PickDevice(Junia::RenderDevice* device);
+class Renderer final {
+public:
+	/**
+	 * @brief Get available render devices
+	 * @return a reference to a vector containing a list of pointers to valid
+	 *         render devices
+	*/
+	static const std::vector<std::shared_ptr<Junia::RenderDevice>> GetDevices();
+
+	/**
+	 * @brief Pick a device to render on
+	 * @param device The device to select or nullptr to select the one with the
+	 *               highest rating (see GetDevices())
+	*/
+	static void PickDevice(std::shared_ptr<Junia::RenderDevice> device);
+};
 
 } // namespace Junia::Renderer

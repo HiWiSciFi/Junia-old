@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -10,7 +9,7 @@ namespace Junia::Log {
 /**
 * @brief The Log level of a message (can be compared with "<", ">" and "=")
 */
-enum class LogLevel : uint8_t {
+enum class LogLevel : std::uint8_t {
 	None = 0,     /** @brief LogLevel for no output */
 	Critical = 1, /** @brief LogLevel for Critical messages */
 	Error = 2,    /** @brief LogLevel for Error messages */

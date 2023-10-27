@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Junia/ECS/ECS.hpp>
+
 #include "../../../JMath/Vector3.hpp"
 
 namespace Junia {

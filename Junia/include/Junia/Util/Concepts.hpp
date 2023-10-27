@@ -1,6 +1,6 @@
 #pragma once
 
-#include <concepts> // std::derived_from<T, U>
+#include <concepts>
 
 namespace Junia {
 

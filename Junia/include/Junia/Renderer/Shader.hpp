@@ -1,13 +1,14 @@
 #pragma once
 
-#include <cstdint>
 #include <memory>
+#include <string>
+#include <cstdint>
 
 namespace Junia {
 
 class Shader {
 public:
-	enum class Type : uint8_t {
+	enum class Type : std::uint8_t {
 		VERTEX                 = 0,
 		FRAGMENT               = 1,
 		TESSELATION_CONTROL    = 2,

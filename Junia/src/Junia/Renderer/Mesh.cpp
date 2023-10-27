@@ -1,12 +1,11 @@
 #include <Junia/Renderer/Mesh.hpp>
+
 #include <Junia/Core/FileSystem.hpp>
 #include <stdexcept>
 #include <vulkan/vulkan.hpp>
-
 #include <iostream>
 #include <fstream>
 #include <string_view>
-#include "../../Platform/Vulkan/VulkanMesh.hpp"
 
 namespace Junia {
 
@@ -17,7 +16,7 @@ void Mesh::LoadModel(const std::string& path, FileType type) {
 
 		std::string line;
 
-		size_t vertexCount = 0, faceCount = 0, uvCount = 0;
+		std::size_t vertexCount = 0, faceCount = 0, uvCount = 0;
 		while (std::getline(objFile, line)) {
 			std::string_view identifier(line.c_str(), 2);
 			if (identifier == "v ") vertexCount++;
@@ -32,10 +31,10 @@ void Mesh::LoadModel(const std::string& path, FileType type) {
 		objFile.clear();
 		objFile.seekg(0);
 
-		size_t currVertexId = 0, currFaceId = 0, currUvId = 0;
+		std::size_t currVertexId = 0, currFaceId = 0, currUvId = 0;
 
 		while (std::getline(objFile, line)) {
-			size_t startLoc = line.find(' ', 0);
+			std::size_t startLoc = line.find(' ', 0);
 			if (startLoc == std::string::npos) continue;
 			const char* identifier = line.c_str();
 			line.at(startLoc) = '\0';
@@ -43,8 +42,8 @@ void Mesh::LoadModel(const std::string& path, FileType type) {
 
 			if (std::strcmp(identifier, "v") == 0) {
 				JMath::Vec3f vertex;
-				for (uint8_t i = 0; i < 3; i++) {
-					size_t spaceLoc = line.find(' ', startLoc);
+				for (std::uint8_t i = 0; i < 3; i++) {
+					std::size_t spaceLoc = line.find(' ', startLoc);
 					if (spaceLoc == std::string::npos) spaceLoc = line.length() - 1;
 					else line.at(spaceLoc) = '\0';
 					vertex[i] = std::atof(line.c_str() + startLoc);
@@ -54,8 +53,8 @@ void Mesh::LoadModel(const std::string& path, FileType type) {
 				currVertexId++;
 			} else if (std::strcmp(identifier, "f") == 0) {
 				JMath::Vec3ui face;
-				for (uint8_t i = 0; i < 3; i++) {
-					size_t spaceLoc = line.find(' ', startLoc);
+				for (std::uint8_t i = 0; i < 3; i++) {
+					std::size_t spaceLoc = line.find(' ', startLoc);
 					if (spaceLoc == std::string::npos) spaceLoc = line.length() - 1;
 					else line.at(spaceLoc) = '\0';
 					face[i] = std::atol(line.c_str() + startLoc) - 1;
@@ -65,8 +64,8 @@ void Mesh::LoadModel(const std::string& path, FileType type) {
 				currFaceId++;
 			} else if (uvs.has_value() && std::strcmp(identifier, "vt") == 0) {
 				JMath::Vec2f uv;
-				for (uint8_t i = 0; i < 2; i++) {
-					size_t spaceLoc = line.find(' ', startLoc);
+				for (std::uint8_t i = 0; i < 2; i++) {
+					std::size_t spaceLoc = line.find(' ', startLoc);
 					if (spaceLoc == std::string::npos) spaceLoc = line.length() - 1;
 					else line.at(spaceLoc) = '\0';
 					uv[i] = std::atol(line.c_str() + startLoc);
@@ -83,7 +82,7 @@ void Mesh::LoadModel(const std::string& path, FileType type) {
 }
 
 std::shared_ptr<Mesh> Mesh::Create(const std::string& path, FileType type) {
-	return std::make_shared<Vulkan::VulkanMesh>(path, type);
+	return nullptr;
 }
 
 Mesh::~Mesh() {

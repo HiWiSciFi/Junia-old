@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -11,7 +10,7 @@ namespace Junia {
 	 * @param path The path to the file
 	 * @return a vector containing the bytes that have been read
 	*/
-	std::vector<uint8_t> ReadFileBinary(const std::string& path);
+	std::vector<std::uint8_t> ReadFileBinary(const std::string& path);
 
 	/**
 	 * @brief Read a text file

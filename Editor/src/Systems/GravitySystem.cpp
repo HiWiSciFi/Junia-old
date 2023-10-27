@@ -9,6 +9,6 @@ void GravitySystem::Init() {
 void GravitySystem::Update(float dt) {
 	for (auto& e : GetEntities()) {
 		Junia::ComponentRef<Junia::Transform> transform = e.GetComponent<Junia::Transform>();
-		transform->position.z -= downForce * dt;
+		transform->position.z -= this->downForce * dt;
 	}
 }

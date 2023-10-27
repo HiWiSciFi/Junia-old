@@ -3,26 +3,24 @@
 #include <vector>
 #include <stdexcept>
 
-namespace Junia
-{
-	std::vector<Monitor*> monitors{ };
+namespace Junia {
 
-	Monitor::~Monitor()
-	{ }
+std::vector<Monitor*> monitors{ };
 
-	Monitor** Monitor::GetAll()
-	{
-		return monitors.data();
-	}
+Monitor::~Monitor()
+{ }
 
-	size_t Monitor::GetMonitorCount()
-	{
-		return monitors.size();
-	}
-
-	Monitor* Monitor::GetPrimary()
-	{
-		if (monitors.size() < 1) throw std::runtime_error("no available monitors");
-		return monitors[0];
-	}
+Monitor** Monitor::GetAll() {
+	return monitors.data();
 }
+
+std::size_t Monitor::GetMonitorCount() {
+	return monitors.size();
+}
+
+Monitor* Monitor::GetPrimary() {
+	if (monitors.size() < 1) throw std::runtime_error("no available monitors");
+	return monitors[0];
+}
+
+} // namespace Junia

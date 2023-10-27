@@ -1,24 +1,28 @@
 #include "GlfwWindow.hpp"
+
 #include <stdexcept>
 #include <vector>
 #include <Junia/Events/InputEvents.hpp>
 #include <Junia/Events/WindowEvents.hpp>
+
 #include "GlfwInput.hpp"
 
 namespace Junia {
+
 extern std::vector<Window*> windows;
-}
+
+} // namespace Junia
 
 namespace GLFW {
 
 GlfwWindow::GlfwWindow(const std::string& title, int width, int height) : title(title) {
-	id = -1;
+	this->id = -1;
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
-	if (window == NULL) throw std::runtime_error("failed to create window");
-	glfwSetWindowUserPointer(window, this);
+	if (this->window == NULL) throw std::runtime_error("failed to create window");
+	glfwSetWindowUserPointer(this->window, this);
 
-	glfwSetWindowFocusCallback(window, [] (GLFWwindow* window, int focused) {
+	glfwSetWindowFocusCallback(this->window, [] (GLFWwindow* window, int focused) {
 		GlfwWindow* w = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(window));
 		Junia::windows[0] = focused ? w : (Junia::windows[0] == w ? nullptr : Junia::windows[0]);
 	});
@@ -165,8 +169,8 @@ JMath::Vec2ui GlfwWindow::GetFramebufferSize() const {
 	int framebufferWidth, framebufferHeight;
 	glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
 	return {
-		static_cast<uint32_t>(framebufferWidth),
-		static_cast<uint32_t>(framebufferHeight)
+		static_cast<std::uint32_t>(framebufferWidth),
+		static_cast<std::uint32_t>(framebufferHeight)
 	};
 }
 

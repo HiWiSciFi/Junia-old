@@ -1,17 +1,19 @@
 #include <Junia/Core/Input.hpp>
-#include "../../Platform/GLFW/GlfwInput.hpp"
+
 #include <stdexcept>
 
-namespace Junia
-{
-	Input* Input::instance = nullptr;
+#include "../../Platform/GLFW/GlfwInput.hpp"
 
-	void Input::Init()
-	{
-		if (instance != nullptr) return;
-		instance = new GLFW::GlfwInput();
-	}
+namespace Junia {
 
-	Input::~Input()
-	{ }
+Input* Input::instance = nullptr;
+
+void Input::Init() {
+	if (instance != nullptr) return;
+	instance = new GLFW::GlfwInput();
 }
+
+Input::~Input()
+{ }
+
+} // namespace Junia

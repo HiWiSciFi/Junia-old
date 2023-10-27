@@ -2,8 +2,7 @@
 
 #include <Junia.hpp>
 
-class GravitySystem : public Junia::System
-{
+class GravitySystem : public Junia::System {
 private:
 	static const float downForce;
 

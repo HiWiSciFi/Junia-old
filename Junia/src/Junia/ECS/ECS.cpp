@@ -1,5 +1,7 @@
 #include <Junia/ECS/ECS.hpp>
 
+#include <stdexcept>
+
 namespace Junia {
 
 // -----------------------------------------------------------------------------
@@ -65,12 +67,12 @@ Entity Component::GetEntity() const {
 // ------------------------------- ComponentStore ------------------------------
 // -----------------------------------------------------------------------------
 
-ComponentStore::ComponentStore(size_t elementSize, MoveFunc moveFunc, DestFunc destFunc)
+ComponentStore::ComponentStore(std::size_t elementSize, MoveFunc moveFunc, DestFunc destFunc)
 	: componentArray(elementSize), entityToComponentMap(), componentToEntityMap(),
 	elementSize(elementSize), elementCount(0), moveFunc(moveFunc), destFunc(destFunc) { }
 
 ComponentStore::~ComponentStore() {
-	for (size_t i = 0; i < elementCount; i++) {
+	for (std::size_t i = 0; i < elementCount; i++) {
 		destFunc(&componentArray[i * elementSize]);
 	}
 }
@@ -111,9 +113,9 @@ ComponentStore& ComponentStore::operator=(ComponentStore&& other) noexcept {
 
 void* ComponentStore::AllocateComponent(Entity::IdType entity) {
 	if ((elementCount + 1) * elementSize > componentArray.size()) {
-		std::vector<uint8_t> newComponentArray(componentArray.size() * 2);
-		for (size_t i = 0; i < elementCount; i++) {
-			size_t offset = i * elementSize;
+		std::vector<std::uint8_t> newComponentArray(componentArray.size() * 2);
+		for (std::size_t i = 0; i < elementCount; i++) {
+			std::size_t offset = i * elementSize;
 			moveFunc(&componentArray[offset], &newComponentArray[offset]);
 			destFunc(&componentArray[offset]);
 		}
@@ -136,8 +138,8 @@ void* ComponentStore::GetComponent(Entity::IdType entity) {
 
 void ComponentStore::RemoveComponent(Entity::IdType entity) {
 	if (!HasComponent(entity)) throw std::runtime_error("Entity does not have component");
-	size_t componentOffset = entityToComponentMap.at(entity);
-	size_t lastComponentOffset = (elementCount - 1) * elementSize;
+	std::size_t componentOffset = entityToComponentMap.at(entity);
+	std::size_t lastComponentOffset = (elementCount - 1) * elementSize;
 	if (componentOffset != lastComponentOffset) {
 		destFunc(&componentArray[componentOffset]);
 		moveFunc(&componentArray[lastComponentOffset], &componentArray[componentOffset]);
@@ -199,7 +201,7 @@ void ECS::DestroyEntity(const Entity& entity) {
 		if (csp.second.HasComponent(entity.GetId())) csp.second.RemoveComponent(entity.GetId());
 	}
 	for (auto& syp : systems) {
-		for (size_t i = 0; i < syp.second->entities.size(); i++) {
+		for (std::size_t i = 0; i < syp.second->entities.size(); i++) {
 			if (syp.second->entities[i] == entity) {
 				if (i != syp.second->entities.size() - 1) syp.second->entities[i] = syp.second->entities[syp.second->entities.size() - 1];
 				syp.second->entities.pop_back();
@@ -213,7 +215,7 @@ void ECS::UpdateSystems(float delta) {
 	for (auto& syp : systems) syp.second->Update(delta);
 }
 
-void ECS::RegisterComponent(const std::type_index type, size_t size, ComponentStore::MoveFunc move, ComponentStore::DestFunc dest) {
+void ECS::RegisterComponent(const std::type_index type, std::size_t size, ComponentStore::MoveFunc move, ComponentStore::DestFunc dest) {
 	if (componentStores.contains(type)) throw std::runtime_error("component already registered");
 	componentStores.emplace(type, ComponentStore(size, move, dest));
 }
@@ -246,7 +248,7 @@ void ECS::RemoveComponent(const std::type_index type, Entity::IdType entity) {
 	componentStores.at(type).RemoveComponent(entity);
 	for (auto& syp : systems) {
 		if (!syp.second->GetRequirements().contains(type)) continue;
-		for (size_t i = 0; i < syp.second->entities.size(); i++) {
+		for (std::size_t i = 0; i < syp.second->entities.size(); i++) {
 			if (syp.second->entities[i].GetId() == entity) {
 				if (i != syp.second->entities.size() - 1) {
 					syp.second->entities[i] = syp.second->entities.back();

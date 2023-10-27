@@ -2,24 +2,19 @@
 
 #include <vulkan/vulkan.hpp>
 
-namespace Vulkan {
+namespace Junia::Vulkan {
 
-// -----------------------------------------------------------------------------
-// -------------------------------- Declaration --------------------------------
-// -----------------------------------------------------------------------------
-
-class Buffer final {
+class Buffer {
 public:
-	Buffer();
 	Buffer(VkDeviceSize size, VkBufferUsageFlags usage);
 	~Buffer();
 
 	void SetData(void* data);
 
 private:
+	VkDeviceSize size;
 	VkBuffer buffer;
 	VkDeviceMemory memory;
-	VkDeviceSize size;
 };
 
-} // namespace Vulkan
+} // namespace Junia::Vulkan

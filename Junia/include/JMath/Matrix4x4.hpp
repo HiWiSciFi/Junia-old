@@ -1,10 +1,9 @@
 #pragma once
 
+#include <cmath>
+
 #include "Types.hpp"
 #include "Vector3.hpp"
-
-#include <cmath>
-#include <cstdint>
 
 namespace JMath {
 

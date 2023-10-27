@@ -1,9 +1,9 @@
 #pragma once
 
+#include <string>
+
 #include "../../JMath/Vector2.hpp"
 #include "../../JMath/Vector3.hpp"
-#include <cstdint>
-#include <string>
 
 namespace Junia {
 
@@ -44,7 +44,7 @@ public:
 	 * @brief Get the refresh rate of the monitor
 	 * @return An unsigned integer containing the rounded refresh rate
 	*/
-	[[nodiscard]] virtual uint32_t GetRefreshRate() const = 0;
+	[[nodiscard]] virtual std::uint32_t GetRefreshRate() const = 0;
 
 	/**
 	 * @brief Get the WindowAPI native handle of the monitor
@@ -64,7 +64,7 @@ public:
 	 * @brief Get the amount of connected monitors
 	 * @return The amount of monitors
 	*/
-	static size_t GetMonitorCount();
+	static std::size_t GetMonitorCount();
 
 	/**
 	 * @brief Get the primary monitor

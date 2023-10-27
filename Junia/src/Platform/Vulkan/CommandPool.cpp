@@ -1,11 +1,5 @@
 #include "CommandPool.hpp"
 
-namespace Vulkan {
+namespace Junia::Vulkan {
 
-CommandPool::CommandPool() : pool(VK_NULL_HANDLE) {
-}
-
-CommandPool::~CommandPool() {
-}
-
-} // namespace Vulkan
+} // namespace Junia::Vulkan

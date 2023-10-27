@@ -1,16 +1,15 @@
 #pragma once
 
-#include <cstdint>    // uint8_t, uint32_t
-#include <functional> // std::function<T>
-#include <map>        // std::map<T, U>
-#include <memory>     // std::construct_at<T>, std::destroy_at<T>
-#include <set>        // std::set<T>
-#include <typeindex>  // std::type_index
-#include <typeinfo>   // typeid(T)
-#include <vector>     // std::vector<T>
+#include <functional>
+#include <map>
+#include <memory>
+#include <set>
+#include <typeindex>
+#include <typeinfo>
+#include <vector>
 
-#include "../Core/IdPool.hpp"   // Junia::IdPool<T>
-#include "../Util/Concepts.hpp" // Junia::TypenameDerivedFrom<T>
+#include "../Core/IdPool.hpp"
+#include "../Util/Concepts.hpp"
 
 namespace Junia {
 
@@ -29,7 +28,7 @@ class System;
 class Entity final {
 friend ECS;
 public:
-	using IdType = uint32_t;
+	using IdType = std::uint32_t;
 
 	Entity();
 	Entity(IdType id, ECS* ecs);
@@ -87,7 +86,7 @@ public:
 	using MoveFunc = std::function<void(void* from, void* to)>;
 	using DestFunc = std::function<void(void* ptr)>;
 
-	ComponentStore(size_t, MoveFunc, DestFunc);
+	ComponentStore(std::size_t, MoveFunc, DestFunc);
 	~ComponentStore();
 
 	ComponentStore(const ComponentStore&);
@@ -101,11 +100,11 @@ public:
 	void RemoveComponent(Entity::IdType);
 
 private:
-	std::vector<uint8_t> componentArray;
-	std::map<Entity::IdType, size_t> entityToComponentMap;
-	std::map<size_t, Entity::IdType> componentToEntityMap;
-	size_t elementSize;
-	size_t elementCount;
+	std::vector<std::uint8_t> componentArray;
+	std::map<Entity::IdType, std::size_t> entityToComponentMap;
+	std::map<std::size_t, Entity::IdType> componentToEntityMap;
+	std::size_t elementSize;
+	std::size_t elementCount;
 	MoveFunc moveFunc;
 	DestFunc destFunc;
 };
@@ -160,7 +159,7 @@ private:
 	std::map<std::type_index, std::unique_ptr<System>> systems;
 	IdPool<Entity::IdType> entityIdPool;
 
-	void RegisterComponent(const std::type_index, size_t, ComponentStore::MoveFunc, ComponentStore::DestFunc);
+	void RegisterComponent(const std::type_index, std::size_t, ComponentStore::MoveFunc, ComponentStore::DestFunc);
 	void UnregisterComponent(const std::type_index);
 	void AddComponent(const std::type_index, Entity::IdType, Component*);
 	bool HasComponent(const std::type_index, Entity::IdType);

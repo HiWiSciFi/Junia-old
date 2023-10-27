@@ -1,12 +1,10 @@
 #pragma once
 
 #include <array>
-#include <cstdint>
 #include <optional>
 #include <string>
 #include <vector>
 #include <memory>
-
 #include <JMath/Vector3.hpp>
 #include <JMath/Vector2.hpp>
 
@@ -14,7 +12,7 @@ namespace Junia {
 
 class Mesh {
 public:
-	enum class FileType : uint8_t {
+	enum class FileType : std::uint8_t {
 		NONE,
 		OBJ
 	};

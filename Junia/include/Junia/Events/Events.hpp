@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <deque>
 #include <functional>
 #include <string>
@@ -40,7 +39,7 @@ private:
 	std::vector<std::function<void(const ET*)>> subscribers;
 
 	void DispatchType(const ET* event) {
-		for (size_t i = 0; i < subscribers.size(); i++) subscribers[i](event);
+		for (std::size_t i = 0; i < subscribers.size(); i++) subscribers[i](event);
 	}
 
 public:

@@ -1,39 +1,91 @@
 #pragma once
 
 #include <vulkan/vulkan.hpp>
+#include <Junia/Core/Version.hpp>
+#include <vector>
 
-#include "CommandBuffer.hpp"
+#include "RenderDevice.hpp"
 
-namespace Vulkan {
+namespace Junia::Vulkan {
 
 // -----------------------------------------------------------------------------
-// -------------------------------- Declaration --------------------------------
+// -------------------------------- Declarations -------------------------------
 // -----------------------------------------------------------------------------
 
-class Instance;
-
-extern Instance* g_instance;
-
-class Instance final {
+class Instance {
 public:
-	Instance();
+	Instance(const std::string& appName, Junia::Version appVersion, const std::string& engineName, Junia::Version engineVersion);
 	~Instance();
 
+	/**
+	 * @brief Initialize Vulkan
+	 * @param appName The name of the application
+	 * @param appVersion The Version of the application
+	 * @param engineName The name of the game engine
+	 * @param engineVersion The version of the game engine
+	*/
+	static inline void Init(const std::string& appName, Junia::Version appVersion, const std::string& engineName, Junia::Version engineVersion);
+
+	/**
+	 * @brief Terminate Vulkan and free resources
+	*/
+	static inline void Terminate();
+
+	/**
+	 * @brief Get the underlying VkInstance
+	 * @return The application wide VkInstance
+	*/
+	static inline VkInstance Get();
+
+	/**
+	 * @brief Get available render devices
+	 * @return a reference to a vector containing a list of pointers to valid
+	 *         render devices
+	*/
+	static inline const std::vector<std::shared_ptr<Vulkan::RenderDevice>>& GetDevices();
+
+	/**
+	 * @brief Pick a device for rendering
+	 * @param device The device to use for rendering (see
+	 *               Vulkan::Instance::GetDevices())
+	*/
+	static inline void PickDevice(std::shared_ptr<Vulkan::RenderDevice> device);
+
 private:
+	static std::unique_ptr<Instance> s_instance;
+	static std::vector<std::shared_ptr<Vulkan::RenderDevice>> s_renderDevices;
+	static std::shared_ptr<Vulkan::RenderDevice> s_device;
+
 	VkInstance instance;
+	VkDebugUtilsMessengerEXT debugMessenger;
 
-	VkPhysicalDevice physicalDevice;
-	VkPhysicalDeviceMemoryProperties physicalDeviceMemoryProperties;
-
-	VkDevice device;
-
-	VkCommandPool transferCommandPool;
-	CommandBuffer transferCommandBuffer;
-
-	extern VkPhysicalDeviceMemoryProperties g_physicalDeviceMemoryProperties;
-	extern VkCommandPool g_transferCommandPool;
-	extern CommandBuffer g_transferCommandBuffer;
-	extern VkQueue g_transferQueue;
+	void EnumerateDevices();
 };
 
-} // namespace Vulkan
+// -----------------------------------------------------------------------------
+// ------------------------------- Implementation ------------------------------
+// -----------------------------------------------------------------------------
+
+inline void Vulkan::Instance::Init(const std::string& appName, Junia::Version appVersion, const std::string& engineName, Junia::Version engineVersion) {
+	s_instance = std::make_unique<Vulkan::Instance>(appName, std::move(appVersion), engineName, std::move(engineVersion));
+	s_instance->EnumerateDevices();
+}
+
+inline void Vulkan::Instance::Terminate() {
+	s_instance.reset();
+}
+
+inline VkInstance Vulkan::Instance::Get() {
+	return s_instance->instance;
+}
+
+inline const std::vector<std::shared_ptr<Vulkan::RenderDevice>>& Vulkan::Instance::GetDevices() {
+	return s_renderDevices;
+}
+
+inline void Instance::PickDevice(std::shared_ptr<Vulkan::RenderDevice> device) {
+	s_device = device == nullptr ? GetDevices()[0] : device;
+	s_device->Pick();
+}
+
+}
