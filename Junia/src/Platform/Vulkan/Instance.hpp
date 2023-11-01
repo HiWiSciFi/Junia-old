@@ -42,14 +42,14 @@ public:
 	 * @return a reference to a vector containing a list of pointers to valid
 	 *         render devices
 	*/
-	static inline const std::vector<std::shared_ptr<Vulkan::RenderDevice>>& GetDevices();
+	static inline std::vector<std::weak_ptr<Vulkan::RenderDevice>> GetDevices();
 
 	/**
 	 * @brief Pick a device for rendering
 	 * @param device The device to use for rendering (see
 	 *               Vulkan::Instance::GetDevices())
 	*/
-	static inline void PickDevice(std::shared_ptr<Vulkan::RenderDevice> device);
+	static inline void PickDevice(std::weak_ptr<Vulkan::RenderDevice> device);
 
 private:
 	static std::unique_ptr<Instance> s_instance;
@@ -79,12 +79,14 @@ inline VkInstance Vulkan::Instance::Get() {
 	return s_instance->instance;
 }
 
-inline const std::vector<std::shared_ptr<Vulkan::RenderDevice>>& Vulkan::Instance::GetDevices() {
-	return s_renderDevices;
+inline std::vector<std::weak_ptr<Vulkan::RenderDevice>> Vulkan::Instance::GetDevices() {
+	std::vector<std::weak_ptr<Vulkan::RenderDevice>> devices(s_renderDevices.begin(), s_renderDevices.end());
+	return devices;
 }
 
-inline void Instance::PickDevice(std::shared_ptr<Vulkan::RenderDevice> device) {
-	s_device = device == nullptr ? GetDevices()[0] : device;
+inline void Instance::PickDevice(std::weak_ptr<Vulkan::RenderDevice> device) {
+	if (device.expired()) s_device = s_renderDevices[0];
+	else s_device = device.lock();
 	s_device->Pick();
 }
 

@@ -25,7 +25,7 @@
 #include "Platform/Vulkan/Instance.hpp"
 
 // TODO: remove
-#include <spirv_reflect.h>
+//#include <spirv_reflect.h>
 
 namespace Junia {
 
@@ -57,7 +57,7 @@ void Init(const std::string& appName, Version appVersion) {
 	InitTimer();
 
 	// TODO: remove
-	{
+	/*{
 		std::vector<std::uint8_t> spv = ReadFileBinary("res/Shaders/shader2.vert.spv");
 		SpvReflectShaderModule module;
 		SpvReflectResult result = spvReflectCreateShaderModule(spv.size(), spv.data(), &module);
@@ -75,13 +75,10 @@ void Init(const std::string& appName, Version appVersion) {
 		for (const auto& var : input_vars) {
 			auto logger = JELOG_WARN;
 			logger << var->name;
-			logger << " : " << var->type_description->type_name;
 		}
 
 		spvReflectDestroyShaderModule(&module);
-	}
-
-	__debugbreak();
+	}*/
 
 	try {
 		GLFW::Init();

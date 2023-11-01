@@ -31,8 +31,10 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebugCallback(
 		VKLOG_ERROR << data->pMessage;
 	else if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
 		VKLOG_ERROR << data->pMessage;
-	else if (c_debug && severity & (VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT))
-		VKLOG_TRACE << data->pMessage;
+	else if constexpr (c_debug) {
+		if (severity & (VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT))
+			VKLOG_TRACE << data->pMessage;
+	}
 	return VK_FALSE;
 }
 
@@ -66,7 +68,7 @@ Vulkan::Instance::Instance(const std::string& appName, Junia::Version appVersion
 	vkEnumerateInstanceLayerProperties(&availableLayerCount, availableLayers.data());
 	VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo;
 	
-	if (c_debug) {
+	if constexpr (c_debug) {
 		// Add vulkan debug extensions and layer
 		instanceExtensions.back() = VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
 		layersToEnable.front() = "VK_LAYER_KHRONOS_validation";
@@ -114,14 +116,16 @@ Vulkan::Instance::Instance(const std::string& appName, Junia::Version appVersion
 	Vulkan::LoadExtensions(this->instance, instanceExtensions);
 
 	// Create Debug Messenger
-	if (c_debug && vkCreateDebugUtilsMessengerEXT(this->instance, &debugMessengerCreateInfo, nullptr, &this->debugMessenger) != VK_SUCCESS)
-		VKLOG_WARN << "Failed to create Vulkan debug messenger. Continuing without it.";
+	if constexpr (c_debug) {
+		if (vkCreateDebugUtilsMessengerEXT(this->instance, &debugMessengerCreateInfo, nullptr, &this->debugMessenger) != VK_SUCCESS)
+			VKLOG_WARN << "Failed to create Vulkan debug messenger. Continuing without it.";
+	}
 }
 
 Vulkan::Instance::~Instance() {
 	s_renderDevices.clear();
 	s_device.reset();
-	if (c_debug) vkDestroyDebugUtilsMessengerEXT(this->instance, debugMessenger, nullptr);
+	if constexpr (c_debug) vkDestroyDebugUtilsMessengerEXT(this->instance, debugMessenger, nullptr);
 	if (this->instance != VK_NULL_HANDLE) vkDestroyInstance(this->instance, nullptr);
 }
 

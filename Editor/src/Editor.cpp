@@ -10,9 +10,9 @@ int main() {
 		Junia::Init("Junia Editor", Junia::Version(1, 0, 0));
 
 		// Select render device
-		const std::vector<std::shared_ptr<Junia::RenderDevice>> renderDevices = Junia::Renderer::GetDevices();
+		const std::vector<std::weak_ptr<Junia::RenderDevice>> renderDevices = Junia::Renderer::GetDevices();
 		JELOG_INFO << "Render Devices:";
-		for (const auto& device : renderDevices) JELOG_INFO << "  - " << device->GetName();
+		for (const auto& device : renderDevices) JELOG_INFO << "  - " << device.lock()->GetName();
 		Junia::Renderer::PickDevice(nullptr);
 
 		// Create window

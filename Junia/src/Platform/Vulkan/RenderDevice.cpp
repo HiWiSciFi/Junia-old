@@ -137,6 +137,7 @@ Vulkan::RenderDevice::RenderDevice(VkPhysicalDevice physicalDevice, GLFWwindow* 
 		}
 		SetRating(GetRating() + (this->transferQueue.IsValid() * 200) + (this->computeQueue.IsValid() * 100));
 
+		// Debug printing for available queue families
 		/*VKLOG_INFO << "Queue Families:";
 		for (std::uint32_t i = 0; i < queueFamilyCount; i++) {
 			auto out = VKLOG_INFO;

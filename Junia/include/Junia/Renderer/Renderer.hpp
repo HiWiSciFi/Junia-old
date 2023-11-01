@@ -14,7 +14,7 @@ public:
 	 * @return a reference to a vector containing a list of pointers to valid
 	 *         render devices
 	*/
-	static const std::vector<std::shared_ptr<Junia::RenderDevice>> GetDevices();
+	static std::vector<std::weak_ptr<Junia::RenderDevice>> GetDevices();
 
 	/**
 	 * @brief Pick a device to render on

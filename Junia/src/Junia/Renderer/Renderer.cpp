@@ -4,7 +4,7 @@
 
 namespace Junia {
 
-const std::vector<std::shared_ptr<RenderDevice>> Renderer::GetDevices() {
+std::vector<std::weak_ptr<RenderDevice>> Renderer::GetDevices() {
 	const auto& nativeDevices = Vulkan::Instance::GetDevices();
 	return { nativeDevices.begin(), nativeDevices.end() };
 }
